@@ -1,0 +1,13 @@
+.it-header-slim-wrapper .it-header-slim-wrapper-content a.navbar-brand,
+.it-header-slim-wrapper
+  .it-header-slim-wrapper-content
+  .nav-mobile
+  ul.link-list
+  a {
+  padding-top: 0px;
+}
+
+.it-header-slim-wrapper-tent,
+.it-header-slim-wrapper {
+  height: 35px;
+}

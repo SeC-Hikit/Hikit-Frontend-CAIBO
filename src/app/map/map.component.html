@@ -6,14 +6,14 @@
         <div id="absolute-wrapper">
             <div class="row">
                 <div class="column-map col-12 col-md-3 white details hide">
-                    <div class="row clickable" v-on:click="toggleFullTrailPage">
+                    <div *ngIf="selectedTrail" class="row clickable" (click)="toggleFullTrailPage">
                         <div class="col-md-10">
                             <h1>{{ selectedTrail.code }}</h1>
                         </div>
                         <div class="col-md-2 space-up">
                             <svg class="bi" width="24" height="24" fill="red">
                                 <use
-                                    xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#arrow-up-right-square" />
+                                    xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#arrow-up-right-square" />
                             </svg>
                         </div>
                     </div>
@@ -32,12 +32,12 @@
                     <div class="btn-group-toggle" data-toggle="buttons">
                         <label v-on:click="toggleAllTrails()" class="btn btn-light active">
                             <svg class="bi" width="24" height="24" fill="currentColor">
-                                <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#eye" />
+                                <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#eye" />
                             </svg>
                         </label>
                         <label v-on:click="toggleList()" class="btn btn-light">
                             <svg class="bi" width="24" height="24" fill="currentColor">
-                                <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#list-ol" />
+                                <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#list-ol" />
                             </svg>
                         </label>
                     </div>

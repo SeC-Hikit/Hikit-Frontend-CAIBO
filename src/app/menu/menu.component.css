@@ -1,3 +1,20 @@
 a {
-    color: white;
+  color: white;
+}
+
+.it-header-center-wrapper
+  .it-header-center-content-wrapper
+  .it-brand-wrapper
+  a
+  .icon {
+  width: 72px;
+  height: 62px;
+}
+
+.it-header-center-wrapper {
+  height: 90px;
+}
+
+.active {
+    border-bottom: 2px solid white;
 }

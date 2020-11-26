@@ -17,6 +17,9 @@ import { TrailDetailPageComponent } from './trail-detail-page/trail-detail-page.
 import { MapFullComponent } from './map-full/map-full.component';
 import { MapTrailListComponent } from './map-trail-list/map-trail-list.component';
 import { MapTrailDetailsComponent } from './map-trail-details/map-trail-details.component';
+import { HttpClientModule } from '@angular/common/http';
+import { LoadingPanelComponent } from './loading-panel/loading-panel.component';
+import { MapPreviewComponent } from './map-preview/map-preview.component';
 
 @NgModule({
   declarations: [
@@ -34,11 +37,14 @@ import { MapTrailDetailsComponent } from './map-trail-details/map-trail-details.
     TrailDetailPageComponent,
     MapFullComponent,
     MapTrailListComponent,
-    MapTrailDetailsComponent
+    MapTrailDetailsComponent,
+    LoadingPanelComponent,
+    MapPreviewComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

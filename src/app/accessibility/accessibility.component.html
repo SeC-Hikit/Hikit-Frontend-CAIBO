@@ -1,1 +1,63 @@
-<p>accessibility works!</p>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12 col-md-12">
+            <h1>
+                Percorribilità dei sentieri
+            </h1>
+            <p>Di seguito trovi la lista di avvisi sulla percorribilità della sentieristica. Un esempio di questi
+                potrebbero essere danni naturali o umani provocati a un sentiero, alla sua segnaletica con un possibile
+                rischio alla sicurezza o alla percorribilità dei frequentatori.</p>
+            <p>Hai notato un problema? Segnalacelo.</p>
+            <table *ngIf="unresolvedNotifications; else notShow" class="table table-striped interactive-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Codice sentiero</th>
+                        <th scope="col">Data Segnalazione</th>
+                        <th scope="col">Descrizione Problema</th>
+                        <th scope="col">Aggirabile?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let notification for unresolvedNotifications">
+                        <th scope="row">{{ notification.code }}</th>
+                        <td>{{ moment(notification.reportDate).format('DD/MM/YYYY') }}</td>
+                        <td>{{ notification.description }}</td>
+                        <td>{{ notification.isMinor ? 'si' : 'no' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <ng-template #notShow>
+                <p>
+                    Non ci sono ancora notifiche di percorrenza da mostrare.
+                </p>
+            </ng-template>
+        </div>
+        <div class="col-12 col-md-12">
+            <h1>Risoluzioni</h1>
+            <table *ngIf="itemsSolved; else notShow" class="table table-striped interactive-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Codice sentiero</th>
+                        <th scope="col">Data segnalazione</th>
+                        <th scope="col">Descrizione Problema</th>
+                        <th scope="col">Data risoluzione</th>
+                        <th scope="col">Risoluzione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let notification for itemsSolved">
+                        <th scope="row">{{ item.code }}</th>
+                        <td>{{ moment(item.reportDate).format('DD/MM/YYYY') }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ moment(item.resolutionDate).format('DD/MM/YYYY') }}</td>
+                        <td>{{ item.resolution }}</td>
+                </tbody>
+            </table>
+            <ng-template #notShow>
+                <p>
+                    Non ci sono ancora notifiche di percorrenza da mostrare.
+                </p>
+            </ng-template>
+        </div>
+    </div>
+</div>

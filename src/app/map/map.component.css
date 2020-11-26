@@ -19,3 +19,6 @@
     z-index: 1;
 }
   
+.active {
+    background-color: gray !important;
+}

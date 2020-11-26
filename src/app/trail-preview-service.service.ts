@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { TrailPreview } from './TrailPreview';
 import { catchError, map, tap } from 'rxjs/operators';
+import { TrailPreviewResponse } from './TrailPreviewResponse';
 
 
 @Injectable({
@@ -10,18 +11,18 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class TrailPreviewService {
 
-  baseUrl = "";
+  baseUrl = "api/preview";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private httpClient: HttpClient) { }
 
-  getPreviews(): Observable<TrailPreview[]> {
-    return this.httpClient.get<TrailPreview[]>(this.baseUrl)
+  getPreviews(): Observable<TrailPreviewResponse> {
+    return this.httpClient.get<TrailPreviewResponse>(this.baseUrl)
       .pipe(
         tap(_ => console.log("")),
-        catchError(this.handleError<TrailPreview[]>('getHeroes', []))
+        catchError(this.handleError<TrailPreviewResponse>('get all previews', null))
       );
   }
 

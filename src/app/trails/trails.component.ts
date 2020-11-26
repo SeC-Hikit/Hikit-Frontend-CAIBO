@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Trail } from '../Trail';
+import { TrailPreviewService } from '../trail-preview-service.service';
 import { TrailPreview } from '../TrailPreview';
+import { TrailPreviewResponse } from '../TrailPreviewResponse';
 
 @Component({
   selector: 'app-trails',
@@ -10,12 +12,17 @@ import { TrailPreview } from '../TrailPreview';
 })
 export class TrailsComponent implements OnInit {
 
-  trailsResponse$: Observable<TrailPreview[]>
+  trailsResponse: TrailPreview[]
 
-  constructor() { }
+  constructor(private trailPreviewService : TrailPreviewService) { }
 
   ngOnInit(): void {
-      
+      this.getAllPreviews();
+  }
+
+  getAllPreviews() { 
+    console.log("ABc");
+    this.trailPreviewService.getPreviews().subscribe(preview => this.trailsResponse = preview.trailPreviews);
   }
 
   onOpenToMap(selectedTrailPreview: TrailPreview) {

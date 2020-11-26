@@ -1,51 +1,56 @@
-<div class="row">
+<div *ngIf="selectedTrail; else notShowTrail" class="row">
     <div class="description hidden column-map col-12 col-md-3 white scrollable details hide">
-        <h4>Classificazione</h4>
-        <p> {{ selectedTrail.classification }}</p>
-        <h4>Località</h4>
-        <p> <span>{{ selectedTrail.startPos.name }}</span> - <span>{{ selectedTrail.finalPos.name }}
-            </span> </p>
-        <h4>Percorribilita'</h4>
-        <div *ngIf="notificationsForTrail; else notShow" class="clickable">
-            <div v-on:click="toggleModal">
-                <svg class="bi pulse" width="24" height="24" fill="red">
-                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
-                </svg>
-                <p>Clicca visualizzare avvisi di percorribilita'</p>
+        <div>
+            <h4>Classificazione</h4>
+            <p> {{ selectedTrail.classification }}</p>
+            <h4>Località</h4>
+            <p> <span>{{ selectedTrail.startPos.name }}</span> - <span>{{ selectedTrail.finalPos.name }}
+                </span> </p>
+            <h4>Percorribilita'</h4>
+            <div *ngIf="notificationsForTrail; else notShow" class="clickable">
+                <div v-on:click="toggleModal">
+                    <svg class="bi pulse" width="24" height="24" fill="red">
+                        <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
+                    </svg>
+                    <p>Clicca visualizzare avvisi di percorribilita'</p>
+                </div>
             </div>
-        </div>
-        <ng-template #notShow>
-            <p>Non ci sono avvisi di percorribilita</p>
-        </ng-template>
-        <h4>Lunghezza</h4>
-        <p>{{ selectedTrail.statsMetadata.length }}m</p>
-        <h4>Tempo di percorrenza</h4>
-        <p>{{ selectedTrail.statsMetadata.eta }} minuti</p>
-        <h4>Dislivello</h4>
-        <p>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</p>
-        <p>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</p>
-        <h4>Altitudine</h4>
-        <canvas id="chart-hike"></canvas>
-        <h4>Descrizione</h4>
-        <p>{{ selectedTrail.description }}</p>
-        <h4>Altro</h4>
-        <div class="row">
-            <div class="col-md-2 space-up">
-                <svg class="bi" width="32" height="32" fill="red">
-                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#download" />
-                </svg>
-            </div>
-            <div class="col-md-10 space-up clickable">
-                <a v-on:click="downloadGpx" target="_blank">Download</a>
-            </div>
-            <div class="col-md-2 space-up clickable">
-                <svg class="bi" width="32" height="32" fill="red">
-                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#geo-alt" />
-                </svg>
-            </div>
-            <div class="col-md-10 space-up">
-                <label>Apri su Maps</label>
+            <ng-template #notShow>
+                <p>Non ci sono avvisi di percorribilita</p>
+            </ng-template>
+            <h4>Lunghezza</h4>
+            <p>{{ selectedTrail.statsMetadata.length }}m</p>
+            <h4>Tempo di percorrenza</h4>
+            <p>{{ selectedTrail.statsMetadata.eta }} minuti</p>
+            <h4>Dislivello</h4>
+            <p>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</p>
+            <p>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</p>
+            <h4>Altitudine</h4>
+            <canvas id="chart-hike"></canvas>
+            <h4>Descrizione</h4>
+            <p>{{ selectedTrail.description }}</p>
+            <h4>Altro</h4>
+            <div class="row">
+                <div class="col-md-2 space-up">
+                    <svg class="bi" width="32" height="32" fill="red">
+                        <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#download" />
+                    </svg>
+                </div>
+                <div class="col-md-10 space-up clickable">
+                    <a v-on:click="downloadGpx" target="_blank">Download</a>
+                </div>
+                <div class="col-md-2 space-up clickable">
+                    <svg class="bi" width="32" height="32" fill="red">
+                        <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#geo-alt" />
+                    </svg>
+                </div>
+                <div class="col-md-10 space-up">
+                    <label>Apri su Maps</label>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<ng-template #notShowTrail>
+    <p>Seleziona un sentiero</p>
+</ng-template>
