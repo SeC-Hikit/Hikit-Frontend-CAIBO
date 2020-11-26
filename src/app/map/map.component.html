@@ -1,0 +1,56 @@
+<div>
+    <div class="row relative-map">
+        
+        <app-map-full id="map-full-container"></app-map-full>
+        
+        <div id="absolute-wrapper">
+            <div class="row">
+                <div class="column-map col-12 col-md-3 white details hide">
+                    <div class="row clickable" v-on:click="toggleFullTrailPage">
+                        <div class="col-md-10">
+                            <h1>{{ selectedTrail.code }}</h1>
+                        </div>
+                        <div class="col-md-2 space-up">
+                            <svg class="bi" width="24" height="24" fill="red">
+                                <use
+                                    xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#arrow-up-right-square" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="column-map col-12 col-md-4">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label (click)="changeTileLayer('topo')" class="btn btn-light active"><input
+                                autocomplete="off" checked id="option1" name="options" type="radio">Topografico</label>
+                        <label (click)="changeTileLayer('geopolitic')" class="btn btn-light"><input
+                                autocomplete="off" id="option2" name="options" type="radio">Geopolitica</label>
+                        <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light"><input
+                                autocomplete="off" id="option3" name="options" type="radio">Geopolitica 2</label>
+                    </div>
+                </div>
+                <div class="column-map col-12 col-md-2">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label v-on:click="toggleAllTrails()" class="btn btn-light active">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#eye" />
+                            </svg>
+                        </label>
+                        <label v-on:click="toggleList()" class="btn btn-light">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#list-ol" />
+                            </svg>
+                        </label>
+                    </div>
+                </div>
+                <div class="column-map col-12 col-md-3 column-hike-title white hide">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h1>Lista sentieri</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <!-- TODO: dial notification -->
+    </div>
+</div>

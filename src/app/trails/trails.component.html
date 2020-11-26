@@ -1,0 +1,43 @@
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <h1>Sentieri</h1>
+            <table *ngIf="trailsResponse$; else notShow" class="table table-striped interactive-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Codice</th>
+                        <th scope="col">Localita</th>
+                        <th scope="col">Classificazione</th>
+                        <th scope="col">Anteprima</th>
+                        <th scope="col">Apri</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let trailPreview of trailsResponse" class="trailPreview">
+                        <th scope="row">{{ trailPreview.code }}</th>
+                        <td>{{ trailPreview.startPos.name }} - {{ trailPreview.endPos.name }}</td>
+                        <td>{{ trailPreview.classification }}</td>
+                        <td (click)='onPreview(trailPreview)'>
+                            <svg class="bi" width="32" height="32" fill="currentColor">
+                                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#eye"/>
+                            </svg>
+                        </td>
+                        <td (click)='onOpenToMap(trailPreview)'>
+                            <svg class="bi" width="32" height="32" fill="currentColor">
+                                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#map-fill"/>
+                            </svg>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ng-template #notShow>
+                <p>
+                  Non ci sono ancora sentieri.
+                </p>
+              </ng-template>
+        </div>
+        <div class="col-12 col-md-4">
+            
+        </div>
+    </div>
+</div>

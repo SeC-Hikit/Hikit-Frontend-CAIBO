@@ -1,0 +1,20 @@
+<div class="column-hikes column-map col-3 white offset-6 hide">
+    <table class="table table-striped interactive-table">
+        <thead>
+            <tr>
+                <th scope="col">Codice</th>
+                <th scope="col">Localita</th>
+                <th scope="col">Class.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div *ngIf="trailPreviewResponse$">
+                <tr v-for="trailPreview in trailPreviewResponse$" class="trailPreview">
+                    <td scope="row" (click)="onTrailListClick(trailPreview)">{{ trailPreview.code }}</td>
+                    <td>{{ trailPreview.startPos.name }} - {{ trailPreview.endPos.name }}</td>
+                    <td>{{ trailPreview.classification }}</td>
+                </tr>
+            </div>
+        </tbody>
+    </table>
+</div>

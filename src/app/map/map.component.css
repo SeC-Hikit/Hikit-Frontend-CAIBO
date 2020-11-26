@@ -1,0 +1,21 @@
+.relative-map {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+#map-full-container {
+    width: 100%;
+}
+
+#absolute-wrapper {
+    position: absolute;
+    width: 100%;
+}
+
+.column-map {
+    padding: 1%;
+    padding-bottom: 0;
+    z-index: 1;
+}
+  
