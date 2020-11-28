@@ -1,7 +1,7 @@
 import { TrailCoordinates } from './TrailCoordinates';
 
 export interface Place {
-    name: String,
-    tags: String[],
+    name: string,
+    tags: string[],
     coordinates: TrailCoordinates
 }

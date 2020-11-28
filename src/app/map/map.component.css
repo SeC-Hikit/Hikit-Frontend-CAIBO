@@ -17,8 +17,21 @@
     padding: 1%;
     padding-bottom: 0;
     z-index: 1;
+    max-height: 100px;
 }
-  
+
+.functional-column {
+    min-height: 750px !important;
+}
+
 .active {
     background-color: gray !important;
+}
+
+.hide { 
+    visibility: hidden !important;
+}
+
+.showHideButtons .btn-group-toggle .btn {
+    margin: 0 5%;
 }

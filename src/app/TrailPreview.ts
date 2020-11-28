@@ -2,7 +2,7 @@ import { Place } from './Place';
 import { TrailClassification } from './TrailClassification';
 
 export interface TrailPreview {
-    code: String,
+    code: string,
     classification: TrailClassification,
     startPos: Place,
     finalPos: Place,

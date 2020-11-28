@@ -12,19 +12,19 @@
                         <th scope="col">Apri</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="short-list">
                     <tr *ngFor="let trailPreview of trailsResponse" class="trailPreview">
                         <th scope="row">{{ trailPreview.code }}</th>
-                        <td>{{ trailPreview.startPos.name }} - {{ trailPreview.endPos.name }}</td>
+                        <td>{{ trailPreview.startPos.name }} - {{ trailPreview.finalPos.name }}</td>
                         <td>{{ trailPreview.classification }}</td>
-                        <td (click)='onPreview(trailPreview)'>
+                        <td class="clickable" (click)='onPreview(trailPreview)'>
                             <svg class="bi" width="32" height="32" fill="currentColor">
-                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye" />
                             </svg>
                         </td>
-                        <td (click)='onOpenToMap(trailPreview)'>
+                        <td class="clickable" routerLink='/map/{{trailPreview.code}}'>
                             <svg class="bi" width="32" height="32" fill="currentColor">
-                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill"/>
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill" />
                             </svg>
                         </td>
                     </tr>
@@ -37,7 +37,7 @@
             </ng-template>
         </div>
         <div class="col-12 col-md-4">
-            
+            <app-map-preview [trailPreview]="selectedTrail"></app-map-preview>
         </div>
     </div>
 </div>

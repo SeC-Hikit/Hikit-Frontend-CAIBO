@@ -1,8 +1,8 @@
 export interface Maintenance {
-    id: String,
+    id: string,
     date: Date,
-    code: String,
-    meetingPlace: String,
-    description: String,
-    contact: String
+    code: string,
+    meetingPlace: string,
+    description: string,
+    contact: string
 }

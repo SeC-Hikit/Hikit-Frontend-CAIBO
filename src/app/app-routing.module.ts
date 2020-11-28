@@ -9,7 +9,7 @@ import { SafetyComponent } from './safety/safety.component';
 import { TrekkingComponent } from './trekking/trekking.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/trails', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: "home", component: HomeComponent },
   { path: "trails", component: TrailsComponent },
   { path: "map", component: MapComponent },

@@ -4,16 +4,16 @@ import { TrailClassification } from './TrailClassification';
 import { TrailCoordinates } from './TrailCoordinates';
 
 export interface Trail {
-    name: String,
-    code: String,
-    description: String,
+    name: string,
+    code: string,
+    description: string,
     classification: TrailClassification,
     startPos: Place,
     finalPos: Place,
-    country: String,
+    country: string,
     statsMetadata: StatsMetadata,
     lastUpdate: Date,
-    maintainingSection: String,
+    maintainingSection: string,
     coordinates: TrailCoordinates[],
     locations: Place[],
 }

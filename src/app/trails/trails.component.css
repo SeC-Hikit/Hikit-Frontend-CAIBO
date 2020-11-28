@@ -1,0 +1,4 @@
+.short-list{ 
+    overflow-y: hidden;
+    max-height: 500px;
+}

@@ -4,3 +4,7 @@
     max-height: 720px;
     z-index: 1;
 }
+
+.leaflet-left {
+    left: 95%;
+  }

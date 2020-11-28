@@ -1,8 +1,8 @@
 export interface AccessibilityNotification { 
-    _id: String,
-    description: String,
+    _id: string,
+    description: string,
     reportDate: Date,
     resolutionDate: Date,
     isMinor: boolean,
-    resolution: String
+    resolution: string
 }

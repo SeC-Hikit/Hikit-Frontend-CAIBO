@@ -1,56 +1,39 @@
 <div>
     <div class="row relative-map">
-        
-        <app-map-full id="map-full-container"></app-map-full>
-        
+        <app-map-full id="map-full-container" [selectedTrail]="selectedTrail" [tileLayerName]="selectedTileLayer" [trailList]="trailList"></app-map-full>
         <div id="absolute-wrapper">
             <div class="row">
-                <div class="column-map col-12 col-md-3 white details hide">
-                    <div *ngIf="selectedTrail" class="row clickable" (click)="toggleFullTrailPage">
-                        <div class="col-md-10">
-                            <h1>{{ selectedTrail.code }}</h1>
-                        </div>
-                        <div class="col-md-2 space-up">
-                            <svg class="bi" width="24" height="24" fill="red">
-                                <use
-                                    xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#arrow-up-right-square" />
-                            </svg>
-                        </div>
-                    </div>
+                <div class="column-map col-12 col-md-3 white details functional-column" [ngClass]="{ 'hide' : !isTrailSelectedVisible }">
+                    <app-map-trail-details></app-map-trail-details>
                 </div>
                 <div class="column-map col-12 col-md-4">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label (click)="changeTileLayer('topo')" class="btn btn-light active"><input
-                                autocomplete="off" checked id="option1" name="options" type="radio">Topografico</label>
-                        <label (click)="changeTileLayer('geopolitic')" class="btn btn-light"><input
-                                autocomplete="off" id="option2" name="options" type="radio">Geopolitica</label>
-                        <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light"><input
-                                autocomplete="off" id="option3" name="options" type="radio">Geopolitica 2</label>
+                        <label (click)="changeTileLayer('topo')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'topo' }"><input autocomplete="off"
+                                checked id="option1" name="options" type="radio">Topografico</label>
+                        <label (click)="changeTileLayer('geopolitic')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'geopolitic' }"><input autocomplete="off"
+                                id="option2" name="options" type="radio">Geopolitica</label>
+                        <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'geopolitic2' }"><input autocomplete="off"
+                                id="option3" name="options" type="radio">Geopolitica 2</label>
                     </div>
                 </div>
-                <div class="column-map col-12 col-md-2">
+                <div class="column-map col-12 col-md-2 showHideButtons">
                     <div class="btn-group-toggle" data-toggle="buttons">
-                        <label v-on:click="toggleAllTrails()" class="btn btn-light active">
+                        <label (click)="toggleAllTrails()" class="btn btn-light" [ngClass]="{ 'active' : isAllTrailVisible }">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#eye" />
                             </svg>
                         </label>
-                        <label v-on:click="toggleList()" class="btn btn-light">
+                        <label (click)="toggleList()" class="btn btn-light" [ngClass]="{ 'active' : isTrailListVisible }">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#list-ol" />
                             </svg>
                         </label>
                     </div>
                 </div>
-                <div class="column-map col-12 col-md-3 column-hike-title white hide">
-                    <div class="row">
-                        <div class="col-md-10">
-                            <h1>Lista sentieri</h1>
-                        </div>
-                    </div>
+                <div class="column-map col-12 col-md-3 column-hike-title white functional-column" [ngClass]="{ 'hide' : !isTrailListVisible }">
+                    <app-map-trail-list [trailsPreviewList]="trailPreviewList" (selectCodeEvent)="loadTrail($event)"></app-map-trail-list>
                 </div>
             </div>
         </div>
-       <!-- TODO: dial notification -->
     </div>
 </div>

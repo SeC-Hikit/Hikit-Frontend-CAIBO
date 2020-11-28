@@ -14,6 +14,9 @@ export class MapTrailDetailsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
+
+  
 
 }

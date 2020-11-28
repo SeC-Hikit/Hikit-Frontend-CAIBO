@@ -1,5 +1,6 @@
-<div class="column-hikes column-map col-3 white offset-6 hide">
-    <table class="table table-striped interactive-table">
+<div class="col-md-12">
+    <h1>Lista sentieri</h1>
+    <table *ngIf="trailsPreviewList" class="table table-striped interactive-table">
         <thead>
             <tr>
                 <th scope="col">Codice</th>
@@ -8,13 +9,11 @@
             </tr>
         </thead>
         <tbody>
-            <div *ngIf="trailPreviewResponse$">
-                <tr v-for="trailPreview in trailPreviewResponse$" class="trailPreview">
-                    <td scope="row" (click)="onTrailListClick(trailPreview)">{{ trailPreview.code }}</td>
-                    <td>{{ trailPreview.startPos.name }} - {{ trailPreview.endPos.name }}</td>
-                    <td>{{ trailPreview.classification }}</td>
-                </tr>
-            </div>
+            <tr *ngFor="let trailPreview of trailsPreviewList" class="clickable actionable-row">
+                <td scope="row" (click)="onPreview(trailPreview)">{{ trailPreview.code }}</td>
+                <td>{{ trailPreview.startPos.name }} - {{ trailPreview.finalPos.name }} </td>
+                <td>{{ trailPreview.classification }}</td>
+            </tr>
         </tbody>
     </table>
 </div>
