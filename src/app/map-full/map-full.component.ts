@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import 'leaflet';
-import * as L from 'leaflet-textpath';
+import 'leaflet-textpath';
+declare let L; // to be able to use L namespace
 import { Trail } from '../Trail';
 import { TrailClassification } from '../TrailClassification';
 import { MapUtils } from './MapUtils';
@@ -26,7 +27,12 @@ export class MapFullComponent implements OnInit {
   @Input() trailList: Trail[];
   @Input() tileLayerName: string;
 
-  constructor() { }
+  @Output() selectCodeEvent = new EventEmitter<string>();
+
+  constructor() {
+    this.otherTrailsPolylines = [];
+  }
+
 
   ngOnInit(): void {
     this.openStreetmapCopy =
@@ -39,32 +45,43 @@ export class MapFullComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    for (const propName in changes) {
-      if (propName == "selectedTrail") { this.renderTrail(this.selectedTrail) }
-      if (propName == "trailList") { this.renderAllTrail(this.trailList) }
-      if (propName == "tileLayerName") { this.renderTileLayer(this.tileLayerName) }
+    if (this.isInitialized()) {
+      for (const propName in changes) {
+        if (propName == "tileLayerName") { this.renderTileLayer(this.tileLayerName) }
+        if (propName == "trailList") { this.renderAllTrail(this.trailList) }
+        if (propName == "selectedTrail") { this.renderTrail(this.selectedTrail) }
+      }
     }
   }
 
   renderTrail(selectedTrail: Trail) {
-    console.log(selectedTrail);
     this.clearPreviouslySelectedLayer();
     this.clearPathFromList(selectedTrail);
-    
     let polyline = L.polyline(MapUtils.getCoordinatesInverted(selectedTrail.coordinates));
     polyline.setStyle(this.getLineStyle(true, selectedTrail.classification));
-    polyline.setText(MapUtils.generateTextForMap(selectedTrail.code));
-
-    //TODO
-
+    polyline.setText(MapUtils.generateTextForMap(selectedTrail.code), MapUtils.getTextSyle(true));
+    polyline.bindPopup(selectedTrail.code);
+    polyline.addTo(this.map);
+    this.map.fitBounds(polyline.getBounds());
   }
 
   renderAllTrail(trailList: Trail[]) {
-    this.otherTrailsPolylines = this.trailList.map(trail => {
+    this.otherTrailsPolylines = trailList.map(trail => {
       return new TrailToPolyline(trail.code,
         L.polyline(MapUtils.getCoordinatesInverted(trail.coordinates),
-          this.getLineStyle(false, trail.classification)))});
-    this.otherTrailsPolylines.forEach(trailToPoly=> { trailToPoly.getPolyline().addTo(this.map)});
+          this.getLineStyle(false, trail.classification)))
+    });
+    this.otherTrailsPolylines.forEach(trailToPoly => {
+      trailToPoly.getPolyline().addTo(this.map)
+      trailToPoly.getPolyline().on("click", this.onSelectTrail(trailToPoly));
+    });
+  }
+
+  private onSelectTrail(trailToPoly: TrailToPolyline) {
+    let codeEmitter = this.selectCodeEvent;
+    return function () {
+      codeEmitter.emit(trailToPoly.getCode())
+    };
   }
 
   renderTileLayer(tileLayerName: string): void {
@@ -79,12 +96,14 @@ export class MapFullComponent implements OnInit {
   }
 
   clearPathFromList(selectedTrail: Trail) {
-    const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == selectedTrail.code)[0];
-    this.map.removeLayer(trailFromOtherTrails.getPolyline());   
+    const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == selectedTrail.code);
+    if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
+      this.map.removeLayer(trailFromOtherTrails[0].getPolyline());
+    }
   }
 
   getLineStyle(isSelectedLine: boolean, trailClassification: TrailClassification): L.PolylineOptions {
-    var trailColor = isSelectedLine ? "red" : "#ff1414";
+    var trailColor = MapUtils.getLineColor(isSelectedLine);
     switch (trailClassification) {
       case TrailClassification.E:
         return {
@@ -109,6 +128,10 @@ export class MapFullComponent implements OnInit {
     }
   }
 
+  isInitialized(): boolean {
+    return this.map != null;
+  }
+
   getLayerByName(layerName: string): L.TileLayer {
     switch (layerName) {
       case "topo":
@@ -130,6 +153,8 @@ export class MapFullComponent implements OnInit {
         throw new Error("TileLayer not in list");
     }
   }
+
+  
 
 
 }

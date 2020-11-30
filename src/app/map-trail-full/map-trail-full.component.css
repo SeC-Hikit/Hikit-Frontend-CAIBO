@@ -1,0 +1,13 @@
+#fullTrailPage {
+    width: 100%;
+    min-height: 1000px;
+    background: rgba(255, 255, 255, 0.95);
+    position: absolute;
+    top: 0px;
+    z-index: 2;
+  }
+  
+  #fullTrailPage .container {
+    overflow-y: scroll;
+  }
+  

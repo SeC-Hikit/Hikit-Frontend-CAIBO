@@ -20,6 +20,7 @@ import { MapTrailDetailsComponent } from './map-trail-details/map-trail-details.
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingPanelComponent } from './loading-panel/loading-panel.component';
 import { MapPreviewComponent } from './map-preview/map-preview.component';
+import { MapTrailFullComponent } from './map-trail-full/map-trail-full.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { MapPreviewComponent } from './map-preview/map-preview.component';
     MapTrailListComponent,
     MapTrailDetailsComponent,
     LoadingPanelComponent,
-    MapPreviewComponent
+    MapPreviewComponent,
+    MapTrailFullComponent
   ],
   imports: [
     BrowserModule,

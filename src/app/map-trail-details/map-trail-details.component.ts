@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NotificationService } from '../notification-service.service';
 import { Trail } from '../Trail';
 
 @Component({
@@ -8,8 +9,11 @@ import { Trail } from '../Trail';
 })
 export class MapTrailDetailsComponent implements OnInit {
 
-  notificationsForTrail : Notification[];
-  selectedTrail: Trail;
+  @Input() selectedTrail: Trail;
+  @Input() trailNotifications : Notification[];
+
+  @Output() toggleFullTrailPageEvent = new EventEmitter<void>();
+  @Output() toggleNotificationListEvent = new EventEmitter<void>();
 
   constructor() { }
 
@@ -17,6 +21,12 @@ export class MapTrailDetailsComponent implements OnInit {
     
   }
 
-  
+  toggleFullTrailPage(): void {
+    console.log("tac");
+    this.toggleFullTrailPageEvent.emit();
+  }
 
+  toggleEventNotificationList(): void {
+    this.toggleNotificationListEvent.emit();
+  }
 }

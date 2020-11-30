@@ -1,37 +1,55 @@
 <div>
     <div class="row relative-map">
-        <app-map-full id="map-full-container" [selectedTrail]="selectedTrail" [tileLayerName]="selectedTileLayer" [trailList]="trailList"></app-map-full>
+        <div [ngClass]="{ 'hideaway' : !isTrailFullScreenVisible }">
+            <app-map-trail-full [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications" (isVisibleEvent)="toggleFullPageTrail()"
+                (downloadGpxEvent)="downloadGpx()" (toggleNotificationModalEvent)="toggleNotificationsModal()">
+            </app-map-trail-full>
+        </div>
+        <app-map-full id="map-full-container" [selectedTrail]="selectedTrail" [tileLayerName]="selectedTileLayer"
+            [trailList]="trailList" (selectCodeEvent)="loadTrail($event)">
+        </app-map-full>
         <div id="absolute-wrapper">
             <div class="row">
-                <div class="column-map col-12 col-md-3 white details functional-column" [ngClass]="{ 'hide' : !isTrailSelectedVisible }">
-                    <app-map-trail-details></app-map-trail-details>
+                <div class="column-map col-12 col-md-3 white details functional-column"
+                    [ngClass]="{ 'hide' : !isTrailSelectedVisible }">
+                    <app-map-trail-details [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications"
+                        (toggleFullTrailPageEvent)="toggleFullPageTrail()" (toggleNotificationListEvent)="toggleNotificationsModal()"
+                    >
+                    </app-map-trail-details>
                 </div>
                 <div class="column-map col-12 col-md-4">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label (click)="changeTileLayer('topo')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'topo' }"><input autocomplete="off"
-                                checked id="option1" name="options" type="radio">Topografico</label>
-                        <label (click)="changeTileLayer('geopolitic')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'geopolitic' }"><input autocomplete="off"
+                        <label (click)="changeTileLayer('topo')" class="btn btn-light"
+                            [ngClass]="{'active': selectedTileLayer == 'topo' }"><input autocomplete="off" checked
+                                id="option1" name="options" type="radio">Topografico</label>
+                        <label (click)="changeTileLayer('geopolitic')" class="btn btn-light"
+                            [ngClass]="{'active': selectedTileLayer == 'geopolitic' }"><input autocomplete="off"
                                 id="option2" name="options" type="radio">Geopolitica</label>
-                        <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'geopolitic2' }"><input autocomplete="off"
+                        <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light"
+                            [ngClass]="{'active': selectedTileLayer == 'geopolitic2' }"><input autocomplete="off"
                                 id="option3" name="options" type="radio">Geopolitica 2</label>
                     </div>
                 </div>
                 <div class="column-map col-12 col-md-2 showHideButtons">
                     <div class="btn-group-toggle" data-toggle="buttons">
-                        <label (click)="toggleAllTrails()" class="btn btn-light" [ngClass]="{ 'active' : isAllTrailVisible }">
+                        <label (click)="toggleAllTrails()" class="btn btn-light"
+                            [ngClass]="{ 'active' : isAllTrailVisible }">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#eye" />
                             </svg>
                         </label>
-                        <label (click)="toggleList()" class="btn btn-light" [ngClass]="{ 'active' : isTrailListVisible }">
+                        <label (click)="toggleList()" class="btn btn-light"
+                            [ngClass]="{ 'active' : isTrailListVisible }">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#list-ol" />
                             </svg>
                         </label>
                     </div>
                 </div>
-                <div class="column-map col-12 col-md-3 column-hike-title white functional-column" [ngClass]="{ 'hide' : !isTrailListVisible }">
-                    <app-map-trail-list [trailsPreviewList]="trailPreviewList" (selectCodeEvent)="loadTrail($event)"></app-map-trail-list>
+                <div class="column-map col-12 col-md-3 column-hike-title white functional-column"
+                    [ngClass]="{ 'hide' : !isTrailListVisible }">
+                    <app-map-trail-list [trailsPreviewList]="trailPreviewList" (selectCodeEvent)="loadTrail($event)">
+                    </app-map-trail-list>
                 </div>
             </div>
         </div>

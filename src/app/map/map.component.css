@@ -32,6 +32,10 @@
     visibility: hidden !important;
 }
 
+.hideaway {
+    display: none;
+}
+
 .showHideButtons .btn-group-toggle .btn {
     margin: 0 5%;
 }

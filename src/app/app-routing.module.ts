@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: "home", component: HomeComponent },
   { path: "trails", component: TrailsComponent },
   { path: "map", component: MapComponent },
-  { path: "map/:id?", component: MapComponent },
+  { path: "map/:id", component: MapComponent },
   { path: "safety", component: SafetyComponent },
   { path: "trekking", component: TrekkingComponent },
   { path: "accessibility", component: AccessibilityComponent },

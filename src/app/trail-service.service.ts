@@ -25,7 +25,7 @@ export class TrailService {
   }
 
   getTrailsLow() {
-    return this.httpClient.get<TrailResponse>(this.baseUrl + "/")
+    return this.httpClient.get<TrailResponse>(this.baseUrl + "/ ")
       .pipe(
         tap(_ => console.log("")),
         catchError(this.handleError<TrailResponse>('get all trail', null))

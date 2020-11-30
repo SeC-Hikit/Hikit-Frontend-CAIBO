@@ -1,0 +1,101 @@
+<div id="fullTrailPage">
+    <div class="container" *ngIf="selectedTrail">
+        <div class="row space-up">
+            <div class="col-12 col-md-6">
+                <h1>Sentiero {{ selectedTrail.code }}</h1>
+            </div>
+            <div class="col-1 col-md-1 offset-5 clickable">
+                <svg class="bi" width="24" height="24" fill="red" (click)="toggleVisibility()">
+                    <use xlink:href="/assets//bootstrap-icons/bootstrap-icons.svg#x" />
+                </svg>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p> {{ selectedTrail.classification }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <h2>Descrizione</h2>
+                <p> {{ selectedTrail.description }}</p>
+            </div>
+            <div class="col-12 col-md-6">
+                <h2>Percorribilita'</h2>
+                <div *ngIf="trailNotifications; else notShow" class="clickable">
+                    <div (click)="toggleModal()">
+                        <svg class="bi pulse" width="24" height="24" fill="red">
+                            <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
+                        </svg>
+                        <span>Clicca per visualizzare avvisi di percorribilita'</span>
+                    </div>
+                </div>
+                <ng-template #notShow>
+                    <p>Non ci sono avvisi di percorribilita'.</p>
+                </ng-template>
+            </div>
+        </div>
+        <div class="row space-up">
+            <div class="col-12">
+                <h2>Dati</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <h4>Lunghezza</h4>
+                <p>{{ selectedTrail.statsMetadata.length }}m</p>
+            </div>
+            <div class="col-12 col-md-4">
+                <h4>Tempo di percorrenza stimato</h4>
+                <p>{{ selectedTrail.statsMetadata.eta }} minuti</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <h4>Dislivello</h4>
+                <p>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</p>
+                <p>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</p>
+            </div>
+            <div class="col-12 col-md-6">
+                <h4>Profilo Altimetrico</h4>
+                <canvas id="chart-hike-full"></canvas>
+            </div>
+        </div>
+        <div class="row space-up">
+            <div class="col-12">
+                <h4>Altro</h4>
+            </div>
+        </div>
+        <div class="row clickable space-up" (click)="downloadGpx()">
+            <div class="col-md-1">
+                <svg class="bi" width="32" height="32" fill="red">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
+                </svg>
+            </div>
+            <div class="col-md-4 clickable">
+                <label>Download .GPX</label>
+            </div>
+        </div>
+        <div class="row clickable">
+            <div class="col-md-1">
+                <svg class="bi" width="32" height="32" fill="red">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#geo-alt" />
+                </svg>
+            </div>
+            <div class="col-md-4 clickable">
+                <label>Apri su Maps</label>
+            </div>
+        </div>
+        <div class="row clickable">
+            <div class="col-md-1">
+                <svg class="bi" width="32" height="32" fill="red">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#printer" />
+                </svg>
+            </div>
+            <div class="col-md-4 clickable">
+                <label>Stampa</label>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,14 +2,14 @@
     <div class="col-md-10">
         <h1>{{ selectedTrail.code }}</h1>
     </div>
-    <div class="col-md-2 space-up">
+    <div class="col-md-2 space-up" (click)="toggleFullTrailPage()">
         <svg class="bi" width="24" height="24" fill="red">
             <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#arrow-up-right-square" />
         </svg>
     </div>
 </div>
 <div *ngIf="selectedTrail"
-    class="description column-map col-12 col-md-3 white scrollable details"
+    class="col-12 white scrollable details"
     [ngClass]="{ 'hide' : selectedTrail }">
     <div>
         <h4>Classificazione</h4>
@@ -19,7 +19,7 @@
             </span> </p>
         <h4>Percorribilita'</h4>
         <div *ngIf="notificationsForTrail; else notShow" class="clickable">
-            <div v-on:click="toggleModal">
+            <div (click)="toggleEventNotificationList()">
                 <svg class="bi pulse" width="24" height="24" fill="red">
                     <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
                 </svg>
