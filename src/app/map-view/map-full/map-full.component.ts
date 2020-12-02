@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import 'leaflet';
 import 'leaflet-textpath';
+import { Trail } from 'src/app/Trail';
+import { TrailClassification } from 'src/app/TrailClassification';
+import { MapUtils } from '../MapUtils';
+import { TrailToPolyline } from '../TrailToPolyline';
 declare let L; // to be able to use L namespace
-import { Trail } from '../Trail';
-import { TrailClassification } from '../TrailClassification';
-import { MapUtils } from './MapUtils';
-import { TrailToPolyline } from './TrailToPolyline';
 
 @Component({
   selector: 'app-map-full',
@@ -42,6 +42,7 @@ export class MapFullComponent implements OnInit {
       [44.498955, 11.327591],
       12
     );
+    L.control.scale().addTo(this.map);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -102,7 +103,7 @@ export class MapFullComponent implements OnInit {
     }
   }
 
-  getLineStyle(isSelectedLine: boolean, trailClassification: TrailClassification): L.PolylineOptions {
+  getLineStyle(isSelectedLine: boolean, trailClassification: TrailClassification) {
     var trailColor = MapUtils.getLineColor(isSelectedLine);
     switch (trailClassification) {
       case TrailClassification.E:

@@ -1,6 +1,6 @@
 export enum TrailClassification {
-    T, 
-    E,
-    EE,
-    EEA
+    T = "T", 
+    E = "E",
+    EE = "EE",
+    EEA = "EEA"
 }

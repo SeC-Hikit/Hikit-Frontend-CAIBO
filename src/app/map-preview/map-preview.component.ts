@@ -1,7 +1,7 @@
 import { SimpleChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
-import { MapUtils } from '../map-full/MapUtils';
+import { MapUtils } from '../map-view/MapUtils';
 import { Trail } from '../Trail';
 
 @Component({

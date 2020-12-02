@@ -56,6 +56,8 @@ export class MapComponent implements OnInit {
       this.trailService.getTrailByCode(code).subscribe(
         trailResponse => {
           this.selectedTrail = trailResponse.trails[0];
+          this.selectedTrail.statsMetadata.eta = Math.round(this.selectedTrail.statsMetadata.eta);
+          this.selectedTrail.statsMetadata.length = Math.round(this.selectedTrail.statsMetadata.length);
           this.loadNotificationsForTrail(code);
 
           this.isTrailSelectedVisible = true;
@@ -68,7 +70,7 @@ export class MapComponent implements OnInit {
   }
 
   loadAllTrails(): void {
-    this.trailService.getTrailsLow().subscribe(trailResponse => { this.trailList = trailResponse.trails });
+    this.trailService.getTrailsLight().subscribe(trailResponse => { this.trailList = trailResponse.trails });
   }
 
   downloadGpx(): void {

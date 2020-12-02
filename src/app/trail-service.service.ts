@@ -8,7 +8,7 @@ import { TrailResponse } from './TrailResponse';
   providedIn: 'root'
 })
 export class TrailService {
-  
+
   baseUrl = "api/trail";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,15 +17,15 @@ export class TrailService {
   constructor(private httpClient: HttpClient) { }
 
   getTrailByCode(code: String): Observable<TrailResponse> {
-    return this.httpClient.get<TrailResponse>(this.baseUrl + "/" + code)
+    return this.httpClient.get<TrailResponse>(this.baseUrl + "/" + code + "?light=true")
       .pipe(
         tap(_ => console.log("")),
         catchError(this.handleError<TrailResponse>('get all trail', null))
       );
   }
 
-  getTrailsLow() {
-    return this.httpClient.get<TrailResponse>(this.baseUrl + "/ ")
+  getTrailsLight() {
+    return this.httpClient.get<TrailResponse>(this.baseUrl + "/?light=true")
       .pipe(
         tap(_ => console.log("")),
         catchError(this.handleError<TrailResponse>('get all trail', null))

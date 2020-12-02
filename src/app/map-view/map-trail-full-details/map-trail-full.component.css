@@ -7,7 +7,7 @@
     z-index: 2;
   }
   
-  #fullTrailPage .container {
-    overflow-y: scroll;
+  #fullTrailPage .scrollable-subcontainer {
+    overflow: scroll;
+    max-height: 700px;
   }
-  

@@ -1,6 +1,6 @@
 export interface StatsMetadata {
-    totalRise: Number,
-    totalFall: Number,
-    eta: Number,
-    length: Number
+    totalRise: number,
+    totalFall: number,
+    eta: number,
+    length: number
 }
