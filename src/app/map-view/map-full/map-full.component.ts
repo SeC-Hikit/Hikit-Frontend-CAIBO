@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import 'leaflet';
 import 'leaflet-textpath';
 import { Trail } from 'src/app/Trail';
@@ -14,6 +14,8 @@ declare let L; // to be able to use L namespace
 })
 export class MapFullComponent implements OnInit {
 
+  private static MAP_ID: string = "map-full"
+  
   map: L.Map;
   selectedLayer: L.TileLayer;
   selectedTrailLayer: L.Polyline;
@@ -29,6 +31,9 @@ export class MapFullComponent implements OnInit {
 
   @Output() selectCodeEvent = new EventEmitter<string>();
 
+  @ViewChild("#map-full") mapObj;
+
+
   constructor() {
     this.otherTrailsPolylines = [];
   }
@@ -38,11 +43,20 @@ export class MapFullComponent implements OnInit {
     this.openStreetmapCopy =
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     this.selectedLayer = this.getLayerByName("topo");
-    this.map = L.map("map-full", { layers: [this.selectedLayer], maxZoom: 17 }).setView(
+    this.map = L.map(MapFullComponent.MAP_ID, { layers: [this.selectedLayer], maxZoom: 17 }).setView(
       [44.498955, 11.327591],
       12
     );
-    L.control.scale().addTo(this.map);
+  }
+
+  ngAfterViewInit(): void {
+    let documentHeight: number = document.documentElement.scrollHeight;
+    let headerWrapperHeight = document.getElementById("header-wrapper").offsetHeight;
+    let slimHeaderWrapHeight = document.getElementById("header-slim-wrapper").offsetHeight;
+    let mapHeight = documentHeight - headerWrapperHeight - slimHeaderWrapHeight;
+    console.log(documentHeight);
+    document.getElementById(MapFullComponent.MAP_ID).style.height = mapHeight.toString() + "px";
+    this.map.invalidateSize();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -154,8 +168,4 @@ export class MapFullComponent implements OnInit {
         throw new Error("TileLayer not in list");
     }
   }
-
-  
-
-
 }

@@ -27,7 +27,7 @@ export class ChartUtils {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: "Distanza",
+                            labelString: "Distanza (m)",
 
                         }, ticks: {
                             autoSkip: true,

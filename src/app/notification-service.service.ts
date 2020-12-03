@@ -27,11 +27,11 @@ export class NotificationService {
       );
   }
 
-  getUnresolved(code: String): Observable<AccessibilityNotificationUnresolvedResponse> {
+  getUnresolved(): Observable<AccessibilityNotificationUnresolvedResponse> {
     return this.httpClient.get<AccessibilityNotificationUnresolvedResponse>(this.baseUrl + "/unresolved")
       .pipe(
         tap(_ => console.log("")),
-        catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('get all trail', null))
+        catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('get all unresolved', null))
       );
   }
 
@@ -39,7 +39,7 @@ export class NotificationService {
     return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/solved")
       .pipe(
         tap(_ => console.log("")),
-        catchError(this.handleError<AccessibilityNotificationResponse>('get all trail', null))
+        catchError(this.handleError<AccessibilityNotificationResponse>('get all resolved', null))
       );
   }
 

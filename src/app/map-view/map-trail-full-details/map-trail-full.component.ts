@@ -4,6 +4,7 @@ import { ChartOptions } from 'chart.js';
 import { AccessibilityNotificationUnresolved } from 'src/app/AccessibilityNotificationUnresolved';
 import { Trail } from 'src/app/Trail';
 import { ChartUtils } from '../ChartUtils';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-map-trail-full',
@@ -30,6 +31,8 @@ export class MapTrailFullComponent implements OnInit {
       type: "line",
       options: this.chartOptions,
     });
+
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -44,7 +47,7 @@ export class MapTrailFullComponent implements OnInit {
   updateChart(): void {
     ChartUtils.clearChart(this.chart);
     let altitudeDataPoints = this.selectedTrail.coordinates.map(c => c.altitude);
-    this.chart.data.labels = this.selectedTrail.coordinates.map(c => Math.round(c.distanceFromTrailStart));
+    this.chart.data.labels = this.selectedTrail.coordinates.map(c => c.distanceFromTrailStart + "m");
     this.chart.data.datasets = [{
       backgroundColor: "rgb(255, 99, 132)",
       borderColor: "rgb(255, 99, 132)",
