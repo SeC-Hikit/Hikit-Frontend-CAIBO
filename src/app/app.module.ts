@@ -8,7 +8,7 @@ import { MenuSlimComponent } from './menu-slim/menu-slim.component';
 import { HomeComponent } from './home/home.component';
 import { TrailsComponent } from './trails/trails.component';
 import { AccessibilityComponent } from './accessibility/accessibility.component';
-import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { MaintenanceComponent } from './maintenance-view/maintenance.component';
 import { FooterComponent } from './footer/footer.component';
 import { TrekkingComponent } from './trekking/trekking.component';
 import { SafetyComponent } from './safety/safety.component';

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AccessibilityNotificationUnresolvedResponse } from './AccessibilityNotificationUnresolvedResponse';
-import { AccessibilityNotificationResponse } from './AccessibilityNotificationUnresolvedResponse copy';
+import { AccessibilityNotificationResponse } from './AccessibilityNotificationResolvedResponse';
 
 @Injectable({
   providedIn: 'root'

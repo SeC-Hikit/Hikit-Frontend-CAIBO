@@ -29,6 +29,7 @@
     "chart.js": "^2.9.4",
     "leaflet": "^1.7.1",
     "leaflet-textpath": "^1.2.3",
+    "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

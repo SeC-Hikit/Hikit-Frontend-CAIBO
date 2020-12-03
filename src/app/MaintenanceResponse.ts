@@ -3,7 +3,7 @@ import { Status } from './Status';
 import { Maintenance } from './Maintenance';
 
 export interface MaintenanceResponse { 
-    trailPreviews : Maintenance[],
+    maintenanceList : Maintenance[],
     status: Status,
     messages: String[]
 }
