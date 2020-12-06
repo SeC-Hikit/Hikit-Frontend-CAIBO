@@ -12,4 +12,9 @@ export class TrailAddManagementComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(): void {
+
+    
+  }
+
 }

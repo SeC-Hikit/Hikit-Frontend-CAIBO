@@ -5,7 +5,7 @@
             <h1>
                 Gestione segnalazioni percorribilità sentieri
             </h1>
-            <button type="button" class="btn btn-primary">Crea segnalazione</button>
+            <button type="button" class="btn btn-primary" routerLink="./add">Crea segnalazione</button>
             <h2 class="section-distance-up">Segnalazioni aperte</h2>
             <table *ngIf="unresolvedNotifications.length > 0; else notShow" class="table table-striped interactive-table">
                 <thead>

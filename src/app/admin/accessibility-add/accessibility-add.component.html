@@ -1,1 +1,64 @@
-<p>accessibility-add works!</p>
+<div class="container my-4">
+    <app-menu-admin></app-menu-admin>
+    <h1 class="space-up">Gestione segnalazioni percorribilità sentieri</h1>
+    <h2>Aggiungi notifica di percorribilità legata a un sentiero</h2>
+    <p>Compila i seguenti campi per aggiungere una notifica di percorribilità. Questa sarà mostrata quando l'utente
+        visualizza il sentiero a cui essa è legata.</p>
+    <div class="table-wrapper space-up">
+        <form class="needs-validation" novalidate>
+            <div class="form-row">
+
+                <div class="form-group col-md-4 mb-3">
+                    <p>Sentiero interessato</p>
+                    <div class="bootstrap-select-wrapper">
+                        <select title="Scegli una opzione" data-live-search="true"
+                            data-live-search-placeholder="Cerca opzioni" class="form-control" id="trailId_select">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <p>Data segnalazione</p>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
+                                type="button"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <p>Descrizione</p>
+                    <input type="text" class="form-control" id="validationCustom03" placeholder="Descrizione" required>
+                    <div class="invalid-feedback">Per favore inserisci una descrizione</div>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <p>Latitudine</p>
+                    <input type="text" class="form-control" id="validationCustom04" placeholder="Latitudine (facoltativo)"
+                        required>
+                    <div class="invalid-feedback">Latitudine</div>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <p>Longitudine</p>
+                    <input type="text" class="form-control" id="validationCustom04" placeholder="Longitudine (facoltativo)"
+                        required>
+                    <div class="invalid-feedback">Longitudine</div>
+                </div>
+            </div>
+            <span class="form-group col-md-3 mb-3">
+                <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
+            </span>
+            <span class="form-group col-md-3 mb-3">
+                <a routerLink="/admin/accessibility">
+                    <button class="btn btn-light mt-3" type="button">Cancella</button>
+                </a>
+            </span>
+        </form>
+    </div>
+</div>

@@ -1,1 +1,89 @@
-<p>trail-add-management works!</p>
+<div class="container my-4">
+    <app-menu-admin></app-menu-admin>
+    <h1 class="space-up">Gestioni Sentieri</h1>
+    <h2>Aggiungi sentiero</h2>
+    <p>Carica un file .gpx con la traccia da caricare e compila i campi per aggiungere o rimpiazzare un sentiero.</p>
+    <div class="table-wrapper space-up">
+        <form method="post" action="" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+            <input type="file" name="upload1" id="upload1" class="upload" multiple="multiple" />
+            <label for="upload1">
+                <svg class="icon icon-sm" aria-hidden="true">
+                    <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#cloud-upload"></use>
+                </svg>
+                <span>Upload .gpx</span>
+            </label>
+
+
+            <div class="form-row">
+                <div class="form-group col-md-4 mb-3">
+                    <p>Codice sentiero</p>
+                    <input type="text" class="form-control" id="validationCustom01"
+                        placeholder="Codice (es: 100BO)" required>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <p>Nome sentiero</p>
+                    <input type="text" class="form-control" id="validationCustom01"
+                        placeholder="Nome sentiero, se diverso dal codice" required>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <p>Classificazione</p>
+                    <div class="bootstrap-select-wrapper">
+                        <select title="Scegli una opzione" data-live-search="true" class="form-control" id="trailId_select">
+                            <option>T</option>
+                            <option>E</option>
+                            <option>EE</option>
+                            <option>EEA</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4 mb-3">
+                    <p>Data rilevazione</p>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
+                                type="button"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <p>Sezione competente CAI</p>
+                    <div class="bootstrap-select-wrapper">
+                        <select title="Scegli una opzione" data-live-search="true" class="form-control" id="trailId_select">
+                            <option>Bologna</option>
+                            <option>Porretta</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12 mb-12">
+                    <div id="description-full-text"></div>
+                </div>                
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <input type="text" class="form-control" id="validationCustom03" placeholder="Descrizione" required>
+                    <div class="invalid-feedback">Per favore inserisci una descrizione</div>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <input type="text" class="form-control" id="validationCustom04" placeholder="Posto dell'incontro"
+                        required>
+                    <div class="invalid-feedback">Per favore inserisci un posto d'incontro</div>
+                </div>
+            </div>
+            <span class="form-group col-md-3 mb-3">
+                <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
+            </span>
+            <span class="form-group col-md-3 mb-3">
+                <a routerLink="/admin/maintenance">
+                    <button class="btn btn-light mt-3" type="button">Cancella</button>
+                </a>
+            </span>
+        </form>
+    </div>
+</div>
