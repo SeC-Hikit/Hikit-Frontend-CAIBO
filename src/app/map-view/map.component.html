@@ -1,20 +1,21 @@
 <div>
     <div class="row relative-map">
         <div [ngClass]="{ 'hideaway' : !isTrailFullScreenVisible }">
-            <app-map-trail-full [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications" (isVisibleEvent)="toggleFullPageTrail()"
-                (downloadGpxEvent)="downloadGpx()" (toggleNotificationModalEvent)="toggleNotificationsModal()">
+            <app-map-trail-full [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications"
+                (isVisibleEvent)="toggleFullPageTrail()" (downloadGpxEvent)="downloadGpx()"
+                (toggleNotificationModalEvent)="toggleNotificationsModal()">
             </app-map-trail-full>
         </div>
         <app-map-full id="map-full-container" [selectedTrail]="selectedTrail" [tileLayerName]="selectedTileLayer"
-            [trailList]="trailList" (selectCodeEvent)="loadTrail($event)">
+            [trailList]="trailList" [userPosition]="userPosition" (selectCodeEvent)="loadTrail($event)">
         </app-map-full>
         <div id="absolute-wrapper">
             <div class="row">
                 <div class="column-map col-12 col-md-3 white details functional-column"
-                    [ngClass]="{ 'hide' : !isTrailSelectedVisible }">
+                    [ngClass]="{ 'hide' : !isTrailSelectedVisible }" id="trail-detail-column">
                     <app-map-trail-details [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications"
-                        (toggleFullTrailPageEvent)="toggleFullPageTrail()" (toggleNotificationListEvent)="toggleNotificationsModal()"
-                    >
+                        (toggleFullTrailPageEvent)="toggleFullPageTrail()"
+                        (toggleNotificationListEvent)="toggleNotificationsModal()">
                     </app-map-trail-details>
                 </div>
                 <div class="column-map col-12 col-md-4">
@@ -30,23 +31,32 @@
                                 id="option3" name="options" type="radio">Geopolitica 2</label>
                     </div>
                 </div>
-                <div class="column-map col-12 col-md-2 showHideButtons">
+                <div class="column-map col-12 col-md-3 showHideButtons">
                     <div class="btn-group-toggle" data-toggle="buttons">
-                        <label (click)="toggleAllTrails()" class="btn btn-light"
+                        <label (click)="toggleAllTrails()" class="btn btn-light" placement="bottom"
+                            ngbTooltip="Mostra/nascondi sentieri" tooltipClass="tooltip-c"
                             [ngClass]="{ 'active' : isAllTrailVisible }">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#eye" />
                             </svg>
                         </label>
-                        <label (click)="toggleList()" class="btn btn-light"
+                        <label (click)="toggleList()" class="btn btn-light" placement="bottom"
+                            ngbTooltip="Mostra/nascondi lista sentieri" tooltipClass="tooltip-c"
                             [ngClass]="{ 'active' : isTrailListVisible }">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#list-ol" />
                             </svg>
                         </label>
+                        <label (click)="toggleUserPosition()" class="btn btn-light" placement="bottom"
+                            ngbTooltip="Mostra la tua posizione" tooltipClass="tooltip-c"
+                            [ngClass]="{ 'active' : isUserPositionToggled }">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#geo-fill" />
+                            </svg>
+                        </label>
                     </div>
                 </div>
-                <div class="column-map col-12 col-md-3 column-hike-title white functional-column"
+                <div class="column-map col-12 col-md-3 column-hike-title white functional-column" id="trail-list-column"
                     [ngClass]="{ 'hide' : !isTrailListVisible }">
                     <app-map-trail-list [trailsPreviewList]="trailPreviewList" (selectCodeEvent)="loadTrail($event)">
                     </app-map-trail-list>

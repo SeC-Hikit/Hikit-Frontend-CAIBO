@@ -21,7 +21,7 @@
 }
 
 .functional-column {
-    min-height: 750px !important;
+    min-height: 750px;
 }
 
 .active {
@@ -37,5 +37,22 @@
 }
 
 .showHideButtons .btn-group-toggle .btn {
-    margin: 0 5%;
+    margin: 0 1%;
 }
+
+.pulse {
+    animation: pulse-animation 1s infinite alternate-reverse;
+}
+
+@keyframes pulse-animation {
+    0% {
+      opacity: 0.3;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .tooltip-c * {
+      font-size: 18px !important;
+  }

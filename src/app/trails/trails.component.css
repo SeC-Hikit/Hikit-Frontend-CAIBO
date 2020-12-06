@@ -2,3 +2,7 @@
     overflow-y: hidden;
     max-height: 500px;
 }
+
+.hidden {
+    display: none;
+}

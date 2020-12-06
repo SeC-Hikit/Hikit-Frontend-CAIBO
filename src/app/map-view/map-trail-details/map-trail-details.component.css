@@ -8,3 +8,16 @@
     overflow-y: scroll;
     height: 500px;
 }
+
+.pulse {
+    animation: pulse-animation 1s infinite alternate-reverse;
+}
+
+@keyframes pulse-animation {
+    0% {
+      opacity: 0.3;
+    }
+    100% {
+      opacity: 1;
+    }
+  }

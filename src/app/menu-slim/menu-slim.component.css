@@ -5,9 +5,23 @@
   ul.link-list
   a {
   padding-top: 0px;
+  color: black;
 }
 
 .it-header-slim-wrapper-tent,
 .it-header-slim-wrapper {
   height: 35px;
+}
+
+.it-header-slim-wrapper .it-header-slim-wrapper-content .nav-mobile ul.link-list{
+  margin: 0 0px 0 0;
+  display: flex;
+  padding: 0 0px;
+  border-left: 0px solid rgba(255,255,255,.2);
+  border-right: 0px solid rgba(255,255,255,.2);
+  height: 48px;
+}
+
+.it-header-slim-wrapper { 
+  background-color: white;
 }

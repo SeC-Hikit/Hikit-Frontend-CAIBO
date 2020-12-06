@@ -2,8 +2,9 @@
     <div class="row">
         <div class="col-12 col-md-8">
             <h1>Sentieri</h1>
-            <table *ngIf="trailsResponse; else notShow" class="table table-striped interactive-table">
-                <thead>
+
+            <table id="trailTable" *ngIf="trailsResponse; else notShow" class="table table-striped interactive-table">
+                <thead class="">
                     <tr>
                         <th scope="col">Codice</th>
                         <th scope="col">Localita</th>

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
+import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
+import { AccessibilityNotificationUnresolved } from 'src/app/AccessibilityNotificationUnresolved';
+import { NotificationService } from 'src/app/notification-service.service';
 
 @Component({
   selector: 'app-accessibility-management',
@@ -7,9 +11,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccessibilityManagementComponent implements OnInit {
 
-  constructor() { }
+  unresolvedNotifications : AccessibilityNotificationUnresolved[]
+  solvedNotifications : AccessibilityNotification[]
+
+  constructor(private notificationService : NotificationService) { 
+    this.unresolvedNotifications = [];
+    this.solvedNotifications = [];
+  }
 
   ngOnInit(): void {
+    const notificationResponseUnresolved = this.notificationService.getUnresolved().subscribe(x=> { this.unresolvedNotifications = x.accessibilityNotifications; });
+    const notificationResponseResolved = this.notificationService.getAllResolved().subscribe(x=> { this.solvedNotifications = x.accessibilityNotifications }); 
   }
+
+  formatDate(dateString: string) : string {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
+
 
 }

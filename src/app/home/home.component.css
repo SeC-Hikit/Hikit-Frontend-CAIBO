@@ -1,0 +1,9 @@
+#image { 
+    background: url(/assets/cai/bg_home.jpg) no-repeat;
+    background-size:cover;
+    background-position: center;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    z-index: -1;
+}

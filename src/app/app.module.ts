@@ -28,6 +28,9 @@ import { MaintenanceManagementComponent } from './admin/maintenance-management/m
 import { MaintenanceAddComponent } from './admin/maintenance-add/maintenance-add.component';
 import { AccessibilityManagementComponent } from './admin/accessibility-management/accessibility-management.component';
 import { AccessibilityAddComponent } from './admin/accessibility-add/accessibility-add.component';
+import { AdminMenuComponent } from './admin/menu/menu.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -55,12 +58,15 @@ import { AccessibilityAddComponent } from './admin/accessibility-add/accessibili
     MaintenanceManagementComponent,
     MaintenanceAddComponent,
     AccessibilityManagementComponent,
-    AccessibilityAddComponent
+    AccessibilityAddComponent,
+    AdminMenuComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,10 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Trail } from 'src/app/Trail';
-import { Chart, ChartOptions } from 'chart.js';
-import { ChartUtils } from '../ChartUtils';
-import { MapUtils } from '../MapUtils';
-import { ViewChild } from '@angular/core';
-import { ElementRef } from '@angular/core';
+import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 
 @Component({
   selector: 'app-map-trail-details',

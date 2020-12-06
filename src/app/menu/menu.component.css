@@ -18,3 +18,7 @@ a {
 .active {
     border-bottom: 2px solid white;
 }
+
+.it-header-center-wrapper, .it-header-navbar-wrapper {
+  background-color: #d04341;
+}

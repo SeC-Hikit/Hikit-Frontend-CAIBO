@@ -22,8 +22,11 @@ export class TrailsComponent implements OnInit {
     this.getAllPreviews();
   }
 
+  ngOnAfterViewInit(): void {
+  }
+
   getAllPreviews() {
-    this.trailPreviewService.getPreviews().subscribe(preview => this.trailsResponse = preview.trailPreviews);
+    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailsResponse = preview.trailPreviews;  } );
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {

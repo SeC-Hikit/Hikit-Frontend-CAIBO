@@ -6,6 +6,8 @@ import { Trail } from '../Trail';
 import { TrailPreviewService } from '../trail-preview-service.service';
 import { TrailService } from '../trail-service.service';
 import { TrailPreview } from '../TrailPreview';
+import { UserCoordinates } from '../UserCoordinates';
+import { GraphicUtils } from '../utils/GraphicUtils';
 
 @Component({
   selector: 'app-map',
@@ -14,18 +16,23 @@ import { TrailPreview } from '../TrailPreview';
 })
 export class MapComponent implements OnInit {
 
+  static TRAIL_LIST_COLUMN_ID = "trail-list-column"
+  static TRAIL_DETAILS_ID = "trail-detail-column";
+
   // Bound elements
   trailPreviewList: TrailPreview[];
   selectedTrail: Trail;
   trailNotifications: AccessibilityNotificationUnresolved[];
   trailList: Trail[];
   selectedTileLayer: string;
+  userPosition: UserCoordinates;
 
   isTrailSelectedVisible: boolean;
   isTrailFullScreenVisible: boolean;
   isTrailListVisible: boolean;
   isAllTrailVisible: boolean;
   isNotificationModalVisible: boolean;
+  isUserPositionToggled: boolean;
 
   constructor(
     private trailService: TrailService,
@@ -39,6 +46,7 @@ export class MapComponent implements OnInit {
     this.isAllTrailVisible = false;
     this.isNotificationModalVisible = false;
     this.isTrailFullScreenVisible = false;
+    this.isUserPositionToggled = false;
     this.changeTileLayer("topo");
     this.trailPreviewList = [];
     this.trailList = [];
@@ -46,6 +54,13 @@ export class MapComponent implements OnInit {
     const idFromPath: string = this.route.snapshot.paramMap.get("id");
     this.loadTrail(idFromPath);
   }
+
+  ngAfterViewInit(): void {
+    let fullSize = GraphicUtils.getFullHeightSizeMenu();
+    document.getElementById(MapComponent.TRAIL_LIST_COLUMN_ID).style.minHeight = fullSize.toString() + "px";
+    document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
+  }
+
 
   loadPreviews(): void {
     this.trailPreviewService.getPreviews().subscribe(previewResponse => { this.trailPreviewList = previewResponse.trailPreviews; console.log(this.trailPreviewList) });
@@ -89,6 +104,18 @@ export class MapComponent implements OnInit {
 
   toggleFullPageTrail(): void {
     this.isTrailFullScreenVisible = this.isTrailFullScreenVisible ? false : true;
+  }
+
+  toggleUserPosition(): void {
+    this.isUserPositionToggled = this.isTrailFullScreenVisible ? false : true;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.userPosition = new UserCoordinates(
+          position.coords.latitude,
+          position.coords.longitude)
+      }, (error) => alert(error))
+    }
   }
 
   toggleList(): void {

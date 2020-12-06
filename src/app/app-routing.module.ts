@@ -13,6 +13,8 @@ import { MaintenanceManagementComponent } from './admin/maintenance-management/m
 import { MaintenanceAddComponent } from './admin/maintenance-add/maintenance-add.component';
 import { AccessibilityManagementComponent } from './admin/accessibility-management/accessibility-management.component';
 import { AccessibilityAddComponent } from './admin/accessibility-add/accessibility-add.component';
+import { AdminComponent } from './admin/admin.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -27,21 +29,31 @@ const routes: Routes = [
   {
     path: "admin", children: [
       {
-        path: "trail", component: TrailManagementComponent, children: [{
-          path: "add", component: TrailAddManagementComponent
-        }]
+        path: "", component: AdminComponent
       },
       {
-        path: "maintenance", component: MaintenanceManagementComponent, children: [{
-          path: "add", component: MaintenanceAddComponent
-        }]
+        path: "trails", children: [
+          {path: "", component: TrailManagementComponent},
+          {path: "add", component: TrailAddManagementComponent},
+        ]
       },
       {
-        path: "accessibility", component: AccessibilityManagementComponent, children: [{
-          path: "add", component: AccessibilityAddComponent
-        }]
+        path: "maintenance", children: [
+          {path: "", component: MaintenanceManagementComponent},
+          {path: "add", component: MaintenanceAddComponent}
+        ]
+      },
+      {
+        path: "accessibility", children: [
+          {path: "", component: AccessibilityManagementComponent },
+          {path: "add", component: AccessibilityAddComponent}]
       }
     ]
+  },
+  {path: '404', component: NotFoundComponent},
+  {
+    path: '**',
+    component: NotFoundComponent
   }
 ];
 

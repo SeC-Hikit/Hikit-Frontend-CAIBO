@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
+import { Maintenance } from 'src/app/Maintenance';
+import { MaintenanceService } from 'src/app/maintenance.service';
 
 @Component({
   selector: 'app-maintenance-management',
@@ -7,9 +10,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaintenanceManagementComponent implements OnInit {
 
-  constructor() { }
+  maintenanceListFuture : Maintenance[];
+  maintenanceListPast : Maintenance[];
 
-  ngOnInit(): void {
+  constructor(private maintenanceService : MaintenanceService) { 
+    this.maintenanceListFuture = [];
+    this.maintenanceListPast = [];
   }
 
+  ngOnInit(): void {
+    const maintenanceResponseFuture = this.maintenanceService.getFuture().subscribe(x=> { this.maintenanceListFuture = x.maintenanceList; console.log(this.maintenanceListFuture )});
+    const maintenanceResponsePast = this.maintenanceService.getPast().subscribe(x=> { this.maintenanceListPast = x.maintenanceList}); 
+  }
+
+  onDelete(maintenace : Maintenance) {
+    
+  } 
+
+  formatDate(dateString: string) : string {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
 }

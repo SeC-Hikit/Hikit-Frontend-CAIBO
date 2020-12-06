@@ -24,6 +24,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css",
               "node_modules/bootstrap-italia/dist/css/bootstrap-italia.min.css",
               "node_modules/chart.js/dist/Chart.min.css",

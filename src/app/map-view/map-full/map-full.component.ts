@@ -3,6 +3,8 @@ import 'leaflet';
 import 'leaflet-textpath';
 import { Trail } from 'src/app/Trail';
 import { TrailClassification } from 'src/app/TrailClassification';
+import { UserCoordinates } from 'src/app/UserCoordinates';
+import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 import { MapUtils } from '../MapUtils';
 import { TrailToPolyline } from '../TrailToPolyline';
 declare let L; // to be able to use L namespace
@@ -25,14 +27,12 @@ export class MapFullComponent implements OnInit {
 
   openStreetmapCopy: string;
 
+  @Input() userPosition: UserCoordinates;
   @Input() selectedTrail: Trail;
   @Input() trailList: Trail[];
   @Input() tileLayerName: string;
 
   @Output() selectCodeEvent = new EventEmitter<string>();
-
-  @ViewChild("#map-full") mapObj;
-
 
   constructor() {
     this.otherTrailsPolylines = [];
@@ -50,11 +50,7 @@ export class MapFullComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    let documentHeight: number = document.documentElement.scrollHeight;
-    let headerWrapperHeight = document.getElementById("header-wrapper").offsetHeight;
-    let slimHeaderWrapHeight = document.getElementById("header-slim-wrapper").offsetHeight;
-    let mapHeight = documentHeight - headerWrapperHeight - slimHeaderWrapHeight;
-    console.log(documentHeight);
+    let mapHeight = GraphicUtils.getFullHeightSizeMenu();
     document.getElementById(MapFullComponent.MAP_ID).style.height = mapHeight.toString() + "px";
     this.map.invalidateSize();
   }
@@ -65,8 +61,18 @@ export class MapFullComponent implements OnInit {
         if (propName == "tileLayerName") { this.renderTileLayer(this.tileLayerName) }
         if (propName == "trailList") { this.renderAllTrail(this.trailList) }
         if (propName == "selectedTrail") { this.renderTrail(this.selectedTrail) }
+        if (propName == "userPosition") { this.focusOnUser(this.userPosition) }
       }
     }
+  }
+
+  focusOnUser(userPosition: UserCoordinates) {
+    console.log(userPosition);
+    const circle = L.circle([userPosition.latitude, userPosition.longitude], 
+      {radius: 30, color: 'blue'}).addTo(this.map);
+    circle.bindTooltip("Posizione attuale").openTooltip();
+    this.map.addLayer(circle);
+    this.map.flyTo(circle.getLatLng());
   }
 
   renderTrail(selectedTrail: Trail) {

@@ -18,10 +18,10 @@
         <p> <span>{{ selectedTrail.startPos.name }}</span> - <span>{{ selectedTrail.finalPos.name }}
             </span> </p>
         <h4>Percorribilita'</h4>
-        <div *ngIf="notificationsForTrail; else notShow" class="clickable">
+        <div *ngIf="trailNotifications; else notShow" class="clickable">
             <div (click)="toggleEventNotificationList()">
                 <svg class="bi pulse" width="24" height="24" fill="red">
-                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
                 </svg>
                 <p>Clicca visualizzare avvisi di percorribilita'</p>
             </div>
@@ -42,7 +42,7 @@
         <div class="row">
             <div class="col-md-2 space-up">
                 <svg class="bi" width="32" height="32" fill="red">
-                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#download" />
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
                 </svg>
             </div>
             <div class="col-md-10 space-up clickable">
@@ -50,7 +50,7 @@
             </div>
             <div class="col-md-2 space-up clickable">
                 <svg class="bi" width="32" height="32" fill="red">
-                    <use xlink:href="node_modules/bootstrap-icons/bootstrap-icons.svg#geo-alt" />
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#geo-alt" />
                 </svg>
             </div>
             <div class="col-md-10 space-up">
