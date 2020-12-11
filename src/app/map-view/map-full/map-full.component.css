@@ -4,5 +4,6 @@
 }
 
 .leaflet-left {
-    left: 95%;
-  }
+    left: 50% !important;
+    background: blue;
+}

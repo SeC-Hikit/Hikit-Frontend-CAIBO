@@ -3,6 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { MapUtils } from '../map-view/MapUtils';
 import { Trail } from '../Trail';
+import { TrailCoordinates } from '../TrailCoordinates';
+import { UserCoordinates } from '../UserCoordinates';
 
 @Component({
   selector: 'app-map-preview',
@@ -11,29 +13,35 @@ import { Trail } from '../Trail';
 })
 export class MapPreviewComponent implements OnInit {
 
-  @Input() trailPreview: Trail;
+  @Input() trailPreview: TrailCoordinates[];
+  @Input() elementAt: UserCoordinates;
+  @Input() index: string;
 
-  private map: L.Map
+  private map: L.Map;
 
-  private polyline: L.Polyline
-  private marker: L.Marker
-
+  private polyline: L.Polyline;
+  private marker: L.Marker;
+  private selectionCircle: L.Circle;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.index = this.index ? this.index : "0";
+    console.log(this.index);
+  }
+
+  ngAfterViewInit() {
     let openStreetmapCopy:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     let topoLayer = L.tileLayer(
       "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
       { attribution: openStreetmapCopy }
     );
-
-    this.initMap(topoLayer);
+    this.initMap(topoLayer, this.index);
   }
 
-  private initMap(topoLayer: L.TileLayer) {
-    this.map = L.map("map-table", { layers: [topoLayer], maxZoom: 17 });
+  private initMap(topoLayer: L.TileLayer, index: string) {
+    this.map = L.map("map-table-" + index, { layers: [topoLayer], maxZoom: 17 });
     this.map.setView(
       [44.498955, 11.327591],
       12
@@ -41,15 +49,24 @@ export class MapPreviewComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(!this.isInitialized()) { return; }
+    if (!this.isInitialized()) { return; }
     for (const propName in changes) {
-      if (propName == "trailPreview") { this.onPreview(this.trailPreview) }
+      if (propName == "trailPreview") { if (this.trailPreview) { this.onPreview(this.trailPreview) } }
+      if (propName == "elementAt") { this.onSelection(this.elementAt) }
     }
   }
 
-  onPreview(trailPreview: Trail): void {
+  onSelection(userPosition: UserCoordinates) {
+    this.map.removeLayer(this.selectionCircle);
+    this.selectionCircle = L.circle([userPosition.latitude, userPosition.longitude],
+      { radius: 30, color: 'red' }).addTo(this.map);
+    this.map.addLayer(this.selectionCircle);
+    this.map.flyTo(this.selectionCircle.getLatLng());
+  }
+
+  onPreview(trailPreviewCoordinates: TrailCoordinates[]): void {
     this.clearMap();
-    let coordinatesLatLngs = MapUtils.getCoordinatesInverted(this.trailPreview.coordinates);
+    let coordinatesLatLngs = MapUtils.getCoordinatesInverted(trailPreviewCoordinates);
     this.polyline = L.polyline(coordinatesLatLngs, {
       color: "red"
     });

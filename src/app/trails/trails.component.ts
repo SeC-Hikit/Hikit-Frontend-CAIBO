@@ -3,6 +3,7 @@ import { TrailPreviewService } from '../trail-preview-service.service';
 import { TrailPreview } from '../TrailPreview';
 import { TrailService } from '../trail-service.service';
 import { Trail } from '../Trail';
+import { TrailCoordinates } from '../TrailCoordinates';
 
 @Component({
   selector: 'app-trails',
@@ -13,6 +14,7 @@ export class TrailsComponent implements OnInit {
 
   public trailsResponse: TrailPreview[]
   public selectedTrail: Trail
+  public selectedTrailCoords: TrailCoordinates[];
 
   constructor(
     private trailPreviewService: TrailPreviewService,
@@ -26,10 +28,13 @@ export class TrailsComponent implements OnInit {
   }
 
   getAllPreviews() {
-    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailsResponse = preview.trailPreviews;  } );
+    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailsResponse = preview.trailPreviews; });
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {
-    this.trailService.getTrailByCode(selectedTrailPreview.code).subscribe(trail => this.selectedTrail = trail.trails[0])
+    this.trailService.getTrailByCode(selectedTrailPreview.code).subscribe(trail => {
+      this.selectedTrail = trail.trails[0];
+      this.selectedTrailCoords = trail.trails[0].coordinates
+    })
   }
 }

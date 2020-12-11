@@ -17,7 +17,7 @@ declare let L; // to be able to use L namespace
 export class MapFullComponent implements OnInit {
 
   private static MAP_ID: string = "map-full"
-  
+
   map: L.Map;
   selectedLayer: L.TileLayer;
   selectedTrailLayer: L.Polyline;
@@ -43,10 +43,14 @@ export class MapFullComponent implements OnInit {
     this.openStreetmapCopy =
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     this.selectedLayer = this.getLayerByName("topo");
+    this.selectedLayer.on("load", function(){
+      console.log("loaded");
+    })
     this.map = L.map(MapFullComponent.MAP_ID, { layers: [this.selectedLayer], maxZoom: 17 }).setView(
       [44.498955, 11.327591],
       12
     );
+    L.control.scale().addTo(this.map);
   }
 
   ngAfterViewInit(): void {
@@ -67,9 +71,9 @@ export class MapFullComponent implements OnInit {
   }
 
   focusOnUser(userPosition: UserCoordinates) {
-    console.log(userPosition);
-    const circle = L.circle([userPosition.latitude, userPosition.longitude], 
-      {radius: 30, color: 'blue'}).addTo(this.map);
+    // TODO shall be removed on update
+    const circle = L.circle([userPosition.latitude, userPosition.longitude],
+      { radius: 30, color: 'blue' }).addTo(this.map);
     circle.bindTooltip("Posizione attuale").openTooltip();
     this.map.addLayer(circle);
     this.map.flyTo(circle.getLatLng());

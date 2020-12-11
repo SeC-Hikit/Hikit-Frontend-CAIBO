@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-maintenance-add',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaintenanceAddComponent implements OnInit {
 
+  formGroup : FormGroup;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.formGroup = new FormGroup({});
   }
 
 }

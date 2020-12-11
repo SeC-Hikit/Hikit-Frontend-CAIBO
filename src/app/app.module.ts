@@ -31,6 +31,10 @@ import { AccessibilityAddComponent } from './admin/accessibility-add/accessibili
 import { AdminMenuComponent } from './admin/menu/menu.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { QuillModule } from 'ngx-quill';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LocationEntryComponent } from './admin/trail-management/trail-add-management/location-entry/location-entry.component';
+import { IncreasedIndexPipe } from './IncreasedIndexPipe';
 
 @NgModule({
   declarations: [
@@ -60,13 +64,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AccessibilityManagementComponent,
     AccessibilityAddComponent,
     AdminMenuComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    LocationEntryComponent,
+    IncreasedIndexPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    QuillModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
