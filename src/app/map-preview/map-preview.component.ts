@@ -2,7 +2,6 @@ import { SimpleChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { MapUtils } from '../map-view/MapUtils';
-import { Trail } from '../Trail';
 import { TrailCoordinates } from '../TrailCoordinates';
 import { UserCoordinates } from '../UserCoordinates';
 
@@ -27,7 +26,6 @@ export class MapPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.index = this.index ? this.index : "0";
-    console.log(this.index);
   }
 
   ngAfterViewInit() {
@@ -46,6 +44,8 @@ export class MapPreviewComponent implements OnInit {
       [44.498955, 11.327591],
       12
     );
+    if(this.trailPreview) { this.onPreview(this.trailPreview); }
+    if(this.elementAt) { this.onSelection(this.elementAt); }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,7 +57,8 @@ export class MapPreviewComponent implements OnInit {
   }
 
   onSelection(userPosition: UserCoordinates) {
-    this.map.removeLayer(this.selectionCircle);
+    
+    if(this.selectionCircle) this.map.removeLayer(this.selectionCircle);
     this.selectionCircle = L.circle([userPosition.latitude, userPosition.longitude],
       { radius: 30, color: 'red' }).addTo(this.map);
     this.map.addLayer(this.selectionCircle);

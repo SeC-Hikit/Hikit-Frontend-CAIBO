@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let notification of unresolvedNotifications">
-                        <th scope="row">{{ notification.code }}</th>
+                        <th class="clickable" routerLink='/map/{{notification.code}}' scope="row">{{ notification.code }}</th>
                         <td>{{ formatDate(notification.reportDate) }}</td>
                         <td>{{ notification.description }}</td>
                         <td>{{ notification.isMinor ? 'si' : 'no' }}</td>

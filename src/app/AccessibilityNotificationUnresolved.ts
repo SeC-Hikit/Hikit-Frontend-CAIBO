@@ -1,6 +1,7 @@
 export interface AccessibilityNotificationUnresolved { 
     _id: String,
-    description: String,
+    code: string, 
+    description: string,
     reportDate: Date,
     isMinor: boolean,
 }
