@@ -1,5 +1,11 @@
 <div class="container my-4">
+    
     <app-menu-admin></app-menu-admin>
+    <div *ngIf="fileSaved">
+        <div class="space-up alert alert-success" role="alert">
+            Nuovo sentiero aggiunto!
+        </div>
+    </div>
     <div class="row section-distance-up">
         <div class="col-12 col-md-8">
             <h1>Gestione Sentieri</h1>
@@ -13,7 +19,8 @@
                         <th scope="col">Classificazione</th>
                         <th scope="col">Anteprima</th>
                         <th scope="col">Apri</th>
-                        <th scope="col">Cancella</th>
+                        <th scope="col">Modifica</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody class="short-list">
@@ -31,6 +38,11 @@
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill" />
                             </svg>
                         </td>
+                        <td class="clickable">
+                            <svg class="bi" width="32" height="32" fill="currentColor">
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen" />
+                            </svg>
+                        </td>
                         <td class="clickable" (click)='onDelete(trailPreview)'>
                             <svg class="bi" width="32" height="32" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
@@ -46,7 +58,7 @@
             </ng-template>
         </div>
         <div class="col-12 col-md-4">
-            <app-map-preview [trailPreview]="selectedTrail"></app-map-preview>
+            <app-map-preview [trailPreview]="selectedTrailCoords"></app-map-preview>
         </div>
     </div>
 </div>

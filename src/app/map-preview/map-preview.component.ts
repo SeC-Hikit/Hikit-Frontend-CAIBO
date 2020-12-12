@@ -44,12 +44,13 @@ export class MapPreviewComponent implements OnInit {
       [44.498955, 11.327591],
       12
     );
-    if(this.trailPreview) { this.onPreview(this.trailPreview); }
-    if(this.elementAt) { this.onSelection(this.elementAt); }
+    if (this.trailPreview) { this.onPreview(this.trailPreview); }
+    if (this.elementAt) { this.onSelection(this.elementAt); }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isInitialized()) { return; }
+    this.map.invalidateSize();
     for (const propName in changes) {
       if (propName == "trailPreview") { if (this.trailPreview) { this.onPreview(this.trailPreview) } }
       if (propName == "elementAt") { this.onSelection(this.elementAt) }
@@ -57,8 +58,7 @@ export class MapPreviewComponent implements OnInit {
   }
 
   onSelection(userPosition: UserCoordinates) {
-    
-    if(this.selectionCircle) this.map.removeLayer(this.selectionCircle);
+    if (this.selectionCircle) this.map.removeLayer(this.selectionCircle);
     this.selectionCircle = L.circle([userPosition.latitude, userPosition.longitude],
       { radius: 30, color: 'red' }).addTo(this.map);
     this.map.addLayer(this.selectionCircle);

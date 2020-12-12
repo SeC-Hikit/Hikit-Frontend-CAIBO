@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Trail } from 'src/app/Trail';
 import { TrailPreviewService } from 'src/app/trail-preview-service.service';
 import { TrailService } from 'src/app/trail-service.service';
+import { TrailCoordinates } from 'src/app/TrailCoordinates';
 import { TrailPreview } from 'src/app/TrailPreview';
 
 @Component({
@@ -13,27 +15,41 @@ export class TrailManagementComponent implements OnInit {
 
   public trailsResponse: TrailPreview[]
   public selectedTrail: Trail
+  public selectedTrailCoords: TrailCoordinates[];
+  public fileSaved: boolean;
 
   constructor(
     private trailPreviewService: TrailPreviewService,
-    private trailService: TrailService) { }
+    private trailService: TrailService,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.getAllPreviews();
+    
+    let hasFileSaved = this.route.snapshot.paramMap.get("success");
+    if(hasFileSaved) { this.onFileSave(); }
   }
 
-  ngOnAfterViewInit(): void {
-  }
-
+  
   getAllPreviews() {
     this.trailPreviewService.getPreviews().subscribe(preview => { this.trailsResponse = preview.trailPreviews;  } );
   }
+  
+  onFileSave() {
+    this.fileSaved = true;
+  }
 
   onPreview(selectedTrailPreview: TrailPreview) {
-    this.trailService.getTrailByCode(selectedTrailPreview.code).subscribe(trail => this.selectedTrail = trail.trails[0])
+    this.trailService.getTrailByCode(selectedTrailPreview.code).subscribe(trail => {
+      this.selectedTrail = trail.trails[0];
+      this.selectedTrailCoords = trail.trails[0].coordinates;
+    })
   }
 
   onDelete(selectedTrailPreview: TrailPreview) {
-    console.log("Delete");
+    let isUserCancelling = confirm("Sei sicuro di voler cancellare il sentiero '" + selectedTrailPreview.code + "'?");
+    if(isUserCancelling) {
+
+    }
   }
 }

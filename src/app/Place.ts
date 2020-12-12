@@ -4,4 +4,5 @@ export interface Place {
     name: string,
     tags: string[],
     coordinates: TrailCoordinates
+    
 }

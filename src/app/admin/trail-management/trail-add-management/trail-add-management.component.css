@@ -25,3 +25,7 @@ border-bottom-right-radius: 0;
     background-position: 50%;
     border: 1px solid gray;
 }
+
+.hide{
+    display: none;
+}
