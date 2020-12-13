@@ -9,3 +9,13 @@
 .space-up {
     margin-top: 2%;
 }
+
+.trailPreview {
+    transition:0.3s all;
+}
+
+.trailPreview:hover {
+    background: #D04341;
+    color: white;
+    cursor: pointer;
+}

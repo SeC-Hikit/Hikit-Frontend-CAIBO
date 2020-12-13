@@ -1,3 +1,13 @@
 .section-distance-up {
     margin-top: 20px;
 }
+
+.t-row { 
+    transition:0.3s all;
+}
+
+.t-row:hover{
+    background: #D04341;
+    color: white;
+    cursor: pointer;
+}

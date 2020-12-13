@@ -19,17 +19,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let notification of unresolvedNotifications">
+                    <tr *ngFor="let notification of unresolvedNotifications" class="t-row">
                         <th scope="row">{{ notification.code }}</th>
                         <td>{{ formatDate(notification.reportDate) }}</td>
                         <td>{{ notification.description }}</td>
                         <td>{{ notification.isMinor ? 'si' : 'no' }}</td>
-                        <td class="clickable" (click)='onDelete(trailPreview)'>
+                        <td class="clickable" (click)='onResolveClick(notification)'>
                             <svg class="bi" width="32" height="32" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square" />
                             </svg>
                         </td>
-                        <td class="clickable" (click)='onDelete(trailPreview)'>
+                        <td class="clickable" (click)='onDeleteClick(notification)'>
                             <svg class="bi" width="32" height="32" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
                             </svg>

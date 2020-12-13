@@ -5,12 +5,12 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AccessibilityNotificationUnresolvedResponse } from './AccessibilityNotificationUnresolvedResponse';
 import { AccessibilityNotificationResponse } from './AccessibilityNotificationResolvedResponse';
+import { RestResponse } from './RestResponse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-
 
   baseUrl = "api/accessibility";
   httpOptions = {
@@ -22,7 +22,7 @@ export class NotificationService {
   getUnresolvedByTrailByCode(code: String): Observable<AccessibilityNotificationUnresolvedResponse> {
     return this.httpClient.get<AccessibilityNotificationUnresolvedResponse>(this.baseUrl + "/unresolved/" + code)
       .pipe(
-        tap(_ => console.log("")),
+        tap(),
         catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('get unresolved by trail', null))
       );
   }
@@ -30,7 +30,7 @@ export class NotificationService {
   getUnresolved(): Observable<AccessibilityNotificationUnresolvedResponse> {
     return this.httpClient.get<AccessibilityNotificationUnresolvedResponse>(this.baseUrl + "/unresolved")
       .pipe(
-        tap(_ => console.log("")),
+        tap(),
         catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('get all unresolved', null))
       );
   }
@@ -38,10 +38,19 @@ export class NotificationService {
   getAllResolved() {
     return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/solved")
       .pipe(
-        tap(_ => console.log("")),
+        tap(),
         catchError(this.handleError<AccessibilityNotificationResponse>('get all resolved', null))
       );
   }
+
+  deleteById(_id: string) : Observable<RestResponse> {
+    return this.httpClient.delete<AccessibilityNotificationResponse>(this.baseUrl + "/" + _id)
+    .pipe(
+      tap(),
+      catchError(this.handleError<AccessibilityNotificationResponse>('delete by id', null))
+    );
+  }
+
 
 /**
 * Handle Http operation that failed.

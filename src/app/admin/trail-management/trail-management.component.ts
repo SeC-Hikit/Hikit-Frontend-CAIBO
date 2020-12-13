@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Status } from 'src/app/Status';
 import { Trail } from 'src/app/Trail';
 import { TrailPreviewService } from 'src/app/trail-preview-service.service';
 import { TrailService } from 'src/app/trail-service.service';
@@ -13,7 +14,7 @@ import { TrailPreview } from 'src/app/TrailPreview';
 })
 export class TrailManagementComponent implements OnInit {
 
-  public trailsResponse: TrailPreview[]
+  public trailPreviewList: TrailPreview[]
   public selectedTrail: Trail
   public selectedTrailCoords: TrailCoordinates[];
   public fileSaved: boolean;
@@ -32,7 +33,7 @@ export class TrailManagementComponent implements OnInit {
 
   
   getAllPreviews() {
-    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailsResponse = preview.trailPreviews;  } );
+    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailPreviewList = preview.trailPreviews;  } );
   }
   
   onFileSave() {
@@ -49,7 +50,12 @@ export class TrailManagementComponent implements OnInit {
   onDelete(selectedTrailPreview: TrailPreview) {
     let isUserCancelling = confirm("Sei sicuro di voler cancellare il sentiero '" + selectedTrailPreview.code + "'?");
     if(isUserCancelling) {
-
+      this.trailService.deleteByCode(selectedTrailPreview.code).subscribe(r=> { if(r.status == Status.OK){ this.onDeleteSuccess(selectedTrailPreview)}});
     }
+  }
+
+  onDeleteSuccess(selectedTrailPreview: TrailPreview) {
+    let i = this.trailPreviewList.indexOf(selectedTrailPreview);
+    this.trailPreviewList.splice(i,1);
   }
 }

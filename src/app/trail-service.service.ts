@@ -2,6 +2,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { RestResponse } from './RestResponse';
 import { TrailResponse } from './TrailResponse';
 
 @Injectable({
@@ -19,15 +20,23 @@ export class TrailService {
   getTrailByCode(code: String): Observable<TrailResponse> {
     return this.httpClient.get<TrailResponse>(this.baseUrl + "/" + code + "?light=true")
       .pipe(
-        tap(_ => console.log("")),
+        tap(),
         catchError(this.handleError<TrailResponse>('get all trail', null))
       );
   }
 
-  getTrailsLight() {
+  getTrailsLight() : Observable<TrailResponse> {
     return this.httpClient.get<TrailResponse>(this.baseUrl + "/?light=true")
       .pipe(
-        tap(_ => console.log("")),
+        tap(),
+        catchError(this.handleError<TrailResponse>('get all trail', null))
+      );
+  }
+
+  deleteByCode(code: string) : Observable<RestResponse>{
+    return this.httpClient.delete<TrailResponse>(this.baseUrl + "/" + code)
+      .pipe(
+        tap(),
         catchError(this.handleError<TrailResponse>('get all trail', null))
       );
   }
