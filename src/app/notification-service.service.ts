@@ -6,6 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { AccessibilityNotificationUnresolvedResponse } from './AccessibilityNotificationUnresolvedResponse';
 import { AccessibilityNotificationResponse } from './AccessibilityNotificationResolvedResponse';
 import { RestResponse } from './RestResponse';
+import { AccessibilityNotificationResolution } from './AccessibilityNotificationResolution';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class NotificationService {
       );
   }
 
-  getAllResolved() {
+  getAllResolved(): Observable<AccessibilityNotificationResponse> {
     return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/solved")
       .pipe(
         tap(),
@@ -43,21 +44,30 @@ export class NotificationService {
       );
   }
 
-  deleteById(_id: string) : Observable<RestResponse> {
-    return this.httpClient.delete<AccessibilityNotificationResponse>(this.baseUrl + "/" + _id)
+  deleteById(_id: string): Observable<RestResponse> {
+    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
+      .pipe(
+        tap(),
+        catchError(this.handleError<RestResponse>('delete by id', null))
+      );
+  }
+
+  resolveNotification(resolution: AccessibilityNotificationResolution): Observable<RestResponse> {
+    return this.httpClient.post<RestResponse>(this.baseUrl + "/resolve", resolution)
     .pipe(
       tap(),
-      catchError(this.handleError<AccessibilityNotificationResponse>('delete by id', null))
+      catchError(this.handleError<RestResponse>('delete by id', null))
     );
   }
 
 
-/**
-* Handle Http operation that failed.
-* Let the app continue.
-* @param operation - name of the operation that failed
-* @param result - optional value to return as the observable result
-*/
+
+  /**
+  * Handle Http operation that failed.
+  * Let the app continue.
+  * @param operation - name of the operation that failed
+  * @param result - optional value to return as the observable result
+  */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
