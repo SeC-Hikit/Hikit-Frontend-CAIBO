@@ -28,7 +28,7 @@ export class AccessibilityManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const notificationResponseUnresolved = this.notificationService.getUnresolved().subscribe(x => { this.unresolvedNotifications = x.accessibilityNotifications; });
+    const notificationResponseUnresolved = this.notificationService.getUnresolved().subscribe(x => { this.unresolvedNotifications =  x.accessibilityNotifications; console.log(x) });
     const notificationResponseResolved = this.notificationService.getAllResolved().subscribe(x => { this.solvedNotifications = x.accessibilityNotifications });
   }
 

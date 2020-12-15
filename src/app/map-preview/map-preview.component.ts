@@ -30,7 +30,7 @@ export class MapPreviewComponent implements OnInit {
 
   ngAfterViewInit() {
     let openStreetmapCopy:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     let topoLayer = L.tileLayer(
       "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
       { attribution: openStreetmapCopy }

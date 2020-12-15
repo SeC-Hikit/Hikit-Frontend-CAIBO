@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { Maintenance } from './Maintenance';
 import { MaintenanceResponse } from './MaintenanceResponse';
+import { RestResponse } from './RestResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -32,12 +34,20 @@ export class MaintenanceService {
       );
   }
 
-/**
-* Handle Http operation that failed.
-* Let the app continue.
-* @param operation - name of the operation that failed
-* @param result - optional value to return as the observable result
-*/
+  save(maintenance: Maintenance): Observable<RestResponse> {
+    return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
+      .pipe(
+        tap(_ => console.log("")),
+        catchError(this.handleError<RestResponse>('Past maintenance', null))
+      );
+  }
+
+  /**
+  * Handle Http operation that failed.
+  * Let the app continue.
+  * @param operation - name of the operation that failed
+  * @param result - optional value to return as the observable result
+  */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 

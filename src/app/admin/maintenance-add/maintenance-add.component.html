@@ -4,16 +4,16 @@
     <h2>Aggiungi uscita di manuntenzione</h2>
     <p>Compila i seguenti campi per aggiungere un'uscita di manuntenzione. Questa sarà pubblicata istantaneamente.</p>
     <div class="table-wrapper space-up">
-        <form class="needs-validation" [formGroup]="formGroup" novalidate>
+        <form class="needs-validation" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
             <div class="form-row">
                 <div class="form-group col-md-4 mb-3">
-                    <input type="text" class="form-control" id="validationCustom01"
-                        placeholder="Contatto (es: Mario Rossi)" required>
+                    <input type="text" class="form-control" formControlName="contact"
+                        placeholder="Contatto (es: Mario Rossi)">
                     <div class="valid-feedback">Validato!</div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
                     <div class="input-group">
-                        <input class="form-control" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="dd/mm/yyyy" name="dp" formControlName="date" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
                                 type="button"></button>
@@ -23,25 +23,20 @@
                 <div class="form-group col-md-4 mb-3">
                     <div class="bootstrap-select-wrapper">
                         <label>Sentiero</label>
-                        <select title="Scegli una opzione" data-live-search="true"
+                        <select title="Scegli una opzione" data-live-search="true" formControlName="code"
                             data-live-search-placeholder="Cerca opzioni" class="form-control" id="trailId_select">
-                            <option>Non legata a un sentiero</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <option *ngFor="let tId of trailIds" value="{{tId}}">{{tId}}</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6 mb-3">
-                    <input type="text" class="form-control" id="validationCustom03" placeholder="Descrizione" required>
+                    <input type="text" class="form-control" placeholder="Descrizione" formControlName="description">
                     <div class="invalid-feedback">Per favore inserisci una descrizione</div>
                 </div>
                 <div class="form-group col-md-3 mb-3">
-                    <input type="text" class="form-control" id="validationCustom04" placeholder="Posto dell'incontro"
+                    <input type="text" class="form-control" formControlName="meetingPlace" placeholder="Posto dell'incontro"
                         required>
                     <div class="invalid-feedback">Per favore inserisci un posto d'incontro</div>
                 </div>

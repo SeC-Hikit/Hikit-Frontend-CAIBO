@@ -7,18 +7,27 @@ import { AccessibilityNotificationUnresolvedResponse } from './AccessibilityNoti
 import { AccessibilityNotificationResponse } from './AccessibilityNotificationResolvedResponse';
 import { RestResponse } from './RestResponse';
 import { AccessibilityNotificationResolution } from './AccessibilityNotificationResolution';
+import { AccessibilityNotification } from './AccessibilityNotification';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-
+  
   baseUrl = "api/accessibility";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private httpClient: HttpClient) { }
+
+  createNotification(notification : AccessibilityNotification) {
+    return this.httpClient.put<RestResponse>(this.baseUrl, notification)
+      .pipe(
+        tap(),
+        catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('create trail', null))
+      );
+  }
 
   getUnresolvedByTrailByCode(code: String): Observable<AccessibilityNotificationUnresolvedResponse> {
     return this.httpClient.get<AccessibilityNotificationUnresolvedResponse>(this.baseUrl + "/unresolved/" + code)

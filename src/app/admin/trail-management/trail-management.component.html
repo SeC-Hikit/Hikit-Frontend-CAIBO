@@ -1,9 +1,9 @@
 <div class="container my-4">
     
     <app-menu-admin></app-menu-admin>
-    <div *ngIf="fileSaved">
+    <div *ngIf="savedTrailCode">
         <div class="space-up alert alert-success" role="alert">
-            Nuovo sentiero aggiunto!
+            Sentiero {{savedTrailCode}} aggiunto
         </div>
     </div>
     <div class="row section-distance-up">

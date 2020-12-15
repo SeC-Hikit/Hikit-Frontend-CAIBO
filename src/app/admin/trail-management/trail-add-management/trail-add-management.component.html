@@ -164,7 +164,7 @@
 
             <div formArrayName="locations">
                 <app-location-entry *ngFor="let place of locations.controls; index as i" [inputForm]="place"
-                    [trailCoordinates]="previewCoords" [i]="i">
+                    [trailCoordinates]="previewCoords" [i]="i" [isEditableLocation]="true">
                 </app-location-entry>
             </div>
 

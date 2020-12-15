@@ -17,7 +17,7 @@ export class TrailManagementComponent implements OnInit {
   public trailPreviewList: TrailPreview[]
   public selectedTrail: Trail
   public selectedTrailCoords: TrailCoordinates[];
-  public fileSaved: boolean;
+  public savedTrailCode: string;
 
   constructor(
     private trailPreviewService: TrailPreviewService,
@@ -27,8 +27,8 @@ export class TrailManagementComponent implements OnInit {
   ngOnInit(): void {
     this.getAllPreviews();
     
-    let hasFileSaved = this.route.snapshot.paramMap.get("success");
-    if(hasFileSaved) { this.onFileSave(); }
+    let codeTrailSaved = this.route.snapshot.paramMap.get("success") as string;
+    if(codeTrailSaved) { this.onFileSave(codeTrailSaved); }
   }
 
   
@@ -36,8 +36,8 @@ export class TrailManagementComponent implements OnInit {
     this.trailPreviewService.getPreviews().subscribe(preview => { this.trailPreviewList = preview.trailPreviews;  } );
   }
   
-  onFileSave() {
-    this.fileSaved = true;
+  onFileSave(codeTrailSaved : string) {
+    this.savedTrailCode = codeTrailSaved;
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {

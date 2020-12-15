@@ -85,25 +85,28 @@ export class TrailAddManagementComponent implements OnInit {
 
   onSaveRequest(restResponse: RestResponse): void {
     if (restResponse.status == Status.OK) {
-      this.router.navigate(['/admin/trails', { success: true }]);
+      this.router.navigate(['/admin/trails', { success: this.tpm.name }]);
     }
   }
 
   private getImportRequest(trailFormValue: any) {
+    
     const importTrail = trailFormValue as TrailImportRequest;
+    
     importTrail.lastUpdate = moment(trailFormValue.lastUpdate.year + "-" + trailFormValue.lastUpdate.month + "-" + trailFormValue.lastUpdate.day).toDate();
     let tagsStartPos = trailFormValue.startPos.tags as string;
     let tagsFinalPos = trailFormValue.finalPos.tags as string;
     for (var i = 0; i < trailFormValue.locations.length; i++) {
       let temp = trailFormValue.locations[i]; 
-      importTrail.locations[i].tags = temp.tags.split(",");
+      importTrail.locations[i].tags = temp.tags == null ? [] : temp.tags.split(",");
       importTrail.locations[i].coordinates = new TrailCoordinatesObj(temp.latitude, temp.longitude, temp.altitude, temp.distanceFromTrailStart); 
     }
-    importTrail.startPos.tags = tagsStartPos.split(",");
+    importTrail.startPos.tags = tagsStartPos == null ? [] : tagsStartPos.split(",");
     importTrail.startPos.coordinates = this.previewCoords[0];
-    importTrail.finalPos.tags = tagsFinalPos.split(",");
+    importTrail.finalPos.tags = tagsStartPos == null ? [] : tagsFinalPos.split(",");
     importTrail.finalPos.coordinates = this.previewCoords[this.previewCoords.length-1];
     importTrail.coordinates = this.previewCoords;
+    importTrail.name = importTrail.name ? importTrail.name : importTrail.code; 
     return importTrail;
   }
 

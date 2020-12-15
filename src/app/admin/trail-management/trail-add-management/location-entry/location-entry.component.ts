@@ -13,6 +13,7 @@ export class LocationEntryComponent implements OnInit {
   @Input() i : number; 
   @Input() inputForm : FormGroup; 
   @Input() trailCoordinates: TrailCoordinates[];
+  @Input() isEditableLocation: boolean;
 
   selectedCoordinate: TrailCoordinates;
 
