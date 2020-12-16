@@ -38,7 +38,15 @@ export class MaintenanceService {
     return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
       .pipe(
         tap(_ => console.log("")),
-        catchError(this.handleError<RestResponse>('Past maintenance', null))
+        catchError(this.handleError<RestResponse>('Save maintenance', null))
+      );
+  }
+
+  deleteById(_id: any): Observable<RestResponse> {
+    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
+      .pipe(
+        tap(_ => console.log("")),
+        catchError(this.handleError<RestResponse>('Delete maintenance', null))
       );
   }
 

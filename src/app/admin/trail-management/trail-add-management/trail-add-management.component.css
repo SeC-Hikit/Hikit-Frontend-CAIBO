@@ -9,12 +9,8 @@ input[name='dp'] {
     line-height: 1.5;
     border: 0px;
     border-top-right-radius: 0;
-border-bottom-right-radius: 0;
+    border-bottom-right-radius: 0;
     border-bottom: 1px solid gray;
-}
-
-.space-up {
-    margin-top: 20px;
 }
 
 .calendar { 

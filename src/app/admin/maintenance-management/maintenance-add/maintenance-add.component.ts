@@ -47,13 +47,13 @@ export class MaintenanceAddComponent implements OnInit {
       maintenance.date = moment(formDate.year +
         "-" + formDate.month +
         "-" + formDate.day).toDate();
-      this.maintenanceService.save(maintenance).subscribe(resp=>{if(resp.status==Status.OK) { this.onSaveSuccess() }});
+      this.maintenanceService.save(maintenance).subscribe(resp=>{if(resp.status==Status.OK) { this.onSaveSuccess(maintenance) }});
     } else {
       alert("Alcuni campi sono ancora da completare")
     }
   }
 
-  onSaveSuccess() {
-    this.router.navigate(['/admin/maintenance', { success: true }]);  
+  onSaveSuccess(maintenance: Maintenance) {
+    this.router.navigate(['/admin/maintenance', { success: maintenance.code }]);  
   }
 }

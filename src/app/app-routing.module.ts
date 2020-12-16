@@ -10,9 +10,9 @@ import { MapComponent } from './map-view/map.component';
 import { TrailAddManagementComponent } from './admin/trail-management/trail-add-management/trail-add-management.component';
 import { TrailManagementComponent } from './admin/trail-management/trail-management.component';
 import { MaintenanceManagementComponent } from './admin/maintenance-management/maintenance-management.component';
-import { MaintenanceAddComponent } from './admin/maintenance-add/maintenance-add.component';
+import { MaintenanceAddComponent } from './admin/maintenance-management/maintenance-add/maintenance-add.component';
 import { AccessibilityManagementComponent } from './admin/accessibility-management/accessibility-management.component';
-import { AccessibilityAddComponent } from './admin/accessibility-add/accessibility-add.component';
+import { AccessibilityAddComponent } from './admin/accessibility-management/accessibility-add/accessibility-add.component';
 import { AdminComponent } from './admin/admin.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 

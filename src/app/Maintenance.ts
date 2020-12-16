@@ -1,5 +1,5 @@
 export interface Maintenance {
-    id: string,
+    _id: string,
     date: Date,
     code: string,
     meetingPlace: string,

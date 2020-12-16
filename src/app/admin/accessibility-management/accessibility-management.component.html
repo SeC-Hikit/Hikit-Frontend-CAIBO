@@ -1,5 +1,10 @@
 <div class="container my-4">
     <app-menu-admin></app-menu-admin>
+    <div *ngIf="notificationSaved">
+        <div class="space-up alert alert-success" role="alert">
+            Aggiunta notifica per sentiero '{{notificationSaved}}'
+        </div>
+    </div>
     <div class="row section-distance-up">
         <div class="col-12 col-md-12">
             <h1>

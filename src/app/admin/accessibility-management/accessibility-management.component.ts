@@ -1,5 +1,6 @@
 import { resolve } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ok } from 'assert';
 import * as moment from 'moment';
@@ -21,15 +22,24 @@ export class AccessibilityManagementComponent implements OnInit {
 
   unresolvedNotifications: AccessibilityNotificationUnresolved[]
   solvedNotifications: AccessibilityNotification[]
+  notificationSaved: string;
 
-  constructor(private notificationService: NotificationService, private modalService: NgbModal) {
+  constructor(
+    private notificationService: NotificationService,
+    private route: ActivatedRoute) {
     this.unresolvedNotifications = [];
     this.solvedNotifications = [];
   }
 
   ngOnInit(): void {
-    const notificationResponseUnresolved = this.notificationService.getUnresolved().subscribe(x => { this.unresolvedNotifications =  x.accessibilityNotifications; console.log(x) });
-    const notificationResponseResolved = this.notificationService.getAllResolved().subscribe(x => { this.solvedNotifications = x.accessibilityNotifications });
+    this.notificationService.getUnresolved().subscribe(x => { this.unresolvedNotifications = x.accessibilityNotifications; console.log(x) });
+    this.notificationService.getAllResolved().subscribe(x => { this.solvedNotifications = x.accessibilityNotifications });
+    let savedNotification = this.route.snapshot.paramMap.get("success") as string;
+    if (savedNotification) { this.onFileSave(savedNotification); }
+  }
+
+  onFileSave(notification: string) {
+    this.notificationSaved = notification;
   }
 
   formatDate(dateString: string): string {
@@ -55,7 +65,8 @@ export class AccessibilityManagementComponent implements OnInit {
     let resDesc = "Scrivi una breve risoluzione per la segnalazione " + unresolvedNotification.code + " riportata in data '" +
       this.formatDate(unresolvedNotification.reportDate.toString()) + "' con descrizione: '" + unresolvedNotification.description + "'";
     let resolution = prompt(resDesc);
-    if (resolution.length > 0) {
+    
+    if (resolution != null && resolution.length > 0) {
       let resolutionDate = new Date();
       this.notificationService.resolveNotification(new AccessibilityNotificationResolution(unresolvedNotification._id, resolution, resolutionDate))
         .subscribe(response => { if (response.status == Status.OK) { this.onResolvedSuccess(unresolvedNotification, resolution, resolutionDate); } });
@@ -64,8 +75,8 @@ export class AccessibilityManagementComponent implements OnInit {
 
   onResolvedSuccess(resolvedNotification: AccessibilityNotificationUnresolved, resolution: string, resolutionDate: Date): void {
     this.onDeleted(resolvedNotification);
-    this.solvedNotifications.push(new AccessibilityNotificationObj(resolvedNotification._id, 
-      resolvedNotification.code, resolvedNotification.description, 
+    this.solvedNotifications.push(new AccessibilityNotificationObj(resolvedNotification._id,
+      resolvedNotification.code, resolvedNotification.description,
       resolvedNotification.reportDate, resolutionDate, resolvedNotification.isMinor, resolution));
   }
 

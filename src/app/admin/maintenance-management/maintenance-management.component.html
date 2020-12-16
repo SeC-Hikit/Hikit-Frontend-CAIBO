@@ -1,5 +1,10 @@
 <div class="container my-4">
     <app-menu-admin></app-menu-admin>
+    <div *ngIf="savedMaintenance">
+        <div class="space-up alert alert-success" role="alert">
+            Manuntenzione per sentiero '{{savedMaintenance}}' aggiunta
+        </div>
+    </div>
     <div class="row section-distance-up">
         <div class="col-12 col-md-12 col-s-6">
             <h1>Gestione calendario manuntenzioni</h1>
@@ -23,7 +28,7 @@
                         <td>{{ maintenance.meetingPlace }}</td>
                         <td>{{ maintenance.description }}</td>
                         <td>{{ maintenance.contact }}</td>
-                        <td class="clickable" (click)='onDelete(trailPreview)'>
+                        <td class="clickable" (click)='onDelete(maintenance)'>
                             <svg class="bi" width="32" height="32" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
                             </svg>

@@ -6,10 +6,6 @@
     display: none;
 }
 
-.space-up {
-    margin-top: 2%;
-}
-
 .trailPreview {
     transition:0.3s all;
 }
