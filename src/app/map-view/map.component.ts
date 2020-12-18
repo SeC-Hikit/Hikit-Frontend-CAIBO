@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AccessibilityNotificationUnresolved } from '../AccessibilityNotificationUnresolved';
 import { NotificationService } from '../notification-service.service';
+import { Status } from '../Status';
 import { Trail } from '../Trail';
 import { TrailPreviewService } from '../trail-preview-service.service';
 import { TrailService } from '../trail-service.service';
@@ -22,6 +23,7 @@ export class MapComponent implements OnInit {
   // Bound elements
   trailPreviewList: TrailPreview[];
   selectedTrail: Trail;
+  selectedTrailBinaryPath: string;
   trailNotifications: AccessibilityNotificationUnresolved[];
   trailList: Trail[];
   selectedTileLayer: string;
@@ -43,14 +45,20 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     this.isTrailSelectedVisible = false;
     this.isTrailListVisible = false;
-    this.isAllTrailVisible = false;
+    this.isAllTrailVisible = true;
     this.isNotificationModalVisible = false;
     this.isTrailFullScreenVisible = false;
     this.isUserPositionToggled = false;
     this.changeTileLayer("topo");
     this.trailPreviewList = [];
     this.trailList = [];
+    this.handleQueryParam();
+    if(this.isAllTrailVisible){
+      this.loadAllTrails();
+    }
+  }
 
+  private handleQueryParam() {
     const idFromPath: string = this.route.snapshot.paramMap.get("id");
     this.loadTrail(idFromPath);
   }
@@ -60,7 +68,6 @@ export class MapComponent implements OnInit {
     document.getElementById(MapComponent.TRAIL_LIST_COLUMN_ID).style.minHeight = fullSize.toString() + "px";
     document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
   }
-
 
   loadPreviews(): void {
     this.trailPreviewService.getPreviews().subscribe(previewResponse => { this.trailPreviewList = previewResponse.trailPreviews; console.log(this.trailPreviewList) });
@@ -74,7 +81,7 @@ export class MapComponent implements OnInit {
           this.selectedTrail.statsMetadata.eta = Math.round(this.selectedTrail.statsMetadata.eta);
           this.selectedTrail.statsMetadata.length = Math.round(this.selectedTrail.statsMetadata.length);
           this.loadNotificationsForTrail(code);
-
+          this.loadBinaryPath();
           this.isTrailSelectedVisible = true;
         });
     }
@@ -88,10 +95,22 @@ export class MapComponent implements OnInit {
     this.trailService.getTrailsLight().subscribe(trailResponse => { this.trailList = trailResponse.trails });
   }
 
-  downloadGpx(): void {
-    if (this.selectedTrail) {
-      console.log("downloading...");
-    }
+  loadBinaryPath(): void {
+    this.trailService.getGpxPath(this.selectedTrail.code).subscribe(response => {
+      if (response.status == Status.OK) {
+        this.selectedTrailBinaryPath = response.path;
+      }
+    })
+  }
+
+  onDownloadBinary(): void {
+    let link = document.createElement('a');
+    link.setAttribute('type', 'hidden');
+    link.href = 'assets/file';
+    link.download = this.selectedTrailBinaryPath;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 
   changeTileLayer(type: string): void {

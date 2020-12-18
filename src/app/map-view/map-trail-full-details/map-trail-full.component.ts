@@ -20,7 +20,7 @@ export class MapTrailFullComponent implements OnInit {
   @Input() trailNotifications: AccessibilityNotificationUnresolved[];
 
   @Output() isVisibleEvent = new EventEmitter<void>();
-  @Output() downloadGpxEvent = new EventEmitter<void>();
+  @Output() onDownloadBinaryEvent = new EventEmitter<void>();
   @Output() toggleNotificationModalEvent = new EventEmitter<void>();
 
   constructor() { }
@@ -31,14 +31,10 @@ export class MapTrailFullComponent implements OnInit {
       type: "line",
       options: this.chartOptions,
     });
-
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    
     if (!this.selectedTrail) { return; }
-
     for (const propName in changes) {
       if (propName == "selectedTrail") { this.updateChart() }
     }
@@ -62,8 +58,8 @@ export class MapTrailFullComponent implements OnInit {
     return this.chart;
   }
 
-  downloadGpx(): void {
-    this.downloadGpxEvent.emit();
+  onDownloadBinary(){
+    this.onDownloadBinaryEvent.emit();
   }
 
   toggleModal(): void {

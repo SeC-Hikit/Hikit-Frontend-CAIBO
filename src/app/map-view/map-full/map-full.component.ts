@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import 'leaflet';
+import { LeafletMouseEventHandlerFn } from 'leaflet';
 import 'leaflet-textpath';
 import { Trail } from 'src/app/Trail';
-import { TrailClassification } from 'src/app/TrailClassification';
 import { UserCoordinates } from 'src/app/UserCoordinates';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 import { MapUtils } from '../MapUtils';
@@ -43,7 +43,7 @@ export class MapFullComponent implements OnInit {
     this.openStreetmapCopy =
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     this.selectedLayer = this.getLayerByName("topo");
-    this.selectedLayer.on("load", function(){
+    this.selectedLayer.on("load", function () {
       console.log("loaded");
     })
     this.map = L.map(MapFullComponent.MAP_ID, { layers: [this.selectedLayer], maxZoom: 17 }).setView(
@@ -80,10 +80,12 @@ export class MapFullComponent implements OnInit {
   }
 
   renderTrail(selectedTrail: Trail) {
+    // Shall take the polyline from the full list - do not instantiate a new polyline each tim
+    // USE restorePathFromList(x);
     this.clearPreviouslySelectedLayer();
     this.clearPathFromList(selectedTrail);
     let polyline = L.polyline(MapUtils.getCoordinatesInverted(selectedTrail.coordinates));
-    polyline.setStyle(this.getLineStyle(true, selectedTrail.classification));
+    polyline.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
     polyline.setText(MapUtils.generateTextForMap(selectedTrail.code), MapUtils.getTextSyle(true));
     polyline.bindPopup(selectedTrail.code);
     polyline.addTo(this.map);
@@ -93,16 +95,37 @@ export class MapFullComponent implements OnInit {
   renderAllTrail(trailList: Trail[]) {
     this.otherTrailsPolylines = trailList.map(trail => {
       return new TrailToPolyline(trail.code,
+        trail.classification,
         L.polyline(MapUtils.getCoordinatesInverted(trail.coordinates),
-          this.getLineStyle(false, trail.classification)))
+          MapUtils.getLineStyle(false, trail.classification)))
     });
     this.otherTrailsPolylines.forEach(trailToPoly => {
       trailToPoly.getPolyline().addTo(this.map)
       trailToPoly.getPolyline().on("click", this.onSelectTrail(trailToPoly));
+      trailToPoly.getPolyline().on("mouseover", this.highlightTrail(trailToPoly));
+      trailToPoly.getPolyline().on("mouseout", this.dehighlightTrail(trailToPoly));
     });
   }
 
-  private onSelectTrail(trailToPoly: TrailToPolyline) {
+  dehighlightTrail(trailToPoly: TrailToPolyline): LeafletMouseEventHandlerFn {
+    return function () {
+      console.log(trailToPoly.getCode());
+      trailToPoly.getPolyline().setStyle(
+        MapUtils.getLineStyle(false, trailToPoly.getClassification()));
+    }
+  }
+
+  highlightTrail(trailToPoly: TrailToPolyline): LeafletMouseEventHandlerFn {
+    return function () {
+      trailToPoly.getPolyline().setStyle({
+        color: 'yellow',
+        opacity: 3,
+        weight: 5
+      });
+    }
+  }
+
+  onSelectTrail(trailToPoly: TrailToPolyline) {
     let codeEmitter = this.selectCodeEvent;
     return function () {
       codeEmitter.emit(trailToPoly.getCode())
@@ -116,40 +139,22 @@ export class MapFullComponent implements OnInit {
   }
 
   clearPreviouslySelectedLayer() {
-    if (this.selectedTrailLayer) this.map.removeLayer(this.selectedTrailLayer);
+    // TODO shall remove previously highlighted line
+    if (this.selectedTrailLayer) { this.map.removeLayer(this.selectedTrailLayer); }
     if (this.selectedMarkerLayer) this.map.removeLayer(this.selectedMarkerLayer);
+  }
+
+  restorePathFromList(unselectedTrail: Trail){
+    const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == unselectedTrail.code);
+    if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
+      this.map.addLayer(trailFromOtherTrails[0].getPolyline());
+    }
   }
 
   clearPathFromList(selectedTrail: Trail) {
     const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == selectedTrail.code);
     if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
       this.map.removeLayer(trailFromOtherTrails[0].getPolyline());
-    }
-  }
-
-  getLineStyle(isSelectedLine: boolean, trailClassification: TrailClassification) {
-    var trailColor = MapUtils.getLineColor(isSelectedLine);
-    switch (trailClassification) {
-      case TrailClassification.E:
-        return {
-          weight: MapUtils.LINE_WEIGHT,
-          color: trailColor,
-          dashArray: "5, 10",
-        };
-      case TrailClassification.EEA:
-        return {
-          weight: MapUtils.LINE_WEIGHT,
-          color: trailColor,
-          dashArray: "2, 10",
-        };
-      case TrailClassification.EE:
-        return {
-          weight: MapUtils.LINE_WEIGHT,
-          color: trailColor,
-          dashArray: "3, 10",
-        };
-      default:
-        return { weight: MapUtils.LINE_WEIGHT, color: trailColor };
     }
   }
 

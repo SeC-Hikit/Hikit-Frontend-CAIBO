@@ -8,9 +8,7 @@
         </svg>
     </div>
 </div>
-<div *ngIf="selectedTrail"
-    class="col-12 white scrollable details"
-    [ngClass]="{ 'hide' : selectedTrail }">
+<div *ngIf="selectedTrail" class="col-12 white scrollable details" [ngClass]="{ 'hide' : selectedTrail }">
     <div>
         <h4>Classificazione</h4>
         <p> {{ selectedTrail.classification }}</p>
@@ -18,7 +16,7 @@
         <p> <span>{{ selectedTrail.startPos.name }}</span> - <span>{{ selectedTrail.finalPos.name }}
             </span> </p>
         <h4>Percorribilita'</h4>
-        <div *ngIf="trailNotifications; else notShow" class="clickable">
+        <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow" class="clickable">
             <div (click)="toggleEventNotificationList()">
                 <svg class="bi pulse" width="24" height="24" fill="red">
                     <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
@@ -27,15 +25,21 @@
             </div>
         </div>
         <ng-template #notShow>
-            <p>Non ci sono avvisi di percorribilita</p>
+            <p>
+                <svg class="bi" width="24" height="24">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all" />
+                </svg>
+                Bene, non ci sono avvisi di percorribilita
+            </p>
         </ng-template>
         <h4>Lunghezza</h4>
         <p>{{ selectedTrail.statsMetadata.length }}m</p>
         <h4>Tempo di percorrenza</h4>
-        <p>{{ selectedTrail.statsMetadata.eta }} minuti</p>
+        <p>{{ selectedTrail.statsMetadata.eta | eta }}</p>
+        <p>({{selectedTrail.statsMetadata.eta}} minuti)</p>
         <h4>Dislivello</h4>
         <p>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</p>
-        <p>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</p>   
+        <p>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</p>
         <h4>Descrizione</h4>
         <p>{{ selectedTrail.description }}</p>
         <h4>Altro</h4>
@@ -46,7 +50,7 @@
                 </svg>
             </div>
             <div class="col-md-10 space-up clickable">
-                <a v-on:click="downloadGpx" target="_blank">Download</a>
+                <a (click)="onDownloadGpx()" target="_blank">Download</a>
             </div>
             <div class="col-md-2 space-up clickable">
                 <svg class="bi" width="32" height="32" fill="red">

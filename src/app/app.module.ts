@@ -35,6 +35,7 @@ import { QuillModule } from 'ngx-quill';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LocationEntryComponent } from './admin/trail-management/trail-add-management/location-entry/location-entry.component';
 import { IncreasedIndexPipe } from './IncreasedIndexPipe';
+import { EtaPipe } from './EtaPipe';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { IncreasedIndexPipe } from './IncreasedIndexPipe';
     AdminMenuComponent,
     NotFoundComponent,
     LocationEntryComponent,
-    IncreasedIndexPipe
+    IncreasedIndexPipe,
+    EtaPipe
   ],
   imports: [
     BrowserModule,

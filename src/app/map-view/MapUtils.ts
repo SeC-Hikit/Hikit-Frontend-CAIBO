@@ -1,3 +1,4 @@
+import { TrailClassification } from '../TrailClassification';
 import { TrailCoordinates } from '../TrailCoordinates';
 
 export class MapUtils {
@@ -21,6 +22,32 @@ export class MapUtils {
         }
         return empty;
     }
+
+    static getLineStyle(isSelectedLine: boolean, trailClassification: TrailClassification) {
+        var trailColor = MapUtils.getLineColor(isSelectedLine);
+        switch (trailClassification) {
+          case TrailClassification.E:
+            return {
+              weight: MapUtils.LINE_WEIGHT,
+              color: trailColor,
+              dashArray: "5, 10",
+            };
+          case TrailClassification.EEA:
+            return {
+              weight: MapUtils.LINE_WEIGHT,
+              color: trailColor,
+              dashArray: "2, 10",
+            };
+          case TrailClassification.EE:
+            return {
+              weight: MapUtils.LINE_WEIGHT,
+              color: trailColor,
+              dashArray: "3, 10",
+            };
+          default:
+            return { weight: MapUtils.LINE_WEIGHT, color: trailColor };
+        }
+      }
     
     static getLineColor(isSelectedLine: boolean) : string {
         return isSelectedLine ? "red" : "#ff5252"

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Trail } from 'src/app/Trail';
-import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 
 @Component({
   selector: 'app-map-trail-details',
@@ -14,6 +13,7 @@ export class MapTrailDetailsComponent implements OnInit {
 
   @Output() toggleFullTrailPageEvent = new EventEmitter<void>();
   @Output() toggleNotificationListEvent = new EventEmitter<void>();
+  @Output() onDownloadBinaryEvent = new EventEmitter<void>();
 
   constructor() {}
 
@@ -26,5 +26,9 @@ export class MapTrailDetailsComponent implements OnInit {
 
   toggleEventNotificationList(): void {
     this.toggleNotificationListEvent.emit();
+  }
+
+  onDownloadGpx() : void {
+    this.onDownloadBinaryEvent.emit();
   }
 }

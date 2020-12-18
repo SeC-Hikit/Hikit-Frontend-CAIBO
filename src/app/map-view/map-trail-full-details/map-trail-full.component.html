@@ -68,15 +68,15 @@
                     <h4>Altro</h4>
                 </div>
             </div>
-            <div class="row clickable space-up" (click)="downloadGpx()">
-                <div class="col-md-1">
-                    <svg class="bi" width="32" height="32" fill="red">
-                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
-                    </svg>
-                </div>
-                <div class="col-md-4 clickable">
-                    <label>Download .GPX</label>
-                </div>
+            <div (click)="onDownloadBinary()" class="row clickable space-up">
+                    <div class="col-md-1">
+                        <svg class="bi" width="32" height="32" fill="red">
+                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
+                        </svg>
+                    </div>
+                    <div class="col-md-4 clickable">
+                        <label>Download .GPX</label>
+                    </div>
             </div>
             <div class="row clickable">
                 <div class="col-md-1">

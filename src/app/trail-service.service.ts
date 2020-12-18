@@ -1,7 +1,8 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { FileDownloadResponse } from './FileDownloadResponse';
 import { RestResponse } from './RestResponse';
 import { TrailResponse } from './TrailResponse';
 
@@ -25,7 +26,7 @@ export class TrailService {
       );
   }
 
-  getTrailsLight() : Observable<TrailResponse> {
+  getTrailsLight(): Observable<TrailResponse> {
     return this.httpClient.get<TrailResponse>(this.baseUrl + "/?light=true")
       .pipe(
         tap(),
@@ -33,7 +34,7 @@ export class TrailService {
       );
   }
 
-  deleteByCode(code: string) : Observable<RestResponse>{
+  deleteByCode(code: string): Observable<RestResponse> {
     return this.httpClient.delete<TrailResponse>(this.baseUrl + "/" + code)
       .pipe(
         tap(),
@@ -41,7 +42,22 @@ export class TrailService {
       );
   }
 
-  /**
+  getGpxPath(code: string): Observable<FileDownloadResponse> {
+    return this.httpClient.get<FileDownloadResponse>(this.baseUrl + "/download/" + code)
+      .pipe(
+        tap(),
+        catchError(this.handleError<FileDownloadResponse>('get trail resource URL', null))
+      );
+  }
+
+  downloadGpx(path: string): any {
+    return this.httpClient.get(path, {responseType: 'blob'})
+      .pipe(tap(),
+        catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
+      );
+  }
+
+/**
 * Handle Http operation that failed.
 * Let the app continue.
 * @param operation - name of the operation that failed
