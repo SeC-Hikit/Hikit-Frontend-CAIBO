@@ -1,3 +1,6 @@
+import { Place } from "./Place";
+import { TrailCoordinates } from "./TrailCoordinates";
+
 export interface AccessibilityNotification { 
     _id: string,
     code: string,
@@ -6,4 +9,5 @@ export interface AccessibilityNotification {
     resolutionDate: Date,
     isMinor: boolean,
     resolution: string
+    position: TrailCoordinates
 }

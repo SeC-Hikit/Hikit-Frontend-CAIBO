@@ -1,4 +1,4 @@
-<div *ngIf="selectedTrail" class="row clickable" [ngClass]="{ 'hide' : selectedTrail }" (click)="toggleFullTrailPage">
+<div *ngIf="selectedTrail" class="row clickable" [ngClass]="{ 'hide' : selectedTrail }" (click)="toggleFullTrailPage()">
     <div class="col-md-10">
         <h1>{{ selectedTrail.code }}</h1>
     </div>
@@ -8,57 +8,76 @@
         </svg>
     </div>
 </div>
-<div *ngIf="selectedTrail" class="col-12 white scrollable details" [ngClass]="{ 'hide' : selectedTrail }">
+<div *ngIf="selectedTrail" id="scrollable-content" class="col-12 white scrollable details"
+    [ngClass]="{ 'hide' : selectedTrail }">
     <div>
         <h4>Classificazione</h4>
-        <p> {{ selectedTrail.classification }}</p>
+        <div> {{ selectedTrail.classification }}</div>
         <h4>Località</h4>
-        <p> <span>{{ selectedTrail.startPos.name }}</span> - <span>{{ selectedTrail.finalPos.name }}
-            </span> </p>
-        <h4>Percorribilita'</h4>
-        <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow" class="clickable">
-            <div (click)="toggleEventNotificationList()">
-                <svg class="bi pulse" width="24" height="24" fill="red">
-                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
-                </svg>
-                <p>Clicca visualizzare avvisi di percorribilita'</p>
+        <div>
+            <div (click)="moveTo(selectedTrail.startPos.coordinates)" class="clickable"><span class="arrow down"></span>{{
+                selectedTrail.startPos.name }}</div>
+            <div *ngFor="let location of selectedTrail.locations">
+                <span class="clickable" (click)="moveTo(location.coordinates)"><span class="arrow down"></span>{{ location.name }}</span>
             </div>
+            <div (click)="moveTo(selectedTrail.finalPos.coordinates)" class="clickable"><span class="arrow down"></span>{{
+                selectedTrail.finalPos.name }}</div>
         </div>
-        <ng-template #notShow>
-            <p>
-                <svg class="bi" width="24" height="24">
-                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all" />
-                </svg>
-                Bene, non ci sono avvisi di percorribilita
-            </p>
-        </ng-template>
-        <h4>Lunghezza</h4>
-        <p>{{ selectedTrail.statsMetadata.length }}m</p>
-        <h4>Tempo di percorrenza</h4>
-        <p>{{ selectedTrail.statsMetadata.eta | eta }}</p>
-        <p>({{selectedTrail.statsMetadata.eta}} minuti)</p>
-        <h4>Dislivello</h4>
-        <p>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</p>
-        <p>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</p>
         <h4>Descrizione</h4>
-        <p>{{ selectedTrail.description }}</p>
+        <div [innerHTML]="selectedTrail.description"></div>
+        <h4>Percorribilita'</h4>
+        <div class="way">
+            <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow" class="clickable">
+                <div>
+                    <div>
+                        <ul>
+                            <svg class="bi pulse" width="24" height="24" fill="red">
+                                <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
+                            </svg>
+                            <li *ngFor="let notification of trailNotifications" class="clickable"
+                                (click)="moveTo(notification.position)">{{notification.description}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ng-template #notShow>
+                <div>
+                    <svg class="bi" width="24" height="24">
+                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all" />
+                    </svg>
+                    Non ci sono problemi di percorribilita
+                </div>
+            </ng-template>
+        </div>
+        <h4>Ultima manuntenzione</h4>
+        <div *ngIf="lastMaintenance">Eseguita il {{formatDate(lastMaintenance.date)}}</div>
+        <h4>Lunghezza</h4>
+        <div>{{ selectedTrail.statsMetadata.length }}m</div>
+        <h4>Tempo di percorrenza</h4>
+        <div>{{ selectedTrail.statsMetadata.eta | eta }} <span>(circa {{selectedTrail.statsMetadata.eta}} minuti)</span></div>
+        <h4>Dislivello</h4>
+        <div>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</div>
+        <div>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</div>
         <h4>Altro</h4>
-        <div class="row">
+        <div class="row  clickable">
             <div class="col-md-2 space-up">
                 <svg class="bi" width="32" height="32" fill="red">
                     <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
                 </svg>
             </div>
-            <div class="col-md-10 space-up clickable">
+            <div class="col-md-10 space-up">
                 <a (click)="onDownloadGpx()" target="_blank">Download</a>
             </div>
+        </div>
+        <div class="row clickable">
             <div class="col-md-2 space-up clickable">
                 <svg class="bi" width="32" height="32" fill="red">
                     <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#geo-alt" />
                 </svg>
             </div>
             <div class="col-md-10 space-up">
-                <label>Apri su Maps</label>
+                <a target="_blank">Apri su Maps</a>
             </div>
         </div>
     </div>

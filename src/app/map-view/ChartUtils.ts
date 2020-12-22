@@ -44,7 +44,7 @@ export class ChartUtils {
                         },
                         ticks: {
                             autoSkip: true,
-                            maxTicksLimit: 20
+                            maxTicksLimit: 5
                         }
                     },
                 ],

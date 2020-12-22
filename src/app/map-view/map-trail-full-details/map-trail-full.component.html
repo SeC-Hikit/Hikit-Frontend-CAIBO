@@ -13,70 +13,94 @@
         <div class="scrollable-subcontainer">
             <div class="row" *ngIf="selectedTrail">
                 <div class="col-12 col-md-6">
-                    <p> {{ selectedTrail.classification }}</p>
+                    <div> {{ selectedTrail.classification }}</div>
                 </div>
             </div>
             <div class="row" *ngIf="selectedTrail">
                 <div class="col-12 col-md-6">
                     <h2>Descrizione</h2>
-                    <p> {{ selectedTrail.description }}</p>
+                    <div [innerHTML]="selectedTrail.description"></div>
                 </div>
+            </div>
+            <div class="row" *ngIf="selectedTrail">
                 <div class="col-12 col-md-6" *ngIf="selectedTrail">
-                    <h2>Percorribilita'</h2>
-                    <div *ngIf="trailNotifications; else notShow" class="clickable">
-                        <div (click)="toggleModal()">
+                    <h2>Percorribilità</h2>
+                    <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow" class="clickable">
+                        <ul>
                             <svg class="bi pulse" width="24" height="24" fill="red">
                                 <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
                             </svg>
-                            <span>Clicca per visualizzare avvisi di percorribilita'</span>
-                        </div>
+                            <li *ngFor="let notification of trailNotifications" class="clickable">
+                                {{notification.description}}</li>
+                        </ul>
                     </div>
                     <ng-template #notShow>
-                        <p>Non ci sono avvisi di percorribilita'.</p>
+                        <svg class="bi" width="24" height="24">
+                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all" />
+                        </svg>
+                        <div>Non ci sono avvisi di percorribilità'</div>
+                    </ng-template>
+                </div>
+                <div class="col-12 col-md-6" *ngIf="selectedTrail">
+                    <h4>Ultima manuntenzione</h4>
+                    <div *ngIf="lastMaintenance; else noMaintenance">Eseguita il {{formatDate(lastMaintenance.date)}}</div>
+                    <ng-template #noMaintenance>
+                        <span>-</span>
                     </ng-template>
                 </div>
             </div>
-            <div class="row space-up">
-                <div class="col-12">
-                    <h2>Dati</h2>
+            <div class="row" *ngIf="selectedTrail">
+                <div class="col-12 col-md-6" *ngIf="selectedTrail">
+                    <h2>Località</h2>
+                    <div>
+                        <div class="clickable"><span class="arrow down"></span>{{selectedTrail.startPos.name }}</div>
+                        <div *ngFor="let location of locationNames()">
+                            <span class="clickable"><span class="arrow down"></span>{{location}}</span>
+                        </div>
+                        <div class="clickable"><span class="arrow down"></span>{{selectedTrail.finalPos.name }}</div>
+                    </div>
                 </div>
             </div>
             <div class="row" *ngIf="selectedTrail">
+                <div class="col-12">
+                    <h2>Dati</h2>
+                </div>
                 <div class="col-12 col-md-3">
                     <h4>Lunghezza</h4>
                     <p>{{ selectedTrail.statsMetadata.length }}m</p>
                 </div>
                 <div class="col-12 col-md-4">
                     <h4>Tempo di percorrenza stimato</h4>
-                    <p>{{ selectedTrail.statsMetadata.eta }} minuti</p>
+                    <p>{{ selectedTrail.statsMetadata.eta | eta }} <span>(circa {{selectedTrail.statsMetadata.eta}}
+                            minuti)</span></p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 col-md-3" *ngIf="selectedTrail">
                     <h4>Dislivello</h4>
-                    <p>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</p>
-                    <p>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</p>
+                    <div>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</div>
+                    <div>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</div>
                 </div>
                 <div class="col-12 col-md-6">
                     <h4>Profilo Altimetrico</h4>
                     <canvas id="chartHike"></canvas>
                 </div>
             </div>
-            <div class="row space-up">
+            <div class="row">
                 <div class="col-12">
                     <h4>Altro</h4>
                 </div>
             </div>
             <div (click)="onDownloadBinary()" class="row clickable space-up">
-                    <div class="col-md-1">
-                        <svg class="bi" width="32" height="32" fill="red">
-                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
-                        </svg>
-                    </div>
-                    <div class="col-md-4 clickable">
-                        <label>Download .GPX</label>
-                    </div>
+                <div class="col-md-1">
+                    <svg class="bi" width="32" height="32" fill="red">
+                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
+                    </svg>
+                </div>
+                <div class="col-md-4 clickable">
+                    <span>Download .GPX</span>
+                </div>
             </div>
             <div class="row clickable">
                 <div class="col-md-1">
@@ -85,7 +109,7 @@
                     </svg>
                 </div>
                 <div class="col-md-4 clickable">
-                    <label>Apri su Maps</label>
+                    <span>Apri su Maps</span>
                 </div>
             </div>
             <div class="row clickable">
@@ -95,7 +119,7 @@
                     </svg>
                 </div>
                 <div class="col-md-4 clickable">
-                    <label>Stampa</label>
+                    <span>Stampa</span>
                 </div>
             </div>
         </div>

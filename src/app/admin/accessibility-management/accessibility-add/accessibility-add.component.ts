@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Positioning } from '@ng-bootstrap/ng-bootstrap/util/positioning';
 import * as moment from 'moment';
 import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
 import { AccessibilityNotificationObj } from 'src/app/AccessibilityNotificationObj';
 import { NotificationService } from 'src/app/notification-service.service';
+import { PlaceObj } from 'src/app/PlaceObj';
 import { Status } from 'src/app/Status';
 import { TrailPreviewService } from 'src/app/trail-preview-service.service';
 import { TrailService } from 'src/app/trail-service.service';
 import { TrailCoordinates } from 'src/app/TrailCoordinates';
+import { TrailCoordinatesObj } from 'src/app/TrailCoordinatesObj';
 import { TrailPreviewResponse } from 'src/app/TrailPreviewResponse';
 import { TrailResponse } from 'src/app/TrailResponse';
 
@@ -43,7 +46,7 @@ export class AccessibilityAddComponent implements OnInit {
         "latitude": new FormControl("", Validators.required),
         "longitude": new FormControl("", Validators.required),
         "altitude": new FormControl("", Validators.required),
-        "distanceFromTrailStart": new FormControl("", Validators.required),
+        "distanceFromTrailStart": new FormControl("", Validators.required)
       })
     });
     this.trailPreviewService.getPreviews().subscribe(x => { this.onLoad(x) })
@@ -67,12 +70,14 @@ export class AccessibilityAddComponent implements OnInit {
 
   onSaveNotification() {
     if (this.formGroup.valid) {
-      let reportedDate = this.formGroup.value.reportDate;
-      let notification = this.formGroup.value as AccessibilityNotificationObj;
+      const objValue = this.formGroup.value; 
+      let reportedDate = objValue.reportDate;
+      let notification = objValue as AccessibilityNotificationObj;
       let date = moment(reportedDate.year +
         "-" + reportedDate.month +
         "-" + reportedDate.day).toDate()
       notification.reportDate = date;
+      notification.position = new TrailCoordinatesObj(objValue.location.latitude, objValue.location.longitude, objValue.location.altitude, objValue.location.distanceFromTrailStart);
       this.accessibility.createNotification(notification).subscribe(x => { if (x.status == Status.OK) this.onSaveSuccess(notification) });
     } else {
       alert("Il modulo contiene ancora alcuni elementi vuoti/errati. Ricontrolla per procedere");

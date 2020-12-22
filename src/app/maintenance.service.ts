@@ -34,6 +34,14 @@ export class MaintenanceService {
       );
   }
 
+  getPastForTrail(code: string) {
+    return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past/" + code)
+      .pipe(
+        tap(_ => console.log("")),
+        catchError(this.handleError<MaintenanceResponse>('Past maintenance by code', null))
+      );
+  }
+
   save(maintenance: Maintenance): Observable<RestResponse> {
     return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
       .pipe(

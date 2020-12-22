@@ -8,7 +8,7 @@ export class TrailCoordinatesObj implements TrailCoordinates {
         public longitude: number,
         public altitude: number,
         public distanceFromTrailStart: number
-    ){
-        this.values=[longitude, latitude];
+    ) {
+        this.values = [longitude, latitude];
     }
 }

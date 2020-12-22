@@ -2,8 +2,3 @@
     width: 100%;
     z-index: 1;
 }
-
-.leaflet-left {
-    left: 50% !important;
-    background: blue;
-}

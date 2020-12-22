@@ -1,43 +1,45 @@
 <div class="entry space-up" [formGroup]="inputForm">
-<h4>Località #{{i | increaseOne}}</h4>
-<div class="form-row"  *ngClass="{'hide': !isEditableLocation}">
-    <div class="form-group col-md-4 mb-3">
-        <p>Nome</p>
-        <input type="text" formControlName="name" placeholder="Es: Rasora">
+    <h4>Località #{{i | increaseOne}}</h4>
+    <div class="form-row" *ngIf="isEditableLocation">
+        <div class="form-group col-md-4 mb-3">
+            <p>Nome</p>
+            <input type="text" formControlName="name" placeholder="Es: Rasora">
+        </div>
+        <div class="form-group col-md-4 mb-3">
+            <p>Altri nomi - separati da una virgola</p>
+            <input type="text" formControlName="tags" class="form-control" placeholder="Es: ...">
+        </div>
     </div>
-    <div class="form-group col-md-4 mb-3">
-        <p>Altri nomi - separati da una virgola</p>
-        <input type="text" formControlName="tags" class="form-control" placeholder="Es: ...">
+    <div class="form-row">
+        <label>Anteprima</label>
+        <div class="form-group col-md-12 mb-12">
+            <app-map-preview [index]="i | increaseOne" [trailPreview]="trailCoordinates"
+                [elementAt]="selectedCoordinate"></app-map-preview>
+        </div>
     </div>
-</div>
-<div class="form-row">
-    <label>Anteprima</label>
-    <div class="form-group col-md-12 mb-12">
-        <app-map-preview [index]="i | increaseOne" [trailPreview]="trailCoordinates" [elementAt]="selectedCoordinate"></app-map-preview>
+    <div class="form-row">
+        <div class="form-group col-md-4 mb-3">
+            <p>Seleziona posizione località da mappa usando il seguento slider</p>
+            <input type="range" value="{{(trailCoordinates.length-1)/2}}" min="0" max="{{trailCoordinates.length-1}}"
+                class="form-control" (change)="onSliderMoved($event.target.value)" required>
+        </div>
     </div>
-</div>
-<div class="form-row">
-    <div class="form-group col-md-4 mb-3">
-        <p>Seleziona posizione località da mappa usando il seguento slider</p>
-        <input type="range" value="{{(trailCoordinates.length-1)/2}}" min="0" max="{{trailCoordinates.length-1}}" class="form-control" (change)="onSliderMoved($event.target.value)" required>
+    <div class="form-row">
+        <div class="form-group col-md-3 mb-3">
+            <p>Latitudine</p>
+            <input type="text" formControlName="latitude" disabled class="form-control" required>
+        </div>
+        <div class="form-group col-md-3 mb-3">
+            <p>Longitudine</p>
+            <input type="text" formControlName="longitude" disabled class="form-control" required>
+        </div>
+        <div class="form-group col-md-3 mb-3">
+            <p>Altitudine</p>
+            <input type="text" formControlName="altitude" disabled class="form-control" required>
+        </div>
+        <div class="form-group col-md-3 mb-3">
+            <p>Distanza dalla partenza</p>
+            <input type="text" formControlName="distanceFromTrailStart" disabled class="form-control" required>
+        </div>
     </div>
-</div>
-<div class="form-row">
-    <div class="form-group col-md-3 mb-3">
-        <p>Latitudine</p>
-        <input type="text" formControlName="latitude" disabled class="form-control" required>
-    </div>
-    <div class="form-group col-md-3 mb-3">
-        <p>Longitudine</p>
-        <input type="text" formControlName="longitude" disabled class="form-control" required>
-    </div>
-    <div class="form-group col-md-3 mb-3">
-        <p>Altitudine</p>
-        <input type="text" formControlName="altitude" disabled class="form-control" required>
-    </div>
-    <div class="form-group col-md-3 mb-3">
-        <p>Distanza dalla partenza</p>
-        <input type="text" formControlName="distanceFromTrailStart" disabled class="form-control" required>
-    </div>
-</div>
 </div>

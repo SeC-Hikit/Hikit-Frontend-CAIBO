@@ -5,6 +5,8 @@ import { AccessibilityNotificationUnresolved } from 'src/app/AccessibilityNotifi
 import { Trail } from 'src/app/Trail';
 import { ChartUtils } from '../ChartUtils';
 import { ViewChild } from '@angular/core';
+import { Maintenance } from 'src/app/Maintenance';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-map-trail-full',
@@ -18,6 +20,7 @@ export class MapTrailFullComponent implements OnInit {
 
   @Input() selectedTrail: Trail;
   @Input() trailNotifications: AccessibilityNotificationUnresolved[];
+  @Input() lastMaintenance: Maintenance;
 
   @Output() isVisibleEvent = new EventEmitter<void>();
   @Output() onDownloadBinaryEvent = new EventEmitter<void>();
@@ -71,5 +74,11 @@ export class MapTrailFullComponent implements OnInit {
     this.isVisibleEvent.emit();
   }
 
+  locationNames(): string[] { 
+    return this.selectedTrail.locations.map(x=> x.name);
+  }
 
+  formatDate(dateString: string) : string {
+    return moment(dateString).format("DD/MM/YYYY");
+  }
 }

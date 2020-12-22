@@ -25,3 +25,7 @@
 .space-up{ 
   margin-top: 2%;
 }
+
+.clickable:hover {
+  color: #D04341;
+}

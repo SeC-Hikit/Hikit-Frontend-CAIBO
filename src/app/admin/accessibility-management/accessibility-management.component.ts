@@ -1,16 +1,11 @@
-import { resolve } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ok } from 'assert';
 import * as moment from 'moment';
-import { AccessibilityComponent } from 'src/app/accessibility/accessibility.component';
 import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
 import { AccessibilityNotificationObj } from 'src/app/AccessibilityNotificationObj';
 import { AccessibilityNotificationResolution } from 'src/app/AccessibilityNotificationResolution';
 import { AccessibilityNotificationUnresolved } from 'src/app/AccessibilityNotificationUnresolved';
 import { NotificationService } from 'src/app/notification-service.service';
-import { RestResponse } from 'src/app/RestResponse';
 import { Status } from 'src/app/Status';
 
 @Component({
@@ -77,7 +72,7 @@ export class AccessibilityManagementComponent implements OnInit {
     this.onDeleted(resolvedNotification);
     this.solvedNotifications.push(new AccessibilityNotificationObj(resolvedNotification._id,
       resolvedNotification.code, resolvedNotification.description,
-      resolvedNotification.reportDate, resolutionDate, resolvedNotification.isMinor, resolution));
+      resolvedNotification.reportDate, resolutionDate, resolvedNotification.isMinor, resolution, resolvedNotification.position));
   }
 
 

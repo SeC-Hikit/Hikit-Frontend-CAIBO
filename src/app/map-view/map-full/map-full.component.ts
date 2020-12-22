@@ -2,7 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChil
 import 'leaflet';
 import { LeafletMouseEventHandlerFn } from 'leaflet';
 import 'leaflet-textpath';
+import { Maintenance } from 'src/app/Maintenance';
+import { Place } from 'src/app/Place';
 import { Trail } from 'src/app/Trail';
+import { TrailCoordinates } from 'src/app/TrailCoordinates';
+import { TrailCoordinatesObj } from 'src/app/TrailCoordinatesObj';
 import { UserCoordinates } from 'src/app/UserCoordinates';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 import { MapUtils } from '../MapUtils';
@@ -31,6 +35,7 @@ export class MapFullComponent implements OnInit {
   @Input() selectedTrail: Trail;
   @Input() trailList: Trail[];
   @Input() tileLayerName: string;
+  @Input() highlightedLocation: TrailCoordinates;
 
   @Output() selectCodeEvent = new EventEmitter<string>();
 
@@ -50,12 +55,13 @@ export class MapFullComponent implements OnInit {
       [44.498955, 11.327591],
       12
     );
-    L.control.scale().addTo(this.map);
+    L.control.scale({ position: 'topright' }).addTo(this.map);
   }
 
   ngAfterViewInit(): void {
     let mapHeight = GraphicUtils.getFullHeightSizeMenu();
     document.getElementById(MapFullComponent.MAP_ID).style.height = mapHeight.toString() + "px";
+    console.log(mapHeight)
     this.map.invalidateSize();
   }
 
@@ -66,8 +72,13 @@ export class MapFullComponent implements OnInit {
         if (propName == "trailList") { this.renderAllTrail(this.trailList) }
         if (propName == "selectedTrail") { this.renderTrail(this.selectedTrail) }
         if (propName == "userPosition") { this.focusOnUser(this.userPosition) }
+        if (propName == "highlightedLocation") { this.focusOnLocation(this.highlightedLocation) }
       }
     }
+  }
+
+  focusOnLocation(highlightedLocation: TrailCoordinates) {
+    this.map.flyTo([highlightedLocation.latitude, highlightedLocation.longitude]);
   }
 
   focusOnUser(userPosition: UserCoordinates) {
@@ -144,7 +155,7 @@ export class MapFullComponent implements OnInit {
     if (this.selectedMarkerLayer) this.map.removeLayer(this.selectedMarkerLayer);
   }
 
-  restorePathFromList(unselectedTrail: Trail){
+  restorePathFromList(unselectedTrail: Trail) {
     const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == unselectedTrail.code);
     if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
       this.map.addLayer(trailFromOtherTrails[0].getPolyline());

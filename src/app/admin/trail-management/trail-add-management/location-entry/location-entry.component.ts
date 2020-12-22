@@ -23,9 +23,8 @@ export class LocationEntryComponent implements OnInit {
   }
 
   onSliderMoved(eventValue: number): void {
-    console.log(eventValue);
+    console.log(this.isEditableLocation);
     this.selectedCoordinate = this.trailCoordinates[eventValue];
-    console.log(this.selectedCoordinate);
     this.inputForm.controls['latitude'].setValue(this.selectedCoordinate.latitude);
     this.inputForm.controls['longitude'].setValue(this.selectedCoordinate.longitude);
     this.inputForm.controls['altitude'].setValue(this.selectedCoordinate.altitude);

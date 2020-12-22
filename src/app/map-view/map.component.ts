@@ -1,14 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AccessibilityNotificationUnresolved } from '../AccessibilityNotificationUnresolved';
+import { Maintenance } from '../Maintenance';
+import { MaintenanceService } from '../maintenance.service';
 import { NotificationService } from '../notification-service.service';
-import { Status } from '../Status';
 import { Trail } from '../Trail';
 import { TrailPreviewService } from '../trail-preview-service.service';
 import { TrailService } from '../trail-service.service';
 import { TrailPreview } from '../TrailPreview';
 import { UserCoordinates } from '../UserCoordinates';
 import { GraphicUtils } from '../utils/GraphicUtils';
+import *  as FileSaver from 'file-saver';
+import { Place } from '../Place';
+import { TrailCoordinatesObj } from '../TrailCoordinatesObj';
+import { TrailCoordinates } from '../TrailCoordinates';
 
 @Component({
   selector: 'app-map',
@@ -25,9 +30,11 @@ export class MapComponent implements OnInit {
   selectedTrail: Trail;
   selectedTrailBinaryPath: string;
   trailNotifications: AccessibilityNotificationUnresolved[];
+  lastMaintenance: Maintenance;
   trailList: Trail[];
   selectedTileLayer: string;
   userPosition: UserCoordinates;
+  highlightedLocation: TrailCoordinates;
 
   isTrailSelectedVisible: boolean;
   isTrailFullScreenVisible: boolean;
@@ -40,6 +47,7 @@ export class MapComponent implements OnInit {
     private trailService: TrailService,
     private trailPreviewService: TrailPreviewService,
     private accessibilityService: NotificationService,
+    private maintenanceService: MaintenanceService,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -81,7 +89,7 @@ export class MapComponent implements OnInit {
           this.selectedTrail.statsMetadata.eta = Math.round(this.selectedTrail.statsMetadata.eta);
           this.selectedTrail.statsMetadata.length = Math.round(this.selectedTrail.statsMetadata.length);
           this.loadNotificationsForTrail(code);
-          this.loadBinaryPath();
+          this.loadLastMaintenaceForTrail(code);
           this.isTrailSelectedVisible = true;
         });
     }
@@ -90,27 +98,25 @@ export class MapComponent implements OnInit {
   loadNotificationsForTrail(code: string): void {
     this.accessibilityService.getUnresolvedByTrailByCode(code).subscribe(notificationResponse => { this.trailNotifications = notificationResponse.accessibilityNotifications });
   }
+  
+  loadLastMaintenaceForTrail(code: string): void {
+    this.maintenanceService.getPastForTrail(code).subscribe(maintenanceResponse => { this.lastMaintenance = maintenanceResponse.maintenanceList[0] });
+  }
 
   loadAllTrails(): void {
     this.trailService.getTrailsLight().subscribe(trailResponse => { this.trailList = trailResponse.trails });
   }
 
   loadBinaryPath(): void {
-    this.trailService.getGpxPath(this.selectedTrail.code).subscribe(response => {
-      if (response.status == Status.OK) {
-        this.selectedTrailBinaryPath = response.path;
-      }
-    })
+    this.trailService.downloadGpx(this.selectedTrail.code).subscribe(response => {
+      let blob:any = new Blob([response], { type: 'text/json; charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      FileSaver.saveAs(blob, this.selectedTrail.code + ".gpx");
+    });
   }
 
   onDownloadBinary(): void {
-    let link = document.createElement('a');
-    link.setAttribute('type', 'hidden');
-    link.href = 'assets/file';
-    link.download = this.selectedTrailBinaryPath;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    this.loadBinaryPath();
   }
 
   changeTileLayer(type: string): void {
@@ -135,6 +141,10 @@ export class MapComponent implements OnInit {
           position.coords.longitude)
       }, (error) => alert(error))
     }
+  }
+
+  navigateToLocation(location: TrailCoordinates) {
+    this.highlightedLocation = location;
   }
 
   toggleList(): void {

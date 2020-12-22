@@ -43,15 +43,15 @@ export class TrailService {
   }
 
   getGpxPath(code: string): Observable<FileDownloadResponse> {
-    return this.httpClient.get<FileDownloadResponse>(this.baseUrl + "/download/" + code)
+    return this.httpClient.get<FileDownloadResponse>(this.baseUrl + "/link/" + code)
       .pipe(
         tap(),
         catchError(this.handleError<FileDownloadResponse>('get trail resource URL', null))
       );
   }
 
-  downloadGpx(path: string): any {
-    return this.httpClient.get(path, {responseType: 'blob'})
+  downloadGpx(code: string): any {
+    return this.httpClient.get(this.baseUrl + "/download/" + code, {responseType: 'blob'})
       .pipe(tap(),
         catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
       );

@@ -19,8 +19,9 @@
                         <th scope="col">Data Segnalazione</th>
                         <th scope="col">Descrizione Problema</th>
                         <th scope="col">Aggirabile?</th>
-                        <th scope="col">Risolvi</th> 
-                        <th scope="col">Cancella</th> 
+                        <th scope="col"></th>
+                        <th scope="col">Risolvi</th>
+                        <th scope="col">Cancella</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,6 +30,11 @@
                         <td>{{ formatDate(notification.reportDate) }}</td>
                         <td>{{ notification.description }}</td>
                         <td>{{ notification.isMinor === true ? "si" : "no" }}</td>
+                        <td class="clickable">
+                            <svg class="bi" width="32" height="32" fill="currentColor">
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image" />
+                            </svg>
+                        </td>
                         <td class="clickable" (click)='onResolveClick(notification)'>
                             <svg class="bi" width="32" height="32" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square" />
