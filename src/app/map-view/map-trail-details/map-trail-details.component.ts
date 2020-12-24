@@ -30,9 +30,9 @@ export class MapTrailDetailsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  afterViewInit(): void { 
-    let fullSize = GraphicUtils.getFullHeightSizeMenu();
-    document.getElementById("scrollable-content").style.maxHeight = fullSize.toString() + "px";
+  ngAfterViewInit(): void { 
+    let fullSize = GraphicUtils.getFullHeightSizeMenu() - 500;
+    document.getElementById("scrollable-content").style.height = fullSize.toString() + "px";
   }
 
   toggleFullTrailPage(): void {

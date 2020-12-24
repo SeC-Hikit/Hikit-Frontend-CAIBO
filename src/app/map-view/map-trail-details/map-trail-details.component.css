@@ -6,6 +6,7 @@
 
 .scrollable {
     overflow-y: scroll;
+    height: 750px;
 }
 
 .clickable:hover {

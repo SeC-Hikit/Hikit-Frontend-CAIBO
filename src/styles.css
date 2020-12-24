@@ -29,3 +29,16 @@
 .clickable:hover {
   color: #D04341;
 }
+
+h1 {
+  font-size: 32px !important;
+}
+
+h2 { 
+  font-size: 27px !important;
+}
+
+h4, h3 {
+  font-size:24px !important;
+  margin-top: 3%;
+}
