@@ -1,6 +1,6 @@
 # SeC - Sentieri e Cartografia UI
-SeC UI helps working with the [SeC API](https://github.com/loreV/SeC).  
-It supports manipulation and visualization of trails related data.
+SeC UI is an italian localized app that makes easy to work with the [SeC API](https://github.com/loreV/SeC).  
+It supports trails related data manipulation and visualization and as it is strongly related to the API, the versioning is tight to the API itself. 
 ## Build
 Run `ng build` to build the project.  
 The build artifacts will be stored in the `dist/` directory.  
