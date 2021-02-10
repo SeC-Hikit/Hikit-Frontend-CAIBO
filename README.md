@@ -2,7 +2,7 @@
 SeC UI is an italian localized app that makes easy to work with the [SeC API](https://github.com/loreV/SeC).  
 It supports trails related data manipulation and visualization and, as it is strongly related to the API, the versioning is tight to the API itself. 
 ## Build
-Run `ng build` to build the project.  
+Run `ng build` to build the project (before you may need to run an `npm install`).  
 The build artifacts will be stored in the `dist/` directory.  
 Use the `--prod` flag for a production build.
 ### Development Run
