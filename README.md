@@ -6,7 +6,7 @@ Run `ng build` to build the project (before you may need to run an `npm install`
 The build artifacts will be stored in the `dist/` directory.  
 Use the `--prod` flag for a production build.
 ### Development Run
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`.
+Run `ng serve --proxy-config src/proxy.conf.json --host 0.0.0.0` for a dev server. Navigate to `http://localhost:4200/`.
 The app will automatically reload if you change any of the source files.
 ## Vision and challenges
 SeC UI aims to be a strong end-user focused UI, that easily allow to gather and save rich data about trails, while connecting this data to a community accessibility notifications, planned maintenance data and POI.
