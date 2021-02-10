@@ -2,7 +2,7 @@ import { Status } from './Status';
 import { Trail } from './Trail';
 
 export interface TrailResponse { 
-    trails : Trail[],
+    content : Trail[],
     status: Status,
     messages: string[]
 }

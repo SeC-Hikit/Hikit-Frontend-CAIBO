@@ -9,5 +9,5 @@ export interface AccessibilityNotification {
     resolutionDate: Date,
     isMinor: boolean,
     resolution: string
-    position: TrailCoordinates
+    coordinates: TrailCoordinates
 }

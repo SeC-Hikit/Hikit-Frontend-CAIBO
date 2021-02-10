@@ -3,7 +3,7 @@ import { Status } from './Status';
 import { AccessibilityNotificationUnresolved } from './AccessibilityNotificationUnresolved';
 
 export interface AccessibilityNotificationUnresolvedResponse { 
-    accessibilityNotifications : AccessibilityNotificationUnresolved[],
+    content : AccessibilityNotificationUnresolved[],
     status: Status,
     messages: string[]
 }

@@ -21,8 +21,8 @@ export class MaintenanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const maintenanceResponseFuture = this.maintenanceService.getFuture().subscribe(x=> { this.maintenanceListFuture = x.maintenanceList; console.log(this.maintenanceListFuture )});
-    const maintenanceResponsePast = this.maintenanceService.getPast().subscribe(x=> { this.maintenanceListPast = x.maintenanceList}); 
+    const maintenanceResponseFuture = this.maintenanceService.getFuture().subscribe(x=> { this.maintenanceListFuture = x.content; console.log(this.maintenanceListFuture )});
+    const maintenanceResponsePast = this.maintenanceService.getPast().subscribe(x=> { this.maintenanceListPast = x.content}); 
   }
 
   formatDate(dateString: string) : string {

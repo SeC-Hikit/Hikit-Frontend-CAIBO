@@ -21,7 +21,7 @@ export class TrailPreviewService {
   getPreviews(): Observable<TrailPreviewResponse> {
     return this.httpClient.get<TrailPreviewResponse>(this.baseUrl)
       .pipe(
-        tap(_ => console.log("")),
+        tap(_ => console.log(_)),
         catchError(this.handleError<TrailPreviewResponse>('get all previews', null))
       );
   }

@@ -24,8 +24,8 @@ export class MaintenanceManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const maintenanceResponseFuture = this.maintenanceService.getFuture().subscribe(x => { this.maintenanceListFuture = x.maintenanceList; console.log(this.maintenanceListFuture) });
-    const maintenanceResponsePast = this.maintenanceService.getPast().subscribe(x => { this.maintenanceListPast = x.maintenanceList });
+    const maintenanceResponseFuture = this.maintenanceService.getFuture().subscribe(x => { this.maintenanceListFuture = x.content; console.log(this.maintenanceListFuture) });
+    const maintenanceResponsePast = this.maintenanceService.getPast().subscribe(x => { this.maintenanceListPast = x.content });
     let codeTrailSaved = this.route.snapshot.paramMap.get("success") as string;
     if (codeTrailSaved) { this.onFileSave(codeTrailSaved); }
   }

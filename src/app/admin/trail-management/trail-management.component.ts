@@ -33,7 +33,7 @@ export class TrailManagementComponent implements OnInit {
 
   
   getAllPreviews() {
-    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailPreviewList = preview.trailPreviews;  } );
+    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailPreviewList = preview.content;  } );
   }
   
   onFileSave(codeTrailSaved : string) {
@@ -42,8 +42,8 @@ export class TrailManagementComponent implements OnInit {
 
   onPreview(selectedTrailPreview: TrailPreview) {
     this.trailService.getTrailByCode(selectedTrailPreview.code).subscribe(trail => {
-      this.selectedTrail = trail.trails[0];
-      this.selectedTrailCoords = trail.trails[0].coordinates;
+      this.selectedTrail = trail.content[0];
+      this.selectedTrailCoords = trail.content[0].coordinates;
     })
   }
 

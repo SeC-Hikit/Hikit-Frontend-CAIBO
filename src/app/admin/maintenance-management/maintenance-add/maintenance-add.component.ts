@@ -37,7 +37,7 @@ export class MaintenanceAddComponent implements OnInit {
   }
 
   onLoad(x: TrailPreviewResponse) {
-    this.trailIds = x.trailPreviews.map(tp => tp.code);
+    this.trailIds = x.content.map(tp => tp.code);
   }
 
   onSubmit() {

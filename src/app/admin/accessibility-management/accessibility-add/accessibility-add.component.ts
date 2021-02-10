@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Positioning } from '@ng-bootstrap/ng-bootstrap/util/positioning';
 import * as moment from 'moment';
 import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
 import { AccessibilityNotificationObj } from 'src/app/AccessibilityNotificationObj';
 import { NotificationService } from 'src/app/notification-service.service';
-import { PlaceObj } from 'src/app/PlaceObj';
 import { Status } from 'src/app/Status';
 import { TrailPreviewService } from 'src/app/trail-preview-service.service';
 import { TrailService } from 'src/app/trail-service.service';
@@ -54,7 +52,7 @@ export class AccessibilityAddComponent implements OnInit {
 
   onLoad(x: TrailPreviewResponse) {
     this.trailResponse = x;
-    this.trailIds = x.trailPreviews.map(tp => tp.code);
+    this.trailIds = x.content.map(tp => tp.code);
     this.selectTrailControl.valueChanges.subscribe(changes => this.onChanges(changes))
   }
 
@@ -64,7 +62,7 @@ export class AccessibilityAddComponent implements OnInit {
   }
 
   onLoadedTrail(x: TrailResponse) {
-    let trail = x.trails[0];
+    let trail = x.content[0];
     this.previewCoords = trail.coordinates;
   }
 
@@ -77,7 +75,7 @@ export class AccessibilityAddComponent implements OnInit {
         "-" + reportedDate.month +
         "-" + reportedDate.day).toDate()
       notification.reportDate = date;
-      notification.position = new TrailCoordinatesObj(objValue.location.latitude, objValue.location.longitude, objValue.location.altitude, objValue.location.distanceFromTrailStart);
+      notification.coordinates = new TrailCoordinatesObj(objValue.location.latitude, objValue.location.longitude, objValue.location.altitude, objValue.location.distanceFromTrailStart);
       this.accessibility.createNotification(notification).subscribe(x => { if (x.status == Status.OK) this.onSaveSuccess(notification) });
     } else {
       alert("Il modulo contiene ancora alcuni elementi vuoti/errati. Ricontrolla per procedere");

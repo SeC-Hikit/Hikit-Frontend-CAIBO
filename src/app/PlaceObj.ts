@@ -1,11 +1,11 @@
 import { Place } from './Place';
-import { TrailCoordinatesObj } from './TrailCoordinatesObj';
+import { TrailCoordinates } from './TrailCoordinates';
 
 export class PlaceObj implements Place {
 
     constructor(public name: string,
         public tags: string[],
-        public coordinates: TrailCoordinatesObj
+        public coordinates: TrailCoordinates
     ) { }
 
 }

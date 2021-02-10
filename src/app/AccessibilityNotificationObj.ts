@@ -10,7 +10,7 @@ export class AccessibilityNotificationObj implements AccessibilityNotification {
         public resolutionDate: Date,
         public isMinor: boolean,
         public resolution: string,
-        public position: TrailCoordinates
+        public coordinates: TrailCoordinates
     ) { }
 
 

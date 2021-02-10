@@ -5,7 +5,6 @@ import { tap, catchError } from 'rxjs/operators';
 import { RestResponse } from './RestResponse';
 import { TrailImportRequest } from './TrailImportRequest';
 import { TrailPreparationModel } from './TrailPreparationModel';
-import { TrailResponse } from './TrailResponse';
 
 @Injectable({
   providedIn: 'root'

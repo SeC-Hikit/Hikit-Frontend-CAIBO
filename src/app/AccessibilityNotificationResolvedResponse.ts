@@ -2,7 +2,7 @@ import { Status } from './Status';
 import { AccessibilityNotification } from './AccessibilityNotification';
 
 export interface AccessibilityNotificationResponse { 
-    accessibilityNotifications : AccessibilityNotification[],
+    content : AccessibilityNotification[],
     status: Status,
     messages: string[]
 }

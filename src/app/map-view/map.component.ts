@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AccessibilityNotificationUnresolved } from '../AccessibilityNotificationUnresolved';
 import { Maintenance } from '../Maintenance';
@@ -11,8 +11,6 @@ import { TrailPreview } from '../TrailPreview';
 import { UserCoordinates } from '../UserCoordinates';
 import { GraphicUtils } from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
-import { Place } from '../Place';
-import { TrailCoordinatesObj } from '../TrailCoordinatesObj';
 import { TrailCoordinates } from '../TrailCoordinates';
 
 @Component({
@@ -78,14 +76,14 @@ export class MapComponent implements OnInit {
   }
 
   loadPreviews(): void {
-    this.trailPreviewService.getPreviews().subscribe(previewResponse => { this.trailPreviewList = previewResponse.trailPreviews; console.log(this.trailPreviewList) });
+    this.trailPreviewService.getPreviews().subscribe(previewResponse => { this.trailPreviewList = previewResponse.content; console.log(this.trailPreviewList) });
   }
 
   loadTrail(code: string): void {
     if (code) {
       this.trailService.getTrailByCode(code).subscribe(
         trailResponse => {
-          this.selectedTrail = trailResponse.trails[0];
+          this.selectedTrail = trailResponse.content[0];
           this.selectedTrail.statsMetadata.eta = Math.round(this.selectedTrail.statsMetadata.eta);
           this.selectedTrail.statsMetadata.length = Math.round(this.selectedTrail.statsMetadata.length);
           this.loadNotificationsForTrail(code);
@@ -96,15 +94,15 @@ export class MapComponent implements OnInit {
   }
 
   loadNotificationsForTrail(code: string): void {
-    this.accessibilityService.getUnresolvedByTrailByCode(code).subscribe(notificationResponse => { this.trailNotifications = notificationResponse.accessibilityNotifications });
+    this.accessibilityService.getUnresolvedByTrailByCode(code).subscribe(notificationResponse => { this.trailNotifications = notificationResponse.content });
   }
   
   loadLastMaintenaceForTrail(code: string): void {
-    this.maintenanceService.getPastForTrail(code).subscribe(maintenanceResponse => { this.lastMaintenance = maintenanceResponse.maintenanceList[0] });
+    this.maintenanceService.getPastForTrail(code).subscribe(maintenanceResponse => { this.lastMaintenance = maintenanceResponse.content[0] });
   }
 
   loadAllTrails(): void {
-    this.trailService.getTrailsLight().subscribe(trailResponse => { this.trailList = trailResponse.trails });
+    this.trailService.getTrailsLight().subscribe(trailResponse => { this.trailList = trailResponse.content });
   }
 
   loadBinaryPath(): void {

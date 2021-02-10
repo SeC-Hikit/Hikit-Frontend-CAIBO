@@ -27,8 +27,8 @@ export class AccessibilityManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.notificationService.getUnresolved().subscribe(x => { this.unresolvedNotifications = x.accessibilityNotifications; console.log(x) });
-    this.notificationService.getAllResolved().subscribe(x => { this.solvedNotifications = x.accessibilityNotifications });
+    this.notificationService.getUnresolved().subscribe(x => { this.unresolvedNotifications = x.content; console.log(x) });
+    this.notificationService.getAllResolved().subscribe(x => { this.solvedNotifications = x.content });
     let savedNotification = this.route.snapshot.paramMap.get("success") as string;
     if (savedNotification) { this.onFileSave(savedNotification); }
   }
