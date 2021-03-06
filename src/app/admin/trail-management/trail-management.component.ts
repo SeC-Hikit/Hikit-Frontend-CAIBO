@@ -10,7 +10,7 @@ import { TrailPreview } from 'src/app/TrailPreview';
 @Component({
   selector: 'app-trail-management',
   templateUrl: './trail-management.component.html',
-  styleUrls: ['./trail-management.component.css']
+  styleUrls: ['./trail-management.component.scss']
 })
 export class TrailManagementComponent implements OnInit {
 

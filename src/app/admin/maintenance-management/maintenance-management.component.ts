@@ -8,7 +8,7 @@ import { Status } from 'src/app/Status';
 @Component({
   selector: 'app-maintenance-management',
   templateUrl: './maintenance-management.component.html',
-  styleUrls: ['./maintenance-management.component.css']
+  styleUrls: ['./maintenance-management.component.scss']
 })
 export class MaintenanceManagementComponent implements OnInit {
 

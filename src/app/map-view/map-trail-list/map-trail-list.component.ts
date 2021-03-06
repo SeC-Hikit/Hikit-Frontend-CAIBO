@@ -5,7 +5,7 @@ import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 @Component({
   selector: 'app-map-trail-list',
   templateUrl: './map-trail-list.component.html',
-  styleUrls: ['./map-trail-list.component.css']
+  styleUrls: ['./map-trail-list.component.scss']
 })
 export class MapTrailListComponent implements OnInit {
 
