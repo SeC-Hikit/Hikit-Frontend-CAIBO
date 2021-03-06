@@ -16,7 +16,7 @@ declare let L; // to be able to use L namespace
 @Component({
   selector: 'app-map-full',
   templateUrl: './map-full.component.html',
-  styleUrls: ['./map-full.component.css']
+  styleUrls: ['./map-full.component.scss']
 })
 export class MapFullComponent implements OnInit {
 
