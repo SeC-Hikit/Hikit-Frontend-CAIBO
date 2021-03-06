@@ -11,7 +11,7 @@ import { Status } from 'src/app/Status';
 @Component({
   selector: 'app-accessibility-management',
   templateUrl: './accessibility-management.component.html',
-  styleUrls: ['./accessibility-management.component.css']
+  styleUrls: ['./accessibility-management.component.scss']
 })
 export class AccessibilityManagementComponent implements OnInit {
 

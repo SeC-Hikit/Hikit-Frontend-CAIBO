@@ -16,7 +16,7 @@ import { TrailResponse } from 'src/app/TrailResponse';
 @Component({
   selector: 'app-accessibility-add',
   templateUrl: './accessibility-add.component.html',
-  styleUrls: ['./accessibility-add.component.css']
+  styleUrls: ['./accessibility-add.component.scss']
 })
 export class AccessibilityAddComponent implements OnInit {
 

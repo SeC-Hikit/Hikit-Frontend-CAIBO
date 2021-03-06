@@ -11,7 +11,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-map-trail-full',
   templateUrl: './map-trail-full.component.html',
-  styleUrls: ['./map-trail-full.component.css']
+  styleUrls: ['./map-trail-full.component.scss']
 })
 export class MapTrailFullComponent implements OnInit {
 

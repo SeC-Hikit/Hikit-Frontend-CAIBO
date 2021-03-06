@@ -5,7 +5,7 @@ import { TrailCoordinates } from 'src/app/TrailCoordinates';
 @Component({
   selector: 'app-location-entry',
   templateUrl: './location-entry.component.html',
-  styleUrls: ['./location-entry.component.css']
+  styleUrls: ['./location-entry.component.scss']
 })
 export class LocationEntryComponent implements OnInit {
 

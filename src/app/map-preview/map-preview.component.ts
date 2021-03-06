@@ -8,7 +8,7 @@ import { UserCoordinates } from '../UserCoordinates';
 @Component({
   selector: 'app-map-preview',
   templateUrl: './map-preview.component.html',
-  styleUrls: ['./map-preview.component.css']
+  styleUrls: ['./map-preview.component.scss']
 })
 export class MapPreviewComponent implements OnInit {
 

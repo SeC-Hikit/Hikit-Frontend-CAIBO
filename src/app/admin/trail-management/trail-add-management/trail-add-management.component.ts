@@ -14,7 +14,7 @@ import { FormUtils } from 'src/app/utils/FormUtils';
 @Component({
   selector: 'app-trail-add-management',
   templateUrl: './trail-add-management.component.html',
-  styleUrls: ['./trail-add-management.component.css']
+  styleUrls: ['./trail-add-management.component.scss']
 })
 export class TrailAddManagementComponent implements OnInit {
 
