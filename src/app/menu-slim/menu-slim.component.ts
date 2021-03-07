@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-menu-slim',
   templateUrl: './menu-slim.component.html',
-  styleUrls: ['./menu-slim.component.css']
+  styleUrls: ['./menu-slim.component.scss']
 })
 export class MenuSlimComponent implements OnInit {
 

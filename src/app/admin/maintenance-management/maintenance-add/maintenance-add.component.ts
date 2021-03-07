@@ -12,7 +12,7 @@ import { TrailPreviewResponse } from 'src/app/TrailPreviewResponse';
 @Component({
   selector: 'app-maintenance-add',
   templateUrl: './maintenance-add.component.html',
-  styleUrls: ['./maintenance-add.component.css']
+  styleUrls: ['./maintenance-add.component.scss']
 })
 export class MaintenanceAddComponent implements OnInit {
 
