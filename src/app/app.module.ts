@@ -23,7 +23,7 @@ import { MapTrailListComponent } from './map-view/map-trail-list/map-trail-list.
 import { MapTrailFullComponent } from './map-view/map-trail-full-details/map-trail-full.component';
 import { AdminComponent } from './admin/admin.component';
 import { TrailManagementComponent } from './admin/trail-management/trail-management.component';
-import { TrailAddManagementComponent } from './admin/trail-management/trail-add-management/trail-add-management.component';
+import { TrailUploadManagementComponent } from './admin/trail-management/trail-upload-management/trail-upload-management.component';
 import { MaintenanceManagementComponent } from './admin/maintenance-management/maintenance-management.component';
 import { MaintenanceAddComponent } from './admin/maintenance-management/maintenance-add/maintenance-add.component';
 import { AccessibilityManagementComponent } from './admin/accessibility-management/accessibility-management.component';
@@ -33,7 +33,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LocationEntryComponent } from './admin/trail-management/trail-add-management/location-entry/location-entry.component';
+import { LocationEntryComponent } from './admin/trail-management/trail-upload-management/location-entry/location-entry.component';
 import { IncreasedIndexPipe } from './IncreasedIndexPipe';
 import { EtaPipe } from './EtaPipe';
 
@@ -59,7 +59,7 @@ import { EtaPipe } from './EtaPipe';
     MapTrailFullComponent,
     AdminComponent,
     TrailManagementComponent,
-    TrailAddManagementComponent,
+    TrailUploadManagementComponent,
     MaintenanceManagementComponent,
     MaintenanceAddComponent,
     AccessibilityManagementComponent,
@@ -68,7 +68,7 @@ import { EtaPipe } from './EtaPipe';
     NotFoundComponent,
     LocationEntryComponent,
     IncreasedIndexPipe,
-    EtaPipe
+    EtaPipe,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +79,6 @@ import { EtaPipe } from './EtaPipe';
     QuillModule.forRoot(),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrailAddManagementComponent } from './trail-add-management.component';
+import { TrailAddManagementComponent } from './trail-upload-management.component';
 
 describe('TrailAddManagementComponent', () => {
   let component: TrailAddManagementComponent;
@@ -8,9 +8,8 @@ describe('TrailAddManagementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrailAddManagementComponent ]
-    })
-    .compileComponents();
+      declarations: [TrailAddManagementComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
