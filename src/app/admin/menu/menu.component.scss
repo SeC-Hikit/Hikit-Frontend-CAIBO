@@ -1,13 +1,13 @@
-a,svg,label {
-    cursor: pointer;
-}
+.menu {
+  &__tab-item {
+    font-size: 24px;
+    line-height: 1.2;
+  }
 
-label {
-    margin-left: 2%;
-}
-
-a {
-    border: 1px solid #999;
-    padding: 13px;
-    border-radius: 5px;
+  &__tab-icon {
+    height: 24px;
+    width: 24px;
+    margin-right: 5px;
+    margin-bottom: 0.5rem;
+  }
 }

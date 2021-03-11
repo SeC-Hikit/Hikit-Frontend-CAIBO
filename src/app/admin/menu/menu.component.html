@@ -1,26 +1,24 @@
-<div class="row admin-menu">
-    <div class="col-2">
-        <a routerLink="/admin/trails">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill" />
-            </svg>
-            <label>Sentieri</label>
+<div class="menu">
+  <div class="menu__tabs">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active menu__tab-item" aria-current="page">
+          <i class="bi bi-map-fill menu__tab-icon"></i>
+          <label>Sentieri</label>
         </a>
-    </div>
-    <div class="col-2">
-        <a routerLink="/admin/accessibility">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle-fill" />
-            </svg>
-            <label>Percorribilità</label>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link menu__tab-item">
+          <i class="bi bi-info-circle-fill menu__tab-icon"></i>
+          <label>Percorribilità</label>
         </a>
-    </div>
-    <div class="col-4">
-        <a routerLink="/admin/maintenance">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar-week" />
-            </svg>
-            <label>Calendario manuntenzioni</label>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link menu__tab-item">
+          <i class="bi bi-calendar-week menu__tab-icon"></i>
+          <label>Calendario manuntenzioni</label>
         </a>
-    </div>
+      </li>
+    </ul>
+  </div>
 </div>
