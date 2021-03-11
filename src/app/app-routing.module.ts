@@ -8,6 +8,7 @@ import { SafetyComponent } from './safety/safety.component';
 import { TrekkingComponent } from './trekking/trekking.component';
 import { MapComponent } from './map-view/map.component';
 import { TrailAddManagementComponent } from './admin/trail-management/trail-add-management/trail-add-management.component';
+import { TrailEditManagementComponent } from './admin/trail-management/trail-edit-management/trail-edit-management.component';
 import { TrailManagementComponent } from './admin/trail-management/trail-management.component';
 import { MaintenanceManagementComponent } from './admin/maintenance-management/maintenance-management.component';
 import { MaintenanceAddComponent } from './admin/maintenance-management/maintenance-add/maintenance-add.component';
@@ -35,6 +36,7 @@ const routes: Routes = [
         path: "trails", children: [
           {path: "", component: TrailManagementComponent},
           {path: "add", component: TrailAddManagementComponent},
+          {path: "edit/:id", component: TrailEditManagementComponent},
         ]
       },
       {

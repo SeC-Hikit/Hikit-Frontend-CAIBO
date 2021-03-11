@@ -24,6 +24,7 @@ import { MapTrailFullComponent } from './map-view/map-trail-full-details/map-tra
 import { AdminComponent } from './admin/admin.component';
 import { TrailManagementComponent } from './admin/trail-management/trail-management.component';
 import { TrailAddManagementComponent } from './admin/trail-management/trail-add-management/trail-add-management.component';
+import { TrailEditManagementComponent } from './admin/trail-management/trail-edit-management/trail-edit-management.component';
 import { MaintenanceManagementComponent } from './admin/maintenance-management/maintenance-management.component';
 import { MaintenanceAddComponent } from './admin/maintenance-management/maintenance-add/maintenance-add.component';
 import { AccessibilityManagementComponent } from './admin/accessibility-management/accessibility-management.component';
@@ -60,6 +61,7 @@ import { EtaPipe } from './EtaPipe';
     AdminComponent,
     TrailManagementComponent,
     TrailAddManagementComponent,
+    TrailEditManagementComponent,
     MaintenanceManagementComponent,
     MaintenanceAddComponent,
     AccessibilityManagementComponent,
