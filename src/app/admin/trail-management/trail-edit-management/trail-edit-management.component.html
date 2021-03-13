@@ -1,175 +1,296 @@
 <div class="container my-4">
-    <app-menu-admin></app-menu-admin>
-    <h1 class="space-up">Gestioni Sentieri</h1>
-    <h2>Modifica sentiero</h2>
-    <p>Carica un file .gpx con la traccia da caricare e compila i campi per aggiungere o rimpiazzare un sentiero.</p>
-    <div class="table-wrapper space-up">
+  <app-menu-admin></app-menu-admin>
+  <h1 class="space-up">Gestioni Sentieri</h1>
+  <h2>Modifica sentiero</h2>
+  <p>
+    Carica un file .gpx con la traccia da caricare e compila i campi per
+    aggiungere o rimpiazzare un sentiero.
+  </p>
+  <div class="table-wrapper space-up">
+    <form
+      class="container"
+      (ngSubmit)="saveTrail()"
+      [formGroup]="trailFormGroup"
+      [ngClass]="{ hide: !uploadedSuccesfull }"
+    >
+      <h3 class="space-up">Dati generali</h3>
 
-        <form class="container" (ngSubmit)="saveTrail()" [formGroup]="trailFormGroup" [ngClass]="{'hide': !uploadedSuccesfull}">
+      <div class="form-row">
+        <div class="form-group col-md-4 mb-3">
+          <p>Codice sentiero</p>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="code"
+            [(ngModel)]="selectedTrail.code"
+            name="code"
+            required
+          />
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <p>Nome sentiero</p>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            [(ngModel)]="selectedTrail.name"
+            name="name"
+          />
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <p>Classificazione</p>
+          <div class="bootstrap-select-wrapper">
+            <select
+              title="Scegli una opzione"
+              formControlName="classification"
+              class="form-control"
+              [(ngModel)]="selectedTrail.classification"
+              name="classification"
+              id="trailId_select"
+            >
+              <option value="T">T</option>
+              <option value="E">E</option>
+              <option value="EE">EE</option>
+              <option value="EEA">EEA</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4 mb-3">
+          <p>Data rilevazione</p>
+          <div class="input-group">
+            <input
+              class="form-control"
+              formControlName="lastUpdate"
+              ngbDatepicker
+              [(ngModel)]="selectedTrail.lastUpdate"
+              name="lastUpdate"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary calendar"
+                type="button"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <p>Sezione competente CAI</p>
+          <div class="bootstrap-select-wrapper">
+            <select
+              title="Scegli una opzione"
+              formControlName="maintainingSection"
+              class="form-control"
+              [(ngModel)]="selectedTrail.maintainingSection"
+              name="maintainingSection"
+              id="trailId_select"
+            >
+              <option>Bologna</option>
+              <option>Porretta</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Descrizione</label>
+        <div class="form-group col-md-12 mb-12">
+          <quill-editor
+            formControlName="description"
+            [(ngModel)]="selectedTrail.description"
+            name="description"
+            [modules]="{
+              toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['link']
+              ]
+            }"
+          ></quill-editor>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Anteprima</label>
+        <div class="form-group col-md-12 mb-12">
+          <app-map-preview
+            [trailPreview]="previewCoords"
+            [index]="0"
+          ></app-map-preview>
+        </div>
+      </div>
 
-            <h3 class="space-up">Dati generali</h3>
+      <h3 class="space-up">Località</h3>
+      <p class="space-up">
+        Le localita' sono utilizzate per segnalare punti di particolare
+        importanza sui sentieri.
+      </p>
 
-            <div class="form-row">
-                <div class="form-group col-md-4 mb-3">
-                    <p>Codice sentiero</p>
-                    <input type="text" class="form-control" formControlName="code" [(ngModel)]="selectedTrail.code" name="code"
-                        required>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <p>Nome sentiero</p>
-                    <input type="text" class="form-control" formControlName="name" [(ngModel)]="selectedTrail.name" name="name">
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <p>Classificazione</p>
-                    <div class="bootstrap-select-wrapper">
-                        <select title="Scegli una opzione" formControlName="classification" class="form-control"
-                            [(ngModel)]="selectedTrail.classification" name="classification"
-                            id="trailId_select">
-                            <option value="T">T</option>
-                            <option value="E">E</option>
-                            <option value="EE">EE</option>
-                            <option value="EEA">EEA</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-4 mb-3">
-                    <p>Data rilevazione</p>
-                    <div class="input-group">
-                        <input class="form-control" formControlName="lastUpdate" 
-                        ngbDatepicker
-                        [(ngModel)]="selectedTrail.lastUpdate" name="lastUpdate"
-                            >
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
-                                type="button"></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <p>Sezione competente CAI</p>
-                    <div class="bootstrap-select-wrapper">
-                        <select title="Scegli una opzione" formControlName="maintainingSection" class="form-control"
-                            [(ngModel)]="selectedTrail.maintainingSection" name="maintainingSection"
-                            id="trailId_select">
-                            <option>Bologna</option>
-                            <option>Porretta</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <label>Descrizione</label>
-                <div class="form-group col-md-12 mb-12">
-                    <quill-editor formControlName="description" [(ngModel)]="selectedTrail.description" name="description"
-                        [modules]="{
-                        toolbar: [ 
-                        ['bold', 'italic', 'underline'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['link']]
-                    }"></quill-editor>
-                </div>
-            </div>
-            <div class="form-row">
-                <label>Anteprima</label>
-                <div class="form-group col-md-12 mb-12">
-                    <app-map-preview [trailPreview]="previewCoords" [index]="0"></app-map-preview>
-                </div>
-            </div>
+      <div [formGroup]="firstPos">
+        <h4>Partenza</h4>
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-3">
+            <p>Nome</p>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              placeholder="Es: Rasora"
+              required
+            />
+          </div>
+          <div class="form-group col-md-4 mb-3">
+            <p>Altri nomi - separati da una virgola</p>
+            <input
+              type="text"
+              formControlName="tags"
+              class="form-control"
+              placeholder="Es: ..."
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-3 mb-3">
+            <p>Latitudine</p>
+            <input
+              type="text"
+              formControlName="latitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Longitudine</p>
+            <input
+              type="text"
+              formControlName="longitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Altitudine</p>
+            <input
+              type="text"
+              formControlName="altitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Distanza dalla partenza</p>
+            <input
+              type="text"
+              formControlName="distanceFromTrailStart"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div [formGroup]="finalPos">
+        <h4>Arrivo</h4>
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-3">
+            <p>Nome</p>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              placeholder="Es: Rasora"
+              required
+            />
+          </div>
+          <div class="form-group col-md-4 mb-3">
+            <p>Altri nomi - separati da una virgola</p>
+            <input
+              type="text"
+              formControlName="tags"
+              class="form-control"
+              placeholder="Es: ..."
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-3 mb-3">
+            <p>Latitudine</p>
+            <input
+              type="text"
+              formControlName="latitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Longitudine</p>
+            <input
+              type="text"
+              formControlName="longitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Altitudine</p>
+            <input
+              type="text"
+              formControlName="altitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Distanza dalla partenza</p>
+            <input
+              type="text"
+              formControlName="distanceFromTrailStart"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+      </div>
 
-            <h3 class="space-up">Località</h3>
-            <p class="space-up">Le localita' sono utilizzate per segnalare punti di particolare importanza sui sentieri.
-            </p>
+      <div formArrayName="locations">
+        <app-location-entry
+          *ngFor="let place of locations.controls; index as i"
+          [inputForm]="place"
+          [trailCoordinates]="previewCoords"
+          [i]="i"
+          [isEditableLocation]="true"
+        >
+        </app-location-entry>
+      </div>
 
-            <div [formGroup]="firstPos">
-                <h4>Partenza</h4>
-                <div class="form-row">
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Nome</p>
-                        <input type="text" formControlName="name" class="form-control" placeholder="Es: Rasora"
-                            required>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Altri nomi - separati da una virgola</p>
-                        <input type="text" formControlName="tags" class="form-control" placeholder="Es: ...">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Latitudine</p>
-                        <input type="text" formControlName="latitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Longitudine</p>
-                        <input type="text" formControlName="longitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Altitudine</p>
-                        <input type="text" formControlName="altitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Distanza dalla partenza</p>
-                        <input type="text" formControlName="distanceFromTrailStart" disabled class="form-control"
-                            required>
-                    </div>
-                </div>
-            </div>
-            <div [formGroup]="finalPos">
-                <h4>Arrivo</h4>
-                <div class="form-row">
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Nome</p>
-                        <input type="text" formControlName="name" class="form-control" placeholder="Es: Rasora"
-                            required>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Altri nomi - separati da una virgola</p>
-                        <input type="text" formControlName="tags" class="form-control" placeholder="Es: ...">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Latitudine</p>
-                        <input type="text" formControlName="latitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Longitudine</p>
-                        <input type="text" formControlName="longitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Altitudine</p>
-                        <input type="text" formControlName="altitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Distanza dalla partenza</p>
-                        <input type="text" formControlName="distanceFromTrailStart" disabled class="form-control"
-                            required>
-                    </div>
-                </div>
-            </div>
+      <div class="form-row">
+        <button
+          type="button"
+          class="btn btn-success mt-3"
+          (click)="onAddLocation()"
+        >
+          Aggiungi località intermedia
+        </button>
+      </div>
 
-            <div formArrayName="locations">
-                <app-location-entry *ngFor="let place of locations.controls; index as i" [inputForm]="place"
-                    [trailCoordinates]="previewCoords" [i]="i" [isEditableLocation]="true">
-                </app-location-entry>
-            </div>
-
-            <div class="form-row">
-                <button type="button" class="btn btn-success mt-3" (click)="onAddLocation()">Aggiungi località intermedia</button>
-            </div>
-
-            <div class="form-row">
-                <span class="form-group col-md-3 mb-2">
-                    <button class="btn btn-primary mt-3" type="submit">Salva e pubblica sentiero</button>
-                </span>
-                <span class="form-group col-md-1 mb-1">
-                    <a routerLink="/admin/trails">
-                        <button class="btn btn-light mt-3" type="button">Cancella</button>
-                    </a>
-                </span>
-            </div>
-        </form>
-    </div>
+      <div class="form-row">
+        <span class="form-group col-md-3 mb-2">
+          <button class="btn btn-primary mt-3" type="submit">
+            Salva e pubblica sentiero
+          </button>
+        </span>
+        <span class="form-group col-md-1 mb-1">
+          <a routerLink="/admin/trails">
+            <button class="btn btn-light mt-3" type="button">Cancella</button>
+          </a>
+        </span>
+      </div>
+    </form>
+  </div>
 </div>
-
