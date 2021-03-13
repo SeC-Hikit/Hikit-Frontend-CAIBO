@@ -36,6 +36,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { LocationEntryComponent } from "./admin/trail-management/trail-upload-management/location-entry/location-entry.component";
 import { IncreasedIndexPipe } from "./IncreasedIndexPipe";
 import { EtaPipe } from "./EtaPipe";
+import { TrailEditManagementComponent } from "./admin/trail-management/trail-edit-management/trail-edit-management.component";
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { EtaPipe } from "./EtaPipe";
     AdminComponent,
     TrailManagementComponent,
     TrailUploadManagementComponent,
+    TrailEditManagementComponent,
     MaintenanceManagementComponent,
     MaintenanceAddComponent,
     AccessibilityManagementComponent,
