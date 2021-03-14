@@ -1,187 +1,310 @@
 <div class="container my-4">
-    <app-menu-admin></app-menu-admin>
-    <h1 class="space-up">Gestioni Sentieri</h1>
-    <h2>Aggiungi sentiero</h2>
-    <p>Carica un file .gpx con la traccia da caricare e compila i campi per aggiungere o rimpiazzare un sentiero.</p>
-    <div class="table-wrapper space-up">
-        <div [ngClass]="{'hide': uploadedSuccesfull}">
-            <input type="file" name="upload" id="upload" class="upload" multiple="multiple"
-                (change)="onUploadGpx($event.target.files)" />
-
-            <label for="upload">
-                <svg class="icon icon-sm" aria-hidden="true">
-                    <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#cloud-upload"></use>
-                </svg>
-                <span>Upload .gpx</span>
-            </label>
-        </div>
-
-        <div [ngClass]="{'hide': !uploadedSuccesfull}">
-            <button type="button" name="reload" class="btn btn-warning"
-                (click)="onReload()">Carica nuovo file</button>
-        </div>
-
-
-        <form class="container" (ngSubmit)="saveTrail()" [formGroup]="trailFormGroup" [ngClass]="{'hide': !uploadedSuccesfull}">
-
-            <h3 class="space-up">Dati generali</h3>
-
-            <div class="form-row">
-                <div class="form-group col-md-4 mb-3">
-                    <p>Codice sentiero</p>
-                    <input type="text" class="form-control" formControlName="code" placeholder="Codice (es: 100BO)"
-                        required>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <p>Nome sentiero</p>
-                    <input type="text" class="form-control" formControlName="name"
-                        placeholder="Nome sentiero, se diverso dal codice">
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <p>Classificazione</p>
-                    <div class="bootstrap-select-wrapper">
-                        <select title="Scegli una opzione" formControlName="classification" class="form-control"
-                            id="trailId_select">
-                            <option value="T">T</option>
-                            <option value="E">E</option>
-                            <option value="EE">EE</option>
-                            <option value="EEA">EEA</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-4 mb-3">
-                    <p>Data rilevazione</p>
-                    <div class="input-group">
-                        <input class="form-control" formControlName="lastUpdate" placeholder="dd/mm/yyyy" name="dp"
-                            ngbDatepicker #d="ngbDatepicker">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
-                                type="button"></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <p>Sezione competente CAI</p>
-                    <div class="bootstrap-select-wrapper">
-                        <select title="Scegli una opzione" formControlName="maintainingSection" class="form-control"
-                            id="trailId_select">
-                            <option>Bologna</option>
-                            <option>Porretta</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <label>Descrizione</label>
-                <div class="form-group col-md-12 mb-12">
-                    <quill-editor formControlName="description" [modules]="{
-                        toolbar: [ 
-                        ['bold', 'italic', 'underline'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['link']]
-                    }"></quill-editor>
-                </div>
-            </div>
-            <div class="form-row">
-                <label>Anteprima</label>
-                <div class="form-group col-md-12 mb-12">
-                    <app-map-preview [trailPreview]="previewCoords" [index]="0"></app-map-preview>
-                </div>
-            </div>
-
-            <h3 class="space-up">Località</h3>
-            <p class="space-up">Le localita' sono utilizzate per segnalare punti di particolare importanza sui sentieri.
-            </p>
-
-            <div [formGroup]="firstPos">
-                <h4>Partenza</h4>
-                <div class="form-row">
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Nome</p>
-                        <input type="text" formControlName="name" class="form-control" placeholder="Es: Rasora"
-                            required>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Altri nomi - separati da una virgola</p>
-                        <input type="text" formControlName="tags" class="form-control" placeholder="Es: ...">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Latitudine</p>
-                        <input type="text" formControlName="latitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Longitudine</p>
-                        <input type="text" formControlName="longitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Altitudine</p>
-                        <input type="text" formControlName="altitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Distanza dalla partenza</p>
-                        <input type="text" formControlName="distanceFromTrailStart" disabled class="form-control"
-                            required>
-                    </div>
-                </div>
-            </div>
-            <div [formGroup]="finalPos">
-                <h4>Arrivo</h4>
-                <div class="form-row">
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Nome</p>
-                        <input type="text" formControlName="name" class="form-control" placeholder="Es: Rasora"
-                            required>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Altri nomi - separati da una virgola</p>
-                        <input type="text" formControlName="tags" class="form-control" placeholder="Es: ...">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Latitudine</p>
-                        <input type="text" formControlName="latitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Longitudine</p>
-                        <input type="text" formControlName="longitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Altitudine</p>
-                        <input type="text" formControlName="altitude" disabled class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-3 mb-3">
-                        <p>Distanza dalla partenza</p>
-                        <input type="text" formControlName="distanceFromTrailStart" disabled class="form-control"
-                            required>
-                    </div>
-                </div>
-            </div>
-
-            <div formArrayName="locations">
-                <app-location-entry *ngFor="let place of locations.controls; index as i" [inputForm]="place"
-                    [trailCoordinates]="previewCoords" [i]="i" [isEditableLocation]="true">
-                </app-location-entry>
-            </div>
-
-            <div class="form-row">
-                <button type="button" class="btn btn-success mt-3" (click)="onAddLocation()">Aggiungi località intermedia</button>
-            </div>
-
-            <div class="form-row">
-                <span class="form-group col-md-3 mb-2">
-                    <button class="btn btn-primary mt-3" type="submit">Salva e pubblica sentiero</button>
-                </span>
-                <span class="form-group col-md-1 mb-1">
-                    <a routerLink="/admin/trails">
-                        <button class="btn btn-light mt-3" type="button">Cancella</button>
-                    </a>
-                </span>
-            </div>
-        </form>
+  <h1 class="space-up">Gestioni Sentieri</h1>
+  <div class="table-wrapper space-up">
+    <div
+      *ngIf="!uploadedSuccesfull"
+      class="trail-upload-management__container-button"
+    >
+      <app-upload-button-management
+        class="trail-upload-management__container-button"
+        [isMultipleUpload]="false"
+        (uploadedFiles)="uploadFile($event)"
+      ></app-upload-button-management>
+      <app-upload-button-management
+        [isMultipleUpload]="true"
+        class="trail-upload-management__container-button"
+      ></app-upload-button-management>
     </div>
+
+    <div [ngClass]="{ hide: !uploadedSuccesfull }">
+      <button
+        type="button"
+        name="reload"
+        class="btn btn-warning"
+        (click)="onReload()"
+      >
+        Carica nuovo file
+      </button>
+    </div>
+
+    <form
+      class="container"
+      (ngSubmit)="saveTrail()"
+      [formGroup]="trailFormGroup"
+      [ngClass]="{ hide: !uploadedSuccesfull }"
+    >
+      <h3 class="space-up">Dati generali</h3>
+
+      <div class="form-row">
+        <div class="form-group col-md-4 mb-3">
+          <p>Codice sentiero</p>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="code"
+            placeholder="Codice (es: 100BO)"
+            required
+          />
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <p>Nome sentiero</p>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="Nome sentiero, se diverso dal codice"
+          />
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <p>Classificazione</p>
+          <div class="bootstrap-select-wrapper">
+            <select
+              title="Scegli una opzione"
+              formControlName="classification"
+              class="form-control"
+              id="trailId_select"
+            >
+              <option value="T">T</option>
+              <option value="E">E</option>
+              <option value="EE">EE</option>
+              <option value="EEA">EEA</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4 mb-3">
+          <p>Data rilevazione</p>
+          <div class="input-group">
+            <input
+              class="form-control"
+              formControlName="lastUpdate"
+              placeholder="dd/mm/yyyy"
+              name="dp"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary calendar"
+                (click)="d.toggle()"
+                type="button"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <p>Sezione competente CAI</p>
+          <div class="bootstrap-select-wrapper">
+            <select
+              title="Scegli una opzione"
+              formControlName="maintainingSection"
+              class="form-control"
+              id="trailId_select"
+            >
+              <option>Bologna</option>
+              <option>Porretta</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Descrizione</label>
+        <div class="form-group col-md-12 mb-12">
+          <quill-editor
+            formControlName="description"
+            [modules]="{
+              toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['link']
+              ]
+            }"
+          ></quill-editor>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Anteprima</label>
+        <div class="form-group col-md-12 mb-12">
+          <app-map-preview
+            [trailPreview]="previewCoords"
+            [index]="0"
+          ></app-map-preview>
+        </div>
+      </div>
+
+      <h3 class="space-up">Località</h3>
+      <p class="space-up">
+        Le localita' sono utilizzate per segnalare punti di particolare
+        importanza sui sentieri.
+      </p>
+
+      <div [formGroup]="firstPos">
+        <h4>Partenza</h4>
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-3">
+            <p>Nome</p>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              placeholder="Es: Rasora"
+              required
+            />
+          </div>
+          <div class="form-group col-md-4 mb-3">
+            <p>Altri nomi - separati da una virgola</p>
+            <input
+              type="text"
+              formControlName="tags"
+              class="form-control"
+              placeholder="Es: ..."
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-3 mb-3">
+            <p>Latitudine</p>
+            <input
+              type="text"
+              formControlName="latitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Longitudine</p>
+            <input
+              type="text"
+              formControlName="longitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Altitudine</p>
+            <input
+              type="text"
+              formControlName="altitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Distanza dalla partenza</p>
+            <input
+              type="text"
+              formControlName="distanceFromTrailStart"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div [formGroup]="finalPos">
+        <h4>Arrivo</h4>
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-3">
+            <p>Nome</p>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              placeholder="Es: Rasora"
+              required
+            />
+          </div>
+          <div class="form-group col-md-4 mb-3">
+            <p>Altri nomi - separati da una virgola</p>
+            <input
+              type="text"
+              formControlName="tags"
+              class="form-control"
+              placeholder="Es: ..."
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-3 mb-3">
+            <p>Latitudine</p>
+            <input
+              type="text"
+              formControlName="latitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Longitudine</p>
+            <input
+              type="text"
+              formControlName="longitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Altitudine</p>
+            <input
+              type="text"
+              formControlName="altitude"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group col-md-3 mb-3">
+            <p>Distanza dalla partenza</p>
+            <input
+              type="text"
+              formControlName="distanceFromTrailStart"
+              disabled
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div formArrayName="locations">
+        <app-location-entry
+          *ngFor="let place of locations.controls; index as i"
+          [inputForm]="place"
+          [trailCoordinates]="previewCoords"
+          [i]="i"
+          [isEditableLocation]="true"
+        >
+        </app-location-entry>
+      </div>
+
+      <div class="form-row">
+        <button
+          type="button"
+          class="btn btn-success mt-3"
+          (click)="onAddLocation()"
+        >
+          Aggiungi località intermedia
+        </button>
+      </div>
+
+      <div class="form-row">
+        <span class="form-group col-md-3 mb-2">
+          <button class="btn btn-primary mt-3" type="submit">
+            Salva e pubblica sentiero
+          </button>
+        </span>
+        <span class="form-group col-md-1 mb-1">
+          <a routerLink="/admin/trails">
+            <button class="btn btn-light mt-3" type="button">Cancella</button>
+          </a>
+        </span>
+      </div>
+    </form>
+  </div>
 </div>

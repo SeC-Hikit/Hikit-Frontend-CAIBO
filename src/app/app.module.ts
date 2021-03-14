@@ -28,7 +28,7 @@ import { MaintenanceManagementComponent } from "./admin/maintenance-management/m
 import { MaintenanceAddComponent } from "./admin/maintenance-management/maintenance-add/maintenance-add.component";
 import { AccessibilityManagementComponent } from "./admin/accessibility-management/accessibility-management.component";
 import { AccessibilityAddComponent } from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
-import { AdminMenuComponent } from "./admin/menu/menu.component";
+import { MenuManagementComponent } from "./admin/menu-management/menu-management.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { QuillModule } from "ngx-quill";
@@ -36,7 +36,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { LocationEntryComponent } from "./admin/trail-management/trail-upload-management/location-entry/location-entry.component";
 import { IncreasedIndexPipe } from "./IncreasedIndexPipe";
 import { EtaPipe } from "./EtaPipe";
-import { TrailEditManagementComponent } from "./admin/trail-management/trail-edit-management/trail-edit-management.component";
+import { UploadButtonManagementComponent } from "./admin/upload-button-management/upload-button-management.component";
 
 @NgModule({
   declarations: [
@@ -61,16 +61,16 @@ import { TrailEditManagementComponent } from "./admin/trail-management/trail-edi
     AdminComponent,
     TrailManagementComponent,
     TrailUploadManagementComponent,
-    TrailEditManagementComponent,
     MaintenanceManagementComponent,
     MaintenanceAddComponent,
     AccessibilityManagementComponent,
     AccessibilityAddComponent,
-    AdminMenuComponent,
+    MenuManagementComponent,
     NotFoundComponent,
     LocationEntryComponent,
     IncreasedIndexPipe,
     EtaPipe,
+    UploadButtonManagementComponent,
   ],
   imports: [
     BrowserModule,

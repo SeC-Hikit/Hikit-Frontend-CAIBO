@@ -1,72 +1,81 @@
 <div class="container my-4">
-    <app-menu-admin></app-menu-admin>
-    <div *ngIf="savedMaintenance">
-        <div class="space-up alert alert-success" role="alert">
-            Manuntenzione per sentiero '{{savedMaintenance}}' aggiunta
-        </div>
+  <div *ngIf="savedMaintenance">
+    <div class="space-up alert alert-success" role="alert">
+      Manuntenzione per sentiero '{{ savedMaintenance }}' aggiunta
     </div>
-    <div class="row section-distance-up">
-        <div class="col-12 col-md-12 col-s-6">
-            <h1>Gestione calendario manuntenzioni</h1>
-            <button type="button" class="btn btn-primary" routerLink="./add">Aggiungi manuntenzione</button>
-            <h2 class="section-distance-up">Prossimi incontri</h2>
-            <table *ngIf="maintenanceListFuture.length > 0; else notShow" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Data</th>
-                        <th scope="col">Codice Sentiero</th>
-                        <th scope="col">Posto di Ritrovo</th>
-                        <th scope="col">Descrizione</th>
-                        <th scope="col">Contatto</th>
-                        <th scope="col">Cancella</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let maintenance of maintenanceListFuture">
-                        <td scope="row">{{ formatDate(maintenance.date) }}</td>
-                        <td scope="row">{{ maintenance.code }}</td>
-                        <td>{{ maintenance.meetingPlace }}</td>
-                        <td>{{ maintenance.description }}</td>
-                        <td>{{ maintenance.contact }}</td>
-                        <td class="clickable" (click)='onDelete(maintenance)'>
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
-                            </svg>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <ng-template #notShow>
-                <p>Non ci sono manuntenzioni programmate al momento</p>
-            </ng-template>
-        </div>
+  </div>
+  <div class="row section-distance-up">
+    <div class="col-12 col-md-12 col-s-6">
+      <h1>Gestione calendario manuntenzioni</h1>
+      <button type="button" class="btn btn-primary" routerLink="./add">
+        Aggiungi manuntenzione
+      </button>
+      <h2 class="section-distance-up">Prossimi incontri</h2>
+      <table
+        *ngIf="maintenanceListFuture.length > 0; else notShow"
+        class="table table-striped"
+      >
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Codice Sentiero</th>
+            <th scope="col">Posto di Ritrovo</th>
+            <th scope="col">Descrizione</th>
+            <th scope="col">Contatto</th>
+            <th scope="col">Cancella</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let maintenance of maintenanceListFuture">
+            <td scope="row">{{ formatDate(maintenance.date) }}</td>
+            <td scope="row">{{ maintenance.code }}</td>
+            <td>{{ maintenance.meetingPlace }}</td>
+            <td>{{ maintenance.description }}</td>
+            <td>{{ maintenance.contact }}</td>
+            <td class="clickable" (click)="onDelete(maintenance)">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                />
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #notShow>
+        <p>Non ci sono manuntenzioni programmate al momento</p>
+      </ng-template>
     </div>
-    <div class="row">
-        <div class="col-12 col-md-12 col-s-6">
-            <h2>Incontri Passati</h2>
-            <table *ngIf="maintenanceListPast.length > 0; else notShow" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Data</th>
-                        <th scope="col">Codice Sentiero</th>
-                        <th scope="col">Posto di Ritrovo</th>
-                        <th scope="col">Descrizione</th>
-                        <th scope="col">Contatto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let maintenance of maintenanceListPast">
-                        <td scope="row">{{ formatDate(maintenance.date) }}</td>
-                        <td scope="row">{{ maintenance.code }}</td>
-                        <td>{{ maintenance.meetingPlace }}</td>
-                        <td>{{ maintenance.description }}</td>
-                        <td>{{ maintenance.contact }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <ng-template #notShow>
-                <p>Non ci sono altre manuntenzioni passate</p>
-            </ng-template>
-        </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-12 col-s-6">
+      <h2>Incontri Passati</h2>
+      <table
+        *ngIf="maintenanceListPast.length > 0; else notShow"
+        class="table table-striped"
+      >
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Codice Sentiero</th>
+            <th scope="col">Posto di Ritrovo</th>
+            <th scope="col">Descrizione</th>
+            <th scope="col">Contatto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let maintenance of maintenanceListPast">
+            <td scope="row">{{ formatDate(maintenance.date) }}</td>
+            <td scope="row">{{ maintenance.code }}</td>
+            <td>{{ maintenance.meetingPlace }}</td>
+            <td>{{ maintenance.description }}</td>
+            <td>{{ maintenance.contact }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #notShow>
+        <p>Non ci sono altre manuntenzioni passate</p>
+      </ng-template>
     </div>
+  </div>
 </div>

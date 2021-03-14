@@ -1,64 +1,85 @@
 <div class="container my-4">
-    
-    <app-menu-admin></app-menu-admin>
-    <div *ngIf="savedTrailCode">
-        <div class="space-up alert alert-success" role="alert">
-            Sentiero {{savedTrailCode}} aggiunto
-        </div>
+  <app-menu-management></app-menu-management>
+  <div *ngIf="savedTrailCode">
+    <div class="space-up alert alert-success" role="alert">
+      Sentiero {{ savedTrailCode }} aggiunto
     </div>
-    <div class="row section-distance-up">
-        <div class="col-12 col-md-8">
-            <h1>Gestione Sentieri</h1>
-            <button type="button" class="btn btn-primary" routerLink="./add">Aggiungi sentiero</button>
+  </div>
+  <div class="row section-distance-up">
+    <div class="col-12 col-md-8">
+      <h1>Gestione Sentieri</h1>
+      <button type="button" class="btn btn-primary" routerLink="./add">
+        Aggiungi sentiero
+      </button>
 
-            <table id="trailTable" *ngIf="trailPreviewList; else notShow" class="table table-striped interactive-table">
-                <thead class="">
-                    <tr>
-                        <th scope="col">Codice</th>
-                        <th scope="col">Localita</th>
-                        <th scope="col">Classificazione</th>
-                        <th scope="col">Apri</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="short-list">
-                    <tr *ngFor="let trailPreview of trailPreviewList" class="trailPreview" (click)='onPreview(trailPreview)'>
-                        <th scope="row">{{ trailPreview.code }}</th>
-                        <td>{{ trailPreview.startPos.name }} - {{ trailPreview.finalPos.name }}</td>
-                        <td>{{ trailPreview.classification }}</td>
-                        <td class="clickable" routerLink='/map/{{trailPreview.code}}'>
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill" />
-                            </svg>
-                        </td>
-                        <td class="clickable" routerLink='/map/{{trailPreview.code}}'>
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image" />
-                            </svg>
-                        </td>
-                        <td class="clickable" routerLink='/admin/trails/edit/{{trailPreview.code}}'>
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen" />
-                            </svg>
-                        </td>
-                        <td class="clickable" (click)='onDelete(trailPreview)'>
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
-                            </svg>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <ng-template #notShow>
-                <p>
-                    Non ci sono ancora sentieri.
-                </p>
-            </ng-template>
-        </div>
-        <div class="col-12 col-md-4">
-            <app-map-preview [trailPreview]="selectedTrailCoords"></app-map-preview>
-        </div>
+      <table
+        id="trailTable"
+        *ngIf="trailPreviewList; else notShow"
+        class="table table-striped interactive-table"
+      >
+        <thead class="">
+          <tr>
+            <th scope="col">Codice</th>
+            <th scope="col">Localita</th>
+            <th scope="col">Classificazione</th>
+            <th scope="col">Apri</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="short-list">
+          <tr
+            *ngFor="let trailPreview of trailPreviewList"
+            class="trailPreview"
+            (click)="onPreview(trailPreview)"
+          >
+            <th scope="row">{{ trailPreview.code }}</th>
+            <td>
+              {{ trailPreview.startPos.name }} -
+              {{ trailPreview.finalPos.name }}
+            </td>
+            <td>{{ trailPreview.classification }}</td>
+            <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
+                />
+              </svg>
+            </td>
+            <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image"
+                />
+              </svg>
+            </td>
+            <td
+              class="clickable"
+              routerLink="/admin/trails/edit/{{ trailPreview.code }}"
+            >
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen"
+                />
+              </svg>
+            </td>
+            <td class="clickable" (click)="onDelete(trailPreview)">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                />
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #notShow>
+        <p>Non ci sono ancora sentieri.</p>
+      </ng-template>
     </div>
+    <div class="col-12 col-md-4">
+      <app-map-preview [trailPreview]="selectedTrailCoords"></app-map-preview>
+    </div>
+  </div>
 </div>
