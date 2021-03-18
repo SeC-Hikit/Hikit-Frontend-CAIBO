@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import * as moment from "moment";
+import { Subject } from "rxjs";
+import { takeUntil, tap } from "rxjs/operators";
 import { ImportService } from "src/app/import.service";
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
@@ -15,11 +17,14 @@ import { FormUtils } from "src/app/utils/FormUtils";
   templateUrl: "./trail-upload-management.component.html",
   styleUrls: ["./trail-upload-management.component.scss"],
 })
-export class TrailUploadManagementComponent implements OnInit {
+export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   tpm: TrailPreparationModel;
   previewCoords: TrailCoordinates[];
   trailFormGroup: FormGroup;
   uploadedSuccesfull: boolean;
+  isLoading = false;
+
+  private destroy$ = new Subject();
 
   constructor(private importService: ImportService, private router: Router) {}
 
@@ -38,6 +43,10 @@ export class TrailUploadManagementComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+
   onAddLocation(): void {
     this.locations.push(FormUtils.getLocationFormGroup());
   }
@@ -48,11 +57,16 @@ export class TrailUploadManagementComponent implements OnInit {
 
   uploadFile(files: FileList): void {
     if (files.length === 1) {
-      this.importService.readTrail(files[0]).subscribe((x) => {
-        this.tpm = x;
-        this.populateForm(this.tpm);
-        this.uploadedSuccesfull = true;
-      });
+      this.isLoading = true;
+      this.importService
+        .readTrail(files[0])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((x) => {
+          this.isLoading = false;
+          this.tpm = x;
+          this.populateForm(this.tpm);
+          this.uploadedSuccesfull = true;
+        });
     } else {
       //TODO: add code per multiple upload
     }
