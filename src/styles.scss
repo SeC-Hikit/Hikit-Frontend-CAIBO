@@ -1,6 +1,7 @@
-@import '~quill/dist/quill.core.css';
-@import '~quill/dist/quill.bubble.css';
-@import '~quill/dist/quill.snow.css';
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.bubble.css";
+@import "~quill/dist/quill.snow.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 
 /* You can add global styles to this file, and also import other style files */
 .white {
@@ -12,33 +13,34 @@
 }
 
 .clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /*
 * Leaflet general styling
 */
 .leaflet-bottom {
-  left:25% !important;
+  left: 25% !important;
 }
 
-.space-up{ 
+.space-up {
   margin-top: 2%;
 }
 
 .clickable:hover {
-  color: #D04341;
+  color: #d04341;
 }
 
 h1 {
   font-size: 32px !important;
 }
 
-h2 { 
+h2 {
   font-size: 27px !important;
 }
 
-h4, h3 {
-  font-size:24px !important;
+h4,
+h3 {
+  font-size: 24px !important;
   margin-top: 3%;
 }

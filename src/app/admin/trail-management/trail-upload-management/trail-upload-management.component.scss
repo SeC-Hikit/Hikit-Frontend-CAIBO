@@ -1,0 +1,41 @@
+.trail-upload-management {
+  position: relative;
+
+  &__container-button {
+    display: flex;
+    width: 45%;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+input[name="dp"] {
+  border-bottom: 1px solid gray;
+}
+
+#trailId_select {
+  background: white;
+  white-space: nowrap;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 0px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid gray;
+}
+
+.calendar {
+  background-image: url(/assets/icons/calendar.png);
+  width: 2.75rem;
+  background-repeat: no-repeat;
+  background-size: 23px;
+  background-position: 50%;
+  border: 1px solid gray;
+}
+
+.hide {
+  display: none;
+}

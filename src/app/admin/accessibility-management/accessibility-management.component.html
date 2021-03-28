@@ -1,85 +1,96 @@
 <div class="container my-4">
-    <app-menu-admin></app-menu-admin>
-    <div *ngIf="notificationSaved">
-        <div class="space-up alert alert-success" role="alert">
-            Aggiunta notifica per sentiero '{{notificationSaved}}'
-        </div>
+  <div *ngIf="notificationSaved">
+    <div class="space-up alert alert-success" role="alert">
+      Aggiunta notifica per sentiero '{{ notificationSaved }}'
     </div>
-    <div class="row section-distance-up">
-        <div class="col-12 col-md-12">
-            <h1>
-                Gestione segnalazioni percorribilità sentieri
-            </h1>
-            <button type="button" class="btn btn-primary" routerLink="./add">Crea segnalazione</button>
-            <h2 class="section-distance-up">Segnalazioni aperte</h2>
-            <table *ngIf="unresolvedNotifications.length > 0; else notShow" class="table table-striped interactive-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Codice sentiero</th>
-                        <th scope="col">Data Segnalazione</th>
-                        <th scope="col">Descrizione Problema</th>
-                        <th scope="col">Aggirabile?</th>
-                        <th scope="col"></th>
-                        <th scope="col">Risolvi</th>
-                        <th scope="col">Cancella</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let notification of unresolvedNotifications" class="t-row">
-                        <th scope="row">{{ notification.code }}</th>
-                        <td>{{ formatDate(notification.reportDate) }}</td>
-                        <td>{{ notification.description }}</td>
-                        <td>{{ notification.isMinor === true ? "si" : "no" }}</td>
-                        <td class="clickable">
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image" />
-                            </svg>
-                        </td>
-                        <td class="clickable" (click)='onResolveClick(notification)'>
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square" />
-                            </svg>
-                        </td>
-                        <td class="clickable" (click)='onDeleteClick(notification)'>
-                            <svg class="bi" width="32" height="32" fill="currentColor">
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
-                            </svg>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <ng-template #notShow>
-                <p>
-                    Non ci sono ancora notifiche di percorrenza da mostrare.
-                </p>
-            </ng-template>
-        </div>
-        <div class="col-12 col-md-12">
-            <h2>Segnalazioni Risolte</h2>
-            <table *ngIf="solvedNotifications.length > 0; else notShow" class="table table-striped interactive-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Codice sentiero</th>
-                        <th scope="col">Data segnalazione</th>
-                        <th scope="col">Descrizione Problema</th>
-                        <th scope="col">Data risoluzione</th>
-                        <th scope="col">Risoluzione</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of solvedNotifications">
-                        <th scope="row">{{ item.code }}</th>
-                        <td>{{ formatDate(item.reportDate) }}</td>
-                        <td>{{ item.description }}</td>
-                        <td>{{ formatDate(item.resolutionDate) }}</td>
-                        <td>{{ item.resolution }}</td>
-                </tbody>
-            </table>
-            <ng-template #notShow>
-                <p>
-                    Non ci sono ancora notifiche di percorrenza da mostrare.
-                </p>
-            </ng-template>
-        </div>
+  </div>
+  <div class="row section-distance-up">
+    <div class="col-12 col-md-12">
+      <h1>Gestione segnalazioni percorribilità sentieri</h1>
+      <button type="button" class="btn btn-primary" routerLink="./add">
+        Crea segnalazione
+      </button>
+      <h2 class="section-distance-up">Segnalazioni aperte</h2>
+      <table
+        *ngIf="unresolvedNotifications.length > 0; else notShow"
+        class="table table-striped interactive-table"
+      >
+        <thead>
+          <tr>
+            <th scope="col">Codice sentiero</th>
+            <th scope="col">Data Segnalazione</th>
+            <th scope="col">Descrizione Problema</th>
+            <th scope="col">Aggirabile?</th>
+            <th scope="col"></th>
+            <th scope="col">Risolvi</th>
+            <th scope="col">Cancella</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let notification of unresolvedNotifications"
+            class="t-row"
+          >
+            <th scope="row">{{ notification.code }}</th>
+            <td>{{ formatDate(notification.reportDate) }}</td>
+            <td>{{ notification.description }}</td>
+            <td>{{ notification.isMinor === true ? "si" : "no" }}</td>
+            <td class="clickable">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image"
+                />
+              </svg>
+            </td>
+            <td class="clickable" (click)="onResolveClick(notification)">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square"
+                />
+              </svg>
+            </td>
+            <td class="clickable" (click)="onDeleteClick(notification)">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                />
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #notShow>
+        <p>Non ci sono ancora notifiche di percorrenza da mostrare.</p>
+      </ng-template>
     </div>
+    <div class="col-12 col-md-12">
+      <h2>Segnalazioni Risolte</h2>
+      <table
+        *ngIf="solvedNotifications.length > 0; else notShow"
+        class="table table-striped interactive-table"
+      >
+        <thead>
+          <tr>
+            <th scope="col">Codice sentiero</th>
+            <th scope="col">Data segnalazione</th>
+            <th scope="col">Descrizione Problema</th>
+            <th scope="col">Data risoluzione</th>
+            <th scope="col">Risoluzione</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of solvedNotifications">
+            <th scope="row">{{ item.code }}</th>
+            <td>{{ formatDate(item.reportDate) }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ formatDate(item.resolutionDate) }}</td>
+            <td>{{ item.resolution }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #notShow>
+        <p>Non ci sono ancora notifiche di percorrenza da mostrare.</p>
+      </ng-template>
+    </div>
+  </div>
 </div>

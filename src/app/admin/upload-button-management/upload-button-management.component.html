@@ -1,0 +1,29 @@
+<ng-container *ngIf="isMultipleUpload; else singleUpload">
+  <input
+    type="file"
+    name="upload"
+    id="multiUpload"
+    class="upload"
+    (change)="onUploadGpx($event.target.files)"
+    accept=".gpx"
+    multiple
+  />
+  <label class="upload-button-management__label" for="multiUpload">
+    <i class="bi bi-cloud-upload upload-button-management__icon"></i>
+    <span>Carica più file .gpx</span>
+  </label>
+</ng-container>
+<ng-template #singleUpload>
+  <input
+    type="file"
+    name="upload"
+    id="upload"
+    class="upload"
+    (change)="onUploadGpx($event.target.files)"
+    accept=".gpx"
+  />
+  <label class="upload-button-management__label" for="upload">
+    <i class="bi bi-cloud-upload upload-button-management__icon"></i>
+    <span>Carica .gpx e compila</span>
+  </label>
+</ng-template>

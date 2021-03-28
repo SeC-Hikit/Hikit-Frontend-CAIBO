@@ -1,0 +1,35 @@
+<div class="menu">
+  <div class="menu__tabs">
+    <ul class="nav nav-tabs">
+      <li
+        *ngFor="let tab of tabsList"
+        class="nav-item"
+        (click)="switchTab(tab.code)"
+      >
+        <a
+          [ngClass]="{ active: tab.code === selectedTab }"
+          class="nav-link align-items-center menu__tab-item"
+        >
+          <i
+            class="bi menu__tab-icon"
+            [ngClass]="{
+              'bi-map-fill': tab.code === tabType.TRAILS,
+              'bi-info-circle-fill': tab.code === tabType.ACCESSIBILITY,
+              'bi-calendar-week': tab.code === tabType.MAINTENANCE
+            }"
+          ></i>
+          <label>{{ tab.label }}</label>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<app-trail-upload-management
+  *ngIf="selectedTab === tabType.TRAILS"
+></app-trail-upload-management>
+<app-accessibility-management
+  *ngIf="selectedTab === tabType.ACCESSIBILITY"
+></app-accessibility-management>
+<app-maintenance-management
+  *ngIf="selectedTab === tabType.MAINTENANCE"
+></app-maintenance-management>

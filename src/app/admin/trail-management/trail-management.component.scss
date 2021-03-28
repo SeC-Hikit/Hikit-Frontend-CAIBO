@@ -1,17 +1,17 @@
 .section-distance-up {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
-.hide { 
-    display: none;
+.hide {
+  display: none;
 }
 
 .trailPreview {
-    transition:0.3s all;
-}
+  transition: 0.3s all;
 
-.trailPreview:hover {
-    background: #D04341;
+  &:hover {
+    background: #d04341;
     color: white;
     cursor: pointer;
+  }
 }

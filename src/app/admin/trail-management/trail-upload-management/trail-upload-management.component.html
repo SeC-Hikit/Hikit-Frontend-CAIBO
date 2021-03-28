@@ -1,12 +1,33 @@
 <div class="container my-4">
-  <app-menu-admin></app-menu-admin>
   <h1 class="space-up">Gestioni Sentieri</h1>
-  <h2>Modifica sentiero</h2>
-  <p>
-    Carica un file .gpx con la traccia da caricare e compila i campi per
-    aggiungere o rimpiazzare un sentiero.
-  </p>
   <div class="table-wrapper space-up">
+    <div
+      *ngIf="!uploadedSuccesfull"
+      class="trail-upload-management__container-button"
+    >
+      <app-upload-button-management
+        class="trail-upload-management__container-button"
+        [isMultipleUpload]="false"
+        (uploadedFiles)="uploadFile($event)"
+      ></app-upload-button-management>
+      <app-upload-button-management
+        [isMultipleUpload]="true"
+        class="trail-upload-management__container-button"
+        (uploadedFiles)="uploadFiles($event)"
+      ></app-upload-button-management>
+    </div>
+
+    <div [ngClass]="{ hide: !uploadedSuccesfull }">
+      <button
+        type="button"
+        name="reload"
+        class="btn btn-warning"
+        (click)="onReload()"
+      >
+        Carica nuovo file
+      </button>
+    </div>
+
     <form
       class="container"
       (ngSubmit)="saveTrail()"
@@ -22,8 +43,7 @@
             type="text"
             class="form-control"
             formControlName="code"
-            [(ngModel)]="selectedTrail.code"
-            name="code"
+            placeholder="Codice (es: 100BO)"
             required
           />
         </div>
@@ -33,8 +53,7 @@
             type="text"
             class="form-control"
             formControlName="name"
-            [(ngModel)]="selectedTrail.name"
-            name="name"
+            placeholder="Nome sentiero, se diverso dal codice"
           />
         </div>
         <div class="form-group col-md-4 mb-3">
@@ -44,8 +63,6 @@
               title="Scegli una opzione"
               formControlName="classification"
               class="form-control"
-              [(ngModel)]="selectedTrail.classification"
-              name="classification"
               id="trailId_select"
             >
               <option value="T">T</option>
@@ -63,13 +80,15 @@
             <input
               class="form-control"
               formControlName="lastUpdate"
+              placeholder="dd/mm/yyyy"
+              name="dp"
               ngbDatepicker
-              [(ngModel)]="selectedTrail.lastUpdate"
-              name="lastUpdate"
+              #d="ngbDatepicker"
             />
             <div class="input-group-append">
               <button
                 class="btn btn-outline-secondary calendar"
+                (click)="d.toggle()"
                 type="button"
               ></button>
             </div>
@@ -82,8 +101,6 @@
               title="Scegli una opzione"
               formControlName="maintainingSection"
               class="form-control"
-              [(ngModel)]="selectedTrail.maintainingSection"
-              name="maintainingSection"
               id="trailId_select"
             >
               <option>Bologna</option>
@@ -97,8 +114,6 @@
         <div class="form-group col-md-12 mb-12">
           <quill-editor
             formControlName="description"
-            [(ngModel)]="selectedTrail.description"
-            name="description"
             [modules]="{
               toolbar: [
                 ['bold', 'italic', 'underline'],

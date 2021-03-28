@@ -1,54 +1,97 @@
 <div class="container my-4">
-    <app-menu-admin></app-menu-admin>
-    <h1 class="space-up">Gestione calendario manuntenzioni</h1>
-    <h2>Aggiungi uscita di manuntenzione</h2>
-    <p>Compila i seguenti campi per aggiungere un'uscita di manuntenzione. Questa sarà pubblicata istantaneamente.</p>
-    <div class="table-wrapper space-up">
-        <form class="needs-validation" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-            <div class="form-row">
-                <div class="form-group col-md-4 mb-3">
-                    <input type="text" class="form-control" formControlName="contact"
-                        placeholder="Contatto (es: Mario Rossi)">
-                    <div class="valid-feedback">Validato!</div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <div class="input-group">
-                        <input class="form-control" placeholder="dd/mm/yyyy" name="dp" formControlName="date" ngbDatepicker #d="ngbDatepicker">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
-                                type="button"></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <div class="bootstrap-select-wrapper">
-                        <label>Sentiero</label>
-                        <select title="Scegli una opzione" data-live-search="true" formControlName="code"
-                            data-live-search-placeholder="Cerca opzioni" class="form-control" id="trailId_select">
-                            <option *ngFor="let tId of trailIds" value="{{tId}}">{{tId}}</option>
-                        </select>
-                    </div>
-                </div>
+  <app-menu-management></app-menu-management>
+  <h1 class="space-up">Gestione calendario manuntenzioni</h1>
+  <h2>Aggiungi uscita di manuntenzione</h2>
+  <p>
+    Compila i seguenti campi per aggiungere un'uscita di manuntenzione. Questa
+    sarà pubblicata istantaneamente.
+  </p>
+  <div class="table-wrapper space-up">
+    <form
+      class="needs-validation"
+      [formGroup]="formGroup"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="form-row">
+        <div class="form-group col-md-4 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="contact"
+            placeholder="Contatto (es: Mario Rossi)"
+          />
+          <div class="valid-feedback">Validato!</div>
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="dd/mm/yyyy"
+              name="dp"
+              formControlName="date"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary calendar"
+                (click)="d.toggle()"
+                type="button"
+              ></button>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6 mb-3">
-                    <input type="text" class="form-control" placeholder="Descrizione" formControlName="description">
-                    <div class="invalid-feedback">Per favore inserisci una descrizione</div>
-                </div>
-                <div class="form-group col-md-3 mb-3">
-                    <input type="text" class="form-control" formControlName="meetingPlace" placeholder="Posto dell'incontro"
-                        required>
-                    <div class="invalid-feedback">Per favore inserisci un posto d'incontro</div>
-                </div>
-            </div>
-            <span class="form-group col-md-3 mb-3">
-                <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
-            </span>
-            <span class="form-group col-md-3 mb-3">
-                <a routerLink="/admin/maintenance">
-                    <button class="btn btn-light mt-3" type="button">Cancella</button>
-                </a>
-            </span>
-        </form>
-    </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <div class="bootstrap-select-wrapper">
+            <label>Sentiero</label>
+            <select
+              title="Scegli una opzione"
+              data-live-search="true"
+              formControlName="code"
+              data-live-search-placeholder="Cerca opzioni"
+              class="form-control"
+              id="trailId_select"
+            >
+              <option *ngFor="let tId of trailIds" value="{{ tId }}">
+                {{ tId }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Descrizione"
+            formControlName="description"
+          />
+          <div class="invalid-feedback">
+            Per favore inserisci una descrizione
+          </div>
+        </div>
+        <div class="form-group col-md-3 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="meetingPlace"
+            placeholder="Posto dell'incontro"
+            required
+          />
+          <div class="invalid-feedback">
+            Per favore inserisci un posto d'incontro
+          </div>
+        </div>
+      </div>
+      <span class="form-group col-md-3 mb-3">
+        <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
+      </span>
+      <span class="form-group col-md-3 mb-3">
+        <a routerLink="/admin/maintenance">
+          <button class="btn btn-light mt-3" type="button">Cancella</button>
+        </a>
+      </span>
+    </form>
+  </div>
 </div>
