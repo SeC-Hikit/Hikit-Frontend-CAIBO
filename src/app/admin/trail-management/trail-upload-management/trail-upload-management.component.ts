@@ -55,21 +55,27 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     this.uploadedSuccesfull = false;
   }
 
-  uploadFile(files: FileList): void {
-    if (files.length === 1) {
+  uploadFile(files: File[]): void {
       this.isLoading = true;
       this.importService
         .readTrail(files[0])
         .pipe(takeUntil(this.destroy$))
-        .subscribe((x) => {
+        .subscribe((trail) => {
           this.isLoading = false;
-          this.tpm = x;
-          this.populateForm(this.tpm);
           this.uploadedSuccesfull = true;
+          this.populateForm(trail);
         });
-    } else {
-      //TODO: add code per multiple upload
-    }
+  }
+
+  uploadFiles(files: FileList): void {
+    this.importService
+    .readTrails(files)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((trail) => {
+      this.isLoading = false;
+      this.uploadedSuccesfull = true;
+      //this.populateForm(trail);
+    });
   }
 
   populateForm(tpm: TrailPreparationModel) {
@@ -117,7 +123,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   }
 
   onSaveRequest(restResponse: RestResponse): void {
-    if (restResponse.status == Status.OK) {
+    if (restResponse.status === Status.OK) {
       this.router.navigate(["/admin/trails", { success: this.tpm.name }]);
     }
   }

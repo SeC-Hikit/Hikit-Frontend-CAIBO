@@ -13,6 +13,7 @@
       <app-upload-button-management
         [isMultipleUpload]="true"
         class="trail-upload-management__container-button"
+        (uploadedFiles)="uploadFiles($event)"
       ></app-upload-button-management>
     </div>
 
