@@ -15,7 +15,7 @@ export class ImportService {
     headers: new HttpHeaders({ "Content-Type": "application/json" }),
   };
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   readTrail(file: File): Observable<TrailPreparationModel> {
     const formData: FormData = new FormData();
@@ -28,16 +28,11 @@ export class ImportService {
   }
 
   readTrails(files: FileList): Observable<TrailPreparationModel> {
-     const formData: FormData = new FormData();
-    // for (let index = 0; index < files.length; index++) {
-    //   formData.append("files", JSON.stringify(files[index]))
-      
-    // }
-      //formData.append("files", JSON.stringify(files))
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        formData.append('files[]', file, file.name);
-      }
+    const formData: FormData = new FormData();
+    for (let index = 0; index < files.length; index++) {
+      formData.append("files", files[index], files[index].name)
+
+    }
     return this.httpClient
       .post<TrailPreparationModel>(this.baseUrl + "/bulk", formData)
       .pipe(
