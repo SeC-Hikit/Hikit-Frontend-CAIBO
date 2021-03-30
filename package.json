@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "generate": "npx openapi-typescript http://127.0.0.1:8990/api/v1/api-docs --output types/",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "generate-local-binding": "npx openapi-typescript http://127.0.0.1:8990/api/v1/api-docs --output ./src/binding/Binding.ts"
   },
   "private": true,
   "dependencies": {
