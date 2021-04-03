@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { TrailPreview } from './TrailPreview';
 import { catchError, map, tap } from 'rxjs/operators';
-import { TrailPreviewResponse } from './TrailPreviewResponse';
+import { components } from 'src/binding/Binding';
 
+export type TrailPreviewResponse = components["schemas"]["TrailPreviewResponse"];
+export type TrailPreview = components["schemas"]["TrailPreviewDto"];
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrailPreviewService {
 
+  
   baseUrl = "api/preview";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,6 +20,7 @@ export class TrailPreviewService {
 
   constructor(private httpClient: HttpClient) { }
 
+  
   getPreviews(): Observable<TrailPreviewResponse> {
     return this.httpClient.get<TrailPreviewResponse>(this.baseUrl)
       .pipe(

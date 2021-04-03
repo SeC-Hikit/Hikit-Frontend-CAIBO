@@ -6,11 +6,10 @@ import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
 import { AccessibilityNotificationObj } from 'src/app/AccessibilityNotificationObj';
 import { NotificationService } from 'src/app/notification-service.service';
 import { Status } from 'src/app/Status';
-import { TrailPreviewService } from 'src/app/trail-preview-service.service';
+import { TrailPreviewResponse, TrailPreviewService } from 'src/app/trail-preview-service.service';
 import { TrailService } from 'src/app/trail-service.service';
 import { TrailCoordinates } from 'src/app/TrailCoordinates';
 import { TrailCoordinatesObj } from 'src/app/TrailCoordinatesObj';
-import { TrailPreviewResponse } from 'src/app/TrailPreviewResponse';
 import { TrailResponse } from 'src/app/TrailResponse';
 
 @Component({
