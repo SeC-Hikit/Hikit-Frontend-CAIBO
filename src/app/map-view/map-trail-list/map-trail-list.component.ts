@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Output, EventEmitter } from '@angular/core';
-import { TrailPreview } from 'src/app/TrailPreview';
-import { GraphicUtils } from 'src/app/utils/GraphicUtils';
+import { TrailPreview } from 'src/app/trail-preview-service.service';
 @Component({
   selector: 'app-map-trail-list',
   templateUrl: './map-trail-list.component.html',

@@ -6,8 +6,7 @@ import * as moment from 'moment';
 import { Maintenance } from 'src/app/Maintenance';
 import { MaintenanceService } from 'src/app/maintenance.service';
 import { Status } from 'src/app/Status';
-import { TrailPreviewService } from 'src/app/trail-preview-service.service';
-import { TrailPreviewResponse } from 'src/app/TrailPreviewResponse';
+import { TrailPreviewResponse, TrailPreviewService } from 'src/app/trail-preview-service.service';
 
 @Component({
   selector: 'app-maintenance-add',

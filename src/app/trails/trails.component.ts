@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TrailPreviewService } from '../trail-preview-service.service';
-import { TrailPreview } from '../TrailPreview';
+import { TrailPreview, TrailPreviewService } from '../trail-preview-service.service';
 import { TrailService } from '../trail-service.service';
 import { Trail } from '../Trail';
 import { TrailCoordinates } from '../TrailCoordinates';

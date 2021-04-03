@@ -1,4 +1,3 @@
-import { TrailPreview } from './TrailPreview';
 import { Status } from './Status';
 import { Maintenance } from './Maintenance';
 

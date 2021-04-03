@@ -46,7 +46,7 @@ export class MenuManagementComponent implements OnInit {
     {
       code: "maintenance",
       label: "Calendario manuntenzioni",
-    },
+    }
   ];
 
   constructor() {}
