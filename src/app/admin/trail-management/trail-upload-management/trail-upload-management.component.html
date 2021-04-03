@@ -1,7 +1,7 @@
 <div class="container my-4">
   <div class="table-wrapper space-up">
     <div
-      *ngIf="!uploadedSuccesfull"
+      *ngIf="!uploadedSuccessful"
       class="trail-upload-management__container-button"
     >
       <app-upload-button-management
@@ -16,7 +16,7 @@
       ></app-upload-button-management>
     </div>
 
-    <div [ngClass]="{ hide: !uploadedSuccesfull }">
+    <div [ngClass]="{ hide: !uploadedSuccessful }">
       <button
         type="button"
         name="reload"
@@ -31,7 +31,7 @@
       class="container"
       (ngSubmit)="saveTrail()"
       [formGroup]="trailFormGroup"
-      [ngClass]="{ hide: !uploadedSuccesfull }"
+      [ngClass]="{ hide: !uploadedSuccessful }"
     >
       <h3 class="space-up">Dati generali</h3>
 

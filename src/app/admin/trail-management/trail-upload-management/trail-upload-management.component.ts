@@ -4,13 +4,12 @@ import { Router } from "@angular/router";
 import * as moment from "moment";
 import { Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
-import { ImportService } from "src/app/import.service";
+import { ImportService, TrailRaw, TrailRawResponse } from "src/app/import.service";
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
 import { TrailCoordinates } from "src/app/trail-service.service";
 import { TrailCoordinatesObj } from "src/app/TrailCoordinatesObj";
 import { TrailImportRequest } from "src/app/TrailImportRequest";
-import { TrailPreparationModel } from "src/app/TrailPreparationModel";
 import { FormUtils } from "src/app/utils/FormUtils";
 @Component({
   selector: "app-trail-upload-management",
@@ -18,10 +17,10 @@ import { FormUtils } from "src/app/utils/FormUtils";
   styleUrls: ["./trail-upload-management.component.scss"],
 })
 export class TrailUploadManagementComponent implements OnInit, OnDestroy {
-  tpm: TrailPreparationModel;
+  trailRawResponse: TrailRawResponse;
   previewCoords: TrailCoordinates[];
   trailFormGroup: FormGroup;
-  uploadedSuccesfull: boolean;
+  uploadedSuccessful: boolean;
   isLoading = false;
 
   private destroy$ = new Subject();
@@ -29,7 +28,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   constructor(private importService: ImportService, private router: Router) {}
 
   ngOnInit(): void {
-    this.uploadedSuccesfull = false;
+    this.uploadedSuccessful = false;
     this.trailFormGroup = new FormGroup({
       code: new FormControl("", Validators.required),
       name: new FormControl(""),
@@ -52,7 +51,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   }
 
   onReload(): void {
-    this.uploadedSuccesfull = false;
+    this.uploadedSuccessful = false;
   }
 
   uploadFile(files: File[]): void {
@@ -60,10 +59,10 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
       this.importService
         .readTrail(files[0])
         .pipe(takeUntil(this.destroy$))
-        .subscribe((trail) => {
+        .subscribe((trailRawResponse: TrailRawResponse) => {
           this.isLoading = false;
-          this.uploadedSuccesfull = true;
-          this.populateForm(trail);
+          this.uploadedSuccessful = true;
+          this.populateForm(trailRawResponse.content[0]);
         });
   }
 
@@ -71,42 +70,40 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     this.importService
     .readTrails(files)
     .pipe(takeUntil(this.destroy$))
-    .subscribe((trail) => {
+    .subscribe((_) => {
       this.isLoading = false;
-      this.uploadedSuccesfull = true;
-      //this.populateForm(trail);
+      this.uploadedSuccessful = true;
     });
   }
 
-  populateForm(tpm: TrailPreparationModel) {
-    this.previewCoords = tpm.coordinates;
+  populateForm(tpm: TrailRaw) {
     this.trailFormGroup.controls["code"].setValue(tpm.name);
     this.trailFormGroup.controls["description"].setValue(tpm.description);
-    this.firstPos.controls["name"].setValue(tpm.startPos.name);
+    this.firstPos.controls["name"].setValue('');
     this.firstPos.controls["latitude"].setValue(
-      tpm.startPos.coordinates.latitude
+      tpm.startPos.latitude
     );
     this.firstPos.controls["longitude"].setValue(
-      tpm.startPos.coordinates.longitude
+      tpm.startPos.longitude
     );
     this.firstPos.controls["altitude"].setValue(
-      tpm.startPos.coordinates.altitude
+      tpm.startPos.altitude
     );
     this.firstPos.controls["distanceFromTrailStart"].setValue(
-      tpm.startPos.coordinates.distanceFromTrailStart
+      tpm.startPos.distanceFromTrailStart
     );
-    this.finalPos.controls["name"].setValue(tpm.finalPos.name);
+    this.finalPos.controls["name"].setValue('');
     this.finalPos.controls["latitude"].setValue(
-      tpm.finalPos.coordinates.latitude
+      tpm.finalPos.latitude
     );
     this.finalPos.controls["longitude"].setValue(
-      tpm.finalPos.coordinates.longitude
+      tpm.finalPos.longitude
     );
     this.finalPos.controls["altitude"].setValue(
-      tpm.finalPos.coordinates.altitude
+      tpm.finalPos.altitude
     );
     this.finalPos.controls["distanceFromTrailStart"].setValue(
-      tpm.finalPos.coordinates.distanceFromTrailStart
+      tpm.finalPos.distanceFromTrailStart
     );
   }
 
@@ -124,7 +121,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   onSaveRequest(restResponse: RestResponse): void {
     if (restResponse.status === Status.OK) {
-      this.router.navigate(["/admin/trails", { success: this.tpm.name }]);
+      this.router.navigate(["/admin/trails", { success: this.trailRawResponse.content[0].name }]);
     }
   }
 
