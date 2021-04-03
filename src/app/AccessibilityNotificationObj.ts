@@ -1,6 +1,6 @@
 import { AccessibilityNotification } from "./AccessibilityNotification"
 import { Place } from "./Place";
-import { TrailCoordinates } from "./TrailCoordinates";
+import { TrailCoordinates } from "./trail-service.service";
 
 export class AccessibilityNotificationObj implements AccessibilityNotification {
     constructor(public _id: string,

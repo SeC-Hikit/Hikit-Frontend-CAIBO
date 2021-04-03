@@ -1,4 +1,4 @@
-import { TrailCoordinates } from "./TrailCoordinates";
+import { TrailCoordinates } from "./trail-service.service";
 
 export interface AccessibilityNotificationUnresolved { 
     _id: string,

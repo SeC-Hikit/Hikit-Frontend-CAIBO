@@ -7,10 +7,8 @@ import { AccessibilityNotificationObj } from 'src/app/AccessibilityNotificationO
 import { NotificationService } from 'src/app/notification-service.service';
 import { Status } from 'src/app/Status';
 import { TrailPreviewResponse, TrailPreviewService } from 'src/app/trail-preview-service.service';
-import { TrailService } from 'src/app/trail-service.service';
-import { TrailCoordinates } from 'src/app/TrailCoordinates';
+import { TrailCoordinates, TrailResponse, TrailService } from 'src/app/trail-service.service';
 import { TrailCoordinatesObj } from 'src/app/TrailCoordinatesObj';
-import { TrailResponse } from 'src/app/TrailResponse';
 
 @Component({
   selector: 'app-accessibility-add',

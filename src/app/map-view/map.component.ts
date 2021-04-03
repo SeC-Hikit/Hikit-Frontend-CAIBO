@@ -4,13 +4,11 @@ import { AccessibilityNotificationUnresolved } from '../AccessibilityNotificatio
 import { Maintenance } from '../Maintenance';
 import { MaintenanceService } from '../maintenance.service';
 import { NotificationService } from '../notification-service.service';
-import { Trail } from '../Trail';
 import { TrailPreview, TrailPreviewService } from '../trail-preview-service.service';
-import { TrailService } from '../trail-service.service';
+import { Trail, TrailCoordinates, TrailService } from '../trail-service.service';
 import { UserCoordinates } from '../UserCoordinates';
 import { GraphicUtils } from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
-import { TrailCoordinates } from '../TrailCoordinates';
 
 @Component({
   selector: 'app-map',
@@ -83,8 +81,8 @@ export class MapComponent implements OnInit {
       this.trailService.getTrailByCode(code).subscribe(
         trailResponse => {
           this.selectedTrail = trailResponse.content[0];
-          this.selectedTrail.statsMetadata.eta = Math.round(this.selectedTrail.statsMetadata.eta);
-          this.selectedTrail.statsMetadata.length = Math.round(this.selectedTrail.statsMetadata.length);
+          this.selectedTrail.statsTrailMetadata.eta = Math.round(this.selectedTrail.statsTrailMetadata.eta);
+          this.selectedTrail.statsTrailMetadata.length = Math.round(this.selectedTrail.statsTrailMetadata.length);
           this.loadNotificationsForTrail(code);
           this.loadLastMaintenaceForTrail(code);
           this.isTrailSelectedVisible = true;

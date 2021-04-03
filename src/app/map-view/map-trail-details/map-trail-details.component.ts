@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import * as moment from 'moment';
 import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
 import { Maintenance } from 'src/app/Maintenance';
-import { Trail } from 'src/app/Trail';
-import { TrailCoordinates } from 'src/app/TrailCoordinates';
+import { Trail, TrailCoordinates } from 'src/app/trail-service.service';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 
 @Component({

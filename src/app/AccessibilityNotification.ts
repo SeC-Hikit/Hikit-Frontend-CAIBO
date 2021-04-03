@@ -1,5 +1,5 @@
 import { Place } from "./Place";
-import { TrailCoordinates } from "./TrailCoordinates";
+import { TrailCoordinates } from "./trail-service.service";
 
 export interface AccessibilityNotification { 
     _id: string,

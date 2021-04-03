@@ -7,7 +7,7 @@ import { takeUntil, tap } from "rxjs/operators";
 import { ImportService } from "src/app/import.service";
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
-import { TrailCoordinates } from "src/app/TrailCoordinates";
+import { TrailCoordinates } from "src/app/trail-service.service";
 import { TrailCoordinatesObj } from "src/app/TrailCoordinatesObj";
 import { TrailImportRequest } from "src/app/TrailImportRequest";
 import { TrailPreparationModel } from "src/app/TrailPreparationModel";

@@ -1,5 +1,5 @@
+import { TrailCoordinates } from '../trail-service.service';
 import { TrailClassification } from '../TrailClassification';
-import { TrailCoordinates } from '../TrailCoordinates';
 
 export class MapUtils {
     
@@ -23,7 +23,7 @@ export class MapUtils {
         return empty;
     }
 
-    static getLineStyle(isSelectedLine: boolean, trailClassification: TrailClassification) {
+    static getLineStyle(isSelectedLine: boolean, trailClassification: String) {
         var trailColor = MapUtils.getLineColor(isSelectedLine);
         switch (trailClassification) {
           case TrailClassification.E:

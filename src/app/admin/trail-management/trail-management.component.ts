@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Status } from 'src/app/Status';
-import { Trail } from 'src/app/Trail';
 import { TrailPreview, TrailPreviewService } from 'src/app/trail-preview-service.service';
-import { TrailService } from 'src/app/trail-service.service';
-import { TrailCoordinates } from 'src/app/TrailCoordinates';
+import { TrailCoordinates, TrailService } from 'src/app/trail-service.service';
 
 @Component({
   selector: 'app-trail-management',
@@ -15,7 +13,7 @@ export class TrailManagementComponent implements OnInit {
 
   public page: Number = 1;
 
-  public selectedTrail: Trail
+  public selectedTrail: TrailPreview
   public selectedTrailCoords: TrailCoordinates[];
   public trailPreviewList: TrailPreview[]
   public savedTrailCode: string;

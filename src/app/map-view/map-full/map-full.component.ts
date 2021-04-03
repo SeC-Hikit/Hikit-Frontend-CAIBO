@@ -1,12 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import 'leaflet';
 import { LeafletMouseEventHandlerFn } from 'leaflet';
 import 'leaflet-textpath';
-import { Maintenance } from 'src/app/Maintenance';
-import { Place } from 'src/app/Place';
-import { Trail } from 'src/app/Trail';
-import { TrailCoordinates } from 'src/app/TrailCoordinates';
-import { TrailCoordinatesObj } from 'src/app/TrailCoordinatesObj';
+import { Trail, TrailCoordinates } from 'src/app/trail-service.service';
 import { UserCoordinates } from 'src/app/UserCoordinates';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 import { MapUtils } from '../MapUtils';

@@ -2,10 +2,18 @@ import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { components } from 'src/binding/Binding';
 import { FileDownloadResponse } from './FileDownloadResponse';
-import { RestResponse } from './RestResponse';
-import { TrailResponse } from './TrailResponse';
 
+export type TrailResponse = components["schemas"]["TrailResponse"]
+export type TrailCoordinates = components["schemas"]["TrailCoordinatesDto"]
+export type Trail = components["schemas"]["TrailDto"]
+export enum TrailClassification {
+  T = "T", 
+  E = "E",
+  EE = "EE",
+  EEA = "EEA"
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +42,7 @@ export class TrailService {
       );
   }
 
-  deleteByCode(code: string): Observable<RestResponse> {
+  deleteByCode(code: string): Observable<TrailResponse> {
     return this.httpClient.delete<TrailResponse>(this.baseUrl + "/" + code)
       .pipe(
         tap(),

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { TrailCoordinates } from 'src/app/TrailCoordinates';
+import { TrailCoordinates } from 'src/app/trail-service.service';
 
 @Component({
   selector: 'app-location-entry',

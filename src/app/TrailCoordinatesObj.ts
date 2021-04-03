@@ -1,4 +1,4 @@
-import { TrailCoordinates } from './TrailCoordinates'
+import { TrailCoordinates } from "./trail-service.service";
 
 export class TrailCoordinatesObj implements TrailCoordinates {
     

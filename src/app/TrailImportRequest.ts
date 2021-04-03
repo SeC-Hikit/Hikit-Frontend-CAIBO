@@ -1,6 +1,6 @@
 import { Place } from './Place';
+import { TrailCoordinates } from './trail-service.service';
 import { TrailClassification } from './TrailClassification';
-import { TrailCoordinates } from './TrailCoordinates';
 
 export class TrailImportRequest {
     constructor(
