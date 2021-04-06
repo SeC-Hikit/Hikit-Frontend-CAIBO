@@ -31,10 +31,10 @@
             *ngFor="let notification of unresolvedNotifications"
             class="t-row"
           >
-            <th scope="row">{{ notification.code }}</th>
+            <th scope="row">{{ notification.id }}</th>
             <td>{{ formatDate(notification.reportDate) }}</td>
             <td>{{ notification.description }}</td>
-            <td>{{ notification.isMinor === true ? "si" : "no" }}</td>
+            <td>{{ notification.minor === true ? "si" : "no" }}</td>
             <td class="clickable">
               <svg class="bi" width="32" height="32" fill="currentColor">
                 <use
@@ -80,7 +80,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of solvedNotifications">
-            <th scope="row">{{ item.code }}</th>
+            <th scope="row">{{ item.id }}</th>
             <td>{{ formatDate(item.reportDate) }}</td>
             <td>{{ item.description }}</td>
             <td>{{ formatDate(item.resolutionDate) }}</td>

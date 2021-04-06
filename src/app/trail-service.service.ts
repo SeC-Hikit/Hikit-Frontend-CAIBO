@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
-import { FileDownloadResponse } from './FileDownloadResponse';
 
 export type TrailResponse = components["schemas"]["TrailResponse"]
 export type TrailCoordinates = components["schemas"]["TrailCoordinatesDto"]
@@ -47,14 +46,6 @@ export class TrailService {
       .pipe(
         tap(),
         catchError(this.handleError<TrailResponse>('get all trail', null))
-      );
-  }
-
-  getGpxPath(code: string): Observable<FileDownloadResponse> {
-    return this.httpClient.get<FileDownloadResponse>(this.baseUrl + "/link/" + code)
-      .pipe(
-        tap(),
-        catchError(this.handleError<FileDownloadResponse>('get trail resource URL', null))
       );
   }
 

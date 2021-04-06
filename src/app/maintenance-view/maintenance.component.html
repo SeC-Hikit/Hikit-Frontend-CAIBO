@@ -16,7 +16,7 @@
                 <tbody>
                     <tr *ngFor="let maintenance of maintenanceListFuture">
                         <td scope="row">{{ formatDate(maintenance.date) }}</td>
-                        <td scope="row">{{ maintenance.code }}</td>
+                        <td scope="row">{{ maintenance.id }}</td>
                         <td>{{ maintenance.meetingPlace }}</td>
                         <td>{{ maintenance.description }}</td>
                         <td>{{ maintenance.contact }}</td>
@@ -44,7 +44,7 @@
                 <tbody>
                     <tr *ngFor="let maintenance of maintenanceListPast">
                         <td scope="row">{{ formatDate(maintenance.date) }}</td>
-                        <td scope="row">{{ maintenance.code }}</td>
+                        <td scope="row">{{ maintenance.id }}</td>
                         <td>{{ maintenance.meetingPlace }}</td>
                         <td>{{ maintenance.description }}</td>
                         <td>{{ maintenance.contact }}</td>

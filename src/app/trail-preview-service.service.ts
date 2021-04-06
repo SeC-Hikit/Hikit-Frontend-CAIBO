@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
@@ -12,7 +12,7 @@ export type TrailPreview = components["schemas"]["TrailPreviewDto"];
 })
 export class TrailPreviewService {
 
-  
+
   baseUrl = "api/preview";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,7 +20,7 @@ export class TrailPreviewService {
 
   constructor(private httpClient: HttpClient) { }
 
-  
+
   getPreviews(): Observable<TrailPreviewResponse> {
     return this.httpClient.get<TrailPreviewResponse>(this.baseUrl)
       .pipe(
@@ -29,6 +29,14 @@ export class TrailPreviewService {
       );
   }
 
+  getRawPreviews(skip: number, limit: number): Observable<TrailPreviewResponse> {
+    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/raw", { params: params })
+      .pipe(
+        tap(_ => console.log(_)),
+        catchError(this.handleError<TrailPreviewResponse>('get all previews', null))
+      );
+  }
   /**
 * Handle Http operation that failed.
 * Let the app continue.

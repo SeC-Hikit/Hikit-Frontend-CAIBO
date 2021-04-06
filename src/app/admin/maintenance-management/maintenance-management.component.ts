@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { Maintenance } from 'src/app/Maintenance';
-import { MaintenanceService } from 'src/app/maintenance.service';
+import { Maintenance, MaintenanceService } from 'src/app/maintenance.service';
 import { Status } from 'src/app/Status';
 
 @Component({
@@ -35,9 +34,9 @@ export class MaintenanceManagementComponent implements OnInit {
   }
 
   onDelete(maintenace: Maintenance) {
-    let isDeleting = confirm("Sei sicuro di voler cancellare la manuntenzione con codice '" + maintenace.code + "' e data '" + this.formatDate(maintenace.date.toString()) + "'?");
+    let isDeleting = confirm("Sei sicuro di voler cancellare la manuntenzione con codice '" + maintenace.id + "' e data '" + this.formatDate(maintenace.date.toString()) + "'?");
     if (isDeleting) {
-      this.maintenanceService.deleteById(maintenace._id).subscribe(d => { if (d.status == Status.OK) this.onDeleted(maintenace); });
+      this.maintenanceService.deleteById(maintenace.trailId).subscribe(d => { if (d.status == Status.OK) this.onDeleted(maintenace); });
     }
 
   }

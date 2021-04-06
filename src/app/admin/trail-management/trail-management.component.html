@@ -4,62 +4,12 @@
       Sentiero {{ savedTrailCode }} aggiunto
     </div>
   </div>
+  <div>
+    <app-trail-upload-management></app-trail-upload-management>
+  </div>
   <div class="row section-distance-up">
     <div class="col-12 col-md-8">
       <h1>Gestione Sentieri</h1>
-
-      <div>
-        <app-trail-upload-management></app-trail-upload-management>
-      </div>
-
-
-      <h2>Tracce</h2>
-      <p>Le seguenti sono tracce ancora da arricchire con i dovuti metadati</p>
-      <table id="trailTable" class="table table-striped interactive-table">
-        <thead class="">
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nome file</th>
-            <th scope="col">Caricato il</th>
-            <th scope="col">Caricato da</th>
-            <th scope="col">Modifica</th>
-          </tr>
-        </thead>
-        <tbody class="short-list">
-          <tr *ngFor="let trailPreview of trailPreviewList" class="trailPreview" (click)="onPreview(trailPreview)">
-            <th scope="row">{{ trailPreview.code }}</th>
-            <td>
-              {{ trailPreview.startPos.name }} -
-              {{ trailPreview.finalPos.name }}
-            </td>
-            <td>{{ trailPreview.classification }}</td>
-            <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
-              <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill" />
-              </svg>
-            </td>
-            <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
-              <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image" />
-              </svg>
-            </td>
-            <td class="clickable" routerLink="/admin/trails/edit/{{ trailPreview.code }}">
-              <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen" />
-              </svg>
-            </td>
-            <td class="clickable" (click)="onDelete(trailPreview)">
-              <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
-              </svg>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-
-      <!-- TODO: separate this -->
-
       <!-- *ngIf="trailPreviewList; else notShow" -->
       <h2>Lista Sentieri</h2>
       <table id="trailTable" class="table table-striped interactive-table">
@@ -77,7 +27,11 @@
           </tr>
         </thead>
         <tbody class="short-list">
-          <tr *ngFor="let trailPreview of trailPreviewList" class="trailPreview" (click)="onPreview(trailPreview)">
+          <tr
+            *ngFor="let trailPreview of trailPreviewList"
+            class="trailPreview"
+            (click)="onPreview(trailPreview)"
+          >
             <th scope="row">{{ trailPreview.code }}</th>
             <td>
               {{ trailPreview.startPos.name }} -
@@ -86,28 +40,43 @@
             <td>{{ trailPreview.classification }}</td>
             <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
               <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill" />
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
+                />
               </svg>
             </td>
             <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
               <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image" />
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image"
+                />
               </svg>
             </td>
-            <td class="clickable" routerLink="/admin/trails/edit/{{ trailPreview.code }}">
+            <td
+              class="clickable"
+              routerLink="/admin/trails/edit/{{ trailPreview.code }}"
+            >
               <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen" />
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen"
+                />
               </svg>
             </td>
             <td class="clickable" (click)="onDelete(trailPreview)">
               <svg class="bi" width="32" height="32" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                />
               </svg>
             </td>
           </tr>
         </tbody>
       </table>
-      <ngb-pagination [collectionSize]="70" [(page)]="page" aria-label="Default pagination"></ngb-pagination>
+      <ngb-pagination
+        [collectionSize]="70"
+        [(page)]="page"
+        aria-label="Default pagination"
+      ></ngb-pagination>
       <ng-template #notShow>
         <p>Non ci sono ancora sentieri.</p>
       </ng-template>

@@ -2,13 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
-import { AccessibilityNotificationObj } from 'src/app/AccessibilityNotificationObj';
-import { NotificationService } from 'src/app/notification-service.service';
+import { AccessibilityNotification, NotificationService } from 'src/app/notification-service.service';
 import { Status } from 'src/app/Status';
 import { TrailPreviewResponse, TrailPreviewService } from 'src/app/trail-preview-service.service';
 import { TrailCoordinates, TrailResponse, TrailService } from 'src/app/trail-service.service';
-import { TrailCoordinatesObj } from 'src/app/TrailCoordinatesObj';
 
 @Component({
   selector: 'app-accessibility-add',
@@ -67,12 +64,12 @@ export class AccessibilityAddComponent implements OnInit {
     if (this.formGroup.valid) {
       const objValue = this.formGroup.value; 
       let reportedDate = objValue.reportDate;
-      let notification = objValue as AccessibilityNotificationObj;
+      let notification = objValue as AccessibilityNotification;
       let date = moment(reportedDate.year +
         "-" + reportedDate.month +
         "-" + reportedDate.day).toDate()
-      notification.reportDate = date;
-      notification.coordinates = new TrailCoordinatesObj(objValue.location.latitude, objValue.location.longitude, objValue.location.altitude, objValue.location.distanceFromTrailStart);
+      notification.reportDate = date.toDateString();
+      notification.coordinates = { latitude: objValue.location.latitude, longitude:  objValue.location.longitude, altitude: objValue.location.altitude };
       this.accessibility.createNotification(notification).subscribe(x => { if (x.status == Status.OK) this.onSaveSuccess(notification) });
     } else {
       alert("Il modulo contiene ancora alcuni elementi vuoti/errati. Ricontrolla per procedere");
@@ -80,7 +77,7 @@ export class AccessibilityAddComponent implements OnInit {
   }
 
   onSaveSuccess(notification: AccessibilityNotification): void {
-    this.router.navigate(['/admin/accessibility', { success: notification.code }]);
+    this.router.navigate(['/admin/accessibility', { success: notification.id }]);
   }
 
   get selectTrailControl(): FormControl {

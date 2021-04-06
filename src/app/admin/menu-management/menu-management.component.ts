@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 
 export enum TabType {
   TRAILS = "trails",
-  ACCESSIBILITY = "accessibility",
+  ACCESSIBILITY = "tracks",
   MAINTENANCE = "maintenance",
 }
 
@@ -17,8 +17,8 @@ export const tabsList: Tab[] = [
     label: "Sentieri",
   },
   {
-    code: "accessibility",
-    label: "Accessiblità",
+    code: "tracks",
+    label: "tracce",
   },
   {
     code: "maintenance",
@@ -40,8 +40,8 @@ export class MenuManagementComponent implements OnInit {
       label: "Sentieri",
     },
     {
-      code: "accessibility",
-      label: "Accessiblità",
+      code: "tracks",
+      label: "Tracce",
     },
     {
       code: "maintenance",

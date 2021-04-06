@@ -37,6 +37,7 @@ import { LocationEntryComponent } from "./admin/trail-management/trail-upload-ma
 import { IncreasedIndexPipe } from "./IncreasedIndexPipe";
 import { EtaPipe } from "./EtaPipe";
 import { UploadButtonManagementComponent } from "./admin/upload-button-management/upload-button-management.component";
+import { TrailRawManagementComponent } from './admin/trail-raw-management/trail-raw-management.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { UploadButtonManagementComponent } from "./admin/upload-button-managemen
     IncreasedIndexPipe,
     EtaPipe,
     UploadButtonManagementComponent,
+    TrailRawManagementComponent,
   ],
   imports: [
     BrowserModule,

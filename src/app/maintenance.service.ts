@@ -2,9 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { Maintenance } from './Maintenance';
-import { MaintenanceResponse } from './MaintenanceResponse';
+import { components } from 'src/binding/Binding';
 import { RestResponse } from './RestResponse';
+
+
+export type Maintenance = components["schemas"]["MaintenanceDto"]
+export type MaintenanceResponse = components["schemas"]["MaintenanceResponse"]
+export type MaintenanceCreation = components["schemas"]["MaintenanceCreationDto"]
 
 @Injectable({
   providedIn: 'root'

@@ -4,10 +4,10 @@ import { Observable, of } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
 import { components } from "src/binding/Binding";
 import { RestResponse } from "./RestResponse";
-import { TrailImportRequest } from "./TrailImportRequest";
 
 
 export type TrailRawResponse = components['schemas']['TrailRawResponse'];
+export type TrailImportRequest = components['schemas']['TrailImportDto'];
 export type TrailRaw = components['schemas']['TrailRawDto'];
 
 @Injectable({

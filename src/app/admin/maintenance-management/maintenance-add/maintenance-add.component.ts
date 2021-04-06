@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { Maintenance } from 'src/app/Maintenance';
-import { MaintenanceService } from 'src/app/maintenance.service';
+import { Maintenance, MaintenanceService } from 'src/app/maintenance.service';
 import { Status } from 'src/app/Status';
 import { TrailPreviewResponse, TrailPreviewService } from 'src/app/trail-preview-service.service';
 
@@ -45,7 +44,7 @@ export class MaintenanceAddComponent implements OnInit {
       let formDate = this.formGroup.value.date;
       maintenance.date = moment(formDate.year +
         "-" + formDate.month +
-        "-" + formDate.day).toDate();
+        "-" + formDate.day).toISOString();
       this.maintenanceService.save(maintenance).subscribe(resp=>{if(resp.status==Status.OK) { this.onSaveSuccess(maintenance) }});
     } else {
       alert("Alcuni campi sono ancora da completare")
@@ -53,6 +52,6 @@ export class MaintenanceAddComponent implements OnInit {
   }
 
   onSaveSuccess(maintenance: Maintenance) {
-    this.router.navigate(['/admin/maintenance', { success: maintenance.code }]);  
+    this.router.navigate(['/admin/maintenance', { success: maintenance.id }]);  
   }
 }

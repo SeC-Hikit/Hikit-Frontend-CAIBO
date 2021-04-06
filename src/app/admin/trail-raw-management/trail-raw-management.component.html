@@ -1,0 +1,53 @@
+<h2>Tracce</h2>
+<div>
+    <app-upload-button-management
+    class="trail-upload-management__container-button"
+    [isMultipleUpload]="false"
+    (uploadedFiles)="uploadFile($event)"
+  ></app-upload-button-management>
+  <app-upload-button-management
+    [isMultipleUpload]="true"
+    class="trail-upload-management__container-button"
+    (uploadedFiles)="uploadFiles($event)"
+  ></app-upload-button-management>
+</div>
+<p>Le seguenti sono tracce ancora da arricchire con i dovuti metadati</p>
+<table id="trailTable" class="table table-striped interactive-table">
+  <thead class="">
+    <tr>
+      <th scope="col">Nome file</th>
+      <th scope="col">Caricato il</th>
+      <th scope="col">Caricato da</th>
+      <th scope="col">Compila</th>
+      <th scope="col">Cancella</th>
+    </tr>
+  </thead>
+  <tbody class="short-list">
+    <tr *ngFor="let tr of trailRawList" class="trailPreview">
+      <td>
+        {{ tr.fileDetails.originalFilename }}
+      </td>
+      <td>{{ formatDate(tr.fileDetails.uploadedOn) }}</td>
+      <td>{{ tr.fileDetails.uploadedBy }}</td>
+      <td class="clickable" routerLink="/map/{{ tr.id }}">
+        <svg class="bi" width="32" height="32" fill="currentColor">
+          <use
+            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
+          />
+        </svg>
+      </td>
+      <td class="clickable" routerLink="/map/{{ tr.id }}">
+        <svg class="bi" width="32" height="32" fill="currentColor">
+          <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash" />
+        </svg>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<ngb-pagination
+  [pageSize]="entryPerPage"
+  [collectionSize]="totalRaw"
+  [(page)]="page"
+  aria-label="Default pagination"
+  (pageChange)="loadRawTrails(page)"
+></ngb-pagination>

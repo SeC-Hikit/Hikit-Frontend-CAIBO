@@ -3,11 +3,13 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { AccessibilityNotificationUnresolvedResponse } from './AccessibilityNotificationUnresolvedResponse';
-import { AccessibilityNotificationResponse } from './AccessibilityNotificationResolvedResponse';
 import { RestResponse } from './RestResponse';
-import { AccessibilityNotificationResolution } from './AccessibilityNotificationResolution';
-import { AccessibilityNotification } from './AccessibilityNotification';
+import { components } from 'src/binding/Binding';
+
+export type AccessibilityNotificationResponse = components["schemas"]["AccessibilityResponse"]
+export type AccessibilityNotificationResolution = components["schemas"]["AccessibilityNotificationResolutionDto"]
+export type AccessibilityNotification = components["schemas"]["AccessibilityNotificationDto"]
+export type AccessibilityNotificationCreation = components["schemas"]["AccessibilityNotificationCreationDto"]
 
 @Injectable({
   providedIn: 'root'
@@ -25,23 +27,23 @@ export class NotificationService {
     return this.httpClient.put<RestResponse>(this.baseUrl, notification)
       .pipe(
         tap(),
-        catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('create trail', null))
+        catchError(this.handleError<AccessibilityNotificationResponse>('create trail', null))
       );
   }
 
-  getUnresolvedByTrailByCode(code: String): Observable<AccessibilityNotificationUnresolvedResponse> {
-    return this.httpClient.get<AccessibilityNotificationUnresolvedResponse>(this.baseUrl + "/unresolved/" + code)
+  getUnresolvedByTrailByCode(code: String): Observable<AccessibilityNotificationResponse> {
+    return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved/" + code)
       .pipe(
         tap(),
-        catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('get unresolved by trail', null))
+        catchError(this.handleError<AccessibilityNotificationResponse>('get unresolved by trail', null))
       );
   }
 
-  getUnresolved(): Observable<AccessibilityNotificationUnresolvedResponse> {
-    return this.httpClient.get<AccessibilityNotificationUnresolvedResponse>(this.baseUrl + "/unresolved")
+  getUnresolved(): Observable<AccessibilityNotificationResponse> {
+    return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved")
       .pipe(
         tap(),
-        catchError(this.handleError<AccessibilityNotificationUnresolvedResponse>('get all unresolved', null))
+        catchError(this.handleError<AccessibilityNotificationResponse>('get all unresolved', null))
       );
   }
 
@@ -65,11 +67,9 @@ export class NotificationService {
     return this.httpClient.post<RestResponse>(this.baseUrl + "/resolve", resolution)
     .pipe(
       tap(),
-      catchError(this.handleError<RestResponse>('delete by id', null))
+      catchError(this.handleError<RestResponse>('', null))
     );
   }
-
-
 
   /**
   * Handle Http operation that failed.

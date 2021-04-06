@@ -4,12 +4,10 @@ import { Router } from "@angular/router";
 import * as moment from "moment";
 import { Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
-import { ImportService, TrailRaw, TrailRawResponse } from "src/app/import.service";
+import { ImportService, TrailImportRequest, TrailRaw, TrailRawResponse } from "src/app/import.service";
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
 import { TrailCoordinates } from "src/app/trail-service.service";
-import { TrailCoordinatesObj } from "src/app/TrailCoordinatesObj";
-import { TrailImportRequest } from "src/app/TrailImportRequest";
 import { FormUtils } from "src/app/utils/FormUtils";
 @Component({
   selector: "app-trail-upload-management",
@@ -21,7 +19,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   previewCoords: TrailCoordinates[];
   trailFormGroup: FormGroup;
   uploadedSuccessful: boolean;
-  isLoading = false;
 
   private destroy$ = new Subject();
 
@@ -52,28 +49,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   onReload(): void {
     this.uploadedSuccessful = false;
-  }
-
-  uploadFile(files: File[]): void {
-      this.isLoading = true;
-      this.importService
-        .readTrail(files[0])
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((trailRawResponse: TrailRawResponse) => {
-          this.isLoading = false;
-          this.uploadedSuccessful = true;
-          this.populateForm(trailRawResponse.content[0]);
-        });
-  }
-
-  uploadFiles(files: FileList): void {
-    this.importService
-    .readTrails(files)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((_) => {
-      this.isLoading = false;
-      this.uploadedSuccessful = true;
-    });
   }
 
   populateForm(tpm: TrailRaw) {
@@ -109,11 +84,11 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   saveTrail() {
     if (this.trailFormGroup.valid) {
-      const trailFormValue = this.trailFormGroup.value;
-      const importTrail = this.getImportRequest(trailFormValue);
-      this.importService
-        .saveTrail(importTrail)
-        .subscribe((response) => this.onSaveRequest(response));
+      // const trailFormValue = this.trailFormGroup.value;
+      // const importTrail = this.getImportRequest(trailFormValue);
+      // this.importService
+      //   .saveTrail(importTrail)
+      //   .subscribe((response) => this.onSaveRequest(response));
     } else {
       alert("Alcuni campi contengono errori");
     }
@@ -126,39 +101,39 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   }
 
   private getImportRequest(trailFormValue: any) {
-    const importTrail = trailFormValue as TrailImportRequest;
+    // const importTrail = trailFormValue as TrailImportRequest;
 
-    importTrail.lastUpdate = moment(
-      trailFormValue.lastUpdate.year +
-        "-" +
-        trailFormValue.lastUpdate.month +
-        "-" +
-        trailFormValue.lastUpdate.day
-    ).toDate();
-    let tagsStartPos = trailFormValue.startPos.tags as string;
-    let tagsFinalPos = trailFormValue.finalPos.tags as string;
-    for (var i = 0; i < trailFormValue.locations.length; i++) {
-      let temp = trailFormValue.locations[i];
-      importTrail.locations[i].tags =
-        temp.tags == null ? [] : temp.tags.split(",");
-      importTrail.locations[i].coordinates = new TrailCoordinatesObj(
-        temp.latitude,
-        temp.longitude,
-        temp.altitude,
-        temp.distanceFromTrailStart
-      );
-    }
-    importTrail.startPos.tags =
-      tagsStartPos == null ? [] : tagsStartPos.split(",");
-    importTrail.startPos.coordinates = this.previewCoords[0];
-    importTrail.finalPos.tags =
-      tagsStartPos == null ? [] : tagsFinalPos.split(",");
-    importTrail.finalPos.coordinates = this.previewCoords[
-      this.previewCoords.length - 1
-    ];
-    importTrail.coordinates = this.previewCoords;
-    importTrail.name = importTrail.name ? importTrail.name : importTrail.code;
-    return importTrail;
+    // importTrail.lastUpdate = moment(
+    //   trailFormValue.lastUpdate.year +
+    //     "-" +
+    //     trailFormValue.lastUpdate.month +
+    //     "-" +
+    //     trailFormValue.lastUpdate.day
+    // ).toDate().toDateString();
+    // let tagsStartPos = trailFormValue.startPos.tags as string;
+    // let tagsFinalPos = trailFormValue.finalPos.tags as string;
+    // for (var i = 0; i < trailFormValue.locations.length; i++) {
+    //   let temp = trailFormValue.locations[i];
+    //   importTrail.locations[i].tags =
+    //     temp.tags == null ? [] : temp.tags.split(",");
+    //   importTrail.locations[i].coordinates = new TrailCoordinatesObj(
+    //     temp.latitude,
+    //     temp.longitude,
+    //     temp.altitude,
+    //     temp.distanceFromTrailStart
+    //   );
+    // }
+    // importTrail..tags =
+    //   tagsStartPos == null ? [] : tagsStartPos.split(",");
+    // importTrail.startPos.coordinates = this.previewCoords[0];
+    // importTrail.finalPos.tags =
+    //   tagsStartPos == null ? [] : tagsFinalPos.split(",");
+    // importTrail.finalPos.coordinates = this.previewCoords[
+    //   this.previewCoords.length - 1
+    // ];
+    // importTrail.coordinates = this.previewCoords;
+    // importTrail.name = importTrail.name ? importTrail.name : importTrail.code;
+    // return importTrail;
   }
 
   get locations() {

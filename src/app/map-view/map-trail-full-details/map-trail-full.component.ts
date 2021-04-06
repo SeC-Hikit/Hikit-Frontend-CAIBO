@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import * as Chart from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { AccessibilityNotificationUnresolved } from 'src/app/AccessibilityNotificationUnresolved';
 import { ChartUtils } from '../ChartUtils';
 import { ViewChild } from '@angular/core';
-import { Maintenance } from 'src/app/Maintenance';
 import * as moment from 'moment';
 import { Trail } from 'src/app/trail-service.service';
+import { AccessibilityNotification } from 'src/app/notification-service.service';
+import { Maintenance } from 'src/app/maintenance.service';
 
 @Component({
   selector: 'app-map-trail-full',
@@ -19,7 +19,7 @@ export class MapTrailFullComponent implements OnInit {
   private chartOptions: ChartOptions;
 
   @Input() selectedTrail: Trail;
-  @Input() trailNotifications: AccessibilityNotificationUnresolved[];
+  @Input() trailNotifications: AccessibilityNotification[];
   @Input() lastMaintenance: Maintenance;
 
   @Output() isVisibleEvent = new EventEmitter<void>();

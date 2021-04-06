@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrailAddManagementComponent } from './trail-upload-management.component';
+import { TrailUploadManagementComponent } from './trail-upload-management.component';
 
 describe('TrailAddManagementComponent', () => {
-  let component: TrailAddManagementComponent;
-  let fixture: ComponentFixture<TrailAddManagementComponent>;
+  let component: TrailUploadManagementComponent;
+  let fixture: ComponentFixture<TrailUploadManagementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TrailAddManagementComponent],
+      declarations: [TrailUploadManagementComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TrailAddManagementComponent);
+    fixture = TestBed.createComponent(TrailUploadManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

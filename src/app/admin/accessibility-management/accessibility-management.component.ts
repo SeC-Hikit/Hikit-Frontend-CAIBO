@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { AccessibilityNotification } from 'src/app/AccessibilityNotification';
-import { AccessibilityNotificationObj } from 'src/app/AccessibilityNotificationObj';
-import { AccessibilityNotificationResolution } from 'src/app/AccessibilityNotificationResolution';
-import { AccessibilityNotificationUnresolved } from 'src/app/AccessibilityNotificationUnresolved';
-import { NotificationService } from 'src/app/notification-service.service';
+import { AccessibilityNotification, NotificationService, AccessibilityNotificationResolution } from 'src/app/notification-service.service';
 import { Status } from 'src/app/Status';
 
 @Component({
@@ -15,7 +11,7 @@ import { Status } from 'src/app/Status';
 })
 export class AccessibilityManagementComponent implements OnInit {
 
-  unresolvedNotifications: AccessibilityNotificationUnresolved[]
+  unresolvedNotifications: AccessibilityNotification[]
   solvedNotifications: AccessibilityNotification[]
   notificationSaved: string;
 
@@ -41,38 +37,37 @@ export class AccessibilityManagementComponent implements OnInit {
     return moment(dateString).format("DD/MM/YYYY");
   }
 
-  onDeleteClick(unresolvedNotification: AccessibilityNotificationUnresolved) {
+  onDeleteClick(unresolvedNotification: AccessibilityNotification) {
     let isDeleting = confirm("Sei sicuro di voler cancellare la segnalazione in data " +
       this.formatDate(unresolvedNotification.reportDate.toString()) +
-      ", per il sentiero '" + unresolvedNotification.code + "'?");
+      ", per il sentiero '" + unresolvedNotification.trailId + "'?");
     if (isDeleting) {
-      this.notificationService.deleteById(unresolvedNotification._id).subscribe(d => { if (d.status == Status.OK) this.onDeleted(unresolvedNotification); });
+      this.notificationService.deleteById(unresolvedNotification.id).subscribe(d => { if (d.status == Status.OK) this.onDeleted(unresolvedNotification); });
     }
 
   }
 
-  onDeleted(unresolvedNotification: AccessibilityNotificationUnresolved): void {
+  onDeleted(unresolvedNotification: AccessibilityNotification): void {
     let i = this.unresolvedNotifications.indexOf(unresolvedNotification);
     this.unresolvedNotifications.splice(i, 1);
   }
 
-  onResolveClick(unresolvedNotification: AccessibilityNotificationUnresolved) {
-    let resDesc = "Scrivi una breve risoluzione per la segnalazione " + unresolvedNotification.code + " riportata in data '" +
+  onResolveClick(unresolvedNotification: AccessibilityNotification) {
+    let resDesc = "Scrivi una breve risoluzione per la segnalazione " + unresolvedNotification.id + " riportata in data '" +
       this.formatDate(unresolvedNotification.reportDate.toString()) + "' con descrizione: '" + unresolvedNotification.description + "'";
     let resolution = prompt(resDesc);
-    
+
     if (resolution != null && resolution.length > 0) {
       let resolutionDate = new Date();
-      this.notificationService.resolveNotification(new AccessibilityNotificationResolution(unresolvedNotification._id, resolution, resolutionDate))
+      this.notificationService.resolveNotification(
+        { id: unresolvedNotification.id, resolution: resolution, resolutionDate: resolutionDate.toDateString() })
         .subscribe(response => { if (response.status == Status.OK) { this.onResolvedSuccess(unresolvedNotification, resolution, resolutionDate); } });
     }
   }
 
-  onResolvedSuccess(resolvedNotification: AccessibilityNotificationUnresolved, resolution: string, resolutionDate: Date): void {
+  onResolvedSuccess(resolvedNotification: AccessibilityNotification, resolution: string, resolutionDate: Date): void {
     this.onDeleted(resolvedNotification);
-    this.solvedNotifications.push(new AccessibilityNotificationObj(resolvedNotification._id,
-      resolvedNotification.code, resolvedNotification.description,
-      resolvedNotification.reportDate, resolutionDate, resolvedNotification.isMinor, resolution, resolvedNotification.position));
+    this.solvedNotifications.push(resolvedNotification);
   }
 
 
