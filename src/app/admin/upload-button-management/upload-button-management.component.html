@@ -7,6 +7,7 @@
     (change)="onUploadGpx($event.target.files)"
     accept=".gpx"
     multiple
+    [attr.disabled]="this.isDisabled ? '': null"
   />
   <label class="upload-button-management__label" for="multiUpload">
     <i class="bi bi-cloud-upload upload-button-management__icon"></i>
@@ -21,6 +22,7 @@
     class="upload"
     (change)="onUploadGpx($event.target.files)"
     accept=".gpx"
+    [attr.disabled]="this.isDisabled ? '': null"
   />
   <label class="upload-button-management__label" for="upload">
     <i class="bi bi-cloud-upload upload-button-management__icon"></i>

@@ -27,8 +27,17 @@ const routes: Routes = [
   { path: "accessibility", component: AccessibilityComponent },
   { path: "maintenance", component: MaintenanceComponent },
   {
-    path: "admin",
-    component: AdminComponent,
+    path: "admin", children: [
+      {
+        path: "",
+        component: AdminComponent,
+      },
+      {
+        path: "trail", children: [
+          { path: "raw/:id", component: TrailUploadManagementComponent },
+        ]
+      }
+    ]
   },
   { path: "404", component: NotFoundComponent },
   {
@@ -42,4 +51,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

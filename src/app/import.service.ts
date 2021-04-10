@@ -23,7 +23,7 @@ export class ImportService {
 
   readTrail(file: File): Observable<TrailRawResponse> {
     const formData: FormData = new FormData();
-    formData.append("gpxFile", file);
+    formData.append("file", file);
     return this.httpClient
       .post<TrailRawResponse>(this.baseUrl, formData)
       .pipe(

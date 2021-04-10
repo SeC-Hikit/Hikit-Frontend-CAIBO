@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TrailPreview, TrailPreviewService } from 'src/app/trail-preview-service.service';
-import { TrailRawService } from 'src/app/trail-raw-service.service';
 import { NgbPagination } from "@ng-bootstrap/ng-bootstrap";
 import { DateUtils } from 'src/app/utils/DateUtils';
 import { ImportService, TrailRawResponse } from 'src/app/import.service';
 import { Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
+import { Router } from '@angular/router';
+import { TrailRawService } from 'src/app/trail-raw-service.service';
 
 @Component({
   selector: 'app-trail-raw-management',
@@ -20,14 +21,15 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
   public trailRawList: TrailPreview[]
   public totalRaw: number;
 
-  isLoading = false;
+  public isLoading = false;
 
   private destroy$ = new Subject();
 
   constructor(
     private trailRawService: TrailRawService,
     private importService: ImportService,
-    private trailPreviewService: TrailPreviewService
+    private trailPreviewService: TrailPreviewService,
+    private router: Router
   ) { }
 
   ngOnDestroy(): void {
@@ -51,26 +53,34 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
     this.getTrailRawPreviews(lowerBound, this.entryPerPage);
   }
 
-  uploadFile(files: File[]): void {
+  uploadFile(file: FileList): void {
     this.isLoading = true;
+    console.log(file);
     this.importService
-      .readTrail(files[0])
+      .readTrail(file[0])
       .pipe(takeUntil(this.destroy$))
       .subscribe((trailRawResponse: TrailRawResponse) => {
         this.isLoading = false;
-        // this.uploadedSuccessful = true;
+        console.log(trailRawResponse.content[0].id);
+        this.navigateToEdit(trailRawResponse.content[0].id)
       });
-}
+  }
 
-uploadFiles(files: FileList): void {
-  this.importService
-  .readTrails(files)
-  .pipe(takeUntil(this.destroy$))
-  .subscribe((_) => {
-    this.isLoading = false;
-    // this.uploadedSuccessful = true;
-  });
-}
+  
+  uploadFiles(files: FileList): void {
+    this.isLoading = true;
+    this.importService
+    .readTrails(files)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((_) => {
+      this.isLoading = false;
+    });
+  }
+  
+  public navigateToEdit(rawId: string) {
+    alert(rawId);
+    this.router.navigate(['/admin/trail/raw/'+ rawId]);
+  }
 
   formatDate(stringDate: string) {
     return DateUtils.formatDateToDay(stringDate)

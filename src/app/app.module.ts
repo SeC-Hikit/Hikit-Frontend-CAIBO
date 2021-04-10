@@ -38,6 +38,7 @@ import { IncreasedIndexPipe } from "./IncreasedIndexPipe";
 import { EtaPipe } from "./EtaPipe";
 import { UploadButtonManagementComponent } from "./admin/upload-button-management/upload-button-management.component";
 import { TrailRawManagementComponent } from './admin/trail-raw-management/trail-raw-management.component';
+import { CrossingModalComponent } from './admin/trail-management/trail-upload-management/crossing-modal/crossing-modal.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { TrailRawManagementComponent } from './admin/trail-raw-management/trail-
     EtaPipe,
     UploadButtonManagementComponent,
     TrailRawManagementComponent,
+    CrossingModalComponent,
   ],
   imports: [
     BrowserModule,

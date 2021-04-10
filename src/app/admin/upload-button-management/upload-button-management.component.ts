@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 })
 export class UploadButtonManagementComponent implements OnInit {
   @Input() isMultipleUpload: boolean;
+  @Input() isDisabled: boolean;
 
   @Output() uploadedFiles: EventEmitter<FileList> = new EventEmitter();
 
@@ -15,7 +16,6 @@ export class UploadButtonManagementComponent implements OnInit {
   ngOnInit(): void {}
 
   onUploadGpx(files: FileList): void {
-    console.log(files);
     this.uploadedFiles.emit(files);
   }
 }

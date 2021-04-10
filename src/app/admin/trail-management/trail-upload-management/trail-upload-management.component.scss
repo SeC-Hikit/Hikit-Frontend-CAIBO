@@ -12,6 +12,43 @@
   }
 }
 
+.section {
+  padding-left: 5%;
+  padding-top: 10px;
+}
+
+.crossing-section { 
+  border-left: 2px solid green;
+}
+.general-section {
+  border-left: 2px solid orange;
+}
+
+.location-section {
+  border-left: 2px solid darkgreen;
+}
+.bike-section {
+  border-left: 2px solid red;
+}
+.wide-btn {
+  width: 100%;
+}
+
+.progress {
+  position: fixed;
+  left: 0px;
+  width: 10%;
+  min-height: 150px;
+  display: block;
+  list-style: none;
+  background-color: white;
+  box-shadow: 0 0 5px black;
+
+  li {
+    margin: 25px 0;
+  }
+}
+
 input[name="dp"] {
   border-bottom: 1px solid gray;
 }
