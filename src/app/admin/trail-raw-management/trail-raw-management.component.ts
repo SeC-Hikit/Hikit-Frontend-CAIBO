@@ -1,17 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TrailPreview, TrailPreviewService } from 'src/app/trail-preview-service.service';
-import { NgbPagination } from "@ng-bootstrap/ng-bootstrap";
 import { DateUtils } from 'src/app/utils/DateUtils';
 import { ImportService, TrailRawResponse } from 'src/app/import.service';
 import { Subject } from "rxjs";
-import { takeUntil, tap } from "rxjs/operators";
+import {  takeUntil, tap } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { TrailRawService } from 'src/app/trail-raw-service.service';
 
 @Component({
   selector: 'app-trail-raw-management',
   templateUrl: './trail-raw-management.component.html',
-  styleUrls: ['./trail-raw-management.component.scss']
+  styleUrls: ['./trail-raw-management.component.scss'],
 })
 export class TrailRawManagementComponent implements OnInit, OnDestroy {
 
@@ -29,13 +28,8 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
     private trailRawService: TrailRawService,
     private importService: ImportService,
     private trailPreviewService: TrailPreviewService,
-    private router: Router
+    private router: Router,
   ) { }
-
-  delete(id: string) {
-    alert("gonna remove " + id);
-    // this.trailRawService.
-  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -46,7 +40,12 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
   }
 
   getTrailRawPreviews(skip: number, limit: number) {
-    this.trailPreviewService.getRawPreviews(skip, limit).subscribe(preview => {
+    this.trailPreviewService.getRawPreviews(skip, limit)
+    .pipe(
+      takeUntil(this.destroy$),
+      tap(_ => this.isLoading = false)
+    )
+    .subscribe(preview => {
       this.totalRaw = preview.totalCount;
       this.trailRawList = preview.content;
     });
@@ -71,19 +70,34 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
       });
   }
 
-
+  
   uploadFiles(files: FileList): void {
     this.isLoading = true;
     this.importService
-      .readTrails(files)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => {
-        this.isLoading = false;
-      });
+    .readTrails(files)
+    .pipe(
+      takeUntil(this.destroy$)
+      )
+    .subscribe((_) => {
+      this.loadRawTrails(1);
+    });
   }
 
-  public navigateToEdit(rawId: string) {
-    this.router.navigate(['/admin/trail/raw/' + rawId]);
+  deleteRawTrail(id: string): void {
+    this.isLoading = true;
+    this.trailRawService.deleteById(id)
+    .pipe(
+      takeUntil(this.destroy$),
+      tap(_ => this.isLoading = false)
+    ).subscribe(_ => {
+      this.trailRawList = this.trailRawList.filter(tr => tr.id !== id);
+      this.loadRawTrails(this.page);
+    })
+  }
+
+  navigateToEdit(rawId: string) {
+    alert(rawId);
+    this.router.navigate(['/admin/trail/raw/'+ rawId]);
   }
 
   formatDate(stringDate: string) {
