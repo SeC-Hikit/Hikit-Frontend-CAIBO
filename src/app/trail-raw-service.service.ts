@@ -18,19 +18,26 @@ export class TrailRawService {
 
   get(skip: number, limit: number): Observable<TrailRawResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
-    return this.httpClient.get<TrailRawResponse>(this.baseUrl, {params: params})
+    return this.httpClient.get(this.baseUrl, {params: params})
       .pipe(
         tap(),
-        catchError(this.handleError<TrailRawResponse>('', null))
+        catchError(this.handleError('', null))
       );
   }
 
   getById(id: string): Observable<TrailRawResponse> {
-    return this.httpClient.get<TrailRawResponse>(this.baseUrl + "/" + id)
+    return this.httpClient.get(`${this.baseUrl}/${id}`)
       .pipe(
         tap(),
-        catchError(this.handleError<TrailRawResponse>('', null))
+        catchError(this.handleError('', null))
       );
+  }
+
+  deleteById(id: string): Observable<TrailRawResponse> {
+    return this.httpClient.delete(`${this.baseUrl}/${id}`)
+    .pipe(
+      catchError(this.handleError('', null))
+    )
   }
 /**
 * Handle Http operation that failed.

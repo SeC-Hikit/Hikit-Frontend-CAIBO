@@ -39,7 +39,7 @@ export class TrailManagementComponent implements OnInit {
   }
 
   getAllPreviews() {
-    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailPreviewList = preview.content;  } );
+    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailPreviewList = preview?.content;  } );
   }
   
 
