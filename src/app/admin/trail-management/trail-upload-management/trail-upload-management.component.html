@@ -175,6 +175,32 @@
         </div>
       </div>
 
+      <ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Some body once told me</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            (click)="modal.close('Save click')"
+          >
+            Save
+          </button>
+        </div>
+      </ng-template>
+
       <div class="section location-section">
         <h3 id="localita" class="space-up">Località</h3>
         <p class="space-up">
@@ -337,8 +363,128 @@
         </div>
       </div>
 
-      <div class="section bike-section"> 
+      <div class="section bike-section">
+        <svg class="bi" width="32" height="32" fill="currentColor">
+          <use
+            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
+          />
+        </svg>
         <h3 class="space-up">Ciclo Escursionismo</h3>
+
+        <div [formGroup]="cyclo">
+          <div class="form-row">
+            <div class="form-group col-md-4 mb-3">
+              <p>Classificazione</p>
+              <select
+                title="Scegli una opzione"
+                formControlName="classification"
+                class="form-control"
+                id="trailId_select"
+                [value]="cyclo_classification"
+              >
+                <option value="UNCLASSIFIED">Non classificato</option>
+                <option value="TC">TC</option>
+                <option value="TC+">TC+</option>
+                <option value="MC">MC</option>
+                <option value="MC+">MC+</option>
+                <option value="BC">BC</option>
+                <option value="BC+">BC+</option>
+                <option value="OC">OC</option>
+                <option value="OC+">OC+</option>
+                <option value="EC">EC</option>
+                <option value="NO">NO</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">Text to explain items</div>
+          </div>
+          <div [formGroup]="wayForward">
+            <h3>Andata</h3>
+            <div class="form-row">
+              <div class="form-group col-md-4 mb-3">
+                <p>Percorribile?</p>
+                <select
+                  title="Scegli una opzione"
+                  formControlName="feasible"
+                  class="form-control"
+                  id="trailId_select"
+                  [value]=""
+                >
+                  <option value="true">Si</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4 mb-3">
+                <p>Portage (circa, in minuti)</p>
+                <select
+                  title="Scegli una opzione"
+                  formControlName="portage"
+                  class="form-control"
+                  id="trailId_select"
+                  [value]=""
+                >
+                  <option value="0">0</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="30">>30</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [formGroup]="wayBack">
+          <h3>Ritorno</h3>
+          <div class="form-row">
+            <div class="form-group col-md-4 mb-3">
+              <p>Percorribile?</p>
+              <select
+                title="Scegli una opzione"
+                formControlName="feasible"
+                class="form-control"
+                id="trailId_select"
+                value="feasible"
+              >
+                <option value="true">Si</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4 mb-3">
+              <p>Portage (circa, in minuti)</p>
+              <select
+                title="Scegli una opzione"
+                formControlName="portage"
+                class="form-control"
+                id="trailId_select"
+              >
+                <option value="0">0</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="30">>30</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label
+            placement="right"
+            ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
+          >
+            Descrizione
+          </label>
+
+          <div class="form-group col-md-12 mb-12">
+            <quill-editor
+              formControlName="description"
+              [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"
+            ></quill-editor>
+          </div>
+        </div>
       </div>
 
       <div class="form-row">

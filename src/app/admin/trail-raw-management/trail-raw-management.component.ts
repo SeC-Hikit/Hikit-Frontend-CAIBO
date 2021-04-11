@@ -32,6 +32,11 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
     private router: Router
   ) { }
 
+  delete(id: string) {
+    alert("gonna remove " + id);
+    // this.trailRawService.
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
   }
@@ -66,20 +71,19 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
       });
   }
 
-  
+
   uploadFiles(files: FileList): void {
     this.isLoading = true;
     this.importService
-    .readTrails(files)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((_) => {
-      this.isLoading = false;
-    });
+      .readTrails(files)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((_) => {
+        this.isLoading = false;
+      });
   }
-  
+
   public navigateToEdit(rawId: string) {
-    alert(rawId);
-    this.router.navigate(['/admin/trail/raw/'+ rawId]);
+    this.router.navigate(['/admin/trail/raw/' + rawId]);
   }
 
   formatDate(stringDate: string) {

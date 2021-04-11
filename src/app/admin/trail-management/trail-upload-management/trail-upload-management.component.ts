@@ -1,7 +1,7 @@
 import { ANALYZE_FOR_ENTRY_COMPONENTS, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import * as moment from "moment";
 import { Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
@@ -59,6 +59,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
       startPos: FormUtils.getLocationFormGroup(),
       finalPos: FormUtils.getLocationFormGroup(),
       locations: new FormArray([]),
+      cyclo: FormUtils.getCylcloFormGroup()
     });
 
     const idFromPath: string = this.route.snapshot.paramMap.get("id");
@@ -146,10 +147,24 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
 
     });
+  }
 
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
 
-
-
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   onLoad(restResponse: RestResponse): void {
@@ -205,6 +220,23 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   get finalPos() {
     return this.trailFormGroup.controls["finalPos"] as FormGroup;
   }
+
+  get cyclo() {
+    return this.trailFormGroup.controls["cyclo"] as FormGroup;
+  }
+
+  get wayForward() {
+    return this.cyclo.controls["wayForward"] as FormGroup;
+  }
+  
+  get wayBack() {
+    return this.cyclo.controls["wayForward"] as FormGroup;
+  }
+
+  get cyclo_classification() {
+    return this.cyclo["classification"] as FormControl;
+  }
+
 }
 
 
