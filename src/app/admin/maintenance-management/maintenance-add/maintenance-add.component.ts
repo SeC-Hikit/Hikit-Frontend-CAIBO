@@ -31,7 +31,7 @@ export class MaintenanceAddComponent implements OnInit {
       'meetingPlace': new FormControl(''),
       'date': new FormControl('', Validators.required),
     });
-    this.trailPreviewService.getPreviews().subscribe(x => { this.onLoad(x) })
+    // this.trailPreviewService.getPreviews().subscribe(x => { this.onLoad(x) })
   }
 
   onLoad(x: TrailPreviewResponse) {

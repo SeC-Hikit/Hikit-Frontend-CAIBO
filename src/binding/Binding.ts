@@ -22,7 +22,7 @@ export interface paths {
   };
   "/place/media/{id}": {
     put: operations["addMedia"];
-    delete: operations["deleteMedia"];
+    post: operations["deleteMedia"];
   };
   "/maintenance": {
     put: operations["create_1"];
@@ -42,6 +42,9 @@ export interface paths {
   "/trail/media/{id}": {
     post: operations["addMediaToTrail"];
     delete: operations["removeMediaFromTrail"];
+  };
+  "/trail/geolocate": {
+    post: operations["geoLocateTrail"];
   };
   "/place/geolocate": {
     post: operations["geolocatePlace"];
@@ -73,12 +76,16 @@ export interface paths {
   };
   "/raw/{id}": {
     get: operations["getById_1"];
+    delete: operations["deleteById_1"];
   };
   "/preview": {
     get: operations["getTrailPreviews"];
   };
   "/preview/{id}": {
     get: operations["getPreviewById"];
+  };
+  "/preview/raw": {
+    get: operations["getRawTrailPreviews"];
   };
   "/poi/{id}": {
     get: operations["get_3"];
@@ -105,7 +112,7 @@ export interface paths {
   };
   "/media/{id}": {
     get: operations["getById_2"];
-    delete: operations["deleteById_1"];
+    delete: operations["deleteById_2"];
   };
   "/maintenance/past": {
     get: operations["getPastMaintenance"];
@@ -209,6 +216,7 @@ export interface components {
         | "BC_PLUS"
         | "OC"
         | "OC_PLUS"
+        | "EC"
         | "NO"
         | "UNCLASSIFIED";
       officialEta?: number;
@@ -357,6 +365,20 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["AccessibilityNotificationDto"][];
     };
+    Coordinates2D: {
+      latitude?: number;
+      longitude?: number;
+      asList?: number[];
+    };
+    RectangleDto: {
+      bottomLeft?: components["schemas"]["Coordinates2D"];
+      topLeft?: components["schemas"]["Coordinates2D"];
+      topRight?: components["schemas"]["Coordinates2D"];
+      bottomRight?: components["schemas"]["Coordinates2D"];
+    };
+    UnLinkeMediaRequestDto: {
+      id?: string;
+    };
     PointGeolocationDto: {
       coordinatesDto?: components["schemas"]["CoordinatesDto"];
       distance?: number;
@@ -396,11 +418,6 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["TrailRawDto"][];
-    };
-    Coordinates2D: {
-      latitude?: number;
-      longitude?: number;
-      asList?: number[];
     };
     GeoLineDto: {
       coordinates?: components["schemas"]["Coordinates2D"][];
@@ -453,9 +470,6 @@ export interface components {
     TrailDatasetVersion: {
       version?: number;
       lastUpdate?: string;
-    };
-    UnLinkeMediaRequestDto: {
-      id?: string;
     };
   };
 }
@@ -797,6 +811,21 @@ export interface operations {
       };
     };
   };
+  geoLocateTrail: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RectangleDto"];
+      };
+    };
+  };
   geolocatePlace: {
     parameters: {
       query: {
@@ -834,6 +863,13 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["TrailRawResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          file?: string;
         };
       };
     };
@@ -912,9 +948,6 @@ export interface operations {
       path: {
         id: string;
       };
-      query: {
-        isPurged?: boolean;
-      };
     };
     responses: {
       /** OK */
@@ -966,12 +999,26 @@ export interface operations {
       };
     };
   };
+  deleteById_1: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailRawResponse"];
+        };
+      };
+    };
+  };
   getTrailPreviews: {
     parameters: {
       query: {
         skip?: number;
         limit?: number;
-        includeRaw?: boolean;
       };
     };
     responses: {
@@ -987,6 +1034,22 @@ export interface operations {
     parameters: {
       path: {
         id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailPreviewResponse"];
+        };
+      };
+    };
+  };
+  getRawTrailPreviews: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
       };
     };
     responses: {
@@ -1159,7 +1222,7 @@ export interface operations {
       };
     };
   };
-  deleteById_1: {
+  deleteById_2: {
     parameters: {
       path: {
         id: string;

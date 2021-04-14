@@ -10,7 +10,7 @@ import { ImportService, TrailImportRequest, TrailRaw, TrailRawResponse } from "s
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
 import { TrailRawService } from "src/app/trail-raw-service.service";
-import { TrailCoordinates } from "src/app/trail-service.service";
+import { TrailCoordinates, TrailResponse } from "src/app/trail-service.service";
 import { FormUtils } from "src/app/utils/FormUtils";
 import { CrossingModalComponent } from "./crossing-modal/crossing-modal.component";
 @Component({
@@ -21,6 +21,7 @@ import { CrossingModalComponent } from "./crossing-modal/crossing-modal.componen
 export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   trailRawResponse: TrailRawResponse;
+  otherTrailResponse: TrailResponse;
   trailFormGroup: FormGroup;
 
   isLoading: boolean;
@@ -123,9 +124,24 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     );
   }
 
+  validateAllFormFields(formGroup: FormGroup) {         //{1}
+    Object.keys(formGroup.controls).forEach(field => {  //{2}
+      const control = formGroup.get(field);             //{3}
+      if (control instanceof FormControl) {             //{4}
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {        //{5}
+        this.validateAllFormFields(control);            //{6}
+      }
+    });
+  }
+
   saveTrail() {
+    // console.log(this.trailFormGroup.getError());
+    // this.validateAllFormFields(this.trailFormGroup);
+    // console.log(this.trailFormGroup);
+    
     if (this.trailFormGroup.valid) {
-      // const trailFormValue = this.trailFormGroup.value;
+      const trailFormValue = this.trailFormGroup.value;
       // const importTrail = this.getImportRequest(trailFormValue);
       // this.importService
       //   .saveTrail(importTrail)
@@ -176,6 +192,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   private getImportRequest(trailFormValue: any) {
     // const importTrail = trailFormValue as TrailImportRequest;
 
+
     // importTrail.lastUpdate = moment(
     //   trailFormValue.lastUpdate.year +
     //     "-" +
@@ -185,18 +202,26 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     // ).toDate().toDateString();
     // let tagsStartPos = trailFormValue.startPos.tags as string;
     // let tagsFinalPos = trailFormValue.finalPos.tags as string;
-    // for (var i = 0; i < trailFormValue.locations.length; i++) {
-    //   let temp = trailFormValue.locations[i];
-    //   importTrail.locations[i].tags =
-    //     temp.tags == null ? [] : temp.tags.split(",");
-    //   importTrail.locations[i].coordinates = new TrailCoordinatesObj(
-    //     temp.latitude,
-    //     temp.longitude,
-    //     temp.altitude,
-    //     temp.distanceFromTrailStart
-    //   );
-    // }
-    // importTrail..tags =
+
+    
+    // // IMPORT ALL LOCATIONS
+    // // for (var i = 0; i < trailFormValue.locations.length; i++) {
+    // //   let temp = trailFormValue.locations[i];
+    // //   importTrail.locations[i].tags =
+    // //     temp.tags == null ? [] : temp.tags.split(",");
+    // //   importTrail.locations[i].coordinates = new TrailCoordinatesObj(
+    // //     temp.latitude,
+    // //     temp.longitude,
+    // //     temp.altitude,
+    // //     temp.distanceFromTrailStart
+    // //   );
+    // // }
+    
+
+
+
+
+    // importTrail.startLocation.tags =
     //   tagsStartPos == null ? [] : tagsStartPos.split(",");
     // importTrail.startPos.coordinates = this.previewCoords[0];
     // importTrail.finalPos.tags =
@@ -230,7 +255,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   }
   
   get wayBack() {
-    return this.cyclo.controls["wayForward"] as FormGroup;
+    return this.cyclo.controls["wayBack"] as FormGroup;
   }
 
   get cyclo_classification() {

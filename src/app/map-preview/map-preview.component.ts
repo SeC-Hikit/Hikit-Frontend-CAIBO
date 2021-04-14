@@ -2,7 +2,7 @@ import { SimpleChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { MapUtils } from '../map-view/MapUtils';
-import { TrailCoordinates } from '../trail-service.service';
+import { Trail, TrailCoordinates } from '../trail-service.service';
 import { UserCoordinates } from '../UserCoordinates';
 
 @Component({
@@ -12,7 +12,8 @@ import { UserCoordinates } from '../UserCoordinates';
 })
 export class MapPreviewComponent implements OnInit {
 
-  @Input() trailPreview: TrailCoordinates[];
+  @Input() otherTrails: Trail[];
+  @Input() trailPreview: Trail;
   @Input() elementAt: UserCoordinates;
   @Input() index: string;
 
@@ -44,7 +45,8 @@ export class MapPreviewComponent implements OnInit {
       [44.498955, 11.327591],
       12
     );
-    if (this.trailPreview) { this.onPreview(this.trailPreview); }
+
+    if (this.trailPreview) { this.onPreview(this.trailPreview.coordinates); }
     if (this.elementAt) { this.onSelection(this.elementAt); }
   }
 
@@ -52,7 +54,7 @@ export class MapPreviewComponent implements OnInit {
     if (!this.isInitialized()) { return; }
     this.map.invalidateSize();
     for (const propName in changes) {
-      if (propName == "trailPreview") { if (this.trailPreview) { this.onPreview(this.trailPreview) } }
+      if (propName == "trailPreview") { if (this.trailPreview) { this.onPreview(this.trailPreview.coordinates) } }
       if (propName == "elementAt") { this.onSelection(this.elementAt) }
     }
   }

@@ -71,7 +71,7 @@ export class MapComponent implements OnInit {
   }
 
   loadPreviews(): void {
-    this.trailPreviewService.getPreviews().subscribe(previewResponse => { this.trailPreviewList = previewResponse.content; console.log(this.trailPreviewList) });
+    this.trailPreviewService.getPreviews(0, 10).subscribe(previewResponse => { this.trailPreviewList = previewResponse.content; console.log(this.trailPreviewList) });
   }
 
   loadTrail(code: string): void {

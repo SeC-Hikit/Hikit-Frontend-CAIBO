@@ -41,6 +41,8 @@ export class TrailService {
       );
   }
 
+  
+
   deleteByCode(code: string): Observable<TrailResponse> {
     return this.httpClient.delete<TrailResponse>(this.baseUrl + "/" + code)
       .pipe(

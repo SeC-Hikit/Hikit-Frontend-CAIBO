@@ -21,8 +21,9 @@ export class TrailPreviewService {
   constructor(private httpClient: HttpClient) { }
 
 
-  getPreviews(): Observable<TrailPreviewResponse> {
-    return this.httpClient.get<TrailPreviewResponse>(this.baseUrl)
+  getPreviews(skip: number, limit: number): Observable<TrailPreviewResponse> {
+    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    return this.httpClient.get<TrailPreviewResponse>(this.baseUrl, { params: params })
       .pipe(
         tap(_ => console.log(_)),
         catchError(this.handleError<TrailPreviewResponse>('get all previews', null))

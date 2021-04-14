@@ -41,7 +41,7 @@ export class AccessibilityAddComponent implements OnInit {
         "distanceFromTrailStart": new FormControl("", Validators.required)
       })
     });
-    this.trailPreviewService.getPreviews().subscribe(x => { this.onLoad(x) })
+    this.trailPreviewService.getPreviews(0, 10).subscribe(x => { this.onLoad(x) })
   }
 
   onLoad(x: TrailPreviewResponse) {

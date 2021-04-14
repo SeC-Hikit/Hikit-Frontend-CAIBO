@@ -139,7 +139,8 @@
           <label>Anteprima</label>
           <div class="form-group col-md-12 mb-12">
             <app-map-preview
-              [trailPreview]="trailRawResponse.content[0].coordinates"
+              [trailPreview]="trailRawResponse.content[0]"
+              [otherTrails]="[]"
               [index]="0"
             ></app-map-preview>
           </div>
@@ -345,7 +346,7 @@
           <app-location-entry
             *ngFor="let place of locations.controls; index as i"
             [inputForm]="place"
-            [trailCoordinates]="trailRawResponse.content[0].coordinates"
+            [trail]="trailRawResponse.content[0]"
             [i]="i"
             [isEditableLocation]="true"
           >
@@ -489,7 +490,7 @@
 
       <div class="form-row">
         <span class="form-group col-md-3 mb-2">
-          <button class="btn btn-primary mt-3" type="submit" disabled>
+          <button class="btn btn-primary mt-3" type="submit">
             Salva sentiero
           </button>
         </span>

@@ -96,7 +96,6 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
   }
 
   navigateToEdit(rawId: string) {
-    alert(rawId);
     this.router.navigate(['/admin/trail/raw/'+ rawId]);
   }
 

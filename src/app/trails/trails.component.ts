@@ -25,7 +25,7 @@ export class TrailsComponent implements OnInit {
   }
 
   getAllPreviews() {
-    this.trailPreviewService.getPreviews().subscribe(preview => { this.trailsResponse = preview.content; });
+    this.trailPreviewService.getPreviews(0, 10).subscribe(preview => { this.trailsResponse = preview.content; });
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {
