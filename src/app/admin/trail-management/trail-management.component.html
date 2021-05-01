@@ -1,4 +1,5 @@
 <div class="container my-4">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
   <div *ngIf="savedTrailCode">
     <div class="space-up alert alert-success" role="alert">
       Sentiero {{ savedTrailCode }} aggiunto

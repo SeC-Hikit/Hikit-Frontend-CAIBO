@@ -1,12 +1,26 @@
-import { ANALYZE_FOR_ENTRY_COMPONENTS, Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  ANALYZE_FOR_ENTRY_COMPONENTS,
+  Component,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import * as moment from "moment";
 import { Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
-import { GeoTrailService, Coordinates2D, GeoLine } from "src/app/geo-trail-service";
-import { ImportService, TrailImportRequest, TrailRaw, TrailRawResponse } from "src/app/import.service";
+import {
+  GeoTrailService,
+  Coordinates2D,
+  GeoLine,
+} from "src/app/geo-trail-service";
+import {
+  ImportService,
+  TrailImportRequest,
+  TrailRaw,
+  TrailRawResponse,
+} from "src/app/import.service";
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
 import { TrailRawService } from "src/app/trail-raw-service.service";
@@ -19,36 +33,30 @@ import { CrossingModalComponent } from "./crossing-modal/crossing-modal.componen
   styleUrls: ["./trail-upload-management.component.scss"],
 })
 export class TrailUploadManagementComponent implements OnInit, OnDestroy {
-
   trailRawResponse: TrailRawResponse;
   otherTrailResponse: TrailResponse;
   trailFormGroup: FormGroup;
 
-  isLoading: boolean;
+  isLoading = false;
   isError: boolean;
 
-  public closeResult: string;
+  closeResult: string;
 
   // Section completeness
-  public isCrossingSectionComplete: boolean;
-  public crossingText: string;
+  isCrossingSectionComplete = false;
+  crossingText = "Rileva Crocevia";
 
   private destroy$ = new Subject();
 
   constructor(
-    private importService: ImportService,
     private geoTrailService: GeoTrailService,
     private rawTrailService: TrailRawService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
-    this.isLoading = false;
-    this.isCrossingSectionComplete = false;
-
-    this.crossingText = "Rileva Crocevia";
-
     this.trailFormGroup = new FormGroup({
       code: new FormControl("", Validators.required),
       eta: new FormControl("", Validators.required),
@@ -60,7 +68,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
       startPos: FormUtils.getLocationFormGroup(),
       finalPos: FormUtils.getLocationFormGroup(),
       locations: new FormArray([]),
-      cyclo: FormUtils.getCylcloFormGroup()
+      cyclo: FormUtils.getCylcloFormGroup(),
     });
 
     const idFromPath: string = this.route.snapshot.paramMap.get("id");
@@ -68,17 +76,16 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   }
 
   loadRaw(idFromPath: string) {
-    this.rawTrailService.getById(idFromPath)
-      .subscribe((response) => {
-        if (response.content.length == 0) {
-          alert("No raw trail found with id " + idFromPath);
-          this.isError = true;
-          return;
-        }
-        this.trailRawResponse = response;
-        this.isLoading = true;
-        this.populateForm(this.trailRawResponse.content[0])
-      });
+    this.isLoading = true;
+    this.rawTrailService.getById(idFromPath).subscribe((response) => {
+      if (response.content.length == 0) {
+        alert("No raw trail found with id " + idFromPath);
+        this.isError = true;
+        return;
+      }
+      this.trailRawResponse = response;
+      this.populateForm(this.trailRawResponse.content[0]);
+    });
   }
 
   ngOnDestroy(): void {
@@ -96,41 +103,33 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   populateForm(tpm: TrailRaw) {
     this.trailFormGroup.controls["code"].setValue(tpm.name);
     this.trailFormGroup.controls["description"].setValue(tpm.description);
-    this.firstPos.controls["name"].setValue('');
-    this.firstPos.controls["latitude"].setValue(
-      tpm.startPos.latitude
-    );
-    this.firstPos.controls["longitude"].setValue(
-      tpm.startPos.longitude
-    );
-    this.firstPos.controls["altitude"].setValue(
-      tpm.startPos.altitude
-    );
+    this.firstPos.controls["name"].setValue("");
+    this.firstPos.controls["latitude"].setValue(tpm.startPos.latitude);
+    this.firstPos.controls["longitude"].setValue(tpm.startPos.longitude);
+    this.firstPos.controls["altitude"].setValue(tpm.startPos.altitude);
     this.firstPos.controls["distanceFromTrailStart"].setValue(
       tpm.startPos.distanceFromTrailStart
     );
-    this.finalPos.controls["name"].setValue('');
-    this.finalPos.controls["latitude"].setValue(
-      tpm.finalPos.latitude
-    );
-    this.finalPos.controls["longitude"].setValue(
-      tpm.finalPos.longitude
-    );
-    this.finalPos.controls["altitude"].setValue(
-      tpm.finalPos.altitude
-    );
+    this.finalPos.controls["name"].setValue("");
+    this.finalPos.controls["latitude"].setValue(tpm.finalPos.latitude);
+    this.finalPos.controls["longitude"].setValue(tpm.finalPos.longitude);
+    this.finalPos.controls["altitude"].setValue(tpm.finalPos.altitude);
     this.finalPos.controls["distanceFromTrailStart"].setValue(
       tpm.finalPos.distanceFromTrailStart
     );
   }
 
-  validateAllFormFields(formGroup: FormGroup) {         //{1}
-    Object.keys(formGroup.controls).forEach(field => {  //{2}
-      const control = formGroup.get(field);             //{3}
-      if (control instanceof FormControl) {             //{4}
+  validateAllFormFields(formGroup: FormGroup) {
+    //{1}
+    Object.keys(formGroup.controls).forEach((field) => {
+      //{2}
+      const control = formGroup.get(field); //{3}
+      if (control instanceof FormControl) {
+        //{4}
         control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {        //{5}
-        this.validateAllFormFields(control);            //{6}
+      } else if (control instanceof FormGroup) {
+        //{5}
+        this.validateAllFormFields(control); //{6}
       }
     });
   }
@@ -139,7 +138,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     // console.log(this.trailFormGroup.getError());
     // this.validateAllFormFields(this.trailFormGroup);
     // console.log(this.trailFormGroup);
-    
+
     if (this.trailFormGroup.valid) {
       const trailFormValue = this.trailFormGroup.value;
       // const importTrail = this.getImportRequest(trailFormValue);
@@ -153,31 +152,38 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   onDetectCrossings() {
     let coords = this.trailRawResponse.content[0].coordinates;
-    let coords2d: Coordinates2D[] = coords.map(a => { return { latitude: a.latitude, longitude: a.longitude } })
-    this.geoTrailService.intersect({ coordinates: coords2d }).subscribe((response) => {
-      if (response.content.length == 0) {
-        this.isCrossingSectionComplete = true;
-        this.crossingText = "Nessun crocevia rilevato"
-        return;
-      }
-
-
+    let coords2d: Coordinates2D[] = coords.map((a) => {
+      return { latitude: a.latitude, longitude: a.longitude };
     });
+    this.geoTrailService
+      .intersect({ coordinates: coords2d })
+      .subscribe((response) => {
+        if (response.content.length == 0) {
+          this.isCrossingSectionComplete = true;
+          this.crossingText = "Nessun crocevia rilevato";
+          return;
+        }
+      });
   }
 
   open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.modalService
+      .open(content, { ariaLabelledBy: "modal-basic-title" })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
+      return "by pressing ESC";
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
+      return "by clicking on a backdrop";
     } else {
       return `with: ${reason}`;
     }
@@ -185,14 +191,15 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   onLoad(restResponse: RestResponse): void {
     if (restResponse.status === Status.OK) {
-      this.router.navigate(["/admin/trails", { success: this.trailRawResponse.content[0].name }]);
+      this.router.navigate([
+        "/admin/trails",
+        { success: this.trailRawResponse.content[0].name },
+      ]);
     }
   }
 
   private getImportRequest(trailFormValue: any) {
     // const importTrail = trailFormValue as TrailImportRequest;
-
-
     // importTrail.lastUpdate = moment(
     //   trailFormValue.lastUpdate.year +
     //     "-" +
@@ -202,8 +209,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     // ).toDate().toDateString();
     // let tagsStartPos = trailFormValue.startPos.tags as string;
     // let tagsFinalPos = trailFormValue.finalPos.tags as string;
-
-    
     // // IMPORT ALL LOCATIONS
     // // for (var i = 0; i < trailFormValue.locations.length; i++) {
     // //   let temp = trailFormValue.locations[i];
@@ -216,11 +221,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     // //     temp.distanceFromTrailStart
     // //   );
     // // }
-    
-
-
-
-
     // importTrail.startLocation.tags =
     //   tagsStartPos == null ? [] : tagsStartPos.split(",");
     // importTrail.startPos.coordinates = this.previewCoords[0];
@@ -253,7 +253,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   get wayForward() {
     return this.cyclo.controls["wayForward"] as FormGroup;
   }
-  
+
   get wayBack() {
     return this.cyclo.controls["wayBack"] as FormGroup;
   }
@@ -261,7 +261,4 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   get cyclo_classification() {
     return this.cyclo["classification"] as FormControl;
   }
-
 }
-
-

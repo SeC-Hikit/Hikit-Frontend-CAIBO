@@ -1,4 +1,5 @@
 <div class="container my-4">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
   <div class="table-wrapper space-up">
     <h1>Aggiunta sentiero</h1>
     <div *ngIf="!isLoading" class="trail-upload-management__container-button">

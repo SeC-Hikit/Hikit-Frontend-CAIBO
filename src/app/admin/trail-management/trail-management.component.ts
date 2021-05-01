@@ -1,34 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TrailRaw } from 'src/app/import.service';
-import { Status } from 'src/app/Status';
-import { TrailPreview, TrailPreviewService } from 'src/app/trail-preview-service.service';
-import { TrailRawService } from 'src/app/trail-raw-service.service';
-import { TrailCoordinates, TrailService } from 'src/app/trail-service.service';
-import { DateUtils } from 'src/app/utils/DateUtils';
+import { Component, OnInit } from "@angular/core";
+import { Status } from "src/app/Status";
+import {
+  TrailPreview,
+  TrailPreviewService,
+} from "src/app/trail-preview-service.service";
+import { TrailCoordinates, TrailService } from "src/app/trail-service.service";
 @Component({
-  selector: 'app-trail-management',
-  templateUrl: './trail-management.component.html',
-  styleUrls: ['./trail-management.component.scss']
+  selector: "app-trail-management",
+  templateUrl: "./trail-management.component.html",
+  styleUrls: ["./trail-management.component.scss"],
 })
 export class TrailManagementComponent implements OnInit {
+  entryPerPage = 10;
+  page = 1;
+  isLoading = false;
 
-  public entryPerPage: number = 10;
-  public page: number = 1;
+  selectedTrail: TrailPreview;
+  selectedTrailCoords: TrailCoordinates[];
+  trailPreviewList: TrailPreview[];
 
-  public selectedTrail: TrailPreview
-  public selectedTrailCoords: TrailCoordinates[];
-  public trailPreviewList: TrailPreview[]
-
-  public savedTrailCode: string;
-
-
+  savedTrailCode: string;
 
   constructor(
     private trailPreviewService: TrailPreviewService,
-    private trailService: TrailService,
-    private trailRawService: TrailRawService,
-    private route: ActivatedRoute) { }
+    private trailService: TrailService
+  ) {}
 
   ngOnInit(): void {
     this.getAllPreviews();
@@ -39,30 +35,45 @@ export class TrailManagementComponent implements OnInit {
   }
 
   getAllPreviews() {
-    this.trailPreviewService.getPreviews(0, 10).subscribe(preview => { this.trailPreviewList = preview?.content;  } );
+    this.isLoading = true;
+    this.trailPreviewService.getPreviews(0, 10).subscribe((preview) => {
+      this.isLoading = false;
+      this.trailPreviewList = preview?.content;
+    });
   }
-  
 
-  onFileSave(codeTrailSaved : string) {
+  onFileSave(codeTrailSaved: string) {
     this.savedTrailCode = codeTrailSaved;
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {
-    this.trailService.getTrailByCode(selectedTrailPreview.code).subscribe(trail => {
-      this.selectedTrail = trail.content[0];
-      this.selectedTrailCoords = trail.content[0].coordinates;
-    })
+    this.trailService
+      .getTrailByCode(selectedTrailPreview.code)
+      .subscribe((trail) => {
+        this.selectedTrail = trail.content[0];
+        this.selectedTrailCoords = trail.content[0].coordinates;
+      });
   }
 
   onDelete(selectedTrailPreview: TrailPreview) {
-    let isUserCancelling = confirm("Sei sicuro di voler cancellare il sentiero '" + selectedTrailPreview.code + "'?");
-    if(isUserCancelling) {
-      this.trailService.deleteByCode(selectedTrailPreview.code).subscribe(r=> { if(r.status == Status.OK){ this.onDeleteSuccess(selectedTrailPreview)}});
+    let isUserCancelling = confirm(
+      "Sei sicuro di voler cancellare il sentiero '" +
+        selectedTrailPreview.code +
+        "'?"
+    );
+    if (isUserCancelling) {
+      this.trailService
+        .deleteByCode(selectedTrailPreview.code)
+        .subscribe((r) => {
+          if (r.status == Status.OK) {
+            this.onDeleteSuccess(selectedTrailPreview);
+          }
+        });
     }
   }
 
   onDeleteSuccess(selectedTrailPreview: TrailPreview) {
     let i = this.trailPreviewList.indexOf(selectedTrailPreview);
-    this.trailPreviewList.splice(i,1);
+    this.trailPreviewList.splice(i, 1);
   }
 }
