@@ -9,7 +9,7 @@ import { components } from 'src/binding/Binding';
 export type AccessibilityNotificationResponse = components["schemas"]["AccessibilityResponse"]
 export type AccessibilityNotificationResolution = components["schemas"]["AccessibilityNotificationResolutionDto"]
 export type AccessibilityNotification = components["schemas"]["AccessibilityNotificationDto"]
-export type AccessibilityNotificationCreation = components["schemas"]["AccessibilityNotificationCreationDto"]
+export type AccessibilityNotificationCreation = components["schemas"]["AccessibilityNotificationDto"]
 
 @Injectable({
   providedIn: 'root'

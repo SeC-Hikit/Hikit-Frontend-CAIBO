@@ -8,7 +8,7 @@ import { RestResponse } from './RestResponse';
 
 export type Maintenance = components["schemas"]["MaintenanceDto"]
 export type MaintenanceResponse = components["schemas"]["MaintenanceResponse"]
-export type MaintenanceCreation = components["schemas"]["MaintenanceCreationDto"]
+export type MaintenanceCreation = components["schemas"]["MaintenanceDto"]
 
 @Injectable({
   providedIn: 'root'

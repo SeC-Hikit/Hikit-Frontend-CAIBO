@@ -4,69 +4,74 @@
  */
 
 export interface paths {
-  "/trail/save": {
+  "/admin/trail/update": {
+    put: operations["updateTrail"];
+  };
+  "/admin/trail/save": {
     put: operations["importTrail"];
   };
-  "/poi": {
-    get: operations["get_2"];
-    put: operations["upsertPoi"];
-  };
-  "/poi/media/{id}": {
-    put: operations["addMediaToPoi"];
-    delete: operations["removeMediaFromPoi"];
-  };
-  "/place": {
-    get: operations["get_4"];
+  "/admin/poi": {
     put: operations["create"];
     post: operations["update"];
   };
-  "/place/media/{id}": {
+  "/admin/place": {
+    put: operations["create_1"];
+    post: operations["update_1"];
+  };
+  "/admin/place/media/{id}": {
     put: operations["addMedia"];
     post: operations["deleteMedia"];
   };
-  "/maintenance": {
-    put: operations["create_1"];
+  "/admin/maintenance": {
+    put: operations["create_2"];
   };
-  "/accessibility": {
-    put: operations["createAccessibilityNotification"];
-  };
-  "/trail": {
-    get: operations["get"];
-    post: operations["updateTrail"];
-  };
-  "/trail/place/{id}": {
-    get: operations["getByPlaceId"];
-    post: operations["addPlaceToTrail"];
-    delete: operations["removePlaceFromTrail"];
-  };
-  "/trail/media/{id}": {
-    post: operations["addMediaToTrail"];
-    delete: operations["removeMediaFromTrail"];
-  };
-  "/trail/geolocate": {
-    post: operations["geoLocateTrail"];
+  "/admin/accessibility": {
+    put: operations["create_3"];
   };
   "/place/geolocate": {
     post: operations["geolocatePlace"];
   };
-  "/media": {
-    post: operations["upload"];
-  };
-  "/import": {
-    post: operations["readGpxFile"];
-  };
-  "/import/bulk": {
-    post: operations["readBulkGpxFile"];
+  "/geo-trail/locate": {
+    post: operations["geoLocateTrail"];
   };
   "/geo-trail/intersect": {
     post: operations["findTrailIntersection"];
   };
-  "/accessibility/resolve": {
+  "/admin/trail/status": {
+    post: operations["updateTrailStatus"];
+  };
+  "/admin/trail/place/{id}": {
+    post: operations["addPlaceToTrail"];
+    delete: operations["removePlaceFromTrail"];
+  };
+  "/admin/trail/media/{id}": {
+    post: operations["addMediaToTrail"];
+    delete: operations["removeMediaFromTrail"];
+  };
+  "/admin/poi/media/{id}": {
+    post: operations["addMediaToPoi"];
+    delete: operations["removeMediaFromPoi"];
+  };
+  "/admin/media": {
+    post: operations["upload"];
+  };
+  "/admin/import": {
+    post: operations["importGpx"];
+  };
+  "/admin/import/bulk": {
+    post: operations["importMassiveGpx"];
+  };
+  "/admin/accessibility/resolve": {
     post: operations["resolveNotification"];
+  };
+  "/trail": {
+    get: operations["get"];
   };
   "/trail/{id}": {
     get: operations["getById"];
-    delete: operations["deleteById"];
+  };
+  "/trail/place/{id}": {
+    get: operations["getByPlaceId"];
   };
   "/trail/count": {
     get: operations["getCount"];
@@ -76,7 +81,6 @@ export interface paths {
   };
   "/raw/{id}": {
     get: operations["getById_1"];
-    delete: operations["deleteById_1"];
   };
   "/preview": {
     get: operations["getTrailPreviews"];
@@ -87,9 +91,11 @@ export interface paths {
   "/preview/raw": {
     get: operations["getRawTrailPreviews"];
   };
+  "/poi": {
+    get: operations["get_2"];
+  };
   "/poi/{id}": {
     get: operations["get_3"];
-    delete: operations["deletePoi"];
   };
   "/poi/type/{type}": {
     get: operations["getByMacro"];
@@ -103,16 +109,17 @@ export interface paths {
   "/poi/code/{code}": {
     get: operations["getByTrail"];
   };
+  "/place": {
+    get: operations["get_4"];
+  };
   "/place/{id}": {
     get: operations["get_5"];
-    delete: operations["delete"];
   };
   "/place/name/{name}": {
     get: operations["getLikeNameOrTags"];
   };
   "/media/{id}": {
     get: operations["getById_2"];
-    delete: operations["deleteById_2"];
   };
   "/maintenance/past": {
     get: operations["getPastMaintenance"];
@@ -150,61 +157,35 @@ export interface paths {
   "/accessibility/count": {
     get: operations["getCount_3"];
   };
-  "/maintenance/{id}": {
+  "/admin/trail/{id}": {
+    delete: operations["deleteById"];
+  };
+  "/admin/raw/{id}": {
+    delete: operations["deleteById_1"];
+  };
+  "/admin/poi/{id}": {
+    delete: operations["deletePoi"];
+  };
+  "/admin/place/{id}": {
+    delete: operations["delete"];
+  };
+  "/admin/media/{id}": {
+    delete: operations["deleteById_2"];
+  };
+  "/admin/maintenance/{id}": {
     delete: operations["deleteMaintenance"];
   };
-  "/accessibility/{id}": {
+  "/admin/accessibility/{id}": {
     delete: operations["deleteAccessibilityNotification"];
   };
 }
 
 export interface components {
   schemas: {
-    FileDetailsDto: {
-      uploadedOn?: string;
-      uploadedBy?: string;
-      filename?: string;
-      originalFilename?: string;
-    };
-    KeyValueDto: {
-      key?: string;
-      value?: string;
-    };
-    LinkedMediaDto: {
-      id?: string;
-      description?: string;
-      keyVal?: components["schemas"]["KeyValueDto"][];
-    };
-    PlaceRefDto: {
-      name?: string;
-      trailCoordinates?: components["schemas"]["TrailCoordinatesDto"];
-      placeId?: string;
-    };
-    TrailCoordinatesDto: {
-      distanceFromTrailStart?: number;
-      latitude?: number;
+    CoordinatesDto: {
       longitude?: number;
+      latitude?: number;
       altitude?: number;
-    };
-    TrailImportDto: {
-      code?: string;
-      name?: string;
-      description?: string;
-      officialEta?: number;
-      startLocation?: components["schemas"]["PlaceRefDto"];
-      endLocation?: components["schemas"]["PlaceRefDto"];
-      locations?: components["schemas"]["PlaceRefDto"][];
-      classification?: "T" | "E" | "EE" | "EEA" | "UNCLASSIFIED";
-      country?: string;
-      coordinates?: components["schemas"]["TrailCoordinatesDto"][];
-      maintainingSection?: string;
-      territorialDivision?: string;
-      linkedMediaDtos?: components["schemas"]["LinkedMediaDto"][];
-      createdOn?: string;
-      lastUpdate?: string;
-      fileDetailsDto?: components["schemas"]["FileDetailsDto"];
-      trailStatus?: "RAW" | "DRAFT" | "PUBLIC";
-      variant?: boolean;
     };
     CycloDetailsDto: {
       cycloClassification?:
@@ -228,6 +209,28 @@ export interface components {
       feasible?: boolean;
       portage?: number;
     };
+    FileDetailsDto: {
+      uploadedOn?: string;
+      uploadedBy?: string;
+      onInstance?: string;
+      realm?: string;
+      filename?: string;
+      originalFilename?: string;
+    };
+    KeyValueDto: {
+      key?: string;
+      value?: string;
+    };
+    LinkedMediaDto: {
+      id?: string;
+      description?: string;
+      keyVal?: components["schemas"]["KeyValueDto"][];
+    };
+    PlaceRefDto: {
+      name?: string;
+      coordinates?: components["schemas"]["CoordinatesDto"];
+      placeId?: string;
+    };
     StatsTrailMetadataDto: {
       totalRise?: number;
       totalFall?: number;
@@ -235,6 +238,12 @@ export interface components {
       length?: number;
       highestPlace?: number;
       lowestPlace?: number;
+    };
+    TrailCoordinatesDto: {
+      distanceFromTrailStart?: number;
+      latitude?: number;
+      longitude?: number;
+      altitude?: number;
     };
     TrailDto: {
       id?: string;
@@ -252,10 +261,9 @@ export interface components {
       coordinates?: components["schemas"]["TrailCoordinatesDto"][];
       mediaList?: components["schemas"]["LinkedMediaDto"][];
       lastUpdate?: string;
-      createdOn?: string;
       territorialDivision?: string;
       maintainingSection?: string;
-      status?: "RAW" | "DRAFT" | "PUBLIC";
+      status?: "DRAFT" | "PUBLIC";
       fileDetails?: components["schemas"]["FileDetailsDto"];
       cycloDetails?: components["schemas"]["CycloDetailsDto"];
     };
@@ -268,10 +276,24 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["TrailDto"][];
     };
-    CoordinatesDto: {
-      longitude?: number;
-      latitude?: number;
-      altitude?: number;
+    TrailImportDto: {
+      code?: string;
+      name?: string;
+      description?: string;
+      officialEta?: number;
+      startLocation?: components["schemas"]["PlaceRefDto"];
+      endLocation?: components["schemas"]["PlaceRefDto"];
+      locations?: components["schemas"]["PlaceRefDto"][];
+      classification?: "T" | "E" | "EE" | "EEA" | "UNCLASSIFIED";
+      country?: string;
+      coordinates?: components["schemas"]["TrailCoordinatesDto"][];
+      maintainingSection?: string;
+      territorialDivision?: string;
+      linkedMediaDtos?: components["schemas"]["LinkedMediaDto"][];
+      lastUpdate?: string;
+      fileDetailsDto?: components["schemas"]["FileDetailsDto"];
+      trailStatus?: "DRAFT" | "PUBLIC";
+      variant?: boolean;
     };
     PoiDto: {
       id?: string;
@@ -287,6 +309,13 @@ export interface components {
       lastUpdatedOn?: string;
       externalResources?: string[];
       keyVal?: components["schemas"]["KeyValueDto"][];
+      recordDetails?: components["schemas"]["RecordDetailsDto"];
+    };
+    RecordDetailsDto: {
+      uploadedOn?: string;
+      uploadedBy?: string;
+      onInstance?: string;
+      realm?: string;
     };
     PoiResponse: {
       currentPage?: number;
@@ -305,6 +334,7 @@ export interface components {
       mediaIds?: string[];
       coordinates?: components["schemas"]["CoordinatesDto"][];
       crossingTrailIds?: string[];
+      recordDetails?: components["schemas"]["RecordDetailsDto"];
     };
     PlaceResponse: {
       currentPage?: number;
@@ -315,13 +345,6 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["PlaceDto"][];
     };
-    MaintenanceCreationDto: {
-      date?: string;
-      trailId?: string;
-      meetingPlace?: string;
-      description?: string;
-      contact?: string;
-    };
     MaintenanceDto: {
       id?: string;
       date?: string;
@@ -329,6 +352,7 @@ export interface components {
       meetingPlace?: string;
       description?: string;
       contact?: string;
+      recordDetails?: components["schemas"]["RecordDetailsDto"];
     };
     MaintenanceResponse: {
       currentPage?: number;
@@ -339,13 +363,6 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["MaintenanceDto"][];
     };
-    AccessibilityNotificationCreationDto: {
-      trailId?: string;
-      description?: string;
-      reportDate?: string;
-      coordinates?: components["schemas"]["CoordinatesDto"];
-      minor?: boolean;
-    };
     AccessibilityNotificationDto: {
       id?: string;
       description?: string;
@@ -355,6 +372,7 @@ export interface components {
       minor?: boolean;
       resolution?: string;
       coordinates?: components["schemas"]["CoordinatesDto"];
+      recordDetails?: components["schemas"]["RecordDetailsDto"];
     };
     AccessibilityResponse: {
       currentPage?: number;
@@ -365,6 +383,10 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["AccessibilityNotificationDto"][];
     };
+    PointGeolocationDto: {
+      coordinatesDto?: components["schemas"]["CoordinatesDto"];
+      distance?: number;
+    };
     Coordinates2D: {
       latitude?: number;
       longitude?: number;
@@ -372,16 +394,26 @@ export interface components {
     };
     RectangleDto: {
       bottomLeft?: components["schemas"]["Coordinates2D"];
-      topLeft?: components["schemas"]["Coordinates2D"];
       topRight?: components["schemas"]["Coordinates2D"];
-      bottomRight?: components["schemas"]["Coordinates2D"];
+    };
+    GeoLineDto: {
+      coordinates?: components["schemas"]["Coordinates2D"][];
+    };
+    TrailIntersectionDto: {
+      points?: components["schemas"]["CoordinatesDto"][];
+      trail?: components["schemas"]["TrailDto"];
+    };
+    TrailIntersectionResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["TrailIntersectionDto"][];
     };
     UnLinkeMediaRequestDto: {
       id?: string;
-    };
-    PointGeolocationDto: {
-      coordinatesDto?: components["schemas"]["CoordinatesDto"];
-      distance?: number;
     };
     MediaDto: {
       creationDate?: string;
@@ -391,6 +423,7 @@ export interface components {
       fileUrl?: string;
       mime?: string;
       fileSize?: number;
+      fileDetails?: components["schemas"]["FileDetailsDto"];
     };
     MediaResponse: {
       currentPage?: number;
@@ -419,22 +452,6 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["TrailRawDto"][];
     };
-    GeoLineDto: {
-      coordinates?: components["schemas"]["Coordinates2D"][];
-    };
-    TrailIntersectionDto: {
-      points?: components["schemas"]["CoordinatesDto"][];
-      trail?: components["schemas"]["TrailDto"];
-    };
-    TrailIntersectionResponse: {
-      currentPage?: number;
-      totalPages?: number;
-      size?: number;
-      totalCount?: number;
-      status?: "OK" | "ERROR";
-      messages?: string[];
-      content?: components["schemas"]["TrailIntersectionDto"][];
-    };
     AccessibilityNotificationResolutionDto: {
       id?: string;
       resolution?: string;
@@ -455,7 +472,7 @@ export interface components {
       startPos?: components["schemas"]["PlaceRefDto"];
       finalPos?: components["schemas"]["PlaceRefDto"];
       bikeData?: boolean;
-      trailStatus?: "RAW" | "DRAFT" | "PUBLIC";
+      trailStatus?: "DRAFT" | "PUBLIC";
       fileDetails?: components["schemas"]["FileDetailsDto"];
     };
     TrailPreviewResponse: {
@@ -475,6 +492,21 @@ export interface components {
 }
 
 export interface operations {
+  updateTrail: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TrailDto"];
+      };
+    };
+  };
   importTrail: {
     responses: {
       /** OK */
@@ -490,23 +522,7 @@ export interface operations {
       };
     };
   };
-  get_2: {
-    parameters: {
-      query: {
-        skip?: number;
-        limit?: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["PoiResponse"];
-        };
-      };
-    };
-  };
-  upsertPoi: {
+  create: {
     responses: {
       /** OK */
       200: {
@@ -521,12 +537,7 @@ export interface operations {
       };
     };
   };
-  addMediaToPoi: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
+  update: {
     responses: {
       /** OK */
       200: {
@@ -537,47 +548,11 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["LinkedMediaDto"];
+        "application/json": components["schemas"]["PoiDto"];
       };
     };
   };
-  removeMediaFromPoi: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["PoiResponse"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UnLinkeMediaRequestDto"];
-      };
-    };
-  };
-  get_4: {
-    parameters: {
-      query: {
-        skip?: number;
-        limit?: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["PlaceResponse"];
-        };
-      };
-    };
-  };
-  create: {
+  create_1: {
     responses: {
       /** OK */
       200: {
@@ -592,7 +567,7 @@ export interface operations {
       };
     };
   };
-  update: {
+  update_1: {
     responses: {
       /** OK */
       200: {
@@ -647,7 +622,7 @@ export interface operations {
       };
     };
   };
-  create_1: {
+  create_2: {
     responses: {
       /** OK */
       200: {
@@ -658,11 +633,11 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["MaintenanceCreationDto"];
+        "application/json": components["schemas"]["MaintenanceDto"];
       };
     };
   };
-  createAccessibilityNotification: {
+  create_3: {
     responses: {
       /** OK */
       200: {
@@ -674,19 +649,33 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AccessibilityNotificationCreationDto"];
-        "application/xml": components["schemas"]["AccessibilityNotificationCreationDto"];
+        "application/json": components["schemas"]["AccessibilityNotificationDto"];
+        "application/xml": components["schemas"]["AccessibilityNotificationDto"];
       };
     };
   };
-  get: {
+  geolocatePlace: {
     parameters: {
       query: {
         skip?: number;
         limit?: number;
-        light?: boolean;
       };
     };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PlaceResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PointGeolocationDto"];
+      };
+    };
+  };
+  geoLocateTrail: {
     responses: {
       /** OK */
       200: {
@@ -695,8 +684,34 @@ export interface operations {
         };
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RectangleDto"];
+      };
+    };
   };
-  updateTrail: {
+  findTrailIntersection: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailIntersectionResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GeoLineDto"];
+      };
+    };
+  };
+  updateTrailStatus: {
     responses: {
       /** OK */
       200: {
@@ -708,26 +723,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["TrailDto"];
-      };
-    };
-  };
-  getByPlaceId: {
-    parameters: {
-      path: {
-        id: string;
-      };
-      query: {
-        light?: boolean;
-        skip?: number;
-        limit?: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["TrailResponse"];
-        };
       };
     };
   };
@@ -811,39 +806,43 @@ export interface operations {
       };
     };
   };
-  geoLocateTrail: {
+  addMediaToPoi: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          "*/*": components["schemas"]["TrailResponse"];
+          "*/*": components["schemas"]["PoiResponse"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RectangleDto"];
+        "application/json": components["schemas"]["LinkedMediaDto"];
       };
     };
   };
-  geolocatePlace: {
+  removeMediaFromPoi: {
     parameters: {
-      query: {
-        skip?: number;
-        limit?: number;
+      path: {
+        id: string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PlaceResponse"];
+          "*/*": components["schemas"]["PoiResponse"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["PointGeolocationDto"];
+        "application/json": components["schemas"]["UnLinkeMediaRequestDto"];
       };
     };
   };
@@ -856,8 +855,15 @@ export interface operations {
         };
       };
     };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          file?: string;
+        };
+      };
+    };
   };
-  readGpxFile: {
+  importGpx: {
     responses: {
       /** OK */
       200: {
@@ -874,7 +880,7 @@ export interface operations {
       };
     };
   };
-  readBulkGpxFile: {
+  importMassiveGpx: {
     parameters: {
       query: {
         files: string[];
@@ -886,27 +892,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["TrailRawResponse"];
         };
-      };
-    };
-  };
-  findTrailIntersection: {
-    parameters: {
-      query: {
-        skip?: number;
-        limit?: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["TrailIntersectionResponse"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["GeoLineDto"];
       };
     };
   };
@@ -922,6 +907,24 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["AccessibilityNotificationResolutionDto"];
+      };
+    };
+  };
+  get: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
+        light?: boolean;
+        realm?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailResponse"];
+        };
       };
     };
   };
@@ -943,10 +946,15 @@ export interface operations {
       };
     };
   };
-  deleteById: {
+  getByPlaceId: {
     parameters: {
       path: {
         id: string;
+      };
+      query: {
+        light?: boolean;
+        skip?: number;
+        limit?: number;
       };
     };
     responses: {
@@ -999,26 +1007,12 @@ export interface operations {
       };
     };
   };
-  deleteById_1: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["TrailRawResponse"];
-        };
-      };
-    };
-  };
   getTrailPreviews: {
     parameters: {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1061,10 +1055,11 @@ export interface operations {
       };
     };
   };
-  get_3: {
+  get_2: {
     parameters: {
-      path: {
-        id: string;
+      query: {
+        skip?: number;
+        limit?: number;
       };
     };
     responses: {
@@ -1076,7 +1071,7 @@ export interface operations {
       };
     };
   };
-  deletePoi: {
+  get_3: {
     parameters: {
       path: {
         id: string;
@@ -1158,10 +1153,11 @@ export interface operations {
       };
     };
   };
-  get_5: {
+  get_4: {
     parameters: {
-      path: {
-        id: string;
+      query: {
+        skip?: number;
+        limit?: number;
       };
     };
     responses: {
@@ -1173,7 +1169,7 @@ export interface operations {
       };
     };
   };
-  delete: {
+  get_5: {
     parameters: {
       path: {
         id: string;
@@ -1208,21 +1204,6 @@ export interface operations {
     };
   };
   getById_2: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["MediaResponse"];
-        };
-      };
-    };
-  };
-  deleteById_2: {
     parameters: {
       path: {
         id: string;
@@ -1404,6 +1385,81 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["CountResponse"];
+        };
+      };
+    };
+  };
+  deleteById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailResponse"];
+        };
+      };
+    };
+  };
+  deleteById_1: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailRawResponse"];
+        };
+      };
+    };
+  };
+  deletePoi: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PoiResponse"];
+        };
+      };
+    };
+  };
+  delete: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PlaceResponse"];
+        };
+      };
+    };
+  };
+  deleteById_2: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["MediaResponse"];
         };
       };
     };
