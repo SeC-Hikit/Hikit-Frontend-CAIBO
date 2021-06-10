@@ -15,13 +15,13 @@
         <div> {{ selectedTrail.classification }}</div>
         <h4>Località</h4>
         <div>
-            <div (click)="moveTo(selectedTrail.startPos.coordinates)" class="clickable"><span class="arrow down"></span>{{
-                selectedTrail.startPos.name }}</div>
+            <div (click)="moveTo(selectedTrail.startLocation.coordinates)" class="clickable"><span class="arrow down"></span>{{
+                selectedTrail.startLocation.name }}</div>
             <div *ngFor="let location of selectedTrail.locations">
                 <span class="clickable" (click)="moveTo(location.coordinates)"><span class="arrow down"></span>{{ location.name }}</span>
             </div>
-            <div (click)="moveTo(selectedTrail.finalPos.coordinates)" class="clickable"><span class="arrow down"></span>{{
-                selectedTrail.finalPos.name }}</div>
+            <div (click)="moveTo(selectedTrail.endLocation.coordinates)" class="clickable"><span class="arrow down"></span>{{
+                selectedTrail.endLocation.name }}</div>
         </div>
         <h4>Descrizione</h4>
         <div [innerHTML]="selectedTrail.description"></div>
@@ -36,7 +36,7 @@
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
                             </svg>
                             <li *ngFor="let notification of trailNotifications" class="clickable"
-                                (click)="moveTo(notification.position)">{{notification.description}}</li>
+                                (click)="moveTo(notification.coordinates)">{{notification.description}}</li>
                         </ul>
                     </div>
                 </div>
@@ -53,12 +53,12 @@
         <h4>Ultima manuntenzione</h4>
         <div *ngIf="lastMaintenance">Eseguita il {{formatDate(lastMaintenance.date)}}</div>
         <h4>Lunghezza</h4>
-        <div>{{ selectedTrail.statsMetadata.length }}m</div>
+        <div>{{ selectedTrail.statsTrailMetadata.length }}m</div>
         <h4>Tempo di percorrenza</h4>
-        <div>{{ selectedTrail.statsMetadata.eta | eta }} <span>(circa {{selectedTrail.statsMetadata.eta}} minuti)</span></div>
+        <div>{{ selectedTrail.statsTrailMetadata.eta | eta }} <span>(circa {{selectedTrail.statsTrailMetadata.eta}} minuti)</span></div>
         <h4>Dislivello</h4>
-        <div>Positivo: {{ selectedTrail.statsMetadata.totalRise }}m</div>
-        <div>Negativo: {{ selectedTrail.statsMetadata.totalFall }}m</div>
+        <div>Positivo: {{ selectedTrail.statsTrailMetadata.totalRise }}m</div>
+        <div>Negativo: {{ selectedTrail.statsTrailMetadata.totalFall }}m</div>
         <h4>Altro</h4>
         <div class="row  clickable">
             <div class="col-md-2 space-up">

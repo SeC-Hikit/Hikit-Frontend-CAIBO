@@ -1,6 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 import { AppComponent } from "./app.component";
 import { MenuComponent } from "./menu/menu.component";
@@ -40,6 +41,23 @@ import { UploadButtonManagementComponent } from "./admin/upload-button-managemen
 import { TrailRawManagementComponent } from './admin/trail-raw-management/trail-raw-management.component';
 import { CrossingModalComponent } from './admin/trail-management/trail-upload-management/crossing-modal/crossing-modal.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:10010/auth',
+        realm: 'springBootKeycloack',
+        clientId: 'your-client-id',
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html',
+      },
+    });
+}
+
 
 @NgModule({
   declarations: [
