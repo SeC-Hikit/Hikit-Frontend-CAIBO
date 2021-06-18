@@ -1,3 +1,5 @@
+@import "../style/const.scss";
+
 .it-header-slim-wrapper .it-header-slim-wrapper-content a.navbar-brand,
 .it-header-slim-wrapper
   .it-header-slim-wrapper-content
@@ -23,5 +25,9 @@
 }
 
 .it-header-slim-wrapper { 
-  background-color: white;
+  background-color: transparent;
+  width: 1184px;
+  margin: 0 auto;
+  color: $primary-bg-color;
 }
+

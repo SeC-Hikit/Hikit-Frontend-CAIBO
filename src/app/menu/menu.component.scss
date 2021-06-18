@@ -1,3 +1,5 @@
+@import "../style/const.scss";
+
 a {
   color: white;
 }
@@ -13,12 +15,15 @@ a {
 
 .it-header-center-wrapper {
   height: 90px;
+  width: 1184px;
+  margin: 0 auto;
 }
 
 .active {
-    border-bottom: 2px solid white;
+  border-bottom: 2px solid white;
 }
 
-.it-header-center-wrapper, .it-header-navbar-wrapper {
-  background-color: #d04341;
+.it-header-center-wrapper,
+.it-header-navbar-wrapper {
+  background-color: $primary-bg-color;
 }

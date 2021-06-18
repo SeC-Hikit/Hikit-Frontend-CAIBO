@@ -2,6 +2,7 @@
 @import "~quill/dist/quill.bubble.css";
 @import "~quill/dist/quill.snow.css";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "/src/app/style/const.scss";
 
 /* You can add global styles to this file, and also import other style files */
 .white {
@@ -25,6 +26,27 @@
 
 .space-up {
   margin-top: 2%;
+}
+
+* {
+  font-family: "Fira Sans", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+thead, th, li, .nav-item, button, .upload-button-management__label {
+  font-family: "Bebas Neue", cursive;
+}
+
+.nav-item {
+  font-size: $menu-primary-font-size;
+}
+
+.upload-button-management__label{
+  background-color: $primary-bg-color;
 }
 
 h1 {
