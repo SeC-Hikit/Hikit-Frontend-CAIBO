@@ -1,11 +1,28 @@
+@import "../style/const.scss";
+
 .relative-map {
     position: relative;
     overflow: hidden;
     width: 100%;
 }
 
+.control { 
+    position: absolute;
+    z-index: 10;
+    right: 1%;
+    top: 4%;
+}
+
+.features {
+    // width: 100%;
+
+
+}
+
 #map-full-container {
     width: 100%;
+    margin: 20px 0 0 0;
+    border-top: 3px solid $secondary-bg-color;
 }
 
 #absolute-wrapper {
