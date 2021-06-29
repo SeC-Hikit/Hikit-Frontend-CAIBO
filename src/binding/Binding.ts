@@ -390,7 +390,6 @@ export interface components {
     Coordinates2D: {
       latitude?: number;
       longitude?: number;
-      asList?: number[];
     };
     RectangleDto: {
       bottomLeft?: components["schemas"]["Coordinates2D"];
@@ -676,6 +675,11 @@ export interface operations {
     };
   };
   geoLocateTrail: {
+    parameters: {
+      query: {
+        level: "LOW" | "MEDIUM" | "HIGH" | "FULL";
+      };
+    };
     responses: {
       /** OK */
       200: {
@@ -915,8 +919,8 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
-        light?: boolean;
         realm?: string;
+        level?: "LOW" | "MEDIUM" | "HIGH" | "FULL";
       };
     };
     responses: {
@@ -934,7 +938,7 @@ export interface operations {
         id: string;
       };
       query: {
-        light?: boolean;
+        level?: "LOW" | "MEDIUM" | "HIGH" | "FULL";
       };
     };
     responses: {
@@ -952,7 +956,7 @@ export interface operations {
         id: string;
       };
       query: {
-        light?: boolean;
+        level?: string;
         skip?: number;
         limit?: number;
       };
