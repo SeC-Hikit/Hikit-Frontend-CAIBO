@@ -15,6 +15,7 @@ import { AccessibilityManagementComponent } from "./admin/accessibility-manageme
 import { AccessibilityAddComponent } from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
 import { AdminComponent } from "./admin/admin.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
+import { AuthGuard } from "./guard/auth.guard";
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -31,12 +32,13 @@ const routes: Routes = [
       {
         path: "",
         component: AdminComponent,
+        canActivate: [AuthGuard]
       },
-      {
-        path: "trail", children: [
-          { path: "raw/:id", component: TrailUploadManagementComponent },
-        ]
-      }
+      // {
+      //   path: "trail", children: [
+      //     { path: "raw/:id", component: TrailUploadManagementComponent },
+      //   ]
+      // }
     ]
   },
   { path: "404", component: NotFoundComponent },
