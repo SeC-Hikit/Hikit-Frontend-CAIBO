@@ -14,7 +14,7 @@ export type TrailRaw = components['schemas']['TrailRawDto'];
   providedIn: "root",
 })
 export class ImportService {
-  baseUrl = "api/import";
+  baseUrl = "api/admin/import";
   httpOptions = {
     headers: new HttpHeaders({ "Content-Type": "application/json" }),
   };

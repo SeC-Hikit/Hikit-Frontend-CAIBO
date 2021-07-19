@@ -5,7 +5,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 import { AppComponent } from "./app.component";
 import { MenuComponent } from "./menu/menu.component";
-import { MenuSlimComponent } from "./menu-slim/menu-slim.component";
+import { MenuSlimComponent } from "./menu/menu-slim/menu-slim.component";
 import { HomeComponent } from "./home/home.component";
 import { TrailsComponent } from "./trails/trails.component";
 import { AccessibilityComponent } from "./accessibility/accessibility.component";
@@ -42,11 +42,13 @@ import { TrailRawManagementComponent } from './admin/trail-raw-management/trail-
 import { CrossingModalComponent } from './admin/trail-management/trail-upload-management/crossing-modal/crossing-modal.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { initializeKeycloak } from "src/init/keycloak-init.factory";
+import { MenuAdminComponent } from "./menu/menu-admin/menu-admin.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
+    MenuAdminComponent,
     MenuSlimComponent,
     HomeComponent,
     TrailsComponent,

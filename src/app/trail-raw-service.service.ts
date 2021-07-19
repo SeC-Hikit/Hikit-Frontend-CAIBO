@@ -10,6 +10,7 @@ import { TrailRawResponse } from './import.service';
 export class TrailRawService {
 
   baseUrl = "api/raw";
+  baseAdminUrl = "api/admin/raw";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -34,7 +35,7 @@ export class TrailRawService {
   }
 
   deleteById(id: string): Observable<TrailRawResponse> {
-    return this.httpClient.delete(`${this.baseUrl}/${id}`)
+    return this.httpClient.delete(`${this.baseAdminUrl}/${id}`)
     .pipe(
       catchError(this.handleError('', null))
     )

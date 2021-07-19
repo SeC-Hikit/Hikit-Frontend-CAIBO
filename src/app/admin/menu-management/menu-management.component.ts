@@ -42,10 +42,6 @@ export class MenuManagementComponent implements OnInit {
     {
       code: "tracks",
       label: "Tracce",
-    },
-    {
-      code: "maintenance",
-      label: "Calendario manuntenzioni",
     }
   ];
 
@@ -57,5 +53,6 @@ export class MenuManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedTab = this.tabType.TRAILS;
+    
   }
 }

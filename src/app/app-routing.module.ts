@@ -28,17 +28,30 @@ const routes: Routes = [
   { path: "accessibility", component: AccessibilityComponent },
   { path: "maintenance", component: MaintenanceComponent },
   {
-    path: "admin", children: [
+    path: "admin", canActivate: [AuthGuard], children: [
       {
-        path: "",
+        path: "dashboard",
         component: AdminComponent,
         canActivate: [AuthGuard]
       },
-      // {
-      //   path: "trail", children: [
-      //     { path: "raw/:id", component: TrailUploadManagementComponent },
-      //   ]
-      // }
+      {
+        path: "trail-management",
+        component: AdminComponent
+      },
+      {
+        path: "accessibility-management",
+        component: AccessibilityManagementComponent
+      },
+      {
+        path: "maintenance-management",
+        component: MaintenanceManagementComponent
+      },
+      {
+        path: "trail",
+        children: [
+          { path: "raw/:id", component: TrailUploadManagementComponent },
+        ]
+      }
     ]
   },
   { path: "404", component: NotFoundComponent },

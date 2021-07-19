@@ -1,0 +1,26 @@
+@import "../../style/const.scss";
+
+.it-nav-wrapper-admin .it-header-center-wrapper {
+  background: $primary-text-color;
+  color: white;
+  height: $header-height;
+}
+
+.it-header-navbar-wrapper {
+  background-color: $primary-text-color;
+  padding: 0;
+}
+
+.it-header-navbar-wrapper a {
+  color: white;
+  padding: 0 9px 0 9px; 
+  font-size: $menu-secondary-font-size;
+}
+
+.nav-link{
+  &.active {
+    text-decoration: underline;
+  }
+}
+
+

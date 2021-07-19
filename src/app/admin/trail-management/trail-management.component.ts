@@ -27,8 +27,8 @@ export class TrailManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAllPreviews();
 
+    this.getAllPreviews();
     // TODO use toast service
     // let codeTrailSaved = this.route.snapshot.paramMap.get("success") as string;
     // if(codeTrailSaved) { this.onFileSave(codeTrailSaved); }

@@ -46,8 +46,14 @@ thead, th, li, .nav-item, button, .upload-button-management__label {
   font-size: $menu-primary-font-size;
 }
 
-.upload-button-management__label{
-  background-color: $primary-bg-color;
+.upload-button-management__label, button, input[type="submit"], 
+.upload[type="file"] + label{
+  background: $action-btn-color !important;
+  border-radius: 0px;
+}
+
+.upload-button-management__label span, .upload[type="file"] + label span {
+  color: $primary-font !important;
 }
 
 h1 {
