@@ -4,6 +4,11 @@
   line-height: 1.2;
   width: 100%;
 
+  .nav {
+    overflow: hidden;
+    float: right;
+  }
+
   &__tab-icon {
     margin-right: 5px;
   }
@@ -35,4 +40,8 @@
     cursor: pointer;
   }
 
+}
+
+.nav-tabs .nav-link{
+  font-weight: 100;
 }

@@ -1,9 +1,12 @@
 @import "../../style/const.scss";
 
+.it-header-center-wrapper{
+  max-height: 60px;
+}
+
 .it-nav-wrapper-admin .it-header-center-wrapper {
   background: $primary-text-color;
   color: white;
-  height: $header-height;
 }
 
 .it-header-navbar-wrapper {
@@ -13,14 +16,47 @@
 
 .it-header-navbar-wrapper a {
   color: white;
-  padding: 0 9px 0 9px; 
+  padding: 0 9px 0 9px;
   font-size: $menu-secondary-font-size;
 }
 
-.nav-link{
+.trail-management-main {
+  .sub-menu {
+    display: none;
+    float: left;
+    width: 100%;
+    .nav-link {
+      float:left;
+    }
+  }
+}
+
+.nav-link {
   &.active {
     text-decoration: underline;
   }
 }
 
 
+
+.trail-management-main {
+  a {
+    &.active {
+      text-decoration: underline;
+    }
+  }
+
+  &.active {
+    .sub-menu {
+      display: inline;
+    }
+  }
+}
+
+.sub-menu {
+  a {
+    &.active {
+      opacity: 1;
+    }
+  }
+}

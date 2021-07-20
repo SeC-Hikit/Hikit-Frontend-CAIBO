@@ -1,47 +1,76 @@
-
 <div *ngIf="isVisible == true" class="it-nav-wrapper-admin" id="header-wrapper">
-    <div class="it-header-center-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="it-header-center-content-wrapper">
-                        <div class="it-brand-wrapper">
+  <div class="it-header-center-wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="it-header-center-content-wrapper">
+            <div class="it-brand-wrapper"></div>
+            <div class="it-right-zone">
+              <div class="it-header-navbar-wrapper">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-12">
+                      <nav class="navbar navbar-expand-lg has-megamenu">
+                        <div class="navbar-collapsable" id="nav10">
+                          <div class="overlay"></div>
+                          <div class="close-div sr-only">
+                            <button class="btn close-menu" type="button">
+                              <span class="it-close"></span>close
+                            </button>
+                          </div>
+                          <div class="menu-wrapper">
+                            <ul class="navbar-nav">
+                              <span class="trail-management-main" routerLinkActive="active">
+                                <a
+                                  routerLink="/admin/trail-management"
+                                  routerLinkActive="active"
+                                  class="nav-item nav-link"
+                                >
+                                Sentieristica
+                                </a>
+                                <span class="sub-menu">
+                                  <a
+                                    routerLink="/admin/trail-management/raw"
+                                    routerLinkActive="active"
+                                    class="nav-item nav-link"
+                                  >
+                                    Tracce
+                                  </a>
+                                  <a
+                                    routerLink="/admin/trail-management/trails"
+                                    routerLinkActive="active"
+                                    class="nav-item nav-link"
+                                  >
+                                    Sentieri
+                                  </a>
+                                </span>
+                              </span>
+                              <a
+                                routerLink="/admin/accessibility-management"
+                                routerLinkActive="active"
+                                class="nav-item nav-link"
+                              >
+                                Percorribilità
+                              </a>
+                              <a
+                                routerLink="/admin/maintenance-management"
+                                routerLinkActive="active"
+                                class="nav-item nav-link"
+                              >
+                                Sentieristica
+                              </a>
+                            </ul>
+                          </div>
                         </div>
-                        <div class="it-right-zone">
-                            <div class="it-header-navbar-wrapper">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <nav class="navbar navbar-expand-lg has-megamenu">
-                                                <div class="navbar-collapsable" id="nav10">
-                                                    <div class="overlay"></div>
-                                                    <div class="close-div sr-only">
-                                                        <button class="btn close-menu" type="button"><span
-                                                                class="it-close"></span>close</button>
-                                                    </div>
-                                                    <div class="menu-wrapper">
-                                                        <ul class="navbar-nav">
-                                                            <a routerLink="/admin/trail-management" routerLinkActive="active" class="nav-item nav-link">
-                                                                Sentieri
-                                                            </a>
-                                                            <a routerLink="/admin/accessibility-management" routerLinkActive="active" class="nav-item nav-link">
-                                                                Percorribilità
-                                                            </a>
-                                                            <a routerLink="/admin/maintenance-management" routerLinkActive="active" class="nav-item nav-link">
-                                                                Sentieristica
-                                                            </a>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </nav>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                      </nav>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
