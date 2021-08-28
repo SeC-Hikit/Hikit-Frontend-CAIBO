@@ -1,4 +1,6 @@
-<h2>Gestione Tracce</h2>
+<div class="container my-4">
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<h1>SENTIERISTICA → Gestione Tracce</h1>
 <div class="flex-container">
   <app-upload-button-management
     class="trail-upload-management__container-button button"
@@ -14,8 +16,9 @@
   ></app-upload-button-management>
 </div>
 
+<div *ngIf="trailRawList.length > 0">
 <p>Le seguenti sono tracce ancora da arricchire con i dovuti metadati</p>
-<table id="trailTable" class="table table-striped interactive-table">
+<table id="trailTable" class="table table-striped interactive-table thin-rows">
   <thead class="">
     <tr>
       <th scope="col">Nome file</th>
@@ -54,3 +57,8 @@
   aria-label="Default pagination"
   (pageChange)="loadRawTrails(page)"
 ></ngb-pagination>
+</div>
+<div *ngIf="trailRawList.length == 0">
+  Non ci sono ancora tracce caricate
+</div>
+</div>

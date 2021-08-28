@@ -1,50 +1,47 @@
-import {
-  ANALYZE_FOR_ENTRY_COMPONENTS,
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import * as moment from "moment";
 import { Subject } from "rxjs";
-import { takeUntil, tap } from "rxjs/operators";
 import {
   GeoTrailService,
   Coordinates2D,
-  GeoLine,
+  TrailIntersectionResponse,
 } from "src/app/geo-trail-service";
-import {
-  ImportService,
-  TrailImportRequest,
-  TrailRaw,
-  TrailRawResponse,
-} from "src/app/import.service";
+import { TrailRaw, TrailRawResponse } from "src/app/import.service";
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
 import { TrailRawService } from "src/app/trail-raw-service.service";
-import { TrailCoordinates, TrailResponse } from "src/app/trail-service.service";
+import { TrailResponse, FileDetailsDto } from "src/app/trail-service.service";
 import { FormUtils } from "src/app/utils/FormUtils";
-import { CrossingModalComponent } from "./crossing-modal/crossing-modal.component";
 @Component({
   selector: "app-trail-upload-management",
   templateUrl: "./trail-upload-management.component.html",
   styleUrls: ["./trail-upload-management.component.scss"],
 })
 export class TrailUploadManagementComponent implements OnInit, OnDestroy {
-  trailRawResponse: TrailRawResponse;
-  otherTrailResponse: TrailResponse;
   trailFormGroup: FormGroup;
 
+  trailRawResponse: TrailRawResponse;
+  otherTrailResponse: TrailResponse;
+  intersectionResponse: TrailIntersectionResponse;
+  fileDetails: FileDetailsDto;
+
   isLoading = false;
+  isPreviewVisible = false;
+  isCrossingSectionComplete = false;
   isError: boolean;
 
   closeResult: string;
 
-  // Section completeness
-  isCrossingSectionComplete = false;
-  crossingText = "Rileva Crocevia";
+  testCoordinates: Coordinates2D = {
+    latitude: 44.11515289941759,
+    longitude: 10.814071100111235,
+  };
+
+  STEPS = ["Info Generali", "Crocevia", "Località", "Ciclo Escursionismo"];
+  CROSSWAY_INDEX = 1;
+  STEP_INDEX = 0;
 
   private destroy$ = new Subject();
 
@@ -64,6 +61,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
       classification: new FormControl("", Validators.required),
       description: new FormControl("", Validators.required),
       lastUpdate: new FormControl("", Validators.required),
+      intersectionExample: new FormControl("", Validators.required),
       maintainingSection: new FormControl("", Validators.required),
       startPos: FormUtils.getLocationFormGroup(),
       finalPos: FormUtils.getLocationFormGroup(),
@@ -84,7 +82,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         return;
       }
       this.trailRawResponse = response;
+      this.fileDetails = this.trailRawResponse.content[0].fileDetails;
       this.populateForm(this.trailRawResponse.content[0]);
+      this.isLoading = false;
     });
   }
 
@@ -98,6 +98,30 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   onReload(): void {
     this.isLoading = false;
+  }
+
+  goToNext(): void {
+    this.STEP_INDEX++;
+    this.scrollUp();
+
+    if (this.STEP_INDEX == this.CROSSWAY_INDEX) {
+      this.ensureCheckCrossing();
+    }
+  }
+
+  private ensureCheckCrossing() {
+    if (!this.isCrossingSectionComplete) {
+      this.onDetectCrossings();
+    }
+  }
+
+  goBack(): void {
+    this.STEP_INDEX--;
+    this.scrollUp();
+  }
+
+  scrollUp() {
+    window.scrollTo(0, 0);
   }
 
   populateForm(tpm: TrailRaw) {
@@ -117,6 +141,10 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     this.finalPos.controls["distanceFromTrailStart"].setValue(
       tpm.finalPos.distanceFromTrailStart
     );
+  }
+
+  togglePreview() {
+    this.isPreviewVisible = !this.isPreviewVisible;
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -151,6 +179,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
   }
 
   onDetectCrossings() {
+    this.toggleLoading();
     let coords = this.trailRawResponse.content[0].coordinates;
     let coords2d: Coordinates2D[] = coords.map((a) => {
       return { latitude: a.latitude, longitude: a.longitude };
@@ -158,12 +187,14 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     this.geoTrailService
       .intersect({ coordinates: coords2d })
       .subscribe((response) => {
-        if (response.content.length == 0) {
-          this.isCrossingSectionComplete = true;
-          this.crossingText = "Nessun crocevia rilevato";
-          return;
-        }
+        this.intersectionResponse = response;
+        this.isCrossingSectionComplete = true;
+        this.toggleLoading();
       });
+  }
+
+  toggleLoading() {
+    this.isLoading = !this.isLoading;
   }
 
   open(content) {

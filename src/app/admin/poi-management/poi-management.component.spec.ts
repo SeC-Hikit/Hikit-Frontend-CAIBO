@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CrossingModalComponent } from './crossing-modal.component';
+import { PoiManagementComponent } from './poi-management.component';
 
-describe('CrossingModalComponent', () => {
-  let component: CrossingModalComponent;
-  let fixture: ComponentFixture<CrossingModalComponent>;
+describe('TrailManagementComponent', () => {
+  let component: PoiManagementComponent;
+  let fixture: ComponentFixture<PoiManagementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CrossingModalComponent ]
+      declarations: [ PoiManagementComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CrossingModalComponent);
+    fixture = TestBed.createComponent(PoiManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

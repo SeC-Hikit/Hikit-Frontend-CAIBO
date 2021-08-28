@@ -6,8 +6,8 @@ export function initializeKeycloak(
     return () =>
       keycloak.init({
         config: {
-          url: 'http://localhost:10010' + '/auth',
-          realm: 'SeC',
+          url: 'http://localhost:8080/auth/',
+          realm: 'SeC-Test',
           clientId: 'backend',
         }
       });

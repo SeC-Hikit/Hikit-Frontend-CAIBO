@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TrailManagementComponent } from './trail-management.component';
 
-describe('TrailManagementComponent', () => {
+describe('PoiManagementComponent', () => {
   let component: TrailManagementComponent;
   let fixture: ComponentFixture<TrailManagementComponent>;
 

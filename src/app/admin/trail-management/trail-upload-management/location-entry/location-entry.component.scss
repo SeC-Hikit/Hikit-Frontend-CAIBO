@@ -1,5 +1,26 @@
+@import "../../../../style/const.scss";
+
 .entry {
     border-left: 5px solid #999;
     padding-left: 2%;
     margin-bottom: 1%;
+}
+
+.arrow-control {
+    position: absolute;
+    top: 45%;
+    z-index: 1000;
+    color: $action-btn-color;
+}
+
+.arrow-left {
+    left: 0;
+}
+
+.arrow-right {
+    right: 0;
+}
+
+.map-container {
+    position: relative;
 }

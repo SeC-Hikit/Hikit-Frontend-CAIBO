@@ -1,36 +1,82 @@
 <div class="container my-4">
   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
   <div class="table-wrapper space-up">
-    <h1>Aggiunta sentiero</h1>
-    <div *ngIf="!isLoading" class="trail-upload-management__container-button">
-      Caricamento Traccia ...
+    <div class="row">
+      <div class="col-sm-4">
+        <h1>Compilazione sentiero</h1>
+      </div>
+      <div class="col-sm-6">
+        <h1 class="steps">
+          <span
+            class="actionable"
+            *ngIf="this.STEP_INDEX > 0"
+            (click)="goBack()"
+            >⬅</span
+          >
+          Step {{ this.STEP_INDEX + 1 }}/{{ this.STEPS.length }} :
+          {{ this.STEPS[STEP_INDEX] }}
+        </h1>
+      </div>
+      <div class="col-sm-2">
+        <div class="features">
+          <div class="btn-group-toggle" data-toggle="buttons">
+            <label
+              (click)="togglePreview()"
+              class="btn btn-primary full-width"
+              placement="bottom"
+              ngbTooltip="Mostra/nascondi anteprima"
+              tooltipClass="tooltip-c"
+              [ngClass]="{ active: isPreviewVisible }"
+            >
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use
+                  xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
+                />
+              </svg>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="isLoading">
-      <ul class="progress">
-        <a href="#dati-generali"><li>Dati generali</li></a>
-        <a href="#crocevia"><li>Crocevia</li></a>
-        <a href="#localita"><li>Altre localita'</li></a>
-        <a href="#ciclo"><li>Dati Ciclo-escursionistici</li></a>
-      </ul>
+    <div
+      *ngIf="!isLoading"
+      [ngClass]="{
+        'floating-hide-panel': true,
+        show: isPreviewVisible,
+        top: true
+      }"
+    >
+      <span class="close-btn" (click)="togglePreview()">ｘ</span>
+      <label>Anteprima</label>
+      <div class="form-group col-md-12 mb-12">
+        <app-map-preview
+          [trailPreview]="trailRawResponse.content[0]"
+          [otherTrails]="[]"
+          [index]="0"
+        ></app-map-preview>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!isLoading">
+      <div class="col">
+        <p>
+          <b>{{
+            this.trailRawResponse.content[0].fileDetails.originalFilename
+          }}</b
+          >, caricata da
+          <b>{{ this.trailRawResponse.content[0].fileDetails.uploadedBy }}</b>
+        </p>
+      </div>
     </div>
 
     <form
       class="container"
       (ngSubmit)="saveTrail()"
       [formGroup]="trailFormGroup"
-      *ngIf="isLoading"
+      *ngIf="!isLoading"
     >
-      <p>
-        Aggiunta sentiero a partire da traccia
-        <b>{{
-          this.trailRawResponse.content[0].fileDetails.originalFilename
-        }}</b
-        >, caricata da
-        <b>{{ this.trailRawResponse.content[0].fileDetails.uploadedBy }}</b>
-      </p>
-
-      <div class="section general-section">
+      <div class="general-section" *ngIf="this.STEP_INDEX == 0">
         <h3 id="dati-generali" class="space-up">Dati generali</h3>
 
         <div class="form-row">
@@ -68,14 +114,14 @@
             </select>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row top-margin">
           <div class="form-group col-md-4 mb-3">
             <p>Data rilevazione</p>
             <div class="input-group">
               <input
                 class="form-control"
                 formControlName="lastUpdate"
-                placeholder="dd/mm/yyyy"
+                placeholder="gg/mm/aaaa"
                 name="dp"
                 ngbDatepicker
                 #d="ngbDatepicker"
@@ -87,20 +133,6 @@
                   type="button"
                 ></button>
               </div>
-            </div>
-          </div>
-          <div class="form-group col-md-4 mb-3">
-            <p>Sezione competente CAI</p>
-            <div class="bootstrap-select-wrapper">
-              <select
-                title="Scegli una opzione"
-                formControlName="maintainingSection"
-                class="form-control"
-                id="trailId_select"
-              >
-                <option>Bologna</option>
-                <option>Porretta</option>
-              </select>
             </div>
           </div>
           <div class="form-group col-md-4 mb-3">
@@ -116,7 +148,7 @@
             </div>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row top-margin">
           <label
             placement="right"
             ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
@@ -136,44 +168,36 @@
             ></quill-editor>
           </div>
         </div>
-        <div class="form-row">
-          <label>Anteprima</label>
-          <div class="form-group col-md-12 mb-12">
-            <app-map-preview
-              [trailPreview]="trailRawResponse.content[0]"
-              [otherTrails]="[]"
-              [index]="0"
-            ></app-map-preview>
-          </div>
-        </div>
       </div>
 
-      <div class="section crossing-section">
-        <h3 id="crocevia">
-          <svg class="bi" width="24" height="24" fill="currentColor">
-            <use
-              xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-split"
-            />
-          </svg>
-          Crocevia
-        </h3>
-        <p class="space-up">
-          I crocevia sono punti di collegamento di diversi sentieri
-        </p>
-        <div class="form-row">
-          <button
-            type="button"
-            class="btn btn-success mt-3 wide-btn"
-            (click)="onDetectCrossings()"
-            [attr.disabled]="this.isCrossingSectionComplete ? '' : null"
-          >
-            <svg class="bi" width="24" height="24" fill="currentColor">
-              <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-split"
-              />
-            </svg>
-            {{ crossingText }}
-          </button>
+      <div class="crossing-section" *ngIf="this.STEP_INDEX == 1">
+        <div class="row">
+          <div class="col-xs-12">
+            <h3 id="crocevia">
+              <svg class="bi" width="32" height="32" fill="currentColor">
+                <use
+                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-split"
+                />
+              </svg>
+              Crocevia
+            </h3>
+          </div>
+          <div class="col-md-12">
+            <p>
+              I crocevia sono punti di collegamento di diversi sentieri.<br />
+              Questi vengono rilevati in automatico sulla base dei sentieri
+              presenti.
+            </p>
+          </div>
+          <div class="col-md-12">
+            <app-trail-intersection-entry
+              [inputForm]="firstPos"
+              [trail]="trailRawResponse.content[0]"
+              [i]="5"
+              [isEditableLocation]="true"
+              [crossPoint]="testCoordinates"
+            ></app-trail-intersection-entry>
+          </div>
         </div>
       </div>
 
@@ -203,14 +227,14 @@
         </div>
       </ng-template>
 
-      <div class="section location-section">
+      <div class="location-section" *ngIf="this.STEP_INDEX == 2">
         <h3 id="localita" class="space-up">Località</h3>
         <p class="space-up">
           Le localita' sono utilizzate per segnalare punti di particolare
           importanza sui sentieri.
         </p>
 
-        <div [formGroup]="firstPos">
+        <!-- <div [formGroup]="firstPos">
           <h4>Partenza</h4>
           <div class="form-row">
             <div class="form-group col-md-4 mb-3">
@@ -275,7 +299,7 @@
               />
             </div>
           </div>
-        </div>
+        </div> -->
         <div [formGroup]="finalPos">
           <h4>Arrivo</h4>
           <div class="form-row">
@@ -365,7 +389,7 @@
         </div>
       </div>
 
-      <div class="section bike-section">
+      <div class="bike-section" *ngIf="this.STEP_INDEX == 3">
         <svg class="bi" width="32" height="32" fill="currentColor">
           <use
             xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
@@ -489,18 +513,22 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <span class="form-group col-md-3 mb-2">
-          <button class="btn btn-primary mt-3" type="submit">
+      <div class="form-row" *ngIf="this.STEP_INDEX == 3">
+        <span class="form-group col-md-12">
+          <button class="btn btn-error full-width" type="submit">
             Salva sentiero
           </button>
         </span>
-        <span class="form-group col-md-1 mb-1">
-          <a routerLink="/admin/trails">
-            <button class="btn btn-light mt-3" type="button">Cancella</button>
-          </a>
-        </span>
       </div>
     </form>
+
+    <div class="row" *ngIf="this.STEP_INDEX < 3">
+      <div class="col top-margin">
+        <button class="btn btn-primary full-width" (click)="goToNext()">
+          Vai allo step {{ this.STEP_INDEX + 2 }}:
+          {{ this.STEPS[this.STEP_INDEX + 1] }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>

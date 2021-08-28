@@ -47,7 +47,7 @@ thead, th, li, .nav-item, button, .upload-button-management__label {
 }
 
 .upload-button-management__label, button, input[type="submit"], 
-.upload[type="file"] + label{
+.upload[type="file"] + label, .btn-primary{
   background: $action-btn-color !important;
   border-radius: 0px;
 }
@@ -68,4 +68,25 @@ h4,
 h3 {
   font-size: 24px !important;
   margin-top: 3%;
+}
+
+.thin-rows td, .thin-rows th {
+  padding: 0.5em !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.top-margin {
+  margin-top: 0.5em;
+}
+
+.btn-error { 
+  background-color: $error-color;
+}
+
+.actionable {
+  color: $action-btn-color;
+  cursor: pointer;
 }

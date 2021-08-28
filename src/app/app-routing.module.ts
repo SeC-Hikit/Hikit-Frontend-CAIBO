@@ -10,12 +10,12 @@ import { MapComponent } from "./map-view/map.component";
 import { TrailUploadManagementComponent } from "./admin/trail-management/trail-upload-management/trail-upload-management.component";
 import { TrailManagementComponent } from "./admin/trail-management/trail-management.component";
 import { MaintenanceManagementComponent } from "./admin/maintenance-management/maintenance-management.component";
-import { MaintenanceAddComponent } from "./admin/maintenance-management/maintenance-add/maintenance-add.component";
 import { AccessibilityManagementComponent } from "./admin/accessibility-management/accessibility-management.component";
-import { AccessibilityAddComponent } from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
 import { AdminComponent } from "./admin/admin.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthGuard } from "./guard/auth.guard";
+import { TrailRawManagementComponent } from "./admin/trail-raw-management/trail-raw-management.component";
+import { PoiManagementComponent } from "./admin/poi-management/poi-management.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -31,12 +31,20 @@ const routes: Routes = [
     path: "admin", canActivate: [AuthGuard], children: [
       {
         path: "dashboard",
-        component: AdminComponent,
+        component: AdminComponent, // TODO: add dashboard
         canActivate: [AuthGuard]
       },
       {
+        path: "raw-trail-management",
+        component: TrailRawManagementComponent
+      },
+      {
+        path: "poi-management",
+        component: PoiManagementComponent
+      },
+      {
         path: "trail-management",
-        component: AdminComponent
+        component: TrailManagementComponent
       },
       {
         path: "accessibility-management",

@@ -5,12 +5,13 @@ import {
   TrailPreviewService,
 } from "src/app/trail-preview-service.service";
 import { TrailCoordinates, TrailService } from "src/app/trail-service.service";
+
 @Component({
-  selector: "app-trail-management",
-  templateUrl: "./trail-management.component.html",
-  styleUrls: ["./trail-management.component.scss"],
+  selector: "app-poi-management",
+  templateUrl: "./poi-management.component.html",
+  styleUrls: ["./poi-management.component.scss"],
 })
-export class TrailManagementComponent implements OnInit {
+export class PoiManagementComponent implements OnInit {
   entryPerPage = 10;
   page = 1;
   isLoading = false;
@@ -27,6 +28,7 @@ export class TrailManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.getAllPreviews();
     // TODO use toast service
     // let codeTrailSaved = this.route.snapshot.paramMap.get("success") as string;

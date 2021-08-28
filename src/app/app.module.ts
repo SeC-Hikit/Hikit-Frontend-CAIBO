@@ -39,10 +39,11 @@ import { IncreasedIndexPipe } from "./IncreasedIndexPipe";
 import { EtaPipe } from "./EtaPipe";
 import { UploadButtonManagementComponent } from "./admin/upload-button-management/upload-button-management.component";
 import { TrailRawManagementComponent } from './admin/trail-raw-management/trail-raw-management.component';
-import { CrossingModalComponent } from './admin/trail-management/trail-upload-management/crossing-modal/crossing-modal.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { initializeKeycloak } from "src/init/keycloak-init.factory";
 import { MenuAdminComponent } from "./menu/menu-admin/menu-admin.component";
+import { PoiManagementComponent } from "./admin/poi-management/poi-management.component";
+import { TrailIntersectionEntryComponent } from './admin/trail-management/trail-intersection-entry/trail-intersection-entry.component';
 
 @NgModule({
   declarations: [
@@ -76,11 +77,12 @@ import { MenuAdminComponent } from "./menu/menu-admin/menu-admin.component";
     NotFoundComponent,
     LocationEntryComponent,
     IncreasedIndexPipe,
+    PoiManagementComponent,
     EtaPipe,
     UploadButtonManagementComponent,
     TrailRawManagementComponent,
-    CrossingModalComponent,
     LoadingSpinnerComponent,
+    TrailIntersectionEntryComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,5 +102,6 @@ import { MenuAdminComponent } from "./menu/menu-admin/menu-admin.component";
     }
   ],
   bootstrap: [AppComponent],
+  exports: [TrailIntersectionEntryComponent],
 })
 export class AppModule {}

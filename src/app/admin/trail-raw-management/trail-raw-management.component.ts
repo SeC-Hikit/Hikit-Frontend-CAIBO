@@ -20,7 +20,7 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
   public trailRawList: TrailPreview[]
   public totalRaw: number;
 
-  public isLoading = false;
+  public isLoading = true;
 
   private destroy$ = new Subject();
 

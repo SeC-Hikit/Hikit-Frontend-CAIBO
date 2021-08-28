@@ -34,16 +34,7 @@ export const tabsList: Tab[] = [
 export class MenuManagementComponent implements OnInit {
   selectedTab: string;
   tabType = TabType;
-  tabsList = [
-    {
-      code: "trails",
-      label: "Sentieri",
-    },
-    {
-      code: "tracks",
-      label: "Tracce",
-    }
-  ];
+  
 
   constructor() {}
 

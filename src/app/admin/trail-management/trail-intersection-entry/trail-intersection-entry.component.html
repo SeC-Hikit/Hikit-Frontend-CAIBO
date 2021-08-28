@@ -1,0 +1,60 @@
+<div class="container-box">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Crocevia n {{ i }}</h2>
+    </div>
+    <div class="col-md-4">
+      <h2>Completato: {{ isCompleted ? "Si" : "No" }}</h2>
+    </div>
+    <div class="col-md-4">
+      <button
+        type="button"
+        class="btn actionable full-width"
+        (click)="toggleShowing()"
+      >
+        <span *ngIf="!isShowing">Mostra</span>
+        <span *ngIf="isShowing">Nascondi</span>
+      </button>
+    </div>
+  </div>
+  <div class="row" *ngIf="isShowing">
+    <div class="col-md-6" [ngClass]="{ collapse: !isShowing }">
+      <app-location-entry
+        [isEditableLocation]="false"
+        [trail]="trail"
+        [otherTrails]="otherTrails"
+        [inputForm]="inputForm"
+        [markers]="[crossPoint]"
+        [i]="i"
+      >
+      </app-location-entry>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+            <h2>Dettagli</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <button
+            class="actionable full-width btn"
+            type="button"
+            [attr.disabled]="hasAutoDetectedRun ? true : null"
+            (click) = "findPlaceCorrespondingTo()"
+          >
+            <span *ngIf="!hasAutoDetectedRun">Auto-rileva</span>
+            <span *ngIf="hasAutoDetectedRun && !isAutoDetected">Nessun match con altri posti da sistema</span>
+          </button>
+        </div>
+      </div>
+      <div class="row" [ngClass]="{ collapse: (!isAutoDetected && !hasAutoDetectedRun)}">
+        <div class="col-md-12">
+          <label>Nome</label>
+          <input type="text" class="form-control" required />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

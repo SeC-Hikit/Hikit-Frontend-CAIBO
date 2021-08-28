@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Coordinates2D } from 'src/app/geo-trail-service';
 import { Trail, TrailCoordinates } from 'src/app/trail-service.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class LocationEntryComponent implements OnInit {
   @Input() inputForm : FormGroup; 
   @Input() trail: Trail;
   @Input() otherTrails: Trail[];
+  @Input() markers: Coordinates2D[];
   @Input() isEditableLocation: boolean;
 
   selectedCoordinate: TrailCoordinates;

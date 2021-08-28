@@ -1,4 +1,30 @@
-<div class="map-preview"  id="map-table-{{index}}">
-    
+<div class="row">
+  <div class="col-md-12">
+    <div class="map-preview" id="map-table-{{ index }}"></div>
+  </div>
 </div>
-<button>Adatta vista al sentiero</button>
+<div class="row">
+  <div class="col-sm-6 top-margin">
+    <button
+      type="button"
+      class="btn full-width actionable"
+      (click)="focusOnTrail()"
+    >
+      <svg class="bi" width="16" height="16" fill="currentColor">
+        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#zoom-in" />
+      </svg>
+    </button>
+  </div>
+  <div class="col-sm-6 top-margin">
+    <button
+      [attr.disabled]="isShowOtherTrailsEnabled ? true : null"
+      type="button"
+      class="btn full-width actionable"
+      (click)="togglePreview()"
+    >
+      <svg class="bi" width="16" height="16" fill="currentColor">
+        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye" />
+      </svg>
+    </button>
+  </div>
+</div>

@@ -15,22 +15,42 @@
       />
     </div>
   </div>
-  <div class="form-row">
-    <label>Anteprima</label>
-    <div class="form-group col-md-12 mb-12">
+  <div class="row">
+    <div class="col-md-12 map-container">
+      <div
+        class="arrow-left arrow-control btn actionable"
+        *ngIf="isEditableLocation"
+      >
+        <svg class="bi" width="32" height="32" fill="currentColor">
+          <use
+            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-circle-fill"
+          />
+        </svg>
+      </div>
       <app-map-preview
         [index]="i | increaseOne"
         [trailPreview]="trail"
         [elementAt]="selectedCoordinate"
+        [isShowOtherTrailsEnabled]="false"
+        [markersCoordinates]="markers"
       ></app-map-preview>
+      <div
+        class="arrow-right arrow-control btn actionable"
+        *ngIf="isEditableLocation"
+      >
+        <svg class="bi" width="32" height="32" fill="currentColor">
+          <use
+            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-right-circle-fill"
+          />
+        </svg>
+      </div>
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col-md-4 mb-3">
-      <p>Seleziona posizione località da mappa usando il seguento slider</p>
+  <div class="row" *ngIf="isEditableLocation">
+    <div class="col-md-12">
       <input
         type="range"
-        value ="{{ (trail.coordinates.length - 1) / 2 }}"
+        value="{{ (trail.coordinates.length - 1) / 2 }}"
         min="0"
         max="{{ trail.coordinates.length - 1 }}"
         class="form-control"
@@ -39,46 +59,48 @@
       />
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col-md-3 mb-3">
-      <p>Latitudine</p>
-      <input
-        type="text"
-        formControlName="latitude"
-        disabled
-        class="form-control"
-        required
-      />
-    </div>
-    <div class="form-group col-md-3 mb-3">
-      <p>Longitudine</p>
-      <input
-        type="text"
-        formControlName="longitude"
-        disabled
-        class="form-control"
-        required
-      />
-    </div>
-    <div class="form-group col-md-3 mb-3">
-      <p>Altitudine</p>
-      <input
-        type="text"
-        formControlName="altitude"
-        disabled
-        class="form-control"
-        required
-      />
-    </div>
-    <div class="form-group col-md-3 mb-3">
-      <p>Distanza dalla partenza</p>
-      <input
-        type="text"
-        formControlName="distanceFromTrailStart"
-        disabled
-        class="form-control"
-        required
-      />
+  <div class="row" *ngClass="{ collapse: true }">
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-3">
+        <p>Latitudine</p>
+        <input
+          type="text"
+          formControlName="latitude"
+          disabled
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group col-md-3 mb-3">
+        <p>Longitudine</p>
+        <input
+          type="text"
+          formControlName="longitude"
+          disabled
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group col-md-3 mb-3">
+        <p>Altitudine</p>
+        <input
+          type="text"
+          formControlName="altitude"
+          disabled
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group col-md-3 mb-3">
+        <p>Distanza dalla partenza</p>
+        <input
+          type="text"
+          formControlName="distanceFromTrailStart"
+          disabled
+          class="form-control"
+          required
+        />
+      </div>
     </div>
   </div>
 </div>
