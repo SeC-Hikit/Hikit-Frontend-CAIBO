@@ -172,15 +172,15 @@
 
       <div class="crossing-section" *ngIf="this.STEP_INDEX == 1">
         <div class="row">
-          <div class="col-xs-12">
-            <h3 id="crocevia">
-              <svg class="bi" width="32" height="32" fill="currentColor">
-                <use
-                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-split"
-                />
-              </svg>
-              Crocevia
-            </h3>
+          <div class="col-md-1">
+            <svg class="bi" width="32" height="32" fill="currentColor">
+              <use
+                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-split"
+              />
+            </svg>
+          </div>
+          <div class="col-md-11">
+            <h3 id="crocevia">Crocevia</h3>
           </div>
           <div class="col-md-12">
             <p>
@@ -193,7 +193,8 @@
             <app-trail-intersection-entry
               [inputForm]="firstPos"
               [trail]="trailRawResponse.content[0]"
-              [i]="5"
+              [otherTrail]="trailRawResponse.content[0]"
+              [i]="0"
               [isEditableLocation]="true"
               [crossPoint]="testCoordinates"
             ></app-trail-intersection-entry>
@@ -228,142 +229,52 @@
       </ng-template>
 
       <div class="location-section" *ngIf="this.STEP_INDEX == 2">
-        <h3 id="localita" class="space-up">Località</h3>
-        <p class="space-up">
-          Le localita' sono utilizzate per segnalare punti di particolare
-          importanza sui sentieri.
-        </p>
+        <div class="row">
+          <div class="col-md-1">
+            <svg class="bi" width="32" height="32" fill="currentColor">
+              <use
+                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#joystick"
+              />
+            </svg>
+          </div>
+          <div class="col-md-11">
+            <h3 id="localita">Località</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="space-up col-md-12">
+            Le localita' sono utilizzate per segnalare punti di particolare
+            importanza sui sentieri.
+          </div>
+        </div>
 
-        <!-- <div [formGroup]="firstPos">
-          <h4>Partenza</h4>
-          <div class="form-row">
-            <div class="form-group col-md-4 mb-3">
-              <p>Nome</p>
-              <input
-                type="text"
-                formControlName="name"
-                class="form-control"
-                placeholder="Es: Rasora"
-                required
-              />
-            </div>
-            <div class="form-group col-md-4 mb-3">
-              <p>Altri nomi - separati da una virgola</p>
-              <input
-                type="text"
-                formControlName="tags"
-                class="form-control"
-                placeholder="Es: ..."
-              />
-            </div>
+        <div class="row">
+          <div class="space-up col-md-12">
+            <app-location-entry
+              [title]="'Località iniziale'"
+              [classPrefix]="'startPos'"
+              [inputForm]="firstPos"
+              [trail]="trailRawResponse.content[0]"
+              [startPoint]="0"
+              [i]="0"
+              [isEditableLocation]="false"
+            >
+            </app-location-entry>
           </div>
-          <div class="form-row hide">
-            <div class="form-group col-md-3 mb-3">
-              <p>Latitudine</p>
-              <input
-                type="text"
-                formControlName="latitude"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group col-md-3 mb-3">
-              <p>Longitudine</p>
-              <input
-                type="text"
-                formControlName="longitude"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group col-md-3 mb-3">
-              <p>Altitudine</p>
-              <input
-                type="text"
-                formControlName="altitude"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group col-md-3 mb-3">
-              <p>Distanza dalla partenza</p>
-              <input
-                type="text"
-                formControlName="distanceFromTrailStart"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
-          </div>
-        </div> -->
-        <div [formGroup]="finalPos">
-          <h4>Arrivo</h4>
-          <div class="form-row">
-            <div class="form-group col-md-4 mb-3">
-              <p>Nome</p>
-              <input
-                type="text"
-                formControlName="name"
-                class="form-control"
-                placeholder="Es: Rasora"
-                required
-              />
-            </div>
-            <div class="form-group col-md-4 mb-3">
-              <p>Altri nomi - separati da una virgola</p>
-              <input
-                type="text"
-                formControlName="tags"
-                class="form-control"
-                placeholder="Es: ..."
-              />
-            </div>
-          </div>
-          <div class="form-row hide">
-            <div class="form-group col-md-3 mb-3">
-              <p>Latitudine</p>
-              <input
-                type="text"
-                formControlName="latitude"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group col-md-3 mb-3">
-              <p>Longitudine</p>
-              <input
-                type="text"
-                formControlName="longitude"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group col-md-3 mb-3">
-              <p>Altitudine</p>
-              <input
-                type="text"
-                formControlName="altitude"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group col-md-3 mb-3">
-              <p>Distanza dalla partenza</p>
-              <input
-                type="text"
-                formControlName="distanceFromTrailStart"
-                disabled
-                class="form-control"
-                required
-              />
-            </div>
+        </div>
+
+        <div class="row">
+          <div class="space-up col-md-12">
+            <app-location-entry
+              [title]="'Località di arrivo'"
+              [classPrefix]="'finalPos'"
+              [inputForm]="finalPos"
+              [trail]="trailRawResponse.content[0]"
+              [i]="1"
+              [startPoint]="trailRawResponse.content[0].coordinates.length - 1"
+              [isEditableLocation]="false"
+            >
+            </app-location-entry>
           </div>
         </div>
 

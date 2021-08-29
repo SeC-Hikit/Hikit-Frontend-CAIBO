@@ -20,9 +20,10 @@
   <div class="row" *ngIf="isShowing">
     <div class="col-md-6" [ngClass]="{ collapse: !isShowing }">
       <app-location-entry
+        [classPrefix]="'crossway'"
         [isEditableLocation]="false"
         [trail]="trail"
-        [otherTrails]="otherTrails"
+        [otherTrails]="[otherTrail]"
         [inputForm]="inputForm"
         [markers]="[crossPoint]"
         [i]="i"
@@ -33,7 +34,12 @@
     <div class="col-md-6">
       <div class="row">
         <div class="col-md-12">
-            <h2>Dettagli</h2>
+          <h2>Dettagli</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Incontra il sentiero {{ otherTrail.code }}</h2>
         </div>
       </div>
       <div class="row">
@@ -42,17 +48,30 @@
             class="actionable full-width btn"
             type="button"
             [attr.disabled]="hasAutoDetectedRun ? true : null"
-            (click) = "findPlaceCorrespondingTo()"
+            (click)="findPlaceCorrespondingTo()"
           >
             <span *ngIf="!hasAutoDetectedRun">Auto-rileva</span>
-            <span *ngIf="hasAutoDetectedRun && !isAutoDetected">Nessun match con altri posti da sistema</span>
+            <span *ngIf="hasAutoDetectedRun && !isAutoDetected"
+              >Nessun match con altri posti da sistema</span
+            >
           </button>
         </div>
       </div>
-      <div class="row" [ngClass]="{ collapse: (!isAutoDetected && !hasAutoDetectedRun)}">
+      <div
+        class="row"
+        [ngClass]="{ collapse: !isAutoDetected && !hasAutoDetectedRun }"
+      >
         <div class="col-md-12">
           <label>Nome</label>
           <input type="text" class="form-control" required />
+        </div>
+        <div class="col-md-12">
+          <label>Descrizione</label>
+          <input type="text" class="form-control" required />
+        </div>
+        <div class="col-md-12">
+          <label>Toponimi (separati da una virgola)</label>
+          <input type="text" class="form-control" placeholder="Es: La Croara, La Fornace, Ca' Foschi" />
         </div>
       </div>
     </div>

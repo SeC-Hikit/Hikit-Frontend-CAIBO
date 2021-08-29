@@ -12,10 +12,12 @@ import { UserCoordinates } from "../UserCoordinates";
   styleUrls: ["./map-preview.component.scss"],
 })
 export class MapPreviewComponent implements OnInit {
+
+  @Input() classPrefix: string;
   @Input() otherTrails: Trail[];
   @Input() markersCoordinates: Coordinates2D[];
   @Input() trailPreview: Trail;
-  @Input() elementAt: UserCoordinates;
+  @Input() elementAt: number;
   @Input() index: string;
   @Input() isShowOtherTrailsEnabled: boolean;
 
@@ -61,6 +63,7 @@ export class MapPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.index = this.index ? this.index : "0";
+    this.classPrefix = this.classPrefix ? this.classPrefix : "map-table-"
     this.markers = this.markers ? this.markers : [];
     this.isShowOtherTrailsEnabled = this.isShowOtherTrailsEnabled
       ? this.isShowOtherTrailsEnabled
@@ -77,7 +80,7 @@ export class MapPreviewComponent implements OnInit {
   }
 
   private initMap(topoLayer: L.TileLayer, index: string) {
-    this.map = L.map("map-table-" + index, {
+    this.map = L.map(this.classPrefix + index, {
       layers: [topoLayer],
       maxZoom: 17,
     });
@@ -86,7 +89,7 @@ export class MapPreviewComponent implements OnInit {
     if (this.trailPreview) {
       this.onPreview(this.trailPreview.coordinates);
     }
-    if (this.elementAt) {
+    if (this.elementAt != undefined && this.elementAt != null) {
       this.onSelection(this.elementAt);
     }
     if (this.markersCoordinates) {
@@ -124,11 +127,13 @@ export class MapPreviewComponent implements OnInit {
     }
   }
 
-  onSelection(userPosition: UserCoordinates) {
+  onSelection(elementAt: number) {
+    console.log("Rendering point at index " + elementAt);
     if (this.selectionCircle) this.map.removeLayer(this.selectionCircle);
+    const trailCoords = this.trailPreview.coordinates;
     this.selectionCircle = L.circle(
-      [userPosition.latitude, userPosition.longitude],
-      { radius: 30, color: "red" }
+      [trailCoords[elementAt].latitude, trailCoords[elementAt].longitude],
+      { radius: 20, color: "red" }
     ).addTo(this.map);
     this.map.addLayer(this.selectionCircle);
     this.map.flyTo(this.selectionCircle.getLatLng());

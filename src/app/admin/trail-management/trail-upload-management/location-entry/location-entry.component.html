@@ -1,5 +1,5 @@
 <div class="entry space-up" [formGroup]="inputForm">
-  <h4>Località #{{ i | increaseOne }}</h4>
+  <h4>{{title}} #{{ i | increaseOne }}</h4>
   <div class="form-row" *ngIf="isEditableLocation">
     <div class="form-group col-md-4 mb-3">
       <p>Nome</p>
@@ -19,7 +19,7 @@
     <div class="col-md-12 map-container">
       <div
         class="arrow-left arrow-control btn actionable"
-        *ngIf="isEditableLocation"
+        *ngIf="isEditableLocation" (click)="onPrevPoint()"
       >
         <svg class="bi" width="32" height="32" fill="currentColor">
           <use
@@ -28,15 +28,16 @@
         </svg>
       </div>
       <app-map-preview
+        [classPrefix]="classPrefix"
         [index]="i | increaseOne"
         [trailPreview]="trail"
-        [elementAt]="selectedCoordinate"
+        [elementAt]="selectedCoordinateIndex"
         [isShowOtherTrailsEnabled]="false"
         [markersCoordinates]="markers"
       ></app-map-preview>
       <div
         class="arrow-right arrow-control btn actionable"
-        *ngIf="isEditableLocation"
+        *ngIf="isEditableLocation" (click)="onNextPoint()"
       >
         <svg class="bi" width="32" height="32" fill="currentColor">
           <use

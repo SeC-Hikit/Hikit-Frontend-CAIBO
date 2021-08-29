@@ -13,7 +13,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
   @Input() i: number;
   @Input() inputForm: FormGroup;
   @Input() trail: Trail;
-  @Input() otherTrails: Trail[];
+  @Input() otherTrail: Trail;
   @Input() crossPoint: Coordinates2D;
 
   isCompleted: boolean;
@@ -33,6 +33,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     this.isCompleted = false;
     this.hasAutoDetectedRun = false;
     this.isAutoDetected = false;
+    console.log(this.otherTrail);
   }
 
   toggleShowing(): void {
