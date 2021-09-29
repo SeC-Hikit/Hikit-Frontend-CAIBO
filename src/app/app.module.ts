@@ -44,6 +44,8 @@ import { initializeKeycloak } from "src/init/keycloak-init.factory";
 import { MenuAdminComponent } from "./menu/menu-admin/menu-admin.component";
 import { PoiManagementComponent } from "./admin/poi-management/poi-management.component";
 import { TrailIntersectionEntryComponent } from './admin/trail-management/trail-intersection-entry/trail-intersection-entry.component';
+import { PoiAddComponent } from './admin/poi-management/poi-add/poi-add.component';
+import { PoiViewTableComponent } from './admin/poi-management/poi-view-table/poi-view-table.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +85,8 @@ import { TrailIntersectionEntryComponent } from './admin/trail-management/trail-
     TrailRawManagementComponent,
     LoadingSpinnerComponent,
     TrailIntersectionEntryComponent,
+    PoiAddComponent,
+    PoiViewTableComponent,
   ],
   imports: [
     BrowserModule,

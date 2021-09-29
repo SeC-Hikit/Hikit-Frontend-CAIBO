@@ -16,6 +16,8 @@ import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthGuard } from "./guard/auth.guard";
 import { TrailRawManagementComponent } from "./admin/trail-raw-management/trail-raw-management.component";
 import { PoiManagementComponent } from "./admin/poi-management/poi-management.component";
+import { PoiAddComponent } from "./admin/poi-management/poi-add/poi-add.component";
+import { PoiViewTableComponent } from "./admin/poi-management/poi-view-table/poi-view-table.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -40,6 +42,11 @@ const routes: Routes = [
       },
       {
         path: "poi-management",
+        children : [
+          { path: "view", component: PoiViewTableComponent },
+          { path: "entry", component: PoiAddComponent },
+          { path: "entry/:id", component: PoiAddComponent }
+        ],
         component: PoiManagementComponent
       },
       {
@@ -54,6 +61,7 @@ const routes: Routes = [
         path: "maintenance-management",
         component: MaintenanceManagementComponent
       },
+      // Change
       {
         path: "trail",
         children: [

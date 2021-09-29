@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { Coordinates2D } from "src/app/geo-trail-service";
-import { PlaceResponse, PlaceService } from "src/app/place.service";
-import { Trail } from "src/app/trail-service.service";
+import { Coordinates2D } from "src/app/service/geo-trail-service";
+import { PlaceResponse, PlaceService } from "src/app/service/place.service";
+import { Trail } from "src/app/service/trail-service.service";
 
 @Component({
   selector: "app-trail-intersection-entry",

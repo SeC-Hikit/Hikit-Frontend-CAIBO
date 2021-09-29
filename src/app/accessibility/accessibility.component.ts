@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { AccessibilityNotification, NotificationService } from '../notification-service.service';
+import { AccessibilityNotification, NotificationService } from '../service/notification-service.service';
 
 @Component({
   selector: 'app-accessibility',

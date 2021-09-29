@@ -1,0 +1,38 @@
+<div class="container my-4">
+  <div class="space-up">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2>Aggiungi punto d'interesse</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngIf="isTrailLoaded">
+        <!-- <form> -->
+        <div class="col-12">
+          <div *ngIf="trailPreviewResponse.content.length > 0">
+            <label>Seleziona un sentiero</label>
+            <select
+              title="Scegli un'opzione"
+              class="form-control"
+              id="trailId_select"
+              (change)="onChangeTrail($event)"
+            >
+              <option
+                *ngFor="let trail of trailPreviewResponse.content"
+                class="trailPreview"
+              >
+                {{ trail.code }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isTrailLoaded">
+      <div class="col-sm-4">
+        <label>Nome</label>
+        <input type="text" />
+      </div>
+    </div>
+  </div>
+</div>

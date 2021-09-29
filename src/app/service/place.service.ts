@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
 import { components } from "src/binding/Binding";
-import { RestResponse } from "./RestResponse";
+import { RestResponse } from "../RestResponse";
 
 export type Place = components["schemas"]["PlaceDto"];
 export type PlaceResponse = components["schemas"]["PlaceResponse"];

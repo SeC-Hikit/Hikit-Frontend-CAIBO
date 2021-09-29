@@ -1,4 +1,4 @@
-import { TrailCoordinates } from '../trail-service.service';
+import { TrailCoordinates } from '../service/trail-service.service';
 import { TrailClassification } from '../TrailClassification';
 
 export class MapUtils {

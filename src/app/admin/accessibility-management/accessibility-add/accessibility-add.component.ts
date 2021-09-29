@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { AccessibilityNotification, NotificationService } from 'src/app/notification-service.service';
+import { AccessibilityNotification, NotificationService } from 'src/app/service/notification-service.service';
 import { Status } from 'src/app/Status';
-import { TrailPreviewResponse, TrailPreviewService } from 'src/app/trail-preview-service.service';
-import { TrailCoordinates, TrailResponse, TrailService } from 'src/app/trail-service.service';
+import { TrailPreviewResponse, TrailPreviewService } from 'src/app/service/trail-preview-service.service';
+import { TrailCoordinates, TrailResponse, TrailService } from 'src/app/service/trail-service.service';
 
 @Component({
   selector: 'app-accessibility-add',

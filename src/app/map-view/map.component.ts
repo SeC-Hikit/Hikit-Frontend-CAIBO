@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Maintenance, MaintenanceService } from '../maintenance.service';
-import { AccessibilityNotification, NotificationService } from '../notification-service.service';
-import { TrailPreview, TrailPreviewService } from '../trail-preview-service.service';
-import { Trail, TrailCoordinates, TrailService } from '../trail-service.service';
+import { Maintenance, MaintenanceService } from '../service/maintenance.service';
+import { AccessibilityNotification, NotificationService } from '../service/notification-service.service';
+import { TrailPreview, TrailPreviewService } from '../service/trail-preview-service.service';
+import { Trail, TrailCoordinates, TrailService } from '../service/trail-service.service';
 import { UserCoordinates } from '../UserCoordinates';
 import { GraphicUtils } from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';

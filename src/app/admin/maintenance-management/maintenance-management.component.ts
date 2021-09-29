@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { Maintenance, MaintenanceService } from 'src/app/maintenance.service';
+import { Maintenance, MaintenanceService } from 'src/app/service/maintenance.service';
 import { Status } from 'src/app/Status';
 
 @Component({

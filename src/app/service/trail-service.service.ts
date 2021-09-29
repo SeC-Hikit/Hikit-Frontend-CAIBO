@@ -27,7 +27,7 @@ export class TrailService {
   constructor(private httpClient: HttpClient) { }
 
   getTrailByCode(code: String): Observable<TrailResponse> {
-    return this.httpClient.get<TrailResponse>(this.baseUrl + "/" + code + "?light=true")
+    return this.httpClient.get<TrailResponse>(this.baseUrl + "/" + code)
       .pipe(
         tap(),
         catchError(this.handleError<TrailResponse>('get all trail', null))

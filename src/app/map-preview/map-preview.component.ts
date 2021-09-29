@@ -1,9 +1,9 @@
 import { SimpleChanges } from "@angular/core";
 import { Component, Input, OnInit } from "@angular/core";
 import * as L from "leaflet";
-import { Coordinates2D } from "../geo-trail-service";
+import { Coordinates2D } from "../service/geo-trail-service";
 import { MapUtils } from "../map-view/MapUtils";
-import { Trail, TrailCoordinates } from "../trail-service.service";
+import { Trail, TrailCoordinates } from "../service/trail-service.service";
 import { UserCoordinates } from "../UserCoordinates";
 
 @Component({

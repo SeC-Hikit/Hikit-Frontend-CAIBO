@@ -18,6 +18,16 @@ export class AuthService {
     return any.preferred_username; 
   }
 
+  getRealm() : string {
+    let any : any = this.keycloakService.getKeycloakInstance().idTokenParsed;
+    return any.realm;
+  }
+
+  getSection() : string {
+    let any : any = this.keycloakService.getKeycloakInstance().idTokenParsed;
+    return any.section;
+  }
+
   logout() {
     this.keycloakService.logout("/#");
   }

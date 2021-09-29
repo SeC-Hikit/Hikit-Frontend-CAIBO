@@ -4,16 +4,14 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
 
-export type TrailPreviewResponse = components["schemas"]["TrailPreviewResponse"];
-export type TrailPreview = components["schemas"]["TrailPreviewDto"];
+export type PoiResponse = components["schemas"]["PoiResponse"];
 
 @Injectable({
   providedIn: 'root'
 })
-export class TrailPreviewService {
+export class PoiService {
 
-
-  baseUrl = "api/preview";
+  baseUrl = "api/poi";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -21,23 +19,31 @@ export class TrailPreviewService {
   constructor(private httpClient: HttpClient) { }
 
 
-  getPreviews(skip: number, limit: number): Observable<TrailPreviewResponse> {
+  get(skip: number, limit: number): Observable<PoiResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
-    return this.httpClient.get<TrailPreviewResponse>(this.baseUrl, { params: params })
+    return this.httpClient.get<PoiResponse>(this.baseUrl, { params: params })
       .pipe(
         tap(_ => console.log(_)),
-        catchError(this.handleError<TrailPreviewResponse>('get all previews', null))
+        catchError(this.handleError<PoiResponse>('get all POI', null))
       );
   }
 
-  getRawPreviews(skip: number, limit: number): Observable<TrailPreviewResponse> {
-    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
-    return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/raw", { params: params })
+  getById(id: string): Observable<PoiResponse> {
+    return this.httpClient.get<PoiResponse>(this.baseUrl + "/" + id)
       .pipe(
         tap(_ => console.log(_)),
-        catchError(this.handleError<TrailPreviewResponse>('get all previews', null))
+        catchError(this.handleError<PoiResponse>('get ID: ' + id, null))
       );
   }
+
+  getByTrailCode(id: string): Observable<PoiResponse> {
+    return this.httpClient.get<PoiResponse>(this.baseUrl + "/code" + id)
+      .pipe(
+        tap(_ => console.log(_)),
+        catchError(this.handleError<PoiResponse>('get by trail ID: ' + id, null))
+      );
+  }
+
   /**
 * Handle Http operation that failed.
 * Let the app continue.

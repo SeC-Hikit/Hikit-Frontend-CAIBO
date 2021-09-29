@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { AccessibilityNotification, NotificationService, AccessibilityNotificationResolution } from 'src/app/notification-service.service';
+import { AccessibilityNotification, NotificationService, AccessibilityNotificationResolution } from 'src/app/service/notification-service.service';
 import { Status } from 'src/app/Status';
 
 @Component({

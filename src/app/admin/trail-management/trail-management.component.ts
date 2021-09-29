@@ -3,8 +3,8 @@ import { Status } from "src/app/Status";
 import {
   TrailPreview,
   TrailPreviewService,
-} from "src/app/trail-preview-service.service";
-import { TrailCoordinates, TrailService } from "src/app/trail-service.service";
+} from "src/app/service/trail-preview-service.service";
+import { TrailCoordinates, TrailService } from "src/app/service/trail-service.service";
 @Component({
   selector: "app-trail-management",
   templateUrl: "./trail-management.component.html",

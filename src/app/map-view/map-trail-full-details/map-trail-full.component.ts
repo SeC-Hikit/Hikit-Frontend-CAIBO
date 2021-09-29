@@ -2,11 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import * as Chart from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import { ChartUtils } from '../ChartUtils';
-import { ViewChild } from '@angular/core';
 import * as moment from 'moment';
-import { Trail } from 'src/app/trail-service.service';
-import { AccessibilityNotification } from 'src/app/notification-service.service';
-import { Maintenance } from 'src/app/maintenance.service';
+import { Trail } from 'src/app/service/trail-service.service';
+import { AccessibilityNotification } from 'src/app/service/notification-service.service';
+import { Maintenance } from 'src/app/service/maintenance.service';
 
 @Component({
   selector: 'app-map-trail-full',

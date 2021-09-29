@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { Maintenance, MaintenanceService as MaintenanceService } from '../maintenance.service';
+import { Maintenance, MaintenanceService as MaintenanceService } from '../service/maintenance.service';
 
 
 @Component({

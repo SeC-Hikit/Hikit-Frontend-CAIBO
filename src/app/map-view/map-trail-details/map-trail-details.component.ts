@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
-import { Maintenance } from 'src/app/maintenance.service';
-import { AccessibilityNotification } from 'src/app/notification-service.service';
-import { Trail, TrailCoordinates } from 'src/app/trail-service.service';
+import { Maintenance } from 'src/app/service/maintenance.service';
+import { AccessibilityNotification } from 'src/app/service/notification-service.service';
+import { Trail, TrailCoordinates } from 'src/app/service/trail-service.service';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 
 @Component({

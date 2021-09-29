@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TrailPreview, TrailPreviewService } from 'src/app/trail-preview-service.service';
+import { TrailPreview, TrailPreviewService } from 'src/app/service/trail-preview-service.service';
 import { DateUtils } from 'src/app/utils/DateUtils';
-import { ImportService, TrailRawResponse } from 'src/app/import.service';
+import { ImportService, TrailRawResponse } from 'src/app/service/import.service';
 import { Subject } from "rxjs";
 import {  takeUntil, tap } from "rxjs/operators";
 import { Router } from '@angular/router';
-import { TrailRawService } from 'src/app/trail-raw-service.service';
+import { TrailRawService } from 'src/app/service/trail-raw-service.service';
 
 @Component({
   selector: 'app-trail-raw-management',

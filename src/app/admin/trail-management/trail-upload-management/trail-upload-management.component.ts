@@ -7,12 +7,12 @@ import {
   GeoTrailService,
   Coordinates2D,
   TrailIntersectionResponse,
-} from "src/app/geo-trail-service";
-import { TrailRaw, TrailRawResponse } from "src/app/import.service";
+} from "src/app/service/geo-trail-service";
+import { TrailRaw, TrailRawResponse } from "src/app/service/import.service";
 import { RestResponse } from "src/app/RestResponse";
 import { Status } from "src/app/Status";
-import { TrailRawService } from "src/app/trail-raw-service.service";
-import { TrailResponse, FileDetailsDto } from "src/app/trail-service.service";
+import { TrailRawService } from "src/app/service/trail-raw-service.service";
+import { TrailResponse, FileDetailsDto } from "src/app/service/trail-service.service";
 import { FormUtils } from "src/app/utils/FormUtils";
 @Component({
   selector: "app-trail-upload-management",

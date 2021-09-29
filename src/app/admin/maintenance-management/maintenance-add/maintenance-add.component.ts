@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { Maintenance, MaintenanceService } from 'src/app/maintenance.service';
+import { Maintenance, MaintenanceService } from 'src/app/service/maintenance.service';
 import { Status } from 'src/app/Status';
-import { TrailPreviewResponse, TrailPreviewService } from 'src/app/trail-preview-service.service';
+import { TrailPreviewResponse, TrailPreviewService } from 'src/app/service/trail-preview-service.service';
 
 @Component({
   selector: 'app-maintenance-add',

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import 'leaflet';
 import { LeafletMouseEventHandlerFn } from 'leaflet';
 import 'leaflet-textpath';
-import { Trail, TrailCoordinates } from 'src/app/trail-service.service';
+import { Trail, TrailCoordinates } from 'src/app/service/trail-service.service';
 import { UserCoordinates } from 'src/app/UserCoordinates';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 import { MapUtils } from '../MapUtils';
