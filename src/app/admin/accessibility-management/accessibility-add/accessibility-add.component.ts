@@ -52,7 +52,7 @@ export class AccessibilityAddComponent implements OnInit {
 
   onChanges(changes: any): void {
     let trailId = changes;
-    this.trailService.getTrailByCode(trailId).subscribe(x => this.onLoadedTrail(x))
+    this.trailService.getTrailById(trailId).subscribe(x => this.onLoadedTrail(x))
   }
 
   onLoadedTrail(x: TrailResponse) {

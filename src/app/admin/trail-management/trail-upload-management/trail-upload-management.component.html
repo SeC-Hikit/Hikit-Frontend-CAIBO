@@ -39,23 +39,12 @@
       </div>
     </div>
 
-    <div
-      *ngIf="!isLoading"
-      [ngClass]="{
-        'floating-hide-panel': true,
-        show: isPreviewVisible,
-        top: true
-      }"
-    >
-      <span class="close-btn" (click)="togglePreview()">ｘ</span>
-      <label>Anteprima</label>
-      <div class="form-group col-md-12 mb-12">
-        <app-map-preview
-          [trailPreview]="trailRawResponse.content[0]"
-          [otherTrails]="[]"
-          [index]="0"
-        ></app-map-preview>
-      </div>
+    <div *ngIf="!isLoading">
+      <app-trail-floating-preview
+        [trailPreview]="trailRawResponse.content[0]"
+        [isVisible]="isPreviewVisible"
+        (onClose)="this.togglePreview()"
+      ></app-trail-floating-preview>
     </div>
 
     <div class="row" *ngIf="!isLoading">

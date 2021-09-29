@@ -1,0 +1,28 @@
+.floating-hide-panel { 
+    padding: 3%;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    transition: all 0.5s;
+    z-index:1100 !important;
+
+    label {
+        color: white;
+    }
+
+}
+
+.close-btn {
+    position: absolute;
+    background: white;
+    padding: 0.5%;
+    border-radius: 10px;
+    color: black;
+    font-size: 24px;
+    top: 2%;
+    right: 2%;
+    cursor: pointer;
+  }

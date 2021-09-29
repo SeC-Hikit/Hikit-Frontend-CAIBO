@@ -46,6 +46,7 @@ import { PoiManagementComponent } from "./admin/poi-management/poi-management.co
 import { TrailIntersectionEntryComponent } from './admin/trail-management/trail-intersection-entry/trail-intersection-entry.component';
 import { PoiAddComponent } from './admin/poi-management/poi-add/poi-add.component';
 import { PoiViewTableComponent } from './admin/poi-management/poi-view-table/poi-view-table.component';
+import { TrailFloatingPreviewComponent } from './shared/trail-floating-preview/trail-floating-preview.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { PoiViewTableComponent } from './admin/poi-management/poi-view-table/poi
     TrailIntersectionEntryComponent,
     PoiAddComponent,
     PoiViewTableComponent,
+    TrailFloatingPreviewComponent,
   ],
   imports: [
     BrowserModule,

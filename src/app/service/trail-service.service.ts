@@ -18,19 +18,20 @@ export enum TrailClassification {
   providedIn: 'root'
 })
 export class TrailService {
-
+  
   baseUrl = "api/trail";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-
+  
   constructor(private httpClient: HttpClient) { }
+  
 
-  getTrailByCode(code: String): Observable<TrailResponse> {
-    return this.httpClient.get<TrailResponse>(this.baseUrl + "/" + code)
+  getTrailById(id: String): Observable<TrailResponse> {
+    return this.httpClient.get<TrailResponse>(this.baseUrl + "/" + id)
       .pipe(
         tap(),
-        catchError(this.handleError<TrailResponse>('get all trail', null))
+        catchError(this.handleError<TrailResponse>('get trail', null))
       );
   }
 

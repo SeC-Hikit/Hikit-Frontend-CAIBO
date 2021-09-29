@@ -1,0 +1,14 @@
+@import "./const.scss";
+
+table tbody tr {
+  &:hover {
+    background: $action-btn-color;
+    color: $primary-bg-color;
+    cursor: pointer;
+  }
+}
+
+.pagination-position {
+    float:right;
+  margin: 0 auto;
+}

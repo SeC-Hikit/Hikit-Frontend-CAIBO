@@ -5,8 +5,17 @@
       Sentiero {{ savedTrailCode }} aggiunto
     </div>
   </div>
+
+  <div *ngIf="!isLoading && selectedTrail != null">
+    <app-trail-floating-preview
+      [trailPreview]="selectedTrail"
+      [isVisible]="isPreviewVisible"
+      (onClose)="togglePreview()"
+    ></app-trail-floating-preview>
+  </div>
+
   <div class="row section-distance-up">
-    <div class="col-12 col-md-8">
+    <div class="col-12 col-md-12">
       <h1>Gestione Sentieri</h1>
       <!-- *ngIf="trailPreviewList; else notShow" -->
       <h2>Lista Sentieri</h2>
@@ -14,14 +23,15 @@
         <thead class="">
           <tr>
             <th scope="col">Id</th>
-            <th scope="col">Stato</th>
             <th scope="col">Codice</th>
+            <th scope="col">Stato</th>
             <th scope="col">Localita</th>
             <th scope="col">Cl.</th>
-            <th scope="col">Type</th>
+            <th scope="col">Ciclo</th>
+            <th scope="col">C. da Utente</th>
+            <th scope="col">Apri</th>
             <th scope="col">Modifica</th>
             <th scope="col">Cancella</th>
-            <th scope="col">File</th>
           </tr>
         </thead>
         <tbody class="short-list">
@@ -30,29 +40,41 @@
             class="trailPreview"
             (click)="onPreview(trailPreview)"
           >
-            <th scope="row">{{ trailPreview.code }}</th>
+            <th
+              scope="row"
+              class="ellipsis small-column"
+              title="{{ trailPreview.id }}"
+            >
+              {{ trailPreview.id }}
+            </th>
+
+            <td [scope]="row">{{ trailPreview.code }}</td>
+            <td [scope]="row">
+              {{
+                trailPreview.trailStatus == "PUBLIC" ? "Pubblicato" : "Bozza"
+              }}
+            </td>
             <td>
               {{ trailPreview.startPos.name }} -
               {{ trailPreview.finalPos.name }}
             </td>
             <td>{{ trailPreview.classification }}</td>
-            <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
+            <td class="clickable">
+              {{ trailPreview.bikeData ? "Si" : "No" }}
+            </td>
+            <td class="clickable">
+              {{ trailPreview.fileDetails.uploadedBy }}
+            </td>
+            <td class="clickable" routerLink="/map/{{ trailPreview.id }}">
               <svg class="bi" width="32" height="32" fill="currentColor">
                 <use
                   xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
                 />
               </svg>
             </td>
-            <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
-              <svg class="bi" width="32" height="32" fill="currentColor">
-                <use
-                  xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image"
-                />
-              </svg>
-            </td>
             <td
               class="clickable"
-              routerLink="/admin/trails/edit/{{ trailPreview.code }}"
+              routerLink="/admin/trails/edit/{{ trailPreview.id }}"
             >
               <svg class="bi" width="32" height="32" fill="currentColor">
                 <use
@@ -60,7 +82,7 @@
                 />
               </svg>
             </td>
-            <td class="clickable" (click)="onDelete(trailPreview)">
+            <td class="clickable" (click)="onDelete($event, trailPreview)">
               <svg class="bi" width="32" height="32" fill="currentColor">
                 <use
                   xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
@@ -70,11 +92,15 @@
           </tr>
         </tbody>
       </table>
-      <ngb-pagination
-        [collectionSize]="70"
-        [(page)]="page"
-        aria-label="Default pagination"
-      ></ngb-pagination>
+      <div class="pagination-position">
+        <ngb-pagination
+          [pageSize]="entryPerPage"
+          [collectionSize]="totalTrail"
+          [(page)]="page"
+          aria-label="Default pagination"
+          (pageChange)="loadTrails(page)"
+        ></ngb-pagination>
+      </div>
       <ng-template #notShow>
         <p>Non ci sono ancora sentieri.</p>
       </ng-template>

@@ -29,7 +29,7 @@ export class TrailsComponent implements OnInit {
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {
-    this.trailService.getTrailByCode(selectedTrailPreview.code).subscribe(trail => {
+    this.trailService.getTrailById(selectedTrailPreview.code).subscribe(trail => {
       this.selectedTrail = trail.content[0];
       this.selectedTrailCoords = trail.content[0].coordinates;
     })

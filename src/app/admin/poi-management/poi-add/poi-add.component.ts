@@ -19,7 +19,7 @@ export class PoiAddComponent implements OnInit {
   
   isTrailListLoaded = false;
   isTrailLoaded = false;
-  
+
   selectedTrail : Trail;
   trailPreviewResponse: TrailPreviewResponse;
 
@@ -43,7 +43,7 @@ export class PoiAddComponent implements OnInit {
 
   private selectFirstTrail(trailPreviews: TrailPreview[]) {
     if(trailPreviews.length > 0){
-      this.trailService.getTrailByCode(trailPreviews[0].id).subscribe((resp)=>{ 
+      this.trailService.getTrailById(trailPreviews[0].id).subscribe((resp)=>{ 
         this.selectedTrail = resp.content[0];
         this.isTrailLoaded = true;
       });

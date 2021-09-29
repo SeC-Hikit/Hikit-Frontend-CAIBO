@@ -35,38 +35,6 @@
   width: 100%;
 }
 
-.floating-hide-panel { 
-  padding: 3%;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 100%;
-  height: 100%;
-  left: 0;
-  width: 100%;
-  transition: all 0.5s;
-  z-index:1100 !important;
-}
-
-.close-btn {
-  position: absolute;
-  background: white;
-  padding: 0.5%;
-  border-radius: 10px;
-  color: black;
-  font-size: 24px;
-  top: 2%;
-  right: 2%;
-  cursor: pointer;
-}
-
-.top {
-  z-index : 100
-}
-
-.show {
-  top: 0%;
-}
-
 .progress {
   position: fixed;
   left: 0px;

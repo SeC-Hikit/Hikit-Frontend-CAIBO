@@ -1,21 +1,18 @@
+@import "../../../app/style/general.scss";
+
 .section-distance-up {
   margin-top: 20px;
 }
 
-.small-column { 
-  width: 10px;
+.small-column {
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  max-width: 100px; 
+  height: 1.2em; 
+  white-space: nowrap;
 }
 
 .hide {
   display: none;
 }
 
-.trailPreview {
-  transition: 0.3s all;
-
-  &:hover {
-    background: #d04341;
-    color: white;
-    cursor: pointer;
-  }
-}

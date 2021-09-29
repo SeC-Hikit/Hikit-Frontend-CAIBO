@@ -9,13 +9,3 @@
 .hide {
   display: none;
 }
-
-.trailPreview {
-  transition: 0.3s all;
-
-  &:hover {
-    background: #d04341;
-    color: white;
-    cursor: pointer;
-  }
-}

@@ -2,9 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { Status } from "src/app/Status";
 import {
   TrailPreview,
+  TrailPreviewResponse,
   TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
-import { TrailCoordinates, TrailService } from "src/app/service/trail-service.service";
+import {  takeUntil, tap } from "rxjs/operators";
+import { Trail, TrailService } from "src/app/service/trail-service.service";
+import { Subject } from "rxjs";
 @Component({
   selector: "app-trail-management",
   templateUrl: "./trail-management.component.html",
@@ -15,11 +18,14 @@ export class TrailManagementComponent implements OnInit {
   page = 1;
   isLoading = false;
 
-  selectedTrail: TrailPreview;
-  selectedTrailCoords: TrailCoordinates[];
+  private destroy$ = new Subject();
+
+  selectedTrail: Trail;
+  isPreviewVisible: boolean = false;
   trailPreviewList: TrailPreview[];
 
   savedTrailCode: string;
+  totalTrail: number;
 
   constructor(
     private trailPreviewService: TrailPreviewService,
@@ -35,10 +41,7 @@ export class TrailManagementComponent implements OnInit {
 
   getAllPreviews() {
     this.isLoading = true;
-    this.trailPreviewService.getPreviews(0, 10).subscribe((preview) => {
-      this.isLoading = false;
-      this.trailPreviewList = preview?.content;
-    });
+    this.getTrailPreviews(0, this.entryPerPage);
   }
 
   onFileSave(codeTrailSaved: string) {
@@ -47,14 +50,15 @@ export class TrailManagementComponent implements OnInit {
 
   onPreview(selectedTrailPreview: TrailPreview) {
     this.trailService
-      .getTrailByCode(selectedTrailPreview.code)
+      .getTrailById(selectedTrailPreview.id)
       .subscribe((trail) => {
         this.selectedTrail = trail.content[0];
-        this.selectedTrailCoords = trail.content[0].coordinates;
+        this.isPreviewVisible = true;
       });
   }
 
-  onDelete(selectedTrailPreview: TrailPreview) {
+  onDelete(e: Event, selectedTrailPreview: TrailPreview) {
+    e.stopPropagation();
     let isUserCancelling = confirm(
       "Sei sicuro di voler cancellare il sentiero '" +
         selectedTrailPreview.code +
@@ -69,6 +73,30 @@ export class TrailManagementComponent implements OnInit {
           }
         });
     }
+  }
+
+  loadTrails(page: number): void {
+    this.page = page;
+    const lowerBound = this.entryPerPage * (page - 1);
+    this.getTrailPreviews(lowerBound, this.entryPerPage);
+  }
+
+  getTrailPreviews(skip: number, limit: number) {
+    this.isLoading = true;
+    this.trailPreviewService.getPreviews(skip, limit)
+    .pipe(
+      takeUntil(this.destroy$),
+      tap(_ => this.isLoading = false)
+    )
+    .subscribe((preview : TrailPreviewResponse)  => {
+      this.totalTrail = preview.totalCount;
+      this.trailPreviewList = preview.content;
+    });
+  }
+
+
+  togglePreview(){
+    this.isPreviewVisible = !this.isPreviewVisible;
   }
 
   onDeleteSuccess(selectedTrailPreview: TrailPreview) {

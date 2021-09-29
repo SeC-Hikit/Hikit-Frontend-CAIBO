@@ -76,7 +76,7 @@ export class MapComponent implements OnInit {
 
   loadTrail(code: string): void {
     if (code) {
-      this.trailService.getTrailByCode(code).subscribe(
+      this.trailService.getTrailById(code).subscribe(
         trailResponse => {
           this.selectedTrail = trailResponse.content[0];
           this.selectedTrail.statsTrailMetadata.eta = Math.round(this.selectedTrail.statsTrailMetadata.eta);
