@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -39,11 +39,12 @@ export class NotificationService {
       );
   }
 
-  getUnresolved(): Observable<AccessibilityNotificationResponse> {
-    return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved")
+  getUnresolved(skip : number, limit: number): Observable<AccessibilityNotificationResponse> {
+    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved", {params: params})
       .pipe(
         tap(),
-        catchError(this.handleError<AccessibilityNotificationResponse>('get all unresolved', null))
+        catchError(this.handleError<AccessibilityNotificationResponse>('get unresolved', null))
       );
   }
 

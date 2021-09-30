@@ -18,6 +18,9 @@ import { TrailRawManagementComponent } from "./admin/trail-raw-management/trail-
 import { PoiManagementComponent } from "./admin/poi-management/poi-management.component";
 import { PoiAddComponent } from "./admin/poi-management/poi-add/poi-add.component";
 import { PoiViewTableComponent } from "./admin/poi-management/poi-view-table/poi-view-table.component";
+import { AccessibilityReportViewComponent } from "./admin/accessibility-management/accessibility-report-view/accessibility-report-view.component";
+import { AccessibilityNotificationViewComponent } from "./admin/accessibility-management/accessibility-notification-view/accessibility-notification-view.component";
+import { AccessibilityAddComponent } from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -55,6 +58,11 @@ const routes: Routes = [
       },
       {
         path: "accessibility-management",
+        children: [
+          { path: "add", component: AccessibilityAddComponent },
+          { path: "notification", component: AccessibilityNotificationViewComponent },
+          { path: "report", component: AccessibilityReportViewComponent }
+        ],
         component: AccessibilityManagementComponent
       },
       {

@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-md-12 map-container">
       <div
-        class="arrow-left arrow-control btn actionable"
+        class="arrow-left arrow-control btn actionable white-fill"
         *ngIf="isEditableLocation" (click)="onPrevPoint()"
       >
         <svg class="bi" width="32" height="32" fill="currentColor">
@@ -36,7 +36,7 @@
         [markersCoordinates]="markers"
       ></app-map-preview>
       <div
-        class="arrow-right arrow-control btn actionable"
+        class="arrow-right arrow-control btn actionable white-fill"
         *ngIf="isEditableLocation" (click)="onNextPoint()"
       >
         <svg class="bi" width="32" height="32" fill="currentColor">

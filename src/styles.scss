@@ -37,22 +37,31 @@ h2,
 h3,
 h4,
 h5,
-thead, th, li, .nav-item, button, .upload-button-management__label {
+thead,
+th,
+li,
+.nav-item,
+button,
+.upload-button-management__label {
   font-family: "Bebas Neue", cursive;
   letter-spacing: 0px !important;
 }
 
-.nav-item {
+.menu-wrapper .nav-item {
   font-size: $menu-primary-font-size;
 }
 
-.upload-button-management__label, button, input[type="submit"], 
-.upload[type="file"] + label, .btn-primary{
+.upload-button-management__label,
+button,
+input[type="submit"],
+.upload[type="file"] + label,
+.btn-primary {
   background: $action-btn-color !important;
   border-radius: 0px;
 }
 
-.upload-button-management__label span, .upload[type="file"] + label span {
+.upload-button-management__label span,
+.upload[type="file"] + label span {
   color: $primary-font !important;
 }
 
@@ -70,8 +79,21 @@ h3 {
   margin-top: 3%;
 }
 
-.thin-rows td, .thin-rows th {
-  padding: 0.5em !important;
+table td,
+th {
+  font-size: 16px;
+}
+
+table {
+  .ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .small-column {
+    max-width: 10px;
+  }
 }
 
 .full-width {
@@ -82,7 +104,7 @@ h3 {
   margin-top: 0.5em;
 }
 
-.btn-error { 
+.btn-error {
   background-color: $error-color;
 }
 
