@@ -42,7 +42,7 @@ export class PoiViewTableComponent implements OnInit {
   loadPois(page: number): void {
     this.page = page;
     const lowerBound = this.entryPerPage * (page - 1);
-    this.getTrailPreviews(lowerBound, this.entryPerPage);
+    this.getTrailPreviews(lowerBound, this.entryPerPage * page);
   }
 
   getTrailCode(id: string): string {

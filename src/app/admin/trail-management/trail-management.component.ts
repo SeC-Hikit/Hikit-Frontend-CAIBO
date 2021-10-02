@@ -29,7 +29,7 @@ export class TrailManagementComponent implements OnInit {
 
   constructor(
     private trailPreviewService: TrailPreviewService,
-    private trailService: TrailService
+    private trailService: TrailService,
   ) {}
 
   ngOnInit(): void {
@@ -78,8 +78,7 @@ export class TrailManagementComponent implements OnInit {
   loadTrails(page: number): void {
     this.page = page;
     const lowerBound = this.entryPerPage * (page - 1);
-    console.log(lowerBound);
-    this.getTrailPreviews(lowerBound, this.entryPerPage);
+    this.getTrailPreviews(lowerBound, this.entryPerPage * page);
   }
 
   getTrailPreviews(skip: number, limit: number) {

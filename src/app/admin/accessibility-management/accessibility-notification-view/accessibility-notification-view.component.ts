@@ -54,7 +54,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
   loadNotification(page: number) {
     this.page = page;
     const lowerBound = this.entryPerPage * (page - 1);
-    this.loadSolved(lowerBound, this.entryPerPage);
+    this.loadSolved(lowerBound, this.entryPerPage * page);
   }
 
   private loadSolved(skip: number, limit: number) {

@@ -60,7 +60,7 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
   loadRawTrails(page: number): void {
     this.page = page;
     const lowerBound = this.entryPerPage * (page - 1);
-    this.getTrailRawPreviews(lowerBound, this.entryPerPage);
+    this.getTrailRawPreviews(lowerBound, this.entryPerPage * page);
   }
 
   uploadFile(file: FileList): void {
