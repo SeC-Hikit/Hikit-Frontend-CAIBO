@@ -16,10 +16,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    let fullSizeWBorder = GraphicUtils.getFullHeightSizeMenu();
-    let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenu();
+    let menuHeight = GraphicUtils.getMenuHeight();
+    let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenuImage();
     document.getElementById(HomeComponent.HOME_ID).style.minHeight = fullSizeWOBorder.toString() + "px";
-    document.getElementById("holder").style.minHeight = fullSizeWBorder.toString() + "px";
+    document.getElementById("holder").style.minHeight = (fullSizeWOBorder - menuHeight) .toString() + "px";
   }
   
 }

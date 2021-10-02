@@ -49,6 +49,8 @@ import { PoiViewTableComponent } from './admin/poi-management/poi-view-table/poi
 import { TrailFloatingPreviewComponent } from './shared/trail-floating-preview/trail-floating-preview.component';
 import { AccessibilityReportViewComponent } from './admin/accessibility-management/accessibility-report-view/accessibility-report-view.component';
 import { AccessibilityNotificationViewComponent } from './admin/accessibility-management/accessibility-notification-view/accessibility-notification-view.component';
+import { ItemsNotFoundComponent } from './shared/items-not-found/items-not-found.component';
+import { AccessibilityViewComponent } from './admin/accessibility-management/accessibility-view/accessibility-view.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +95,8 @@ import { AccessibilityNotificationViewComponent } from './admin/accessibility-ma
     TrailFloatingPreviewComponent,
     AccessibilityReportViewComponent,
     AccessibilityNotificationViewComponent,
+    ItemsNotFoundComponent,
+    AccessibilityViewComponent
   ],
   imports: [
     BrowserModule,

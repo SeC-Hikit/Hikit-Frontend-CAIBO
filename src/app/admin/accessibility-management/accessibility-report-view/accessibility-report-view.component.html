@@ -11,7 +11,7 @@
     ></app-trail-floating-preview>
   </div>
 
-  <div *ngIf="unresolvedNotifications.length > 0">
+  <div *ngIf="unresolvedNotifications.length > 0 else notShow">
     <table class="table table-striped interactive-table">
       <thead>
         <tr>
@@ -72,4 +72,7 @@
       ></ngb-pagination>
     </div>
   </div>
+  <ng-template #notShow>
+    <app-items-not-found></app-items-not-found>
+  </ng-template>  
 </div>

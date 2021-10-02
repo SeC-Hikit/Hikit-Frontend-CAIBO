@@ -1,56 +1,38 @@
 <button type="button" class="btn btn-primary" routerLink="../entry">
   + Aggiungi POI
 </button>
-<div *ngIf="poiPreviewList.length > 0; else notShow">
-  <table id="trailTable" class="table table-striped interactive-table">
+<div *ngIf="poiResponse">
+  <table
+    id="trailTable"
+    class="table table-striped interactive-table"
+    *ngIf="poiResponse.content.length > 0; else notShow"
+  >
     <thead class="">
       <tr>
         <th scope="col">Id</th>
-        <th scope="col">Stato</th>
-        <th scope="col">Codice</th>
-        <th scope="col">Localita</th>
-        <th scope="col">Cl.</th>
-        <th scope="col">Type</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Sotto tipo/i</th>
+        <th scope="col">Sentiero/i</th>
         <th scope="col">Modifica</th>
         <th scope="col">Cancella</th>
-        <th scope="col">File</th>
       </tr>
     </thead>
     <tbody class="short-list">
-      <tr
-        *ngFor="let poi of poiPreviewList"
-        class="trailPreview"
-        (click)="onPreview(trailPreview)"
-      >
-        <th scope="row">{{ trailPreview.code }}</th>
+      <tr *ngFor="let poi of poiResponse.content" class="trailPreview">
+        <th scope="row">{{ poi.id }}</th>
         <td>
-          {{ trailPreview.startPos.name }} -
-          {{ trailPreview.finalPos.name }}
+          {{ poi.name }}
         </td>
-        <td>{{ trailPreview.classification }}</td>
-        <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
-          <svg class="bi" width="32" height="32" fill="currentColor">
-            <use
-              xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
-            />
-          </svg>
-        </td>
-        <td class="clickable" routerLink="/map/{{ trailPreview.code }}">
-          <svg class="bi" width="32" height="32" fill="currentColor">
-            <use
-              xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#card-image"
-            />
-          </svg>
-        </td>
-        <td
-          class="clickable"
-          routerLink="/admin/trails/edit/{{ trailPreview.code }}"
-        >
+        <td>{{ poi.macroType }}</td>
+        <td>{{ poi.microType.toString().replace(",", ", ") }}</td>
+        <td>{{ poi.trailIds }}</td>
+        <td class="clickable" routerLink="/admin/poi/edit/{{ poi.id }}">
           <svg class="bi" width="32" height="32" fill="currentColor">
             <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen" />
           </svg>
         </td>
-        <td class="clickable" (click)="onDelete(trailPreview)">
+        <td class="clickable" (click)="onDelete(poi.id)">
           <svg class="bi" width="32" height="32" fill="currentColor">
             <use
               xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
@@ -60,12 +42,16 @@
       </tr>
     </tbody>
   </table>
-  <ngb-pagination
-    [collectionSize]="70"
-    [(page)]="page"
-    aria-label="Default pagination"
-  ></ngb-pagination>
+  <div class="pagination-position">
+    <ngb-pagination
+      [pageSize]="entryPerPage"
+      [collectionSize]="totalPoi"
+      [(page)]="page"
+      aria-label="Default pagination"
+      (pageChange)="loadPois(page)"
+    ></ngb-pagination>
+  </div>
 </div>
 <ng-template #notShow>
-  <p>Non ci sono ancora Punti d'interesse (POI).</p>
+  <app-items-not-found></app-items-not-found>
 </ng-template>

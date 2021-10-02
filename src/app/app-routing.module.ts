@@ -21,6 +21,7 @@ import { PoiViewTableComponent } from "./admin/poi-management/poi-view-table/poi
 import { AccessibilityReportViewComponent } from "./admin/accessibility-management/accessibility-report-view/accessibility-report-view.component";
 import { AccessibilityNotificationViewComponent } from "./admin/accessibility-management/accessibility-notification-view/accessibility-notification-view.component";
 import { AccessibilityAddComponent } from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
+import { AccessibilityViewComponent } from "./admin/accessibility-management/accessibility-view/accessibility-view.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -32,6 +33,8 @@ const routes: Routes = [
   { path: "trekking", component: TrekkingComponent },
   { path: "accessibility", component: AccessibilityComponent },
   { path: "maintenance", component: MaintenanceComponent },
+  
+  // ADMIN
   {
     path: "admin", canActivate: [AuthGuard], children: [
       {
@@ -47,26 +50,32 @@ const routes: Routes = [
         path: "poi-management",
         children : [
           { path: "view", component: PoiViewTableComponent },
-          { path: "entry", component: PoiAddComponent },
-          { path: "entry/:id", component: PoiAddComponent }
+          { path: "add", component: PoiAddComponent },
+          { path: "modify/:id", component: PoiAddComponent }
         ],
         component: PoiManagementComponent
       },
       {
         path: "trail-management",
+        // children : [
+          // { path: "modify", component:  },
         component: TrailManagementComponent
       },
       {
         path: "accessibility-management",
         children: [
+          { path: "", component: AccessibilityViewComponent },
           { path: "add", component: AccessibilityAddComponent },
-          { path: "notification", component: AccessibilityNotificationViewComponent },
-          { path: "report", component: AccessibilityReportViewComponent }
+          { path: "modify", component: AccessibilityAddComponent },
         ],
         component: AccessibilityManagementComponent
       },
       {
         path: "maintenance-management",
+        children: [
+          { path: "add", component: AccessibilityAddComponent },
+          { path: "modify/:id", component: AccessibilityAddComponent },
+        ],
         component: MaintenanceManagementComponent
       },
       // Change

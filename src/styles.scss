@@ -102,6 +102,15 @@ table {
   }
 }
 
+.accordion .card-header {
+  padding: 0 0 1em 0;
+  border-bottom: none;
+}
+
+.accordion .card-body {
+  padding: 24px 0;
+}
+
 .full-width {
   width: 100%;
 }
