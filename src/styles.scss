@@ -102,6 +102,15 @@ table {
   }
 }
 
+.nav-tabs .nav-item .active {
+  color: $action-btn-color !important;
+  border-bottom: 2px solid $action-btn-color !important;
+}
+
+.nav-tabs .nav-link:hover {
+  color: $action-btn-color !important;
+}
+
 .accordion .card-header {
   padding: 0 0 1em 0;
   border-bottom: none;

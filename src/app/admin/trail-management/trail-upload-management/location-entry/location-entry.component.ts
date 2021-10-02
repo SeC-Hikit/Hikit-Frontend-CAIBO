@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { Marker } from "src/app/map-preview/map-preview.component";
 import { Coordinates2D } from "src/app/service/geo-trail-service";
 import { Trail, TrailCoordinates } from "src/app/service/trail-service.service";
 
@@ -18,7 +19,7 @@ export class LocationEntryComponent implements OnInit {
   @Input() inputForm: FormGroup;
   @Input() trail: Trail;
   @Input() otherTrails: Trail[];
-  @Input() markers: Coordinates2D[];
+  @Input() markers: Marker[];
   @Input() isEditableLocation: boolean;
 
   @Input() startPoint: number;

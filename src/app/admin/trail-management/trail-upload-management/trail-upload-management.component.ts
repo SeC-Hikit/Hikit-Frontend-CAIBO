@@ -14,6 +14,8 @@ import { Status } from "src/app/Status";
 import { TrailRawService } from "src/app/service/trail-raw-service.service";
 import { TrailResponse, FileDetailsDto } from "src/app/service/trail-service.service";
 import { FormUtils } from "src/app/utils/FormUtils";
+import { Marker } from "src/app/map-preview/map-preview.component";
+import { MapIconType } from "src/app/utils/map/MapIconType";
 @Component({
   selector: "app-trail-upload-management",
   templateUrl: "./trail-upload-management.component.html",
@@ -34,10 +36,13 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   closeResult: string;
 
-  testCoordinates: Coordinates2D = {
-    latitude: 44.11515289941759,
-    longitude: 10.814071100111235,
-  };
+  testCoordinates: Marker[] = [{
+    coords: {
+      latitude: 44.11515289941759,
+      longitude: 10.814071100111235,  
+    },
+    icon: MapIconType.CROSSWAY_ICON
+  }]
 
   STEPS = ["Info Generali", "Crocevia", "Località", "Ciclo Escursionismo"];
   CROSSWAY_INDEX = 1;

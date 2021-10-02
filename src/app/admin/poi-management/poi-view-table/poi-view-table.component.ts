@@ -2,6 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
 import { tap, takeUntil } from "rxjs/operators";
 import { PoiResponse, PoiService } from "src/app/service/poi-service.service";
+import {
+  TrailPreview,
+  TrailPreviewService,
+} from "src/app/service/trail-preview-service.service";
+import { TrailService } from "src/app/service/trail-service.service";
 import { components } from "src/binding/Binding";
 
 export type PoiDto = components["schemas"]["PoiDto"];
@@ -14,16 +19,21 @@ export type PoiDto = components["schemas"]["PoiDto"];
 export class PoiViewTableComponent implements OnInit {
   entryPerPage = 10;
   page = 1;
-  isLoading = false;
+  isLoading = true;
   totalPoi = 0;
 
   private destroy$ = new Subject();
 
   poiResponse: PoiResponse;
+  cachedTrail: TrailPreview[] = [];
 
   savedTrailCode: string;
+  selected: PoiDto;
 
-  constructor(private poiService: PoiService) {}
+  constructor(
+    private poiService: PoiService,
+    private trailPreviewService: TrailPreviewService
+  ) {}
 
   ngOnInit(): void {
     this.getTrailPreviews(0, this.entryPerPage);
@@ -35,17 +45,29 @@ export class PoiViewTableComponent implements OnInit {
     this.getTrailPreviews(lowerBound, this.entryPerPage);
   }
 
+  getTrailCode(id: string): string {
+    console.log(this.cachedTrail.filter((ct) => ct.id == id));
+    if (this.cachedTrail.length == 0) return "";
+    return this.cachedTrail.filter((ct) => ct.id == id)[0].code;
+  }
+
   getTrailPreviews(skip: number, limit: number) {
+    this.cachedTrail = [];
     this.isLoading = true;
     this.poiService
       .get(skip, limit)
-      .pipe(
-        takeUntil(this.destroy$),
-        tap((_) => (this.isLoading = false))
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((preview: PoiResponse) => {
+        preview.content.forEach((poi) =>
+          poi.trailIds.forEach((trailId) =>
+            this.trailPreviewService.getPreview(trailId).subscribe((resp) => {
+              resp.content.forEach((it) => this.cachedTrail.push(it));
+            })
+          )
+        );
         this.poiResponse = preview;
         this.totalPoi = preview.totalCount;
+        this.isLoading = false;
       });
   }
 }

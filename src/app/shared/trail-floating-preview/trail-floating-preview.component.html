@@ -5,12 +5,14 @@
   }"
 >
   <span class="close-btn" (click)="onClose.emit()">ｘ</span>
-  <label>Anteprima {{trailPreview.code}}</label>
+  <label>Anteprima {{ trailPreview.code }}</label>
   <div class="form-group col-md-12 mb-12">
     <app-map-preview
       [trailPreview]="this.trailPreview"
+      [mark]
       [otherTrails]="[]"
       [index]="0"
+      [markersCoordinates]="markers"
     ></app-map-preview>
   </div>
 </div>

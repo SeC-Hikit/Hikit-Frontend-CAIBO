@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { Marker } from "src/app/map-preview/map-preview.component";
 import { Coordinates2D } from "src/app/service/geo-trail-service";
 import { PlaceResponse, PlaceService } from "src/app/service/place.service";
 import { Trail } from "src/app/service/trail-service.service";
@@ -14,7 +15,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
   @Input() inputForm: FormGroup;
   @Input() trail: Trail;
   @Input() otherTrail: Trail;
-  @Input() crossPoint: Coordinates2D;
+  @Input() crossPoint: Marker;
 
   isCompleted: boolean;
   isShowing: boolean;
@@ -33,7 +34,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
     this.isCompleted = false;
     this.hasAutoDetectedRun = false;
     this.isAutoDetected = false;
-    console.log(this.otherTrail);
   }
 
   toggleShowing(): void {
@@ -47,8 +47,8 @@ export class TrailIntersectionEntryComponent implements OnInit {
         {
           coordinatesDto: {
             altitude: 0,
-            latitude: this.crossPoint.latitude,
-            longitude: this.crossPoint.longitude,
+            latitude: this.crossPoint.coords.latitude,
+            longitude: this.crossPoint.coords.longitude,
           },
           distance: this.GEO_LOCATION_DISTANCE,
         },

@@ -4,7 +4,17 @@ import * as L from "leaflet";
 import { Coordinates2D } from "../service/geo-trail-service";
 import { MapUtils } from "../map-view/MapUtils";
 import { Trail, TrailCoordinates } from "../service/trail-service.service";
-import { UserCoordinates } from "../UserCoordinates";
+import { StartIcon } from "../utils/map/MapIconType";
+import { EndIcon } from "../utils/map/MapIconType";
+import { MapIconType } from "../utils/map/MapIconType";
+import { AlertPinIcon } from "../utils/map/MapIconType";
+import { CrossWayIcon } from "../utils/map/MapIconType";
+import { RedPinIcon } from "../utils/map/MapIconType";
+
+export interface Marker {
+  coords: Coordinates2D;
+  icon: MapIconType
+}
 
 @Component({
   selector: "app-map-preview",
@@ -15,7 +25,7 @@ export class MapPreviewComponent implements OnInit {
 
   @Input() classPrefix: string;
   @Input() otherTrails: Trail[];
-  @Input() markersCoordinates: Coordinates2D[];
+  @Input() markersCoordinates: Marker[];
   @Input() trailPreview: Trail;
   @Input() elementAt: number;
   @Input() index: string;
@@ -31,33 +41,6 @@ export class MapPreviewComponent implements OnInit {
   private otherTrailPolys: L.Polyline[];
 
   isPreviewVisible: boolean;
-
-  private crossWayIcon = L.divIcon({
-    html: `
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#0B2E20" class="bi bi-signpost-2-fill" viewBox="0 0 16 16">
-      <path d="M7.293.707A1 1 0 0 0 7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586A1 1 0 0 0 7.293.707z"/>
-    </svg>`,
-    className: "",
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-  });
-  private startIcon = L.divIcon({
-    html: `
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
-    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  </svg>`,
-    className: "",
-    iconSize: [16, 16],
-    iconAnchor: [8, 8],
-  });
-  private endIcon = L.divIcon({
-    html: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-fill" viewBox="0 0 16 16">
-    <circle cx="8" cy="8" r="8"/>
-  </svg>`,
-    className: "",
-    iconSize: [16, 16],
-    iconAnchor: [8, 8],
-  });
 
   constructor() {}
 
@@ -97,11 +80,11 @@ export class MapPreviewComponent implements OnInit {
     }
   }
 
-  drawMarkers(markersCoords: Coordinates2D[]) {
-    this.markers = markersCoords.map((coord) => {
+  drawMarkers(markersCoords: Marker[]) {
+    this.markers = markersCoords.map((marker) => {
       return L.marker(
-        { lng: coord.longitude, lat: coord.latitude },
-        { icon: this.crossWayIcon }
+        { lng: marker.coords.longitude, lat: marker.coords.latitude },
+        { icon: this.determineIcon(marker.icon) }
       );
     });
 
@@ -149,11 +132,11 @@ export class MapPreviewComponent implements OnInit {
     });
     this.polyline.addTo(this.map);
     this.startPointMarker = L.marker(coordinatesLatLngs[0], {
-      icon: this.startIcon,
+      icon: StartIcon.get(),
     });
     this.lastPointMarker = L.marker(
       coordinatesLatLngs[coordinatesLatLngs.length - 1], {
-        icon: this.endIcon
+        icon: EndIcon.get()
       }
     );
     this.lastPointMarker.addTo(this.map);
@@ -201,5 +184,16 @@ export class MapPreviewComponent implements OnInit {
 
   focusOnTrail(): void {
     this.map.fitBounds(this.polyline.getBounds());
+  }
+
+  private determineIcon(mapIcon: MapIconType) {
+    switch (mapIcon) {
+      case MapIconType.ALERT_PIN: 
+        return AlertPinIcon.get();
+      case MapIconType.CROSSWAY_ICON:
+        return CrossWayIcon.get();
+      case MapIconType.RED_PIN:
+        return RedPinIcon.get();
+    }
   }
 }

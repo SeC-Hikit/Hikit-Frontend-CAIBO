@@ -1,7 +1,7 @@
 <button type="button" class="btn btn-primary" routerLink="../entry">
   + Aggiungi POI
 </button>
-<div *ngIf="poiResponse">
+<div *ngIf="!isLoading">
   <table
     id="trailTable"
     class="table table-striped interactive-table"
@@ -11,9 +11,9 @@
       <tr>
         <th scope="col">Id</th>
         <th scope="col">Nome</th>
+        <th scope="col">Sentiero/i</th>
         <th scope="col">Tipo</th>
         <th scope="col">Sotto tipo/i</th>
-        <th scope="col">Sentiero/i</th>
         <th scope="col">Modifica</th>
         <th scope="col">Cancella</th>
       </tr>
@@ -24,9 +24,15 @@
         <td>
           {{ poi.name }}
         </td>
+        <td>
+          <span *ngFor="let trailId of poi.trailIds">
+            <span class="trailCodeColumn">{{
+              getTrailCode(trailId)
+            }}</span>
+          </span>
+        </td>
         <td>{{ poi.macroType }}</td>
         <td>{{ poi.microType.toString().replace(",", ", ") }}</td>
-        <td>{{ poi.trailIds }}</td>
         <td class="clickable" routerLink="/admin/poi/edit/{{ poi.id }}">
           <svg class="bi" width="32" height="32" fill="currentColor">
             <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen" />

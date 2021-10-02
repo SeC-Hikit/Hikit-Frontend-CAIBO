@@ -11,7 +11,7 @@
     ></app-trail-floating-preview>
   </div>
 
-  <div *ngIf="unresolvedNotifications.length > 0 else notShow">
+  <div *ngIf="unresolvedNotifications.length > 0; else notShow">
     <table class="table table-striped interactive-table">
       <thead>
         <tr>
@@ -36,9 +36,9 @@
           </th>
           <td>{{ formatDate(notification.reportDate) }}</td>
           <td (click)="showPreview(notification.trailId)">
-            <span class="trailCodeColumn">{{
-              getTrailCode(notification.trailId)
-            }}</span>
+            <span class="trailCodeColumn">
+              {{ getTrailCode(notification.trailId) }}
+            </span>
           </td>
           <td class="ellipsis small-column">{{ notification.description }}</td>
           <td>{{ notification.minor === true ? "si" : "no" }}</td>
@@ -74,5 +74,5 @@
   </div>
   <ng-template #notShow>
     <app-items-not-found></app-items-not-found>
-  </ng-template>  
+  </ng-template>
 </div>

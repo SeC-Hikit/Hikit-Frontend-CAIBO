@@ -11,7 +11,7 @@
     ></app-trail-floating-preview>
   </div>
 
-  <div *ngIf="unresolvedNotifications.length > 0 else notShow">
+  <div *ngIf="unresolvedNotifications.length > 0; else notShow">
     <table class="table table-striped interactive-table">
       <thead>
         <tr>
@@ -70,40 +70,40 @@
   </div>
   <ng-template #notShow>
     <app-items-not-found></app-items-not-found>
-  </ng-template>  
+  </ng-template>
 
   <div class="col-12 col-md-12 space-up">
-    <ngb-accordion class="space-up">
-      <ngb-panel id="static-1" title="Mostra/Nascondi segnalazioni chiuse">
-        <ng-template ngbPanelContent>
-          <div class="col-12 col-md-12 space-up">
-            <h2>Segnalazioni Chiuse</h2>
-          </div>
-          <table
-            *ngIf="solvedNotifications.length > 0"
-            class="table table-striped interactive-table"
-          >
-            <thead>
-              <tr>
-                <th scope="col">Codice sentiero</th>
-                <th scope="col">Data segnalazione</th>
-                <th scope="col">Descrizione Problema</th>
-                <th scope="col">Data risoluzione</th>
-                <th scope="col">Risoluzione</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of solvedNotifications">
-                <th scope="row">{{ item.id }}</th>
-                <td>{{ formatDate(item.reportDate) }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ formatDate(item.resolutionDate) }}</td>
-                <td>{{ item.resolution }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </ng-template>
-      </ngb-panel>
-    </ngb-accordion>
+    <div class="col-12 col-md-12 space-up">
+      <h2>Notifiche Chiuse</h2>
+    </div>
+    <div *ngIf="unresolvedNotifications.length > 0; else notShow">
+      <table
+        *ngIf="solvedNotifications.length > 0"
+        class="table table-striped interactive-table"
+      >
+        <thead>
+          <tr>
+            <th scope="col">Codice sentiero</th>
+            <th scope="col">Data segnalazione</th>
+            <th scope="col">Descrizione Problema</th>
+            <th scope="col">Data risoluzione</th>
+            <th scope="col">Risoluzione</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of solvedNotifications">
+            <th scope="row">{{ item.id }}</th>
+            <td>{{ formatDate(item.reportDate) }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ formatDate(item.resolutionDate) }}</td>
+            <td>{{ item.resolution }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #notShow>
+      <app-items-not-found></app-items-not-found>
+    </ng-template>
   </div>
 </div>
+

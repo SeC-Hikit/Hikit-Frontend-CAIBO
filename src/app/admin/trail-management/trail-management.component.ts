@@ -78,6 +78,7 @@ export class TrailManagementComponent implements OnInit {
   loadTrails(page: number): void {
     this.page = page;
     const lowerBound = this.entryPerPage * (page - 1);
+    console.log(lowerBound);
     this.getTrailPreviews(lowerBound, this.entryPerPage);
   }
 
