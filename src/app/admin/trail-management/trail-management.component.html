@@ -48,7 +48,7 @@
               {{ trailPreview.id }}
             </th>
 
-            <td [scope]="row">{{ trailPreview.code }}</td>
+            <td [scope]="row"><span class="trailCodeColumn">{{ trailPreview.code }}</span></td>
             <td [scope]="row">
               {{
                 trailPreview.trailStatus == "PUBLIC" ? "Pubblicato" : "Bozza"

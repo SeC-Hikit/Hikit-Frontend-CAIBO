@@ -16,7 +16,7 @@ export class NotFoundComponent implements OnInit {
   ngAfterViewInit(): void {
     let fullSizeWBorder = GraphicUtils.getFullHeightSizeMenu();
     let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenu();
-    document.getElementsByTagName("body")[0].style.backgroundColor = "#3A5686";
+    document.getElementsByTagName("body")[0].style.backgroundColor = "#68C2C2";
     // document.getElementById("holder").style.minHeight = fullSizeWBorder.toString() + "px";
   }
 

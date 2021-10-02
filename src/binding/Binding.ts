@@ -10,13 +10,20 @@ export interface paths {
   "/admin/trail/save": {
     put: operations["importTrail"];
   };
+  "/admin/report": {
+    put: operations["update"];
+    post: operations["create_5"];
+  };
+  "/admin/report/upgrade/{id}": {
+    put: operations["upgradeReport"];
+  };
   "/admin/poi": {
     put: operations["create"];
-    post: operations["update"];
+    post: operations["update_1"];
   };
   "/admin/place": {
     put: operations["create_1"];
-    post: operations["update_1"];
+    post: operations["update_2"];
   };
   "/admin/place/media/{id}": {
     put: operations["addMedia"];
@@ -27,6 +34,9 @@ export interface paths {
   };
   "/admin/accessibility": {
     put: operations["create_3"];
+  };
+  "/report": {
+    post: operations["create_4"];
   };
   "/place/geolocate": {
     post: operations["geolocatePlace"];
@@ -47,6 +57,10 @@ export interface paths {
   "/admin/trail/media/{id}": {
     post: operations["addMediaToTrail"];
     delete: operations["removeMediaFromTrail"];
+  };
+  "/admin/resource/regenerate": {
+    get: operations["generateResource_1"];
+    post: operations["generateResource"];
   };
   "/admin/poi/media/{id}": {
     post: operations["addMediaToPoi"];
@@ -76,11 +90,29 @@ export interface paths {
   "/trail/count": {
     get: operations["getCount"];
   };
+  "/report/{id}": {
+    get: operations["getById_1"];
+  };
+  "/report/validate/{validationId}": {
+    get: operations["validate"];
+  };
+  "/report/upgraded/{realm}": {
+    get: operations["getUpgraded"];
+  };
+  "/report/trail/{id}": {
+    get: operations["getByTrailId"];
+  };
+  "/report/not-upgraded/{realm}": {
+    get: operations["getUnapgraded"];
+  };
+  "/report/count/{realm}": {
+    get: operations["getCount_1"];
+  };
   "/raw": {
     get: operations["get_1"];
   };
   "/raw/{id}": {
-    get: operations["getById_1"];
+    get: operations["getById_2"];
   };
   "/preview": {
     get: operations["getTrailPreviews"];
@@ -104,7 +136,7 @@ export interface paths {
     get: operations["getByNameOrTags"];
   };
   "/poi/count": {
-    get: operations["getCount_1"];
+    get: operations["getCount_2"];
   };
   "/poi/code/{code}": {
     get: operations["getByTrail"];
@@ -119,7 +151,7 @@ export interface paths {
     get: operations["getLikeNameOrTags"];
   };
   "/media/{id}": {
-    get: operations["getById_2"];
+    get: operations["getById_3"];
   };
   "/maintenance/past": {
     get: operations["getPastMaintenance"];
@@ -137,7 +169,7 @@ export interface paths {
     get: operations["getCountFuture"];
   };
   "/maintenance/count": {
-    get: operations["getCount_2"];
+    get: operations["getCount_3"];
   };
   "/dataset": {
     get: operations["getTrailDatasetV"];
@@ -155,10 +187,13 @@ export interface paths {
     get: operations["getSolvedByTrailId"];
   };
   "/accessibility/count": {
-    get: operations["getCount_3"];
+    get: operations["getCount_4"];
   };
   "/admin/trail/{id}": {
     delete: operations["deleteById"];
+  };
+  "/admin/report/{id}": {
+    delete: operations["deleteAccessibilityNotificationReport"];
   };
   "/admin/raw/{id}": {
     delete: operations["deleteById_1"];
@@ -295,6 +330,33 @@ export interface components {
       trailStatus?: "DRAFT" | "PUBLIC";
       variant?: boolean;
     };
+    AccessibilityReportDto: {
+      id?: string;
+      description?: string;
+      trailId?: string;
+      email?: string;
+      telephone?: string;
+      issueId?: string;
+      reportDate?: string;
+      valid?: boolean;
+      coordinates?: components["schemas"]["CoordinatesDto"];
+      recordDetails?: components["schemas"]["RecordDetailsDto"];
+    };
+    RecordDetailsDto: {
+      uploadedOn?: string;
+      uploadedBy?: string;
+      onInstance?: string;
+      realm?: string;
+    };
+    AccessibilityReportResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["AccessibilityReportDto"][];
+    };
     PoiDto: {
       id?: string;
       name?: string;
@@ -310,12 +372,6 @@ export interface components {
       externalResources?: string[];
       keyVal?: components["schemas"]["KeyValueDto"][];
       recordDetails?: components["schemas"]["RecordDetailsDto"];
-    };
-    RecordDetailsDto: {
-      uploadedOn?: string;
-      uploadedBy?: string;
-      onInstance?: string;
-      realm?: string;
     };
     PoiResponse: {
       currentPage?: number;
@@ -410,6 +466,12 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["TrailIntersectionDto"][];
+    };
+    GenerateRequestDto: {
+      ids?: string[];
+    };
+    ResourceGeneratorResponse: {
+      status?: "OK" | "ERROR" | "BUSY";
     };
     UnLinkeMediaRequestDto: {
       id?: string;
@@ -521,6 +583,55 @@ export interface operations {
       };
     };
   };
+  update: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AccessibilityReportResponse"];
+          "application/xml": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AccessibilityReportDto"];
+        "application/xml": components["schemas"]["AccessibilityReportDto"];
+      };
+    };
+  };
+  create_5: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AccessibilityReportResponse"];
+          "application/xml": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AccessibilityReportDto"];
+        "application/xml": components["schemas"]["AccessibilityReportDto"];
+      };
+    };
+  };
+  upgradeReport: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+  };
   create: {
     responses: {
       /** OK */
@@ -536,7 +647,7 @@ export interface operations {
       };
     };
   };
-  update: {
+  update_1: {
     responses: {
       /** OK */
       200: {
@@ -566,7 +677,7 @@ export interface operations {
       };
     };
   };
-  update_1: {
+  update_2: {
     responses: {
       /** OK */
       200: {
@@ -650,6 +761,23 @@ export interface operations {
       content: {
         "application/json": components["schemas"]["AccessibilityNotificationDto"];
         "application/xml": components["schemas"]["AccessibilityNotificationDto"];
+      };
+    };
+  };
+  create_4: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AccessibilityReportResponse"];
+          "application/xml": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AccessibilityReportDto"];
+        "application/xml": components["schemas"]["AccessibilityReportDto"];
       };
     };
   };
@@ -807,6 +935,31 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UnLinkeMediaRequestDto"];
+      };
+    };
+  };
+  generateResource_1: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ResourceGeneratorResponse"];
+        };
+      };
+    };
+  };
+  generateResource: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ResourceGeneratorResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["GenerateRequestDto"];
       };
     };
   };
@@ -980,6 +1133,102 @@ export interface operations {
       };
     };
   };
+  getById_1: {
+    parameters: {
+      query: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+  };
+  validate: {
+    parameters: {
+      query: {
+        validationId?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+  };
+  getUpgraded: {
+    parameters: {
+      query: {
+        realm: string;
+        skip?: number;
+        limit?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+  };
+  getByTrailId: {
+    parameters: {
+      query: {
+        id: string;
+        skip?: number;
+        limit?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+  };
+  getUnapgraded: {
+    parameters: {
+      query: {
+        realm: string;
+        skip?: number;
+        limit?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+  };
+  getCount_1: {
+    parameters: {
+      query: {
+        realm: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["CountResponse"];
+        };
+      };
+    };
+  };
   get_1: {
     parameters: {
       query: {
@@ -996,7 +1245,7 @@ export interface operations {
       };
     };
   };
-  getById_1: {
+  getById_2: {
     parameters: {
       path: {
         id: string;
@@ -1128,7 +1377,7 @@ export interface operations {
       };
     };
   };
-  getCount_1: {
+  getCount_2: {
     responses: {
       /** OK */
       200: {
@@ -1207,7 +1456,7 @@ export interface operations {
       };
     };
   };
-  getById_2: {
+  getById_3: {
     parameters: {
       path: {
         id: string;
@@ -1293,7 +1542,7 @@ export interface operations {
       };
     };
   };
-  getCount_2: {
+  getCount_3: {
     responses: {
       /** OK */
       200: {
@@ -1383,7 +1632,7 @@ export interface operations {
       };
     };
   };
-  getCount_3: {
+  getCount_4: {
     responses: {
       /** OK */
       200: {
@@ -1404,6 +1653,21 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["TrailResponse"];
+        };
+      };
+    };
+  };
+  deleteAccessibilityNotificationReport: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
         };
       };
     };

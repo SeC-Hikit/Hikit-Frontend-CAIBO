@@ -85,6 +85,12 @@ th {
 }
 
 table {
+  .trailCodeColumn {
+    background: black;
+    padding: 2px;
+    border-radius: 5px;
+    color: white;
+  }
   .ellipsis {
     white-space: nowrap;
     overflow: hidden;

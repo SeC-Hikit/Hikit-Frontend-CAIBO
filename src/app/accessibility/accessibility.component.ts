@@ -18,8 +18,6 @@ export class AccessibilityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const notificationResponseUnresolved = this.notificationService.getUnresolved().subscribe(x=> { this.unresolvedNotifications = x.content; });
-    const notificationResponseResolved = this.notificationService.getAllResolved().subscribe(x=> { this.solvedNotifications = x.content }); 
   }
 
   formatDate(dateString: string) : string {
