@@ -18,7 +18,7 @@
     <div class="col-12 col-md-12">
       <h1>Gestione Sentieri</h1>
       <h2>Lista Sentieri</h2>
-      <div *ngIf="trailPreviewList; else notShow">
+      <div *ngIf="trailPreviewList && trailPreviewList.length > 0 else notShow">
         <table id="trailTable" class="table table-striped interactive-table">
           <thead class="">
             <tr>
@@ -105,7 +105,7 @@
         </div>
       </div>
       <ng-template #notShow>
-        <app-items-not-found></app-items-not-found>
+        <app-items-not-found text="Nessun sentiero trovato. Creano uno caricando una traccia"></app-items-not-found>
       </ng-template>
     </div>
   </div>

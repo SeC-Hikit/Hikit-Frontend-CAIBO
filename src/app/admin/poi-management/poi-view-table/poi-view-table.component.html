@@ -2,62 +2,65 @@
   + Aggiungi POI
 </button>
 <div *ngIf="!isLoading">
-  <table
-    id="trailTable"
-    class="table table-striped interactive-table"
-    *ngIf="poiResponse.content.length > 0; else notShow"
-  >
-    <thead class="">
-      <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Nome</th>
-        <th scope="col">Sentiero/i</th>
-        <th scope="col">Tipo</th>
-        <th scope="col">Sotto tipo/i</th>
-        <th scope="col">Modifica</th>
-        <th scope="col">Cancella</th>
-      </tr>
-    </thead>
-    <tbody class="short-list">
-      <tr *ngFor="let poi of poiResponse.content" class="trailPreview">
-        <th scope="row">{{ poi.id }}</th>
-        <td>
-          {{ poi.name }}
-        </td>
-        <td>
-          <span *ngFor="let trailId of poi.trailIds">
-            <span class="trailCodeColumn">{{
-              getTrailCode(trailId)
-            }}</span>
-          </span>
-        </td>
-        <td>{{ poi.macroType }}</td>
-        <td>{{ poi.microType.toString().replace(",", ", ") }}</td>
-        <td class="clickable" routerLink="/admin/poi/edit/{{ poi.id }}">
-          <svg class="bi" width="32" height="32" fill="currentColor">
-            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen" />
-          </svg>
-        </td>
-        <td class="clickable" (click)="onDelete(poi.id)">
-          <svg class="bi" width="32" height="32" fill="currentColor">
-            <use
-              xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
-            />
-          </svg>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="pagination-position">
-    <ngb-pagination
-      [pageSize]="entryPerPage"
-      [collectionSize]="totalPoi"
-      [(page)]="page"
-      aria-label="Default pagination"
-      (pageChange)="loadPois(page)"
-    ></ngb-pagination>
+  <div *ngIf="poiResponse.content.length > 0; else notShow">
+    <table
+      id="trailTable"
+      class="table table-striped interactive-table"
+    >
+      <thead class="">
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Sentiero/i</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Sotto tipo/i</th>
+          <th scope="col">Modifica</th>
+          <th scope="col">Cancella</th>
+        </tr>
+      </thead>
+      <tbody class="short-list">
+        <tr *ngFor="let poi of poiResponse.content" class="trailPreview">
+          <th scope="row" class="ellipsis small-column" title="{{ poi.id }}">
+            {{ poi.id }}
+          </th>
+          <td>
+            {{ poi.name }}
+          </td>
+          <td>
+            <span *ngFor="let trailId of poi.trailIds">
+              <span class="trailCodeColumn">{{ getTrailCode(trailId) }}</span>
+            </span>
+          </td>
+          <td>{{ poi.macroType }}</td>
+          <td>{{ poi.microType.toString().replace(",", ", ") }}</td>
+          <td class="clickable" routerLink="/admin/poi/edit/{{ poi.id }}">
+            <svg class="bi" width="32" height="32" fill="currentColor">
+              <use
+                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen"
+              />
+            </svg>
+          </td>
+          <td class="clickable" (click)="onDelete(poi.id)">
+            <svg class="bi" width="32" height="32" fill="currentColor">
+              <use
+                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+              />
+            </svg>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination-position">
+      <ngb-pagination
+        [pageSize]="entryPerPage"
+        [collectionSize]="totalPoi"
+        [(page)]="page"
+        aria-label="Default pagination"
+        (pageChange)="loadPois(page)"
+      ></ngb-pagination>
+    </div>
   </div>
+  <ng-template #notShow>
+    <app-items-not-found text="Nessun punto d'interesse trovato."></app-items-not-found>
+  </ng-template>
 </div>
-<ng-template #notShow>
-  <app-items-not-found></app-items-not-found>
-</ng-template>
