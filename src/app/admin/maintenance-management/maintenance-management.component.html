@@ -1,4 +1,13 @@
 <div class="container my-4">
+
+  <div *ngIf="selectedTrail != null">
+    <app-trail-floating-preview
+      [trailPreview]="selectedTrail"
+      [isVisible]="isPreviewVisible"
+      (onClose)="togglePreview()"
+    ></app-trail-floating-preview>
+  </div>
+
   <div *ngIf="savedMaintenance">
     <div class="space-up alert alert-success" role="alert">
       Manutenzione per sentiero '{{ savedMaintenance }}' aggiunta
@@ -31,7 +40,7 @@
               </td>
               <td>{{ formatDate(maintenance.date) }}</td>
               <td>
-                <span class="trailCodeColumn">{{
+                <span class="trailCodeColumn" (click)="showPreview(maintenance.trailId)">{{
                   getTrailCode(maintenance.trailId)
                 }}</span>
               </td>

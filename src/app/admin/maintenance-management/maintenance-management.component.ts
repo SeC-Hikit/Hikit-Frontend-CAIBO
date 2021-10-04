@@ -9,6 +9,7 @@ import {
   TrailPreview,
   TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
+import { Trail, TrailService } from "src/app/service/trail-service.service";
 import { Status } from "src/app/Status";
 
 @Component({
@@ -17,12 +18,14 @@ import { Status } from "src/app/Status";
   styleUrls: ["./maintenance-management.component.scss"],
 })
 export class MaintenanceManagementComponent implements OnInit {
-  private cachedTrail: TrailPreview[];
+  
+  cachedTrail: TrailPreview[];
   
   hasFutureLoaded = false;
   hasPastLoaded = false;
+  isPreviewVisible = false;
 
-
+  selectedTrail : Trail;
 
   maintenanceListFuture: Maintenance[];
   maintenanceListPast: Maintenance[];
@@ -33,6 +36,7 @@ export class MaintenanceManagementComponent implements OnInit {
   constructor(
     private maintenanceService: MaintenanceService,
     private trailPreviewService: TrailPreviewService,
+    private trailService: TrailService,
     private route: ActivatedRoute
   ) {
     this.maintenanceListFuture = [];
@@ -77,6 +81,19 @@ export class MaintenanceManagementComponent implements OnInit {
     if (codeTrailSaved) {
       this.onFileSave(codeTrailSaved);
     }
+  }
+
+  showPreview(trailId) {
+    this.trailService.getTrailById(trailId).subscribe(
+      trailResp => {
+        this.selectedTrail = trailResp.content[0]; 
+        this.togglePreview();
+      }
+    );
+  }
+
+  togglePreview(){
+    this.isPreviewVisible = !this.isPreviewVisible;
   }
 
   onFileSave(saveMaintenanceCode: string) {
