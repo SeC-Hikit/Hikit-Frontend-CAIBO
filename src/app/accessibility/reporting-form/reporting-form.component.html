@@ -1,0 +1,23 @@
+<div class="container my-4">
+  <div class="row">
+    <div class="col-12 col-md-12">
+      <h1>Segnalazione problemi</h1>
+
+      <label>Seleziona un sentiero oppure rileva sentieri dalla tua posizione</label>
+      <select *ngFor="trailPreview.content"></select>
+
+    
+      <div *ngIf="trail">
+        <app-location-entry
+          [classPrefix]="'crossway'"
+          [isEditableLocation]="true"
+          [trail]="trail"
+          [otherTrails]="[otherTrail]"
+          [inputForm]="inputForm"
+          [markers]="[crossPoint]"
+          [i]="0"
+        ></app-location-entry>
+      </div>
+    </div>
+  </div>
+</div>

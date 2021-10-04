@@ -1,13 +1,16 @@
 import { HttpHeaders, HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { rectangle } from 'leaflet';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
 import { TrailRawResponse } from './import.service';
+import { TrailResponse } from './trail-service.service';
 
 export type TrailIntersectionResponse = components["schemas"]["TrailIntersectionResponse"];
 export type TrailIntersection = components["schemas"]["TrailIntersectionDto"];
 export type GeoLine = components["schemas"]["GeoLineDto"];
+export type Rectangle = components["schemas"]["RectangleDto"];
 export type Coordinates2D = components["schemas"]["Coordinates2D"];
 
 @Injectable({
@@ -30,6 +33,15 @@ export class GeoTrailService {
       );
   }
 
+  locate(rectangle: Rectangle): Observable<TrailResponse> {
+    return this.httpClient.post<TrailResponse>(this.baseUrl + "/locate", rectangle)
+      .pipe(
+        tap(),
+        catchError(this.handleError<TrailResponse>('', null))
+      );
+  }
+
+  
 /**
 * Handle Http operation that failed.
 * Let the app continue.

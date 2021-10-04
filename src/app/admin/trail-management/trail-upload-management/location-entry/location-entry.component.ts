@@ -19,7 +19,7 @@ export class LocationEntryComponent implements OnInit {
   @Input() inputForm: FormGroup;
   @Input() trail: Trail;
   @Input() otherTrails: Trail[];
-  @Input() markers: Marker[];
+  @Input() markers?: Marker[];
   @Input() isEditableLocation: boolean;
 
   @Input() startPoint: number;

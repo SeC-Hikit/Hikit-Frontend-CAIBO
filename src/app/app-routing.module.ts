@@ -18,10 +18,9 @@ import { TrailRawManagementComponent } from "./admin/trail-raw-management/trail-
 import { PoiManagementComponent } from "./admin/poi-management/poi-management.component";
 import { PoiAddComponent } from "./admin/poi-management/poi-add/poi-add.component";
 import { PoiViewTableComponent } from "./admin/poi-management/poi-view-table/poi-view-table.component";
-import { AccessibilityReportViewComponent } from "./admin/accessibility-management/accessibility-report-view/accessibility-report-view.component";
-import { AccessibilityNotificationViewComponent } from "./admin/accessibility-management/accessibility-notification-view/accessibility-notification-view.component";
 import { AccessibilityAddComponent } from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
 import { AccessibilityViewComponent } from "./admin/accessibility-management/accessibility-view/accessibility-view.component";
+import { ReportingFormComponent } from "./accessibility/reporting-form/reporting-form.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -31,35 +30,49 @@ const routes: Routes = [
   { path: "map/:id", component: MapComponent },
   { path: "safety", component: SafetyComponent },
   { path: "trekking", component: TrekkingComponent },
-  { path: "accessibility", component: AccessibilityComponent },
+  {
+    path: "accessibility",
+    children: [
+      {
+        path: "",
+        component: AccessibilityComponent,
+      },
+      {
+        path: "reporting-form",
+        component: ReportingFormComponent,
+      },
+    ],
+  },
   { path: "maintenance", component: MaintenanceComponent },
-  
+
   // ADMIN
   {
-    path: "admin", canActivate: [AuthGuard], children: [
+    path: "admin",
+    canActivate: [AuthGuard],
+    children: [
       {
         path: "dashboard",
         component: AdminComponent, // TODO: add dashboard
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
       },
       {
         path: "raw-trail-management",
-        component: TrailRawManagementComponent
+        component: TrailRawManagementComponent,
       },
       {
         path: "poi-management",
-        children : [
+        children: [
           { path: "view", component: PoiViewTableComponent },
           { path: "add", component: PoiAddComponent },
-          { path: "modify/:id", component: PoiAddComponent }
+          { path: "modify/:id", component: PoiAddComponent },
         ],
-        component: PoiManagementComponent
+        component: PoiManagementComponent,
       },
       {
         path: "trail-management",
         // children : [
-          // { path: "modify", component:  },
-        component: TrailManagementComponent
+        // { path: "modify", component:  },
+        component: TrailManagementComponent,
       },
       {
         path: "accessibility-management",
@@ -68,7 +81,7 @@ const routes: Routes = [
           { path: "add", component: AccessibilityAddComponent },
           { path: "modify", component: AccessibilityAddComponent },
         ],
-        component: AccessibilityManagementComponent
+        component: AccessibilityManagementComponent,
       },
       {
         path: "maintenance-management",
@@ -76,16 +89,16 @@ const routes: Routes = [
           { path: "add", component: AccessibilityAddComponent },
           { path: "modify/:id", component: AccessibilityAddComponent },
         ],
-        component: MaintenanceManagementComponent
+        component: MaintenanceManagementComponent,
       },
       // Change
       {
         path: "trail",
         children: [
           { path: "raw/:id", component: TrailUploadManagementComponent },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   { path: "404", component: NotFoundComponent },
   {
@@ -99,4 +112,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

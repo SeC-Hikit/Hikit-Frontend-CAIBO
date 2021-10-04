@@ -52,6 +52,9 @@ export class MapFullComponent implements OnInit {
       12
     );
     L.control.scale({ position: 'topright' }).addTo(this.map);
+
+
+    L.geoJSON(MapUtils.getERShape()).addTo(this.map);
   }
 
   ngAfterViewInit(): void {
@@ -190,4 +193,6 @@ export class MapFullComponent implements OnInit {
         throw new Error("TileLayer not in list");
     }
   }
+
+  
 }

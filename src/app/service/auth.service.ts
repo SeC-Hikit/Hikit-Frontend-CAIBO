@@ -1,35 +1,36 @@
-import { Injectable } from '@angular/core';
-import { KeycloakService } from 'keycloak-angular';
-
+import { Injectable } from "@angular/core";
+import { KeycloakService } from "keycloak-angular";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-  
-  constructor(private keycloakService: KeycloakService) { }
+  constructor(private keycloakService: KeycloakService) {}
 
-  async onIsAuth() {
-      return this.keycloakService.isLoggedIn();
+  async onIsAuth(onLoggedIn: () => void, onNotLogged?: () => void) {
+    const notLoggedCallback = onNotLogged == null ? ()=> {} : onNotLogged;
+    this.keycloakService.isLoggedIn().then((isIn) => {
+      console.log(isIn);
+      isIn ? onLoggedIn() : notLoggedCallback();
+    });
   }
 
-  getUsername() : string {
-    let any : any = this.keycloakService.getKeycloakInstance().idTokenParsed;
-    return any.preferred_username; 
+  async getUsername(): Promise<string> {
+    let any: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
+    return any.preferred_username;
   }
 
-  getRealm() : string {
-    let any : any = this.keycloakService.getKeycloakInstance().idTokenParsed;
+  getRealm(): string {
+    let any: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
     return any.realm;
   }
 
-  getSection() : string {
-    let any : any = this.keycloakService.getKeycloakInstance().idTokenParsed;
+  getSection(): string {
+    let any: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
     return any.section;
   }
 
   logout() {
     this.keycloakService.logout("/#");
   }
-
 }

@@ -1,42 +1,80 @@
 <div class="it-header-slim-wrapper" id="header-slim-wrapper">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="it-header-slim-wrapper-content">
-                    <a class="d-none d-lg-block navbar-brand" href="https://www.caibo.it/" target="_blank">
-                        <img src="/assets/sec/logo.svg" alt="SeC_logo" />
-                    </a>
-                    <div class="nav-mobile">
-                        <nav>
-                            <a class="it-opener d-lg-none" data-toggle="collapse" href="#menu-principale"
-                                role="button" aria-expanded="false" aria-controls="menu-principale">
-                                <span>
-                                    <svg class="icon">
-                                        <use
-                                            xlink:href="/assets/sec/logo.svg">
-                                        </use>
-                                    </svg>
-                                </span>
-                                <svg class="icon">
-                                    <use
-                                        xlink:href="/assets/bootstrap-italia/dist/svg/sprite.svg#it-expand">
-                                    </use>
-                                </svg>
-                            </a>
-                            <div class="link-list-wrapper collapse" id="menu-principale">
-                                <ul class="link-list">
-                                <a routerLink="/trekking">
-                                    <li><a class="list-item" href="#"></a></li>
-                                </a>
-                                <a routerLink="/admin">
-                                    <li><a class="list-item" href="#">{{ usernameToShow }}</a></li>
-                                </a>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="it-header-slim-wrapper-content">
+          <a
+            class="d-none d-lg-block navbar-brand"
+            href="https://www.caibo.it/"
+            target="_blank"
+          >
+            <img src="/assets/sec/logo.svg" alt="SeC_logo" />
+          </a>
+          <div class="nav-mobile">
+            <nav>
+              <a
+                class="it-opener d-lg-none"
+                data-toggle="collapse"
+                href="#menu-principale"
+                role="button"
+                aria-expanded="false"
+                aria-controls="menu-principale"
+              >
+                <span>
+                  <svg class="icon">
+                    <use xlink:href="/assets/sec/logo.svg"></use>
+                  </svg>
+                </span>
+                <svg class="icon">
+                  <use
+                    xlink:href="/assets/bootstrap-italia/dist/svg/sprite.svg#it-expand"
+                  ></use>
+                </svg>
+              </a>
+              <div class="link-list-wrapper collapse" id="menu-principale">
+                <ul class="link-list">
+                  <a routerLink="/trekking">
+                    <li><a class="list-item" href="#">Escursionismo</a></li>
+                  </a>
+                  <!-- <li>
+                    <a class="list-item" href="#">{{ usernameToShow }}</a>
+                  </li> -->
+                  <a routerLink="/admin">
+                    <li class="icon-place">
+                      <span ngbTooltip="Vai all'amministrazione" class="icon" *ngIf="isLoggedIn; else loggedOut">
+                        <svg
+                          class="bi"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                        >
+                          <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#person-circle"
+                          />
+                        </svg>
+                      </span>
+                      <ng-template #loggedOut>
+                        <span ngbTooltip="Accedi al tuo account" class="icon">
+                          <svg
+                            class="bi"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                          >
+                            <use
+                              xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#person"
+                            />
+                          </svg>
+                        </span>
+                      </ng-template>
+                    </li>
+                  </a>
+                </ul>
+              </div>
+            </nav>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
