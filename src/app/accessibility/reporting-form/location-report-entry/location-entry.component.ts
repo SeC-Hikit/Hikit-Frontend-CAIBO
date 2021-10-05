@@ -1,15 +1,14 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Marker } from "src/app/map-preview/map-preview.component";
-import { Coordinates2D } from "src/app/service/geo-trail-service";
-import { Trail, TrailCoordinates } from "src/app/service/trail-service.service";
+import { Trail } from "src/app/service/trail-service.service";
 
 @Component({
-  selector: "app-location-entry",
+  selector: "app-report-location-entry",
   templateUrl: "./location-entry.component.html",
   styleUrls: ["./location-entry.component.scss"],
 })
-export class LocationEntryComponent implements OnInit {
+export class LocationEntryReportComponent implements OnInit {
   private readonly OFFSET_START_POINT = 1;
   private readonly OFFSET_END_POINT = 2;
 

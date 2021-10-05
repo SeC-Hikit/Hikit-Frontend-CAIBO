@@ -52,6 +52,7 @@ import { AccessibilityNotificationViewComponent } from './admin/accessibility-ma
 import { ItemsNotFoundComponent } from './shared/items-not-found/items-not-found.component';
 import { AccessibilityViewComponent } from './admin/accessibility-management/accessibility-view/accessibility-view.component';
 import { ReportingFormComponent } from './accessibility/reporting-form/reporting-form.component';
+import { LocationEntryReportComponent } from "./accessibility/reporting-form/location-report-entry/location-entry.component";
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { ReportingFormComponent } from './accessibility/reporting-form/reporting
     AccessibilityNotificationViewComponent,
     ItemsNotFoundComponent,
     AccessibilityViewComponent,
-    ReportingFormComponent
+    ReportingFormComponent,
+    LocationEntryReportComponent
   ],
   imports: [
     BrowserModule,

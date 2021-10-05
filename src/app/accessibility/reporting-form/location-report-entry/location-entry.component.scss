@@ -1,0 +1,27 @@
+@import "../../../style/const.scss";
+
+.entry {
+}
+
+.arrow-control {
+  position: absolute;
+  top: 45%;
+  z-index: 1000;
+  color: $action-btn-color;
+}
+
+.arrow-left {
+  left: 0;
+}
+
+.arrow-right {
+  right: 0;
+}
+
+.map-container {
+  position: relative;
+}
+
+.white-fill {
+  background-color: white;
+}

@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  // S&C Env vars
+  realm: "S&C",
+  instance: "S&C_1",
+  publicName: "CAI Bologna",
 };
 
 /*

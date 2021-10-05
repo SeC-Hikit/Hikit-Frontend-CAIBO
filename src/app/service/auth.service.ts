@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { KeycloakService } from "keycloak-angular";
+import { env } from "process";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: "root",
@@ -21,8 +23,11 @@ export class AuthService {
   }
 
   getRealm(): string {
-    let any: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
-    return any.realm;
+    let userLoggedInToken: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
+    if(userLoggedInToken == null) {
+      return environment.realm;
+    }
+    return userLoggedInToken.realm;
   }
 
   getSection(): string {

@@ -2,21 +2,41 @@
   <div class="row">
     <div class="col-12 col-md-12">
       <h1>Segnalazione problemi</h1>
+    </div>
+    <div *ngIf="hasLoaded">
+      <div class="col-12 col-md-12">
+        <label
+          >Seleziona un sentiero oppure rileva sentieri dalla tua
+          posizione</label
+        >
+      </div>
+      <div class="col-3 col-md-12">
+        <!-- <button type="button" class="btn btn-primary" >
+        Trova la mia posizione
+      </button> -->
+      </div>
+      <div class="col-12 col-md-12">
+        <label>Lista Sentieri</label>
+        <div class="bootstrap-select-wrapper">
+          <select title="Scegli una opzione">
+            <option *ngFor="let trailPreview of trailPreviews" value="{{trailPreview.id}}">
+              {{ trailPreview.code }}
+            </option>
+          </select>
+        </div>
 
-      <label>Seleziona un sentiero oppure rileva sentieri dalla tua posizione</label>
-      <select *ngFor="trailPreview.content"></select>
-
-    
-      <div *ngIf="trail">
-        <app-location-entry
-          [classPrefix]="'crossway'"
-          [isEditableLocation]="true"
-          [trail]="trail"
-          [otherTrails]="[otherTrail]"
-          [inputForm]="inputForm"
-          [markers]="[crossPoint]"
-          [i]="0"
-        ></app-location-entry>
+        <div *ngIf="hasLoaded">
+          <div *ngIf="trail">
+            <app-report-location-entry
+              [classPrefix]="'choice'"
+              [isEditableLocation]="true"
+              [trail]="trail"
+              [inputForm]="position"
+              [markers]="[crossPoint]"
+              [i]="0"
+            ></app-report-location-entry>
+          </div>
+        </div>
       </div>
     </div>
   </div>

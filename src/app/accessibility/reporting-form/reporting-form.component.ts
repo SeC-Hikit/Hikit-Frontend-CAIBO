@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AuthService } from "src/app/service/auth.service";
 import { GeoTrailService } from "src/app/service/geo-trail-service";
+import {
+  TrailPreview,
+  TrailPreviewService,
+} from "src/app/service/trail-preview-service.service";
 import { Trail, TrailService } from "src/app/service/trail-service.service";
 import { FormUtils } from "src/app/utils/FormUtils";
 
@@ -10,15 +15,20 @@ import { FormUtils } from "src/app/utils/FormUtils";
   styleUrls: ["./reporting-form.component.scss"],
 })
 export class ReportingFormComponent implements OnInit {
+  hasLoaded = false;
   // The only other option is GPS locating
   isTrailSelection = true;
   trail: Trail;
+
+  trailPreviews: TrailPreview[];
 
   trailFormGroup: FormGroup;
 
   constructor(
     private trailService: TrailService,
-    private geoTrailService: GeoTrailService
+    private trailPreviewService: TrailPreviewService,
+    private geoTrailService: GeoTrailService,
+    private authService: AuthService
   ) {
     this.trailFormGroup = new FormGroup({
       code: new FormControl("", Validators.required),
@@ -31,7 +41,23 @@ export class ReportingFormComponent implements OnInit {
       maintainingSection: new FormControl("", Validators.required),
       position: FormUtils.getLocationFormGroup(),
     });
+    this.trailPreviewService
+      .getPreviews(0, 10000, authService.getRealm())
+      .subscribe((resp) => {
+        this.trailPreviews = resp.content;
+        if (resp.content.length != 0) {
+          
+          trailService.getTrailById(resp.content[0].id).subscribe((trailResp)=> {
+            this.trail = trailResp.content[0];
+            this.hasLoaded = true;
+          })
+        }
+      });
   }
 
   ngOnInit(): void {}
+
+  get position() {
+    return this.trailFormGroup.controls["position"] as FormGroup;
+  }
 }
