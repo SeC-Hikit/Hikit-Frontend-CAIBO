@@ -1,43 +1,43 @@
 <div class="container my-4">
-  <div class="row">
-    <div class="col-12 col-md-12">
-      <h1>Segnalazione problemi</h1>
-    </div>
-    <div *ngIf="hasLoaded">
-      <div class="col-12 col-md-12">
-        <label
-          >Seleziona un sentiero oppure rileva sentieri dalla tua
-          posizione</label
-        >
-      </div>
-      <div class="col-3 col-md-12">
-        <!-- <button type="button" class="btn btn-primary" >
-        Trova la mia posizione
-      </button> -->
-      </div>
-      <div class="col-12 col-md-12">
-        <label>Lista Sentieri</label>
-        <div class="bootstrap-select-wrapper">
-          <select title="Scegli una opzione">
-            <option *ngFor="let trailPreview of trailPreviews" value="{{trailPreview.id}}">
-              {{ trailPreview.code }}
-            </option>
-          </select>
+    <div class="row">
+        <div class="col-12 col-md-12">
+            <h1>Segnalazione problemi</h1>
         </div>
+    </div>
+    <div class="row" *ngIf="hasLoaded">
+        <div class="col-8 col-md-8">
+            <p>Seleziona un sentiero oppure rileva sentieri dalla tua posizione</p>
 
-        <div *ngIf="hasLoaded">
-          <div *ngIf="trail">
-            <app-report-location-entry
-              [classPrefix]="'choice'"
-              [isEditableLocation]="true"
-              [trail]="trail"
-              [inputForm]="position"
-              [markers]="[crossPoint]"
-              [i]="0"
-            ></app-report-location-entry>
-          </div>
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <label>Lista Sentieri</label>
+                    <div class="bootstrap-select-wrapper">
+                        <select title="Scegli una opzione">
+                            <option *ngFor="let trailPreview of trailPreviews" value="{{trailPreview.id}}">
+                                {{ trailPreview.code }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
+        <div class="col-md-4">
+            <div *ngIf="hasLoaded">
+                <div *ngIf="trail">
+                    <app-report-location-entry
+                            [classPrefix]="'choice'"
+                            [isEditableLocation]="true"
+                            [trail]="trail"
+                            [inputForm]="position"
+                            [markers]="[crossPoint]"
+                            [i]="0"
+                    ></app-report-location-entry>
+                </div>
+            </div>
+            <!-- <button type="button" class="btn btn-primary" >
+            Trova la mia posizione
+          </button> -->
+        </div>
     </div>
-  </div>
 </div>
