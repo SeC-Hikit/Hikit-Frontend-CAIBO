@@ -1,10 +1,10 @@
-<div class="container my-4">
+<div class="container my-4 ReportingForm">
     <div class="row">
         <div class="col-12 col-md-12">
-            <h1>Segnalazione problemi</h1>
+            <h1>Segnala un problema</h1>
         </div>
     </div>
-    <div class="row" *ngIf="hasLoaded">
+    <div class="row">
         <div class="col-8 col-md-8">
             <p>Seleziona un sentiero oppure rileva sentieri dalla tua posizione</p>
 
@@ -12,15 +12,66 @@
                 <div class="col-12 col-md-12">
                     <label>Lista Sentieri</label>
                     <div class="bootstrap-select-wrapper">
-                        <select title="Scegli una opzione">
-                            <option *ngFor="let trailPreview of trailPreviews" value="{{trailPreview.id}}">
+                        <select (change)="selectTrail($event.target)" class="form-select" title="Scegli una opzione">
+                            <option
+                                    *ngFor="let trailPreview of trailPreviews"
+                                    value="{{ trailPreview.id }}"
+                            >
                                 {{ trailPreview.code }}
                             </option>
                         </select>
                     </div>
                 </div>
-            </div>
+                <div *ngIf="hasLoaded">
+                    <div class="col-12 col-md-12 top-margin">
+                        <label>Problema riscontrato</label>
+                        <div class="bootstrap-select-wrapper">
+                            <select title="Scegli una opzione" class="form-select">
+                                <option
+                                        *ngFor="let foundIssue of foundIssues"
+                                        value="{{ foundIssue }}"
+                                >
+                                    {{ foundIssue }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 top-margin top-margin-x2">
+                        <div>
+                            <h2>Le tue info</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 offset-0 col-md-6">
+                            <div>
+                                <label for="exampleFormControlInput1">Indirizzo email *</label>
+                                <input type="email" class="form-control" id="exampleFormControlInput1"
+                                       placeholder="email@esempio.com">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div>
+                                <label for="exampleFormControlInput1">Telefono</label>
+                                <input type="tel" class="form-control" id="exampleFormControlInput1">
+                            </div>
+                        </div>
 
+                    </div>
+                    <div class="col-12 col-md-12 top-margin-x2">
+                        <button type="button" class="btn btn-primary">Invia segnalazione</button>
+                    </div>
+                    <!--       id?: string;
+                  description?: string;
+                  trailId?: string;
+                  email?: string;
+                  telephone?: string;
+                  issueId?: string;
+                  reportDate?: string;
+                  valid?: boolean;
+                  coordinates?: components["schemas"]["CoordinatesDto"];
+                  recordDetails?: components["schemas"]["RecordDetailsDto"]; -->
+                </div>
+            </div>
         </div>
         <div class="col-md-4">
             <div *ngIf="hasLoaded">
@@ -36,8 +87,9 @@
                 </div>
             </div>
             <!-- <button type="button" class="btn btn-primary" >
-            Trova la mia posizione
-          </button> -->
+                  Trova la mia posizione
+                </button> -->
         </div>
+
     </div>
 </div>

@@ -53,6 +53,7 @@ import { ItemsNotFoundComponent } from './shared/items-not-found/items-not-found
 import { AccessibilityViewComponent } from './admin/accessibility-management/accessibility-view/accessibility-view.component';
 import { ReportingFormComponent } from './accessibility/reporting-form/reporting-form.component';
 import { LocationEntryReportComponent } from "./accessibility/reporting-form/location-report-entry/location-entry.component";
+import { CycloComponent } from './info/cyclo/cyclo.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,8 @@ import { LocationEntryReportComponent } from "./accessibility/reporting-form/loc
     ItemsNotFoundComponent,
     AccessibilityViewComponent,
     ReportingFormComponent,
-    LocationEntryReportComponent
+    LocationEntryReportComponent,
+    CycloComponent
   ],
   imports: [
     BrowserModule,
