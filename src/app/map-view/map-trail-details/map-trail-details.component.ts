@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import * as moment from 'moment';
 import { Maintenance } from 'src/app/service/maintenance.service';
 import { AccessibilityNotification } from 'src/app/service/notification-service.service';
-import { Trail, TrailCoordinates } from 'src/app/service/trail-service.service';
+import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.service';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 
 @Component({
@@ -12,7 +12,7 @@ import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 })
 export class MapTrailDetailsComponent implements OnInit {
 
-  @Input() selectedTrail: Trail;
+  @Input() selectedTrail: TrailDto;
   @Input() trailNotifications: AccessibilityNotification[];
   @Input() lastMaintenance: Maintenance;
 

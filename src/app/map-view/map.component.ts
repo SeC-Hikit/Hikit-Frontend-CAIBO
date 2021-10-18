@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Maintenance, MaintenanceService } from '../service/maintenance.service';
 import { AccessibilityNotification, NotificationService } from '../service/notification-service.service';
 import { TrailPreview, TrailPreviewService } from '../service/trail-preview-service.service';
-import { Trail, TrailCoordinates, TrailService } from '../service/trail-service.service';
+import { TrailDto, TrailCoordinates, TrailService } from '../service/trail-service.service';
 import { UserCoordinates } from '../UserCoordinates';
 import { GraphicUtils } from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
@@ -20,11 +20,11 @@ export class MapComponent implements OnInit {
 
   // Bound elements
   trailPreviewList: TrailPreview[];
-  selectedTrail: Trail;
+  selectedTrail: TrailDto;
   selectedTrailBinaryPath: string;
   trailNotifications: AccessibilityNotification[];
   lastMaintenance: Maintenance;
-  trailList: Trail[];
+  trailList: TrailDto[];
   selectedTileLayer: string;
   userPosition: UserCoordinates;
   highlightedLocation: TrailCoordinates;
@@ -117,15 +117,15 @@ export class MapComponent implements OnInit {
   }
 
   toggleNotificationsModal(): void {
-    this.isNotificationModalVisible = this.isNotificationModalVisible ? false : true;
+    this.isNotificationModalVisible = !this.isNotificationModalVisible;
   }
 
   toggleFullPageTrail(): void {
-    this.isTrailFullScreenVisible = this.isTrailFullScreenVisible ? false : true;
+    this.isTrailFullScreenVisible = !this.isTrailFullScreenVisible;
   }
 
   toggleUserPosition(): void {
-    this.isUserPositionToggled = this.isTrailFullScreenVisible ? false : true;
+    this.isUserPositionToggled = !this.isTrailFullScreenVisible;
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {

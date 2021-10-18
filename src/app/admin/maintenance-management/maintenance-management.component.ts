@@ -9,7 +9,7 @@ import {
   TrailPreview,
   TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
-import { Trail, TrailService } from "src/app/service/trail-service.service";
+import { TrailDto, TrailService } from "src/app/service/trail-service.service";
 import { Status } from "src/app/Status";
 
 @Component({
@@ -19,19 +19,17 @@ import { Status } from "src/app/Status";
 })
 export class MaintenanceManagementComponent implements OnInit {
   
-  cachedTrail: TrailPreview[];
+  cachedTrail: TrailPreview[] = [];
   
   hasFutureLoaded = false;
   hasPastLoaded = false;
   isPreviewVisible = false;
 
-  selectedTrail : Trail;
+  selectedTrail : TrailDto;
 
   maintenanceListFuture: Maintenance[];
   maintenanceListPast: Maintenance[];
   savedMaintenance: string;
-
-  private readonly newProperty = this;
 
   constructor(
     private maintenanceService: MaintenanceService,
@@ -49,7 +47,7 @@ export class MaintenanceManagementComponent implements OnInit {
       .getFuture()
       .subscribe((x) => {
         this.maintenanceListFuture = x.content;
-        let trailIds: string[] = this.newProperty.maintenanceListFuture.map(
+        let trailIds: string[] = this.maintenanceListFuture.map(
           (m) => m.trailId
         );
         trailIds.forEach((id) =>
@@ -65,7 +63,7 @@ export class MaintenanceManagementComponent implements OnInit {
       .getPast()
       .subscribe((x) => {
         this.maintenanceListPast = x.content;
-        let trailIds: string[] = this.newProperty.maintenanceListFuture.map(
+        let trailIds: string[] = this.maintenanceListPast.map(
           (m) => m.trailId
         );
         trailIds.forEach((id) =>

@@ -6,7 +6,7 @@ import {
   ReportService,
 } from "src/app/service/report-service.service";
 import { TrailPreview, TrailPreviewService } from "src/app/service/trail-preview-service.service";
-import { Trail, TrailService } from "src/app/service/trail-service.service";
+import { TrailDto, TrailService } from "src/app/service/trail-service.service";
 
 @Component({
   selector: "app-accessibility-report-view",
@@ -23,7 +23,7 @@ export class AccessibilityReportViewComponent implements OnInit {
 
   totalNotification: number;
 
-  selectedTrail: Trail;
+  selectedTrail: TrailDto;
   trailPreviews: TrailPreview[];
   unresolvedNotifications: AccessibilityReport[];
 

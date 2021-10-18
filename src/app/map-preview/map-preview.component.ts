@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import * as L from "leaflet";
 import { Coordinates2D } from "../service/geo-trail-service";
 import { MapUtils } from "../map-view/MapUtils";
-import { Trail, TrailCoordinates } from "../service/trail-service.service";
+import { TrailDto, TrailCoordinates } from "../service/trail-service.service";
 import { StartIcon } from "../utils/map/MapIconType";
 import { EndIcon } from "../utils/map/MapIconType";
 import { MapIconType } from "../utils/map/MapIconType";
@@ -24,9 +24,9 @@ export interface Marker {
 export class MapPreviewComponent implements OnInit {
 
   @Input() classPrefix: string;
-  @Input() otherTrails: Trail[];
+  @Input() otherTrails: TrailDto[];
   @Input() markersCoordinates: Marker[];
-  @Input() trailPreview: Trail;
+  @Input() trailPreview: TrailDto;
   @Input() elementAt: number;
   @Input() index: string;
   @Input() isShowOtherTrailsEnabled: boolean;
@@ -72,7 +72,7 @@ export class MapPreviewComponent implements OnInit {
     if (this.trailPreview) {
       this.onPreview(this.trailPreview.coordinates);
     }
-    if (this.elementAt != undefined && this.elementAt != null) {
+    if (this.elementAt != undefined) {
       this.onSelection(this.elementAt);
     }
     if (this.markersCoordinates) {
@@ -82,10 +82,12 @@ export class MapPreviewComponent implements OnInit {
 
   drawMarkers(markersCoords: Marker[]) {
     this.markers = markersCoords.map((marker) => {
-      return L.marker(
-        { lng: marker.coords.longitude, lat: marker.coords.latitude },
-        { icon: this.determineIcon(marker.icon) }
-      );
+      if(marker) {
+        return L.marker(
+            {lng: marker.coords.longitude, lat: marker.coords.latitude},
+            {icon: this.determineIcon(marker.icon)}
+        );
+      }
     });
 
     this.markers.forEach((m) => {

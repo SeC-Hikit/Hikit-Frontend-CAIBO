@@ -36,15 +36,16 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
   closeResult: string;
 
-  testCoordinates: Marker[] = [{
+  testCoordinates: Marker = {
     coords: {
       latitude: 44.11515289941759,
       longitude: 10.814071100111235,  
     },
     icon: MapIconType.CROSSWAY_ICON
-  }]
+  }
 
   STEPS = ["Info Generali", "Crocevia", "Località", "Ciclo Escursionismo"];
+
   CROSSWAY_INDEX = 1;
   STEP_INDEX = 0;
 

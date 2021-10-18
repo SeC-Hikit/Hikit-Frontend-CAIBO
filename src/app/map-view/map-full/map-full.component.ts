@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import 'leaflet';
 import { LeafletMouseEventHandlerFn } from 'leaflet';
 import 'leaflet-textpath';
-import { Trail, TrailCoordinates } from 'src/app/service/trail-service.service';
+import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.service';
 import { UserCoordinates } from 'src/app/UserCoordinates';
 import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 import { MapUtils } from '../MapUtils';
@@ -28,8 +28,8 @@ export class MapFullComponent implements OnInit {
   openStreetmapCopy: string;
 
   @Input() userPosition: UserCoordinates;
-  @Input() selectedTrail: Trail;
-  @Input() trailList: Trail[];
+  @Input() selectedTrail: TrailDto;
+  @Input() trailList: TrailDto[];
   @Input() tileLayerName: string;
   @Input() highlightedLocation: TrailCoordinates;
 
@@ -89,7 +89,7 @@ export class MapFullComponent implements OnInit {
     this.map.flyTo(circle.getLatLng());
   }
 
-  renderTrail(selectedTrail: Trail) {
+  renderTrail(selectedTrail: TrailDto) {
     // Shall take the polyline from the full list - do not instantiate a new polyline each tim
     // USE restorePathFromList(x);
     this.clearPreviouslySelectedLayer();
@@ -102,7 +102,7 @@ export class MapFullComponent implements OnInit {
     this.map.fitBounds(polyline.getBounds());
   }
 
-  renderAllTrail(trailList: Trail[]) {
+  renderAllTrail(trailList: TrailDto[]) {
     this.otherTrailsPolylines = trailList.map(trail => {
       return new TrailToPolyline(trail.code,
         trail.classification,
@@ -154,14 +154,14 @@ export class MapFullComponent implements OnInit {
     if (this.selectedMarkerLayer) this.map.removeLayer(this.selectedMarkerLayer);
   }
 
-  restorePathFromList(unselectedTrail: Trail) {
+  restorePathFromList(unselectedTrail: TrailDto) {
     const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == unselectedTrail.code);
     if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
       this.map.addLayer(trailFromOtherTrails[0].getPolyline());
     }
   }
 
-  clearPathFromList(selectedTrail: Trail) {
+  clearPathFromList(selectedTrail: TrailDto) {
     const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == selectedTrail.code);
     if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
       this.map.removeLayer(trailFromOtherTrails[0].getPolyline());

@@ -3,7 +3,7 @@ import * as Chart from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import { ChartUtils } from '../ChartUtils';
 import * as moment from 'moment';
-import { Trail } from 'src/app/service/trail-service.service';
+import { TrailDto } from 'src/app/service/trail-service.service';
 import { AccessibilityNotification } from 'src/app/service/notification-service.service';
 import { Maintenance } from 'src/app/service/maintenance.service';
 
@@ -17,7 +17,7 @@ export class MapTrailFullComponent implements OnInit {
   private chart: Chart;
   private chartOptions: ChartOptions;
 
-  @Input() selectedTrail: Trail;
+  @Input() selectedTrail: TrailDto;
   @Input() trailNotifications: AccessibilityNotification[];
   @Input() lastMaintenance: Maintenance;
 

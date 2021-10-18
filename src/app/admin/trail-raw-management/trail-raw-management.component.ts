@@ -22,7 +22,7 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
   public entryPerPage = 10;
   public page: number;
 
-  public trailRawList: TrailPreview[];
+  public trailRawList: TrailPreview[] = [];
   public totalRaw: number;
 
   public isLoading = true;

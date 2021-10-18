@@ -6,7 +6,7 @@ import {
   TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
 import {  takeUntil, tap } from "rxjs/operators";
-import { Trail, TrailService } from "src/app/service/trail-service.service";
+import { TrailDto, TrailService } from "src/app/service/trail-service.service";
 import { Subject } from "rxjs";
 @Component({
   selector: "app-trail-management",
@@ -20,7 +20,7 @@ export class TrailManagementComponent implements OnInit {
 
   private destroy$ = new Subject();
 
-  selectedTrail: Trail;
+  selectedTrail: TrailDto;
   isPreviewVisible: boolean = false;
   trailPreviewList: TrailPreview[];
 

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Marker } from "src/app/map-preview/map-preview.component";
-import { Trail, TrailCoordinates } from "src/app/service/trail-service.service";
+import { TrailDto, TrailCoordinates } from "src/app/service/trail-service.service";
 
 @Component({
   selector: "app-trail-floating-preview",
@@ -9,9 +9,9 @@ import { Trail, TrailCoordinates } from "src/app/service/trail-service.service";
 })
 export class TrailFloatingPreviewComponent implements OnInit {
   @Input() isVisible: boolean;
-  @Input() trailPreview: TrailCoordinates[];
+  @Input() trailCoordinates: TrailDto[] = [];
   @Input() markers: Marker[];
-  @Output() onClose = new EventEmitter<void>();;
+  @Output() onClose = new EventEmitter<void>();
 
   constructor() {}
 

@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { Marker } from "src/app/map-preview/map-preview.component";
 import { Coordinates2D } from "src/app/service/geo-trail-service";
 import { PlaceResponse, PlaceService } from "src/app/service/place.service";
-import { Trail } from "src/app/service/trail-service.service";
+import { TrailDto } from "src/app/service/trail-service.service";
 
 @Component({
   selector: "app-trail-intersection-entry",
@@ -13,8 +13,8 @@ import { Trail } from "src/app/service/trail-service.service";
 export class TrailIntersectionEntryComponent implements OnInit {
   @Input() i: number;
   @Input() inputForm: FormGroup;
-  @Input() trail: Trail;
-  @Input() otherTrail: Trail;
+  @Input() trail: TrailDto;
+  @Input() otherTrail: TrailDto;
   @Input() crossPoint: Marker;
 
   isCompleted: boolean;

@@ -8,7 +8,7 @@ import {
 import { IntUtils } from "src/app/utils/IntUtils";
 import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
-import { Trail, TrailService } from "src/app/service/trail-service.service";
+import { TrailDto, TrailService } from "src/app/service/trail-service.service";
 
 @Component({
   selector: "app-poi-add",
@@ -20,7 +20,7 @@ export class PoiAddComponent implements OnInit {
   isTrailListLoaded = false;
   isTrailLoaded = false;
 
-  selectedTrail : Trail;
+  selectedTrail : TrailDto;
   trailPreviewResponse: TrailPreviewResponse;
 
 

@@ -41,7 +41,7 @@
 
     <div *ngIf="!isLoading">
       <app-trail-floating-preview
-        [trailPreview]="trailRawResponse.content[0]"
+              [trailCoordinates]="trailRawResponse.content"
         [isVisible]="isPreviewVisible"
         (onClose)="this.togglePreview()"
       ></app-trail-floating-preview>
@@ -159,7 +159,7 @@
         </div>
       </div>
 
-      <div class="crossing-section" *ngIf="this.STEP_INDEX == 1">
+      <div class="crossing-section" [ngClass]="{ 'hide': this.STEP_INDEX != 1 }">
         <div class="row">
           <div class="col-md-1">
             <svg class="bi" width="32" height="32" fill="currentColor">
@@ -184,7 +184,6 @@
               [trail]="trailRawResponse.content[0]"
               [otherTrail]="trailRawResponse.content[0]"
               [i]="0"
-              [isEditableLocation]="true"
               [crossPoint]="testCoordinates"
             ></app-trail-intersection-entry>
           </div>
@@ -217,7 +216,7 @@
         </div>
       </ng-template>
 
-      <div class="location-section" *ngIf="this.STEP_INDEX == 2">
+      <div class="location-section" [ngClass]="{ 'hide': this.STEP_INDEX != 2}">
         <div class="row">
           <div class="col-md-1">
             <svg class="bi" width="32" height="32" fill="currentColor">
@@ -237,7 +236,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="this.STEP_INDEX == 2">
           <div class="space-up col-md-12">
             <app-location-entry
               [title]="'Località iniziale'"
@@ -252,7 +251,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="this.STEP_INDEX == 2">
           <div class="space-up col-md-12">
             <app-location-entry
               [title]="'Località di arrivo'"
@@ -289,7 +288,7 @@
         </div>
       </div>
 
-      <div class="bike-section" *ngIf="this.STEP_INDEX == 3">
+      <div class="bike-section" [ngClass]="{ 'hide': this.STEP_INDEX != 3 }">
         <svg class="bi" width="32" height="32" fill="currentColor">
           <use
             xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
@@ -321,7 +320,6 @@
                 <option value="NO">NO</option>
               </select>
             </div>
-            <div class="col-md-4 mb-3">Text to explain items</div>
           </div>
           <div [formGroup]="wayForward">
             <h3>Andata</h3>
@@ -366,8 +364,7 @@
                 title="Scegli una opzione"
                 formControlName="feasible"
                 class="form-control"
-                id="trailId_select"
-                value="feasible"
+                id="feasability_select"
               >
                 <option value="true">Si</option>
                 <option value="false">No</option>
@@ -379,7 +376,7 @@
                 title="Scegli una opzione"
                 formControlName="portage"
                 class="form-control"
-                id="trailId_select"
+                id="portage_select"
               >
                 <option value="0">0</option>
                 <option value="15">15</option>

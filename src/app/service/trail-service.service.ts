@@ -6,7 +6,7 @@ import { components } from 'src/binding/Binding';
 
 export type TrailResponse = components["schemas"]["TrailResponse"]
 export type TrailCoordinates = components["schemas"]["TrailCoordinatesDto"]
-export type Trail = components["schemas"]["TrailDto"]
+export type TrailDto = components["schemas"]["TrailDto"]
 export type FileDetailsDto = components["schemas"]["TrailDto"]["fileDetails"]
 export enum TrailClassification {
   T = "T", 

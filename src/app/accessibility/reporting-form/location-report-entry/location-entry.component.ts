@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Marker } from "src/app/map-preview/map-preview.component";
-import { Trail } from "src/app/service/trail-service.service";
+import { TrailDto } from "src/app/service/trail-service.service";
 
 @Component({
   selector: "app-report-location-entry",
@@ -16,8 +16,8 @@ export class LocationEntryReportComponent implements OnInit {
   @Input() classPrefix: string;
   @Input() i: number;
   @Input() inputForm: FormGroup;
-  @Input() trail: Trail;
-  @Input() otherTrails?: Trail[];
+  @Input() trail: TrailDto;
+  @Input() otherTrails?: TrailDto[];
   @Input() markers?: Marker[];
   @Input() isEditableLocation: boolean;
 

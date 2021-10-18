@@ -6,7 +6,7 @@ import {
     TrailPreview,
     TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
-import {Trail, TrailService} from "src/app/service/trail-service.service";
+import {TrailDto, TrailService} from "src/app/service/trail-service.service";
 import {FormUtils} from "src/app/utils/FormUtils";
 
 @Component({
@@ -18,7 +18,7 @@ export class ReportingFormComponent implements OnInit {
     hasLoaded = false;
     // The only other option is GPS locating
     isTrailSelection = true;
-    trail: Trail;
+    trail: TrailDto;
 
     trailPreviews: TrailPreview[];
 
