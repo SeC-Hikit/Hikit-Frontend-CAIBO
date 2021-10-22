@@ -1,9 +1,9 @@
-<div class="container my-4">
+<div class="container my-4 TrailUploadManagement">
   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
   <div class="table-wrapper space-up">
     <div class="row">
       <div class="col-sm-4">
-        <h1>Compilazione sentiero</h1>
+        <h1>Compilazione traccia</h1>
       </div>
       <div class="col-sm-6">
         <h1 class="steps">
@@ -70,7 +70,7 @@
 
         <div class="form-row">
           <div class="form-group col-md-4 mb-3">
-            <p>Codice sentiero</p>
+            <p>Codice sentiero*</p>
             <input
               type="text"
               class="form-control"
@@ -89,12 +89,12 @@
             />
           </div>
           <div class="form-group col-md-4 mb-3">
-            <p>Classificazione</p>
+            <p>Classificazione*</p>
             <select
               title="Scegli una opzione"
               formControlName="classification"
               class="form-control"
-              id="trailId_select"
+              id="classification_select"
             >
               <option value="T">T</option>
               <option value="E">E</option>
@@ -105,7 +105,7 @@
         </div>
         <div class="form-row top-margin">
           <div class="form-group col-md-4 mb-3">
-            <p>Data rilevazione</p>
+            <p>Data rilevazione*</p>
             <div class="input-group">
               <input
                 class="form-control"
@@ -113,6 +113,7 @@
                 placeholder="gg/mm/aaaa"
                 name="dp"
                 ngbDatepicker
+                [(ngModel)]="date"
                 #d="ngbDatepicker"
               />
               <div class="input-group-append">
@@ -125,7 +126,7 @@
             </div>
           </div>
           <div class="form-group col-md-4 mb-3">
-            <p>Tempo stimato di percorrenza (ETA)</p>
+            <p>Tempo registrato di percorrenza, in minuti</p>
             <div class="bootstrap-select-wrapper">
               <input
                 type="number"
@@ -178,12 +179,12 @@
               presenti.
             </p>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12" *ngFor="let place of intersections.controls; index as i">
             <app-trail-intersection-entry
               [inputForm]="firstPos"
-              [trail]="trailRawResponse.content[0]"
-              [otherTrail]="trailRawResponse.content[0]"
-              [i]="0"
+              [trail]="trailRawResponse.content[i]"
+              [otherTrail]="trailRawResponse.content[i]"
+              [i]="i"
               [crossPoint]="testCoordinates"
             ></app-trail-intersection-entry>
           </div>
@@ -245,7 +246,7 @@
               [trail]="trailRawResponse.content[0]"
               [startPoint]="0"
               [i]="0"
-              [isEditableLocation]="false"
+              [isEditableLocation]="true"
             >
             </app-location-entry>
           </div>
@@ -260,7 +261,7 @@
               [trail]="trailRawResponse.content[0]"
               [i]="1"
               [startPoint]="trailRawResponse.content[0].coordinates.length - 1"
-              [isEditableLocation]="false"
+              [isEditableLocation]="true"
             >
             </app-location-entry>
           </div>
@@ -273,6 +274,7 @@
             [trail]="trailRawResponse.content[0]"
             [i]="i"
             [isEditableLocation]="true"
+            [showPositionControls]="true"
           >
           </app-location-entry>
         </div>
@@ -304,7 +306,7 @@
                 title="Scegli una opzione"
                 formControlName="classification"
                 class="form-control"
-                id="trailId_select"
+                id="cyclo_classification_select"
                 [value]="cyclo_classification"
               >
                 <option value="UNCLASSIFIED">Non classificato</option>
@@ -330,7 +332,7 @@
                   title="Scegli una opzione"
                   formControlName="feasible"
                   class="form-control"
-                  id="trailId_select"
+                  id="forward_way_select"
                   [value]=""
                 >
                   <option value="true">Si</option>
@@ -343,7 +345,7 @@
                   title="Scegli una opzione"
                   formControlName="portage"
                   class="form-control"
-                  id="trailId_select"
+                  id="portage_forward_select"
                   [value]=""
                 >
                   <option value="0">0</option>

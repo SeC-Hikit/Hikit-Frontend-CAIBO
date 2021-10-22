@@ -19,7 +19,7 @@
     <div class="col-md-12 map-container">
       <div
         class="arrow-left arrow-control btn actionable white-fill"
-        *ngIf="isEditableLocation" (click)="onPrevPoint()"
+        *ngIf="isEditableLocation && showPositionControls" (click)="onPrevPoint()"
       >
         <svg class="bi" width="32" height="32" fill="currentColor">
           <use
@@ -37,7 +37,7 @@
       ></app-map-preview>
       <div
         class="arrow-right arrow-control btn actionable white-fill"
-        *ngIf="isEditableLocation" (click)="onNextPoint()"
+        *ngIf="isEditableLocation && showPositionControls" (click)="onNextPoint()"
       >
         <svg class="bi" width="32" height="32" fill="currentColor">
           <use
@@ -47,17 +47,27 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="isEditableLocation">
-    <div class="col-md-12">
+  <div class="row top-margin-x2" *ngIf="isEditableLocation && showPositionControls">
+    <div class="col-md-1 icon-center">
+      <svg class="bi" width="32" height="32" fill="currentColor">
+        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#forward" />
+      </svg>
+    </div>
+    <div class="col-md-10">
       <input
         type="range"
         value="{{ selectedCoordinateIndex }}"
         min="0"
         max="{{ trail.coordinates.length - 1 }}"
         class="form-control"
-        (change)="onSliderMoved($event.target.value)"
+        (change)="onSliderChange($event.target.value)"
         required
       />
+    </div>
+    <div class="col-md-1 icon-center">
+      <svg class="bi" width="32" height="32" fill="currentColor">
+        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#flag-fill" />
+      </svg>
     </div>
   </div>
   <div class="row" *ngClass="{ collapse: true }">

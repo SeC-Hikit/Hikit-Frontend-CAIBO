@@ -21,6 +21,7 @@ export class LocationEntryComponent implements OnInit {
   @Input() otherTrails?: TrailDto[];
   @Input() markers?: Marker[];
   @Input() isEditableLocation: boolean;
+  @Input() showPositionControls?: boolean;
 
   @Input() startPoint: number;
 
@@ -33,10 +34,11 @@ export class LocationEntryComponent implements OnInit {
     this.selectedCoordinateIndex = this.isEditableLocation
       ? this.OFFSET_START_POINT
       : null;
+    this.showPositionControls = this.showPositionControls ? this.showPositionControls : false;
     this.selectedCoordinateIndex = this.startPoint != undefined ? this.startPoint : this.OFFSET_START_POINT;
   }
 
-  onSliderMoved(eventValue: number): void {
+  onSliderChange(eventValue: number): void {
     if (!this.isEditableLocation) {
       return;
     }

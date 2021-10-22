@@ -8,7 +8,7 @@ import { RestResponse } from "../RestResponse";
 
 export type TrailRawResponse = components['schemas']['TrailRawResponse'];
 export type TrailImportRequest = components['schemas']['TrailImportDto'];
-export type TrailRaw = components['schemas']['TrailRawDto'];
+export type TrailRawDto = components['schemas']['TrailRawDto'];
 
 @Injectable({
   providedIn: "root",

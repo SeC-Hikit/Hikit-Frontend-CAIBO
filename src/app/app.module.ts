@@ -31,7 +31,7 @@ import { AccessibilityManagementComponent } from "./admin/accessibility-manageme
 import { AccessibilityAddComponent } from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
 import { MenuManagementComponent } from "./admin/menu-management/menu-management.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import {NgbDateParserFormatter, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { QuillModule } from "ngx-quill";
 import { ReactiveFormsModule } from "@angular/forms";
 import { LocationEntryComponent } from "./admin/trail-management/trail-upload-management/location-entry/location-entry.component";
@@ -54,6 +54,7 @@ import { AccessibilityViewComponent } from './admin/accessibility-management/acc
 import { ReportingFormComponent } from './accessibility/reporting-form/reporting-form.component';
 import { LocationEntryReportComponent } from "./accessibility/reporting-form/location-report-entry/location-entry.component";
 import { CycloComponent } from './info/cyclo/cyclo.component';
+import {NgbDateCustomParserFormatter} from "./conf/NgbDateCustomParserFormatter";
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { CycloComponent } from './info/cyclo/cyclo.component';
       useFactory: initializeKeycloak,
       multi: true,
       deps: [KeycloakService],
-    }
+    },
+    {provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter}
   ],
   bootstrap: [AppComponent],
   exports: [TrailIntersectionEntryComponent],

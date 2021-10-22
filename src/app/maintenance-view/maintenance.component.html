@@ -1,7 +1,7 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-12 col-md-12 col-s-6">
-            <h1>Calendario Manuntenzioni</h1>
+            <h1>Calendario Manutenzioni</h1>
             <h2>Prossimi incontri</h2>
             <table *ngIf="maintenanceListFuture.length > 0; else notShow" class="table table-striped">
                 <thead>
@@ -24,7 +24,7 @@
                 </tbody>
             </table>
             <ng-template #notShow>
-                <p>Non ci sono manuntenzioni programmate al momento</p>
+                <p>Non ci sono manutenzioni programmate al momento</p>
             </ng-template>
         </div>
     </div>
@@ -52,7 +52,7 @@
                 </tbody>
             </table>
             <ng-template #notShow>
-                <p>Non ci sono altre manuntenzioni passate</p>
+                <p>Non ci sono altre manutenzioni passate</p>
             </ng-template>
         </div>
     </div>

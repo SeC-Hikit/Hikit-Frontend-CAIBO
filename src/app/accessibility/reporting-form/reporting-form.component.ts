@@ -7,7 +7,7 @@ import {
     TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
 import {TrailDto, TrailService} from "src/app/service/trail-service.service";
-import {FormUtils} from "src/app/utils/FormUtils";
+import {TrailImportFormUtils} from "src/app/utils/TrailImportFormUtils";
 
 @Component({
     selector: "app-reporting-form",
@@ -33,14 +33,14 @@ export class ReportingFormComponent implements OnInit {
     ) {
         this.trailFormGroup = new FormGroup({
             code: new FormControl("", Validators.required),
-            eta: new FormControl("", Validators.required),
+            officialEta: new FormControl("", Validators.required),
             name: new FormControl(""),
             classification: new FormControl("", Validators.required),
             description: new FormControl("", Validators.required),
             lastUpdate: new FormControl("", Validators.required),
             intersectionExample: new FormControl("", Validators.required),
             maintainingSection: new FormControl("", Validators.required),
-            position: FormUtils.getLocationFormGroup(),
+            position: TrailImportFormUtils.getLocationFormGroup(),
         });
 
         this.loadPreviews();
