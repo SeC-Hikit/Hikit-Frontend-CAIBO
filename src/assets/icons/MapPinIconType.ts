@@ -1,6 +1,6 @@
 import * as L from "leaflet";
 
-export enum MapIconType {
+export enum MapPinIconType {
   RED_PIN,
   CROSSWAY_ICON,
   ALERT_PIN,

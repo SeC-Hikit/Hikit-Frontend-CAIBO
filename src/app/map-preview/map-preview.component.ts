@@ -4,16 +4,16 @@ import * as L from "leaflet";
 import { Coordinates2D } from "../service/geo-trail-service";
 import { MapUtils } from "../map-view/MapUtils";
 import { TrailDto, TrailCoordinates } from "../service/trail-service.service";
-import { StartIcon } from "../utils/map/MapIconType";
-import { EndIcon } from "../utils/map/MapIconType";
-import { MapIconType } from "../utils/map/MapIconType";
-import { AlertPinIcon } from "../utils/map/MapIconType";
-import { CrossWayIcon } from "../utils/map/MapIconType";
-import { RedPinIcon } from "../utils/map/MapIconType";
+import { StartIcon } from "../../assets/icons/MapPinIconType";
+import { EndIcon } from "../../assets/icons/MapPinIconType";
+import { MapPinIconType } from "../../assets/icons/MapPinIconType";
+import { AlertPinIcon } from "../../assets/icons/MapPinIconType";
+import { CrossWayIcon } from "../../assets/icons/MapPinIconType";
+import { RedPinIcon } from "../../assets/icons/MapPinIconType";
 
 export interface Marker {
   coords: Coordinates2D;
-  icon: MapIconType
+  icon: MapPinIconType
 }
 
 @Component({
@@ -188,13 +188,13 @@ export class MapPreviewComponent implements OnInit {
     this.map.fitBounds(this.polyline.getBounds());
   }
 
-  private determineIcon(mapIcon: MapIconType) {
+  private determineIcon(mapIcon: MapPinIconType) {
     switch (mapIcon) {
-      case MapIconType.ALERT_PIN: 
+      case MapPinIconType.ALERT_PIN:
         return AlertPinIcon.get();
-      case MapIconType.CROSSWAY_ICON:
+      case MapPinIconType.CROSSWAY_ICON:
         return CrossWayIcon.get();
-      case MapIconType.RED_PIN:
+      case MapPinIconType.RED_PIN:
         return RedPinIcon.get();
     }
   }

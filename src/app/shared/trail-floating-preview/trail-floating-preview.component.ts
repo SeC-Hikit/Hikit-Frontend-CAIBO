@@ -9,7 +9,7 @@ import { TrailDto, TrailCoordinates } from "src/app/service/trail-service.servic
 })
 export class TrailFloatingPreviewComponent implements OnInit {
   @Input() isVisible: boolean;
-  @Input() trailCoordinates: TrailDto[] = [];
+  @Input() trails: TrailDto[] = [];
   @Input() markers: Marker[];
   @Output() onClose = new EventEmitter<void>();
 

@@ -2,7 +2,7 @@
 
     <div *ngIf="selectedTrail != null">
         <app-trail-floating-preview
-                [trailCoordinates]="selectedTrail"
+                [trails]="selectedTrail"
                 [isVisible]="isPreviewVisible"
                 (onClose)="togglePreview()"
         ></app-trail-floating-preview>

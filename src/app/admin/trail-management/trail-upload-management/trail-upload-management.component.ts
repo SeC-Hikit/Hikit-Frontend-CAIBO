@@ -15,9 +15,10 @@ import {TrailRawService} from "src/app/service/trail-raw-service.service";
 import {TrailResponse, FileDetailsDto} from "src/app/service/trail-service.service";
 import {TrailImportFormUtils} from "src/app/utils/TrailImportFormUtils";
 import {Marker} from "src/app/map-preview/map-preview.component";
-import {MapIconType} from "src/app/utils/map/MapIconType";
+import {MapPinIconType} from "src/assets/icons/MapPinIconType";
 import * as moment from "moment";
 import {AuthService} from "../../../service/auth.service";
+import {AdminTrailService} from "../../../service/admin.trail.service";
 
 @Component({
     selector: "app-trail-upload-management",
@@ -27,7 +28,6 @@ import {AuthService} from "../../../service/auth.service";
 export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     trailFormGroup: FormGroup;
 
-    trailRawResponse: TrailRawResponse;
     trailRawDto: TrailRawDto;
     otherTrailResponse: TrailResponse;
     intersectionResponse: TrailIntersectionResponse;
@@ -47,7 +47,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             latitude: 44.11515289941759,
             longitude: 10.814071100111235,
         },
-        icon: MapIconType.CROSSWAY_ICON
+        icon: MapPinIconType.CROSSWAY_ICON
     }
 
     STEPS = ["Info Generali", "Crocevia", "Località", "Ciclo Escursionismo"];
@@ -61,6 +61,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         private geoTrailService: GeoTrailService,
         private rawTrailService: TrailRawService,
         private trailImportService: ImportService,
+        private adminTrailSaveService: AdminTrailService,
         private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -101,7 +102,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 this.isError = true;
                 return;
             }
-            this.trailRawDto = response.content[0]
+            this.trailRawDto = response.content[0];
             this.fileDetails = this.trailRawDto.fileDetails;
             this.populateForm(this.trailRawDto);
             this.isLoading = false;
@@ -206,7 +207,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     onDetectCrossings() {
         this.toggleLoading();
-        let coords = this.trailRawResponse.content[0].coordinates;
+        let coords = this.trailRawDto.coordinates;
         let coords2d: Coordinates2D[] = coords.map((a) => {
             return {latitude: a.latitude, longitude: a.longitude};
         });
@@ -253,13 +254,13 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         if (restResponse.status === Status.OK) {
             this.router.navigate([
                 "/admin/trails",
-                {success: this.trailRawResponse.content[0].name},
+                {success: this.trailRawDto.name},
             ]);
         }
     }
 
-    private onSaveRequest(response: RestResponse) {
-
+    private onSaveRequest(response: TrailResponse) {
+        this.router.navigate(['/admin/trail', { success: response.content[0].code }]);
     }
 
     get locations() {

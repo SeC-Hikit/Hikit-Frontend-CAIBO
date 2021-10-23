@@ -4,54 +4,38 @@ import { Observable, of } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
 import { components } from "src/binding/Binding";
 import { RestResponse } from "../RestResponse";
-import {TrailResponse} from "./trail-service.service";
+import {TrailDto, TrailResponse} from "./trail-service.service";
+import {TrailImportRequest} from "./import.service";
 
-
-export type TrailRawResponse = components['schemas']['TrailRawResponse'];
-export type TrailImportRequest = components['schemas']['TrailImportDto'];
-export type TrailRawDto = components['schemas']['TrailRawDto'];
+export type TrailImportDto = components['schemas']['TrailImportDto'];
 
 @Injectable({
   providedIn: "root",
 })
-export class ImportService {
-  baseUrl = "api/admin/import";
+export class AdminTrailService {
+  baseUrl = "api/admin/trail";
   httpOptions = {
     headers: new HttpHeaders({ "Content-Type": "application/json" }),
   };
 
   constructor(private httpClient: HttpClient) { }
 
-  readTrail(file: File): Observable<TrailRawResponse> {
-    const formData: FormData = new FormData();
-    formData.append("file", file);
-    return this.httpClient
-      .post<TrailRawResponse>(this.baseUrl, formData)
-      .pipe(
-        catchError(this.handleError<TrailRawResponse>("Read file", null))
-      );
-  }
-
-  readTrails(files: FileList): Observable<TrailRawResponse> {
-    const formData: FormData = new FormData();
-    for (let index = 0; index < files.length; index++) {
-      formData.append("files", files[index], files[index].name)
-
-    }
-    return this.httpClient
-      .post<TrailRawResponse>(this.baseUrl + "/bulk", formData)
-      .pipe(
-        catchError(this.handleError<TrailRawResponse>("bulk files", null))
-      );
-  }
-
-  saveTrail(trailImportRequest: TrailImportRequest): Observable<TrailResponse> {
+  saveTrail(trailImportRequest: TrailImportDto): Observable<TrailResponse> {
     return this.httpClient
       .put<RestResponse>(this.baseUrl + "/save", trailImportRequest)
       .pipe(
         tap((_) => console.log("")),
         catchError(this.handleError<RestResponse>("get all trail", null))
       );
+  }
+
+  updateTrail(trailImportRequest: TrailDto): Observable<TrailResponse> {
+    return this.httpClient
+        .put<RestResponse>(this.baseUrl + "/update", trailImportRequest)
+        .pipe(
+            tap((_) => console.log("")),
+            catchError(this.handleError<RestResponse>("get all trail", null))
+        );
   }
 
   /**

@@ -41,7 +41,7 @@
 
     <div *ngIf="!isLoading">
       <app-trail-floating-preview
-              [trailCoordinates]="trailRawResponse.content"
+              [trails]="[trailRawDto]"
         [isVisible]="isPreviewVisible"
         (onClose)="this.togglePreview()"
       ></app-trail-floating-preview>
@@ -51,10 +51,10 @@
       <div class="col">
         <p>
           <b>{{
-            this.trailRawResponse.content[0].fileDetails.originalFilename
+            this.trailRawDto.fileDetails.originalFilename
           }}</b
           >, caricata da
-          <b>{{ this.trailRawResponse.content[0].fileDetails.uploadedBy }}</b>
+          <b>{{ this.trailRawDto.fileDetails.uploadedBy }}</b>
         </p>
       </div>
     </div>
@@ -131,7 +131,7 @@
               <input
                 type="number"
                 class="form-control"
-                formControlName="eta"
+                formControlName="officialEta"
                 placeholder="Tempo di percorrenza in minuti"
                 required
               />
@@ -182,8 +182,8 @@
           <div class="col-md-12" *ngFor="let place of intersections.controls; index as i">
             <app-trail-intersection-entry
               [inputForm]="firstPos"
-              [trail]="trailRawResponse.content[i]"
-              [otherTrail]="trailRawResponse.content[i]"
+              [trail]="trailRawDto"
+              [otherTrail]="trailRawDto"
               [i]="i"
               [crossPoint]="testCoordinates"
             ></app-trail-intersection-entry>
@@ -243,7 +243,7 @@
               [title]="'Località iniziale'"
               [classPrefix]="'startPos'"
               [inputForm]="firstPos"
-              [trail]="trailRawResponse.content[0]"
+              [trail]="trailRawDto"
               [startPoint]="0"
               [i]="0"
               [isEditableLocation]="true"
@@ -258,9 +258,9 @@
               [title]="'Località di arrivo'"
               [classPrefix]="'finalPos'"
               [inputForm]="finalPos"
-              [trail]="trailRawResponse.content[0]"
+              [trail]="trailRawDto"
               [i]="1"
-              [startPoint]="trailRawResponse.content[0].coordinates.length - 1"
+              [startPoint]="trailRawDto.coordinates.length - 1"
               [isEditableLocation]="true"
             >
             </app-location-entry>
@@ -271,7 +271,7 @@
           <app-location-entry
             *ngFor="let place of locations.controls; index as i"
             [inputForm]="place"
-            [trail]="trailRawResponse.content[0]"
+            [trail]="trailRawDto"
             [i]="i"
             [isEditableLocation]="true"
             [showPositionControls]="true"
