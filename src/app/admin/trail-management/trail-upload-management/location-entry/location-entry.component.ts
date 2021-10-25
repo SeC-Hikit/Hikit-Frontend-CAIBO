@@ -39,6 +39,10 @@ export class LocationEntryComponent implements OnInit {
     this.selectedCoordinateIndex = this.startPoint != undefined ? this.startPoint : this.OFFSET_START_POINT;
   }
 
+  onFocus(): void {
+    // Run a geo-search to see what possible places are available close-by
+  }
+
   onSliderChange(eventValue: number): void {
     if (!this.isEditableLocation) {
       return;
