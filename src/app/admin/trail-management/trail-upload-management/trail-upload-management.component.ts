@@ -50,7 +50,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         icon: MapPinIconType.CROSSWAY_ICON
     }
 
-    STEPS = ["Info Generali", "Crocevia", "Località", "Ciclo Escursionismo"];
+    STEPS = ["Info Generali", "Crocevia", "Località"];
 
     CROSSWAY_INDEX = 1;
     STEP_INDEX = 0;
@@ -87,7 +87,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             startPos: TrailImportFormUtils.getLocationFormGroup(),
             finalPos: TrailImportFormUtils.getLocationFormGroup(),
             locations: new FormArray([]),
-            cyclo: TrailImportFormUtils.getCylcloFormGroup(),
         });
 
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
@@ -297,23 +296,4 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     get intersections() {
         return this.trailFormGroup.controls["intersections"] as FormArray;
     }
-
-    get cyclo() {
-        return this.trailFormGroup.controls["cyclo"] as FormGroup;
-    }
-
-    get wayForward() {
-        return this.cyclo.controls["wayForward"] as FormGroup;
-    }
-
-    get wayBack() {
-        return this.cyclo.controls["wayBack"] as FormGroup;
-    }
-
-    get cyclo_classification() {
-        return this.cyclo["classification"] as FormControl;
-    }
-
-
-
 }

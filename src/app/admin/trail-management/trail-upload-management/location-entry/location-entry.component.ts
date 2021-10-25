@@ -22,6 +22,7 @@ export class LocationEntryComponent implements OnInit {
   @Input() markers?: Marker[];
   @Input() isEditableLocation: boolean;
   @Input() showPositionControls?: boolean;
+  @Input() autoDetectOnFirstSelection?: boolean;
 
   @Input() startPoint: number;
 

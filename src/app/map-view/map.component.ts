@@ -79,7 +79,7 @@ export class MapComponent implements OnInit {
       this.trailService.getTrailById(code).subscribe(
         trailResponse => {
           this.selectedTrail = trailResponse.content[0];
-          this.selectedTrail.statsTrailMetadata.eta = Math.round(this.selectedTrail.statsTrailMetadata.officialEta);
+          // this.selectedTrail.statsTrailMetadata.eta = Math.round(this.selectedTrail.statsTrailMetadata.officialEta);
           this.selectedTrail.statsTrailMetadata.length = Math.round(this.selectedTrail.statsTrailMetadata.length);
           this.loadNotificationsForTrail(code);
           this.loadLastMaintenaceForTrail(code);
@@ -141,14 +141,14 @@ export class MapComponent implements OnInit {
   }
 
   toggleList(): void {
-    this.isTrailListVisible = this.isTrailListVisible ? false : true;
+    this.isTrailListVisible = !this.isTrailListVisible;
     if (this.trailPreviewList.length == 0 && this.isTrailListVisible) {
       this.loadPreviews();
     }
   }
 
   toggleAllTrails(): void {
-    this.isAllTrailVisible = this.isAllTrailVisible ? false : true;
+    this.isAllTrailVisible = !this.isAllTrailVisible;
     if (this.trailList.length == 0 && this.isAllTrailVisible) {
       this.loadAllTrails();
     }

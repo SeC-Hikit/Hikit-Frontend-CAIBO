@@ -1,433 +1,315 @@
 <div class="container my-4 TrailUploadManagement">
-  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-  <div class="table-wrapper space-up">
-    <div class="row">
-      <div class="col-sm-4">
-        <h1>Compilazione traccia</h1>
-      </div>
-      <div class="col-sm-6">
-        <h1 class="steps">
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    <div class="table-wrapper space-up">
+        <div class="row">
+            <div class="col-sm-4">
+                <h1>Compilazione traccia</h1>
+            </div>
+            <div class="col-sm-6">
+                <h1 class="steps">
           <span
-            class="actionable"
-            *ngIf="this.STEP_INDEX > 0"
-            (click)="goBack()"
-            >⬅</span
+                  class="actionable"
+                  *ngIf="this.STEP_INDEX > 0"
+                  (click)="goBack()"
+          >⬅</span
           >
-          Step {{ this.STEP_INDEX + 1 }}/{{ this.STEPS.length }} :
-          {{ this.STEPS[STEP_INDEX] }}
-        </h1>
-      </div>
-      <div class="col-sm-2">
-        <div class="features">
-          <div class="btn-group-toggle" data-toggle="buttons">
-            <label
-              (click)="togglePreview()"
-              class="btn btn-primary full-width"
-              placement="bottom"
-              ngbTooltip="Mostra/nascondi anteprima"
-              tooltipClass="tooltip-c"
-              [ngClass]="{ active: isPreviewVisible }"
-            >
-              <svg class="bi" width="24" height="24" fill="currentColor">
-                <use
-                  xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
-                />
-              </svg>
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="!isLoading">
-      <app-trail-floating-preview
-              [trails]="[trailRawDto]"
-        [isVisible]="isPreviewVisible"
-        (onClose)="this.togglePreview()"
-      ></app-trail-floating-preview>
-    </div>
-
-    <div class="row" *ngIf="!isLoading">
-      <div class="col">
-        <p>
-          <b>{{
-            this.trailRawDto.fileDetails.originalFilename
-          }}</b
-          >, caricata da
-          <b>{{ this.trailRawDto.fileDetails.uploadedBy }}</b>
-        </p>
-      </div>
-    </div>
-
-    <form
-      class="container"
-      (ngSubmit)="saveTrail()"
-      [formGroup]="trailFormGroup"
-      *ngIf="!isLoading"
-    >
-      <div class="general-section" *ngIf="this.STEP_INDEX == 0">
-        <h3 id="dati-generali" class="space-up">Dati generali</h3>
-
-        <div class="form-row">
-          <div class="form-group col-md-4 mb-3">
-            <p>Codice sentiero*</p>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="code"
-              placeholder="Codice (es: 100BO)"
-              required
-            />
-          </div>
-          <div class="form-group col-md-4 mb-3">
-            <p>Nome sentiero</p>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="name"
-              placeholder="Nome sentiero, se diverso dal codice"
-            />
-          </div>
-          <div class="form-group col-md-4 mb-3">
-            <p>Classificazione*</p>
-            <select
-              title="Scegli una opzione"
-              formControlName="classification"
-              class="form-control"
-              id="classification_select"
-            >
-              <option value="T">T</option>
-              <option value="E">E</option>
-              <option value="EE">EE</option>
-              <option value="EEA">EEA</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row top-margin">
-          <div class="form-group col-md-4 mb-3">
-            <p>Data rilevazione*</p>
-            <div class="input-group">
-              <input
-                class="form-control"
-                formControlName="lastUpdate"
-                placeholder="gg/mm/aaaa"
-                name="dp"
-                ngbDatepicker
-                [(ngModel)]="date"
-                #d="ngbDatepicker"
-              />
-              <div class="input-group-append">
-                <button
-                  class="btn btn-outline-secondary calendar"
-                  (click)="d.toggle()"
-                  type="button"
-                ></button>
-              </div>
+                    Step {{ this.STEP_INDEX + 1 }}/{{ this.STEPS.length }} :
+                    {{ this.STEPS[STEP_INDEX] }}
+                </h1>
             </div>
-          </div>
-          <div class="form-group col-md-4 mb-3">
-            <p>Tempo registrato di percorrenza, in minuti</p>
-            <div class="bootstrap-select-wrapper">
-              <input
-                type="number"
-                class="form-control"
-                formControlName="officialEta"
-                placeholder="Tempo di percorrenza in minuti"
-                required
-              />
+            <div class="col-sm-2">
+                <div class="features">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label
+                                (click)="togglePreview()"
+                                class="btn btn-primary full-width"
+                                placement="bottom"
+                                ngbTooltip="Mostra/nascondi anteprima"
+                                tooltipClass="tooltip-c"
+                                [ngClass]="{ active: isPreviewVisible }"
+                        >
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use
+                                        xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
+                                />
+                            </svg>
+                        </label>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="form-row top-margin">
-          <label
-            placement="right"
-            ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
-          >
-            Descrizione
-          </label>
-          <div class="form-group col-md-12 mb-12">
-            <quill-editor
-              formControlName="description"
-              [modules]="{
+
+        <div *ngIf="!isLoading">
+            <app-trail-floating-preview
+                    [trails]="[trailRawDto]"
+                    [isVisible]="isPreviewVisible"
+                    (onClose)="this.togglePreview()"
+            ></app-trail-floating-preview>
+        </div>
+
+        <div class="row" *ngIf="!isLoading">
+            <div class="col">
+                <p>
+                    <b>{{
+                        this.trailRawDto.fileDetails.originalFilename
+                        }}</b
+                    >, caricata da
+                    <b>{{ this.trailRawDto.fileDetails.uploadedBy }}</b>
+                </p>
+            </div>
+        </div>
+
+        <form
+                class="container"
+                (ngSubmit)="saveTrail()"
+                [formGroup]="trailFormGroup"
+                *ngIf="!isLoading"
+        >
+            <div class="general-section" *ngIf="this.STEP_INDEX == 0">
+                <h3 id="dati-generali" class="space-up">Dati generali</h3>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4 mb-3">
+                        <p>Codice sentiero*</p>
+                        <input
+                                type="text"
+                                class="form-control"
+                                formControlName="code"
+                                placeholder="Codice (es: 100BO)"
+                                required
+                        />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <p>Nome sentiero</p>
+                        <input
+                                type="text"
+                                class="form-control"
+                                formControlName="name"
+                                placeholder="Nome sentiero, se diverso dal codice"
+                        />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <p>Classificazione*</p>
+                        <select
+                                title="Scegli una opzione"
+                                formControlName="classification"
+                                class="form-control"
+                                id="classification_select"
+                        >
+                            <option value="T">T</option>
+                            <option value="E">E</option>
+                            <option value="EE">EE</option>
+                            <option value="EEA">EEA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row top-margin">
+                    <div class="form-group col-md-4 mb-3">
+                        <p>Data rilevazione*</p>
+                        <div class="input-group">
+                            <input
+                                    class="form-control"
+                                    formControlName="lastUpdate"
+                                    placeholder="gg/mm/aaaa"
+                                    name="dp"
+                                    ngbDatepicker
+                                    [(ngModel)]="date"
+                                    #d="ngbDatepicker"
+                            />
+                            <div class="input-group-append">
+                                <button
+                                        class="btn btn-outline-secondary calendar"
+                                        (click)="d.toggle()"
+                                        type="button"
+                                >
+                                    <svg width="24" height="24" fill="white" class="inner">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <p>Tempo registrato di percorrenza, in minuti</p>
+                        <div class="bootstrap-select-wrapper">
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    formControlName="officialEta"
+                                    placeholder="Tempo di percorrenza in minuti"
+                                    required
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row top-margin">
+                    <label
+                            placement="right"
+                            ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
+                    >
+                        Descrizione
+                    </label>
+                    <div class="form-group col-md-12 mb-12">
+                        <quill-editor
+                                formControlName="description"
+                                [modules]="{
                 toolbar: [
                   ['bold', 'italic', 'underline'],
                   [{ list: 'ordered' }, { list: 'bullet' }],
                   ['link']
                 ]
               }"
-            ></quill-editor>
-          </div>
-        </div>
-      </div>
-
-      <div class="crossing-section" [ngClass]="{ 'hide': this.STEP_INDEX != 1 }">
-        <div class="row">
-          <div class="col-md-1">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-              <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-split"
-              />
-            </svg>
-          </div>
-          <div class="col-md-11">
-            <h3 id="crocevia">Crocevia</h3>
-          </div>
-          <div class="col-md-12">
-            <p>
-              I crocevia sono punti di collegamento di diversi sentieri.<br />
-              Questi vengono rilevati in automatico sulla base dei sentieri
-              presenti.
-            </p>
-          </div>
-          <div class="col-md-12" *ngFor="let place of intersections.controls; index as i">
-            <app-trail-intersection-entry
-              [inputForm]="firstPos"
-              [trail]="trailRawDto"
-              [otherTrail]="trailRawDto"
-              [i]="i"
-              [crossPoint]="testCoordinates"
-            ></app-trail-intersection-entry>
-          </div>
-        </div>
-      </div>
-
-      <ng-template #content let-modal>
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-          <button
-            type="button"
-            class="close"
-            aria-label="Close"
-            (click)="modal.dismiss('Cross click')"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Some body once told me</p>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-outline-dark"
-            (click)="modal.close('Save click')"
-          >
-            Save
-          </button>
-        </div>
-      </ng-template>
-
-      <div class="location-section" [ngClass]="{ 'hide': this.STEP_INDEX != 2}">
-        <div class="row">
-          <div class="col-md-1">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-              <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#joystick"
-              />
-            </svg>
-          </div>
-          <div class="col-md-11">
-            <h3 id="localita">Località</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="space-up col-md-12">
-            Le localita' sono utilizzate per segnalare punti di particolare
-            importanza sui sentieri.
-          </div>
-        </div>
-
-        <div class="row" *ngIf="this.STEP_INDEX == 2">
-          <div class="space-up col-md-12">
-            <app-location-entry
-              [title]="'Località iniziale'"
-              [classPrefix]="'startPos'"
-              [inputForm]="firstPos"
-              [trail]="trailRawDto"
-              [startPoint]="0"
-              [i]="0"
-              [isEditableLocation]="true"
-            >
-            </app-location-entry>
-          </div>
-        </div>
-
-        <div class="row" *ngIf="this.STEP_INDEX == 2">
-          <div class="space-up col-md-12">
-            <app-location-entry
-              [title]="'Località di arrivo'"
-              [classPrefix]="'finalPos'"
-              [inputForm]="finalPos"
-              [trail]="trailRawDto"
-              [i]="1"
-              [startPoint]="trailRawDto.coordinates.length - 1"
-              [isEditableLocation]="true"
-            >
-            </app-location-entry>
-          </div>
-        </div>
-
-        <div formArrayName="locations">
-          <app-location-entry
-            *ngFor="let place of locations.controls; index as i"
-            [inputForm]="place"
-            [trail]="trailRawDto"
-            [i]="i"
-            [isEditableLocation]="true"
-            [showPositionControls]="true"
-          >
-          </app-location-entry>
-        </div>
-
-        <div class="form-row">
-          <button
-            type="button"
-            class="btn btn-success mt-3 wide-btn"
-            (click)="onAddLocation()"
-          >
-            Aggiungi località intermedia
-          </button>
-        </div>
-      </div>
-
-      <div class="bike-section" [ngClass]="{ 'hide': this.STEP_INDEX != 3 }">
-        <svg class="bi" width="32" height="32" fill="currentColor">
-          <use
-            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
-          />
-        </svg>
-        <h3 class="space-up">Ciclo Escursionismo</h3>
-
-        <div [formGroup]="cyclo">
-          <div class="form-row">
-            <div class="form-group col-md-4 mb-3">
-              <p>Classificazione</p>
-              <select
-                title="Scegli una opzione"
-                formControlName="classification"
-                class="form-control"
-                id="cyclo_classification_select"
-                [value]="cyclo_classification"
-              >
-                <option value="UNCLASSIFIED">Non classificato</option>
-                <option value="TC">TC</option>
-                <option value="TC+">TC+</option>
-                <option value="MC">MC</option>
-                <option value="MC+">MC+</option>
-                <option value="BC">BC</option>
-                <option value="BC+">BC+</option>
-                <option value="OC">OC</option>
-                <option value="OC+">OC+</option>
-                <option value="EC">EC</option>
-                <option value="NO">NO</option>
-              </select>
+                        ></quill-editor>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div [formGroup]="wayForward">
-            <h3>Andata</h3>
-            <div class="form-row">
-              <div class="form-group col-md-4 mb-3">
-                <p>Percorribile?</p>
-                <select
-                  title="Scegli una opzione"
-                  formControlName="feasible"
-                  class="form-control"
-                  id="forward_way_select"
-                  [value]=""
-                >
-                  <option value="true">Si</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-              <div class="form-group col-md-4 mb-3">
-                <p>Portage (circa, in minuti)</p>
-                <select
-                  title="Scegli una opzione"
-                  formControlName="portage"
-                  class="form-control"
-                  id="portage_forward_select"
-                  [value]=""
-                >
-                  <option value="0">0</option>
-                  <option value="15">15</option>
-                  <option value="20">20</option>
-                  <option value="30">>30</option>
-                </select>
-              </div>
+
+            <div class="crossing-section" [ngClass]="{ 'hide': this.STEP_INDEX != 1 }">
+                <div class="row">
+                    <div class="col-md-1">
+                        <svg class="bi" width="32" height="32" fill="currentColor">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-split"
+                            />
+                        </svg>
+                    </div>
+                    <div class="col-md-11">
+                        <h3 id="crocevia">Crocevia</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <p>
+                            I crocevia sono punti di collegamento di diversi sentieri.<br/>
+                            Questi vengono rilevati in automatico sulla base dei sentieri
+                            presenti.
+                        </p>
+                    </div>
+                    <div class="col-md-12" *ngFor="let place of intersections.controls; index as i">
+                        <app-trail-intersection-entry
+                                [inputForm]="firstPos"
+                                [trail]="trailRawDto"
+                                [otherTrail]="trailRawDto"
+                                [i]="i"
+                                [crossPoint]="testCoordinates"
+                        ></app-trail-intersection-entry>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div [formGroup]="wayBack">
-          <h3>Ritorno</h3>
-          <div class="form-row">
-            <div class="form-group col-md-4 mb-3">
-              <p>Percorribile?</p>
-              <select
-                title="Scegli una opzione"
-                formControlName="feasible"
-                class="form-control"
-                id="feasability_select"
-              >
-                <option value="true">Si</option>
-                <option value="false">No</option>
-              </select>
+
+            <ng-template #content let-modal>
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+                    <button
+                            type="button"
+                            class="close"
+                            aria-label="Close"
+                            (click)="modal.dismiss('Cross click')"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Some body once told me</p>
+                </div>
+                <div class="modal-footer">
+                    <button
+                            type="button"
+                            class="btn btn-outline-dark"
+                            (click)="modal.close('Save click')"
+                    >
+                        Save
+                    </button>
+                </div>
+            </ng-template>
+
+            <div class="location-section" [ngClass]="{ 'hide': this.STEP_INDEX != 2}">
+                <div class="row">
+                    <div class="col-md-1">
+                        <svg class="bi" width="32" height="32" fill="currentColor">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#joystick"
+                            />
+                        </svg>
+                    </div>
+                    <div class="col-md-11">
+                        <h3 id="localita">Località</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="space-up col-md-12">
+                        Le localita' sono utilizzate per segnalare punti di particolare
+                        importanza sui sentieri.
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="this.STEP_INDEX == 2">
+                    <div class="space-up col-md-12">
+                        <app-location-entry
+                                [title]="'Località iniziale'"
+                                [classPrefix]="'startPos'"
+                                [inputForm]="firstPos"
+                                [trail]="trailRawDto"
+                                [startPoint]="0"
+                                [i]="0"
+                                [isEditableLocation]="true"
+                        >
+                        </app-location-entry>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="this.STEP_INDEX == 2">
+                    <div class="space-up col-md-12">
+                        <app-location-entry
+                                [title]="'Località di arrivo'"
+                                [classPrefix]="'finalPos'"
+                                [inputForm]="finalPos"
+                                [trail]="trailRawDto"
+                                [i]="1"
+                                [startPoint]="trailRawDto.coordinates.length - 1"
+                                [isEditableLocation]="true"
+                        >
+                        </app-location-entry>
+                    </div>
+                </div>
+
+                <div formArrayName="locations">
+                    <app-location-entry
+                            *ngFor="let place of locations.controls; index as i"
+                            [inputForm]="place"
+                            [trail]="trailRawDto"
+                            [i]="i"
+                            [isEditableLocation]="true"
+                            [showPositionControls]="true"
+                    >
+                    </app-location-entry>
+                </div>
+
+                <div class="form-row">
+                    <button
+                            type="button"
+                            class="btn btn-success mt-3 wide-btn"
+                            (click)="onAddLocation()"
+                    >
+                        + località intermedia
+                    </button>
+                </div>
             </div>
-            <div class="form-group col-md-4 mb-3">
-              <p>Portage (circa, in minuti)</p>
-              <select
-                title="Scegli una opzione"
-                formControlName="portage"
-                class="form-control"
-                id="portage_select"
-              >
-                <option value="0">0</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="30">>30</option>
-              </select>
+            <div class="form-row" *ngIf="this.STEP_INDEX == 2">
+                <div class="col col-md-12 top-margin-x2">
+                    <button class="btn btn-primary full-width" type="submit">
+                        Salva sentiero
+                    </button>
+                </div>
             </div>
-          </div>
-        </div>
 
-        <div class="form-row">
-          <label
-            placement="right"
-            ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
-          >
-            Descrizione
-          </label>
 
-          <div class="form-group col-md-12 mb-12">
-            <quill-editor
-              formControlName="description"
-              [modules]="{
-                toolbar: [
-                  ['bold', 'italic', 'underline'],
-                  [{ list: 'ordered' }, { list: 'bullet' }],
-                  ['link']
-                ]
-              }"
-            ></quill-editor>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-row" *ngIf="this.STEP_INDEX == 3">
-        <span class="form-group col-md-12">
-          <button class="btn btn-error full-width" type="submit">
-            Salva sentiero
-          </button>
-        </span>
-      </div>
-    </form>
-
-    <div class="row" *ngIf="this.STEP_INDEX < 3">
-      <div class="col top-margin">
-        <button class="btn btn-primary full-width" (click)="goToNext()">
-          Vai allo step {{ this.STEP_INDEX + 2 }}:
-          {{ this.STEPS[this.STEP_INDEX + 1] }}
-        </button>
-      </div>
+            <div class="row" *ngIf="this.STEP_INDEX < 2">
+                <div class="col top-margin">
+                    <button class="btn btn-primary full-width" (click)="goToNext()">
+                        Vai allo step {{ this.STEP_INDEX + 2 }}:
+                        {{ this.STEPS[this.STEP_INDEX + 1] }}
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-  </div>
 </div>

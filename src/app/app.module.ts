@@ -55,6 +55,7 @@ import { ReportingFormComponent } from './accessibility/reporting-form/reporting
 import { LocationEntryReportComponent } from "./accessibility/reporting-form/location-report-entry/location-entry.component";
 import { CycloComponent } from './info/cyclo/cyclo.component';
 import {NgbDateCustomParserFormatter} from "./conf/NgbDateCustomParserFormatter";
+import { CycloManagementComponent } from './admin/trail-management/cyclo-management/cyclo-management.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import {NgbDateCustomParserFormatter} from "./conf/NgbDateCustomParserFormatter"
     AccessibilityViewComponent,
     ReportingFormComponent,
     LocationEntryReportComponent,
-    CycloComponent
+    CycloComponent,
+    CycloManagementComponent
   ],
   imports: [
     BrowserModule,

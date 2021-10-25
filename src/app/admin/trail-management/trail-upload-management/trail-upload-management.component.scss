@@ -3,6 +3,7 @@
     margin: 0;
   }
 }
+
 .trail-upload-management {
   position: relative;
 
@@ -71,12 +72,14 @@ input[name="dp"] {
 }
 
 .calendar {
-  // background-image: url(/assets/icons/calendar.png);
   width: 2.75rem;
-  background-repeat: no-repeat;
   background-size: 23px;
-  background-position: 50%;
+  background: url('/src/assets/icons/admin/png/calendar.png') no-repeat 50%;
   border: 1px solid gray;
+
+  .inner{
+    margin-left: -10px;
+  }
 }
 
 .hide {

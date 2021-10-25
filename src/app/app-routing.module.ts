@@ -22,6 +22,7 @@ import {AccessibilityAddComponent} from "./admin/accessibility-management/access
 import {AccessibilityViewComponent} from "./admin/accessibility-management/accessibility-view/accessibility-view.component";
 import {ReportingFormComponent} from "./accessibility/reporting-form/reporting-form.component";
 import {CycloComponent} from "./info/cyclo/cyclo.component";
+import {CycloManagementComponent} from "./admin/trail-management/cyclo-management/cyclo-management.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -113,6 +114,7 @@ const routes: Routes = [
                 path: "trail",
                 children: [
                     {path: "raw/:id", component: TrailUploadManagementComponent},
+                    {path: "cyclo/:id", component: CycloManagementComponent},
                 ],
             },
         ],
