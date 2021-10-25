@@ -8,7 +8,7 @@ import {
     Coordinates2D,
     TrailIntersectionResponse, TrailIntersection,
 } from "src/app/service/geo-trail-service";
-import {ImportService, TrailRawDto, TrailRawResponse} from "src/app/service/import.service";
+import {ImportService, TrailRawDto} from "src/app/service/import.service";
 import {RestResponse} from "src/app/RestResponse";
 import {Status} from "src/app/Status";
 import {TrailRawService} from "src/app/service/trail-raw-service.service";
@@ -186,23 +186,42 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     saveTrail() {
 
         console.log(this.trailFormGroup);
+
+
+
         if (this.trailFormGroup.valid) {
             const trailFormValue = this.trailFormGroup.value;
-            const importTrail = TrailImportFormUtils.getImportRequestFromControls(trailFormValue,
-                this.trailRawDto.coordinates.map(tc => {
-                    return {
-                        latitude: tc.latitude,
-                        longitude: tc.longitude,
-                        altitude: tc.altitude
-                    }
-                }),
-                this.trailRawDto.fileDetails);
-            this.trailImportService
+            const importTrail = this.getTrailFromForm(trailFormValue);
+
+            // create places if they do not exist
+            let places = [importTrail.startLocation].concat(importTrail.locations).concat(importTrail.endLocation);
+
+            places.forEach(
+                place => {
+                    // if it does not exist create it
+
+                }
+            )
+
+            // import trail
+            this.adminTrailSaveService
               .saveTrail(importTrail)
               .subscribe((response) => this.onSaveRequest(response));
         } else {
             alert("Alcuni campi contengono errori");
         }
+    }
+
+    private getTrailFromForm(trailFormValue) {
+        return TrailImportFormUtils.getImportRequestFromControls(trailFormValue,
+            this.trailRawDto.coordinates.map(tc => {
+                return {
+                    latitude: tc.latitude,
+                    longitude: tc.longitude,
+                    altitude: tc.altitude
+                }
+            }),
+            this.trailRawDto.fileDetails);
     }
 
     onDetectCrossings() {
