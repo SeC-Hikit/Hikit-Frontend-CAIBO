@@ -5,7 +5,7 @@ import {tap, catchError} from "rxjs/operators";
 import {components} from "src/binding/Binding";
 import {RestResponse} from "../RestResponse";
 
-export type Place = components["schemas"]["PlaceDto"];
+export type PlaceDto = components["schemas"]["PlaceDto"];
 export type PlaceResponse = components["schemas"]["PlaceResponse"];
 export type LinkedMedia = components["schemas"]["LinkedMediaDto"];
 export type UnlinkMedia = components["schemas"]["UnLinkeMediaRequestDto"];
@@ -64,14 +64,14 @@ export class PlaceService {
         );
     }
 
-    create(place: Place): Observable<PlaceResponse> {
+    create(place: PlaceDto): Observable<PlaceResponse> {
         return this.httpClient.put<PlaceResponse>(this.baseUrl, place).pipe(
             tap((_) => console.log("")),
             catchError(this.handleError<PlaceResponse>("Save maintenance", null))
         );
     }
 
-    update(place: Place): Observable<PlaceResponse> {
+    update(place: PlaceDto): Observable<PlaceResponse> {
         return this.httpClient.post<RestResponse>(this.baseUrl, place).pipe(
             tap((_) => console.log("")),
             catchError(this.handleError<RestResponse>("Save maintenance", null))

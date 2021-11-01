@@ -196,47 +196,7 @@
             </div>
 
             <!-- Modal Selector -->
-            <ng-template #content let-modal>
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modal-basic-title">Elementi georeferenziati</h4>
-                    <button
-                            type="button"
-                            class="close"
-                            aria-label="Close"
-                            (click)="modal.dismiss('Cross click')"
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="list-of-georeferenced-places">
-                        <div class="row">
-                            <div class="col-6">
-                                <ul>
-                                    <li>Selected place</li>
-                                </ul>
-                            </div>
-                            <div class="col-6">
-                                <app-map-preview
-                                        [classPrefix]="'geolocation-preview'"
-                                        [markersCoordinates]=""
-                                ></app-map-preview>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button
-                            type="button"
-                            class="btn btn-outline-dark"
-                            (click)="modal.close('Save click')"
-                    >
-                        Seleziona
-                    </button>
-                </div>
-            </ng-template>
+            <app-place-picker-selector></app-place-picker-selector>
 
             <div class="location-section" [ngClass]="{ 'hide': this.STEP_INDEX != 2}">
                 <div class="row">

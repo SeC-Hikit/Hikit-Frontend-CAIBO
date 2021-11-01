@@ -1,1 +1,41 @@
-<p>place-picker-selector works!</p>
+<div class="PlacePickerSelector">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Elementi georeferenziati</h4>
+        <button
+                type="button"
+                class="close"
+                aria-label="Close"
+                (click)="onCancelEvent()"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="list-of-georeferenced-places">
+            <div class="row">
+                <div class="col-6">
+                    <ul>
+                        <li *ngFor="let place of places; index as i" (click)="onSelect(place)">{{place.name}}</li>
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <app-map-preview
+                            [classPrefix]="'geolocation-preview'"
+                            [markersCoordinates]=""
+                    ></app-map-preview>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer">
+        <button
+                type="button"
+                class="btn btn-outline-dark"
+                (click)="modal.close('Save click')"
+        >
+            Seleziona
+        </button>
+    </div>
+</div>
