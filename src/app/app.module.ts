@@ -56,6 +56,7 @@ import { LocationEntryReportComponent } from "./accessibility/reporting-form/loc
 import { CycloComponent } from './info/cyclo/cyclo.component';
 import {NgbDateCustomParserFormatter} from "./conf/NgbDateCustomParserFormatter";
 import { CycloManagementComponent } from './admin/trail-management/cyclo-management/cyclo-management.component';
+import { PlacePickerSelectorComponent } from './admin/trail-management/trail-upload-management/place-picker-selector/place-picker-selector.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { CycloManagementComponent } from './admin/trail-management/cyclo-managem
     LocationEntryReportComponent,
     CycloComponent,
     CycloManagementComponent,
+    PlacePickerSelectorComponent,
   ],
   imports: [
     BrowserModule,
