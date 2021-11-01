@@ -105,7 +105,7 @@ import { CycloManagementComponent } from './admin/trail-management/cyclo-managem
     ReportingFormComponent,
     LocationEntryReportComponent,
     CycloComponent,
-    CycloManagementComponent
+    CycloManagementComponent,
   ],
   imports: [
     BrowserModule,

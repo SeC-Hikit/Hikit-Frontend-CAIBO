@@ -24,12 +24,12 @@ export interface Marker {
 export class MapPreviewComponent implements OnInit {
 
   @Input() classPrefix: string;
-  @Input() otherTrails: TrailDto[];
-  @Input() markersCoordinates: Marker[];
-  @Input() trailPreview: TrailDto;
-  @Input() elementAt: number;
-  @Input() index: string;
-  @Input() isShowOtherTrailsEnabled: boolean;
+  @Input() otherTrails?: TrailDto[];
+  @Input() markersCoordinates?: Marker[];
+  @Input() trailPreview?: TrailDto;
+  @Input() elementAt?: number;
+  @Input() index?: string;
+  @Input() isShowOtherTrailsEnabled?: boolean;
 
   private map: L.Map;
   private polyline: L.Polyline;

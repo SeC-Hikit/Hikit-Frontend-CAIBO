@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ModalDismissReasons, NgbDateStruct, NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -19,6 +19,8 @@ import {MapPinIconType} from "src/assets/icons/MapPinIconType";
 import * as moment from "moment";
 import {AuthService} from "../../../service/auth.service";
 import {AdminTrailService} from "../../../service/admin.trail.service";
+import {IndexCoordinateSelector} from "./location-entry/location-entry.component";
+import {PlaceResponse, PlaceService} from "../../../service/place.service";
 
 @Component({
     selector: "app-trail-upload-management",
@@ -26,21 +28,27 @@ import {AdminTrailService} from "../../../service/admin.trail.service";
     styleUrls: ["./trail-upload-management.component.scss"],
 })
 export class TrailUploadManagementComponent implements OnInit, OnDestroy {
-    trailFormGroup: FormGroup;
+    PLACE_OFFSET = 1;
 
+    trailFormGroup: FormGroup;
     trailRawDto: TrailRawDto;
     otherTrailResponse: TrailResponse;
     intersectionResponse: TrailIntersectionResponse;
+    geoLocatedPlaceResponse: PlaceResponse;
     fileDetails: FileDetailsDto;
 
+    // Modal and datepicker
+    @ViewChild('content', {static: false}) private content;
+    date: NgbDateStruct;
+
     isLoading = false;
+    isPlaceListLoading = false;
     isPreviewVisible = false;
     isCrossingSectionComplete = false;
     isError: boolean;
 
-    date: NgbDateStruct;
-
     closeResult: string;
+
 
     testCoordinates: Marker = {
         coords: {
@@ -62,6 +70,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         private rawTrailService: TrailRawService,
         private trailImportService: ImportService,
         private adminTrailSaveService: AdminTrailService,
+        private placeService: PlaceService,
         private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -105,6 +114,20 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             this.fileDetails = this.trailRawDto.fileDetails;
             this.populateForm(this.trailRawDto);
             this.isLoading = false;
+        });
+    }
+
+    geolocatePlace(indexCoordinateSelector: IndexCoordinateSelector): void {
+        this.placeService.geolocatePlace({
+            coordinatesDto: {
+                longitude: indexCoordinateSelector.coordinates.longitude,
+                latitude: indexCoordinateSelector.coordinates.latitude,
+                altitude: indexCoordinateSelector.coordinates.altitude,
+            },
+            distance: 1
+        }, 0, 20).subscribe((resp) => {
+            this.geoLocatedPlaceResponse = resp;
+            this.open(this.content);
         });
     }
 
@@ -187,7 +210,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         console.log(this.trailFormGroup);
 
 
-
         if (this.trailFormGroup.valid) {
             const trailFormValue = this.trailFormGroup.value;
             const importTrail = this.getTrailFromForm(trailFormValue);
@@ -204,8 +226,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
             // import trail
             this.adminTrailSaveService
-              .saveTrail(importTrail)
-              .subscribe((response) => this.onSaveRequest(response));
+                .saveTrail(importTrail)
+                .subscribe((response) => this.onSaveRequest(response));
         } else {
             alert("Alcuni campi contengono errori");
         }
@@ -278,10 +300,10 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     }
 
     private onSaveRequest(response: TrailResponse) {
-        this.router.navigate(['/admin/trail', { success: response.content[0].code }]);
+        this.router.navigate(['/admin/trail', {success: response.content[0].code}]);
     }
 
-    get locations() {
+    get locations(): FormArray {
         return this.trailFormGroup.controls["locations"] as FormArray;
     }
 

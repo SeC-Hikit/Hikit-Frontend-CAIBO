@@ -1,8 +1,14 @@
-import { Component, Input, OnInit } from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Marker } from "src/app/map-preview/map-preview.component";
 import { Coordinates2D } from "src/app/service/geo-trail-service";
-import { TrailDto, TrailCoordinates } from "src/app/service/trail-service.service";
+import {TrailDto, TrailCoordinates, CoordinatesDto} from "src/app/service/trail-service.service";
+
+
+export interface IndexCoordinateSelector {
+  i : number,
+  coordinates: CoordinatesDto
+}
 
 @Component({
   selector: "app-location-entry",
@@ -12,8 +18,10 @@ import { TrailDto, TrailCoordinates } from "src/app/service/trail-service.servic
 export class LocationEntryComponent implements OnInit {
   private readonly OFFSET_START_POINT = 1;
   private readonly OFFSET_END_POINT = 2;
+  private isFocusDirty : boolean = false;
 
   @Input() title: string;
+  @Input() showIndex: boolean;
   @Input() classPrefix: string;
   @Input() i: number;
   @Input() inputForm: FormGroup;
@@ -26,11 +34,15 @@ export class LocationEntryComponent implements OnInit {
 
   @Input() startPoint: number;
 
+  @Output() onTextFocus?: EventEmitter<IndexCoordinateSelector> = new EventEmitter<IndexCoordinateSelector>();
+  @Output() onSearchBtnClick?: EventEmitter<number> = new EventEmitter<number>();
+
   selectedCoordinateIndex: number;
 
   constructor() {}
 
   ngOnInit(): void {
+    this.showIndex = this.showIndex != undefined;
     this.title = this.title ? this.title : "Località";
     this.selectedCoordinateIndex = this.isEditableLocation
       ? this.OFFSET_START_POINT
@@ -41,6 +53,16 @@ export class LocationEntryComponent implements OnInit {
 
   onFocus(): void {
     // Run a geo-search to see what possible places are available close-by
+    const coordinate = this.trail.coordinates[this.selectedCoordinateIndex];
+    if(!this.isFocusDirty) {
+      this.onTextFocus.emit({
+        i: this.i, coordinates: {
+          altitude: coordinate.altitude,
+          latitude: coordinate.latitude, longitude: coordinate.longitude
+        }
+      });
+    }
+    this.isFocusDirty = true;
   }
 
   onSliderChange(eventValue: number): void {

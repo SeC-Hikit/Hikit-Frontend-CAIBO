@@ -157,3 +157,7 @@ select {
   color: $action-btn-color;
   cursor: pointer;
 }
+
+.modal-dialog {
+  min-width: 60% !important;
+}

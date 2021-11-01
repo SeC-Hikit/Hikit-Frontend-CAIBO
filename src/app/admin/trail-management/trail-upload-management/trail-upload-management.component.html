@@ -149,7 +149,7 @@
                     >
                         Descrizione
                     </label>
-                    <div class="form-group col-md-12 mb-12">
+                    <div class="form-group col-md-12 mb-12" *ngIf="!isLoading">
                         <quill-editor
                                 formControlName="description"
                                 [modules]="{
@@ -195,9 +195,10 @@
                 </div>
             </div>
 
+            <!-- Modal Selector -->
             <ng-template #content let-modal>
                 <div class="modal-header">
-                    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+                    <h4 class="modal-title" id="modal-basic-title">Elementi georeferenziati</h4>
                     <button
                             type="button"
                             class="close"
@@ -208,7 +209,23 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Some body once told me</p>
+                    <div class="list-of-georeferenced-places">
+                        <div class="row">
+                            <div class="col-6">
+                                <ul>
+                                    <li>Selected place</li>
+                                </ul>
+                            </div>
+                            <div class="col-6">
+                                <app-map-preview
+                                        [classPrefix]="'geolocation-preview'"
+                                        [markersCoordinates]=""
+                                ></app-map-preview>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button
@@ -216,7 +233,7 @@
                             class="btn btn-outline-dark"
                             (click)="modal.close('Save click')"
                     >
-                        Save
+                        Seleziona
                     </button>
                 </div>
             </ng-template>
@@ -249,9 +266,12 @@
                                 [inputForm]="firstPos"
                                 [trail]="trailRawDto"
                                 [startPoint]="0"
-                                [i]="0"
+                                [i]="-1"
                                 [isEditableLocation]="true"
                                 [autoDetectOnFirstSelection]="true"
+                                [markers]="[]"
+                                [otherTrails]="[]"
+                                (onTextFocus)="geolocatePlace($event)"
                         >
                         </app-location-entry>
                     </div>
@@ -264,10 +284,13 @@
                                 [classPrefix]="'finalPos'"
                                 [inputForm]="finalPos"
                                 [trail]="trailRawDto"
-                                [i]="1"
+                                [i]="0"
                                 [startPoint]="trailRawDto.coordinates.length - 1"
                                 [isEditableLocation]="true"
                                 [autoDetectOnFirstSelection]="true"
+                                [markers]="[]"
+                                [otherTrails]="[]"
+                                (onTextFocus)="geolocatePlace($event)"
                         >
                         </app-location-entry>
                     </div>
@@ -277,11 +300,15 @@
                     <app-location-entry
                             *ngFor="let place of locations.controls; index as i"
                             [inputForm]="place"
+                            [showIndex]="true"
                             [trail]="trailRawDto"
-                            [i]="i"
+                            [i]="i + PLACE_OFFSET"
                             [isEditableLocation]="true"
                             [showPositionControls]="true"
                             [autoDetectOnFirstSelection]="true"
+                            [otherTrails]="[]"
+                            [markers]="[]"
+                            (onTextFocus)="geolocatePlace($event)"
                     >
                     </app-location-entry>
                 </div>
