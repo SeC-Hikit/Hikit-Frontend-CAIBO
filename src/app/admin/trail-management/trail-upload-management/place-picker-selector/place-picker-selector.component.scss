@@ -1,0 +1,15 @@
+@import "../../../../style/const.scss";
+
+.PlacePickerSelector {
+  background: white;
+  position: fixed;
+  width: 80%;
+  top:0;
+  z-index: 1000;
+  box-shadow: 0 5px $primary-bg-color;
+
+  .modal-body {
+    max-height: 500px;
+    overflow-y: scroll;
+  }
+}

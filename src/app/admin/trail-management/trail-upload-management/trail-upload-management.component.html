@@ -196,7 +196,14 @@
             </div>
 
             <!-- Modal Selector -->
-            <app-place-picker-selector></app-place-picker-selector>
+            <div *ngIf="isPlacePicking">
+                <div class="place-picking-bg"></div>
+                <app-place-picker-selector
+                        [places]="geoLocatedPlaceResponse.content"
+                        [targetPoint]="{  }"
+                        (onCancel)="this.closePlacePicker()"
+                ></app-place-picker-selector>
+            </div>
 
             <div class="location-section" [ngClass]="{ 'hide': this.STEP_INDEX != 2}">
                 <div class="row">

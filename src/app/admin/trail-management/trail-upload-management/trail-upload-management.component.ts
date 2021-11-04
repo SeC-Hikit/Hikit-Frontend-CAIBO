@@ -37,14 +37,13 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     geoLocatedPlaceResponse: PlaceResponse;
     fileDetails: FileDetailsDto;
 
-    // Modal and datepicker
-    @ViewChild('content', {static: false}) private content;
     date: NgbDateStruct;
 
     isLoading = false;
     isPlaceListLoading = false;
     isPreviewVisible = false;
     isCrossingSectionComplete = false;
+    isPlacePicking = false;
     isError: boolean;
 
     closeResult: string;
@@ -127,7 +126,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             distance: 1
         }, 0, 20).subscribe((resp) => {
             this.geoLocatedPlaceResponse = resp;
-            this.open(this.content);
+            this.isPlacePicking = true;
+            this.openPlacePicker();
         });
     }
 
@@ -267,27 +267,12 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.isLoading = !this.isLoading;
     }
 
-    open(content) {
-        this.modalService
-            .open(content, {ariaLabelledBy: "modal-basic-title"})
-            .result.then(
-            (result) => {
-                this.closeResult = `Closed with: ${result}`;
-            },
-            (reason) => {
-                this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-            }
-        );
+    openPlacePicker() {
+
     }
 
-    private getDismissReason(reason: any): string {
-        if (reason === ModalDismissReasons.ESC) {
-            return "by pressing ESC";
-        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-            return "by clicking on a backdrop";
-        } else {
-            return `with: ${reason}`;
-        }
+    closePlacePicker() {
+        this.isPlacePicking = false;
     }
 
     onLoad(restResponse: RestResponse): void {
@@ -318,4 +303,5 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     get intersections() {
         return this.trailFormGroup.controls["intersections"] as FormArray;
     }
+
 }

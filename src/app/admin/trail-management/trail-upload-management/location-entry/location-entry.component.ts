@@ -18,7 +18,8 @@ export interface IndexCoordinateSelector {
 export class LocationEntryComponent implements OnInit {
   private readonly OFFSET_START_POINT = 1;
   private readonly OFFSET_END_POINT = 2;
-  private isFocusDirty : boolean = false;
+
+  isFocusDirty : boolean = false;
 
   @Input() title: string;
   @Input() showIndex: boolean;
@@ -103,5 +104,10 @@ export class LocationEntryComponent implements OnInit {
     if (this.selectedCoordinateIndex > this.OFFSET_START_POINT) {
       this.selectedCoordinateIndex--;
     }
+  }
+
+  reattemptLocalization() {
+    this.isFocusDirty = false;
+    this.onFocus();
   }
 }

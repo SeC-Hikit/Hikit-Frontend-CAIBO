@@ -7,7 +7,7 @@
                 aria-label="Close"
                 (click)="onCancelEvent()"
         >
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true" (click)="onClose()">&times;</span>
         </button>
     </div>
     <div class="modal-body">
@@ -21,7 +21,7 @@
                 <div class="col-6">
                     <app-map-preview
                             [classPrefix]="'geolocation-preview'"
-                            [markersCoordinates]=""
+                            [markersCoordinates]="[targetMarker]"
                     ></app-map-preview>
                 </div>
             </div>
@@ -33,7 +33,7 @@
         <button
                 type="button"
                 class="btn btn-outline-dark"
-                (click)="modal.close('Save click')"
+
         >
             Seleziona
         </button>
