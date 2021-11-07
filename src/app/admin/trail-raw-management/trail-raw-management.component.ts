@@ -11,7 +11,7 @@ import {
 import { Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { TrailRawService } from "src/app/service/trail-raw-service.service";
+import { AdminTrailRawService } from "src/app/service/admin-trail-raw.service";
 
 @Component({
   selector: "app-trail-raw-management",
@@ -30,7 +30,7 @@ export class TrailRawManagementComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
 
   constructor(
-    private trailRawService: TrailRawService,
+    private trailRawService: AdminTrailRawService,
     private importService: ImportService,
     private trailPreviewService: TrailPreviewService,
     private router: Router

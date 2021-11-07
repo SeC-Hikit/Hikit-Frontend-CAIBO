@@ -4,6 +4,12 @@ import {TrailImportRequest} from "../service/import.service";
 import {FileDetailsDto} from "../service/trail-service.service";
 import * as moment from "moment";
 import {DateUtils} from "./DateUtils";
+import {PlaceRefDto} from "../service/place.service";
+
+export interface CreatedPlaceRefDto {
+    placeRef : PlaceRefDto,
+    isCreatedPlace: boolean
+}
 
 export class TrailImportFormUtils {
 
@@ -57,7 +63,7 @@ export class TrailImportFormUtils {
             placeId: tfv.startPos.id,
             coordinates: {
                 altitude: tfv.startPos.altitude,
-                longitude: tfv.startPos.altitude,
+                longitude: tfv.startPos.longitude,
                 latitude: tfv.startPos.longitude,
             }
         };
@@ -66,7 +72,7 @@ export class TrailImportFormUtils {
             placeId: tfv.finalPos.id,
             coordinates: {
                 altitude: tfv.finalPos.altitude,
-                longitude: tfv.finalPos.altitude,
+                longitude: tfv.finalPos.longitude,
                 latitude: tfv.finalPos.longitude,
             }
         };
@@ -76,7 +82,7 @@ export class TrailImportFormUtils {
                 placeId: l.id,
                 coordinates: {
                     altitude: l.altitude,
-                    longitude: l.altitude,
+                    longitude: l.longitude,
                     latitude: l.longitude,
                 }
             }

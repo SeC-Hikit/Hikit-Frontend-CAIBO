@@ -7,7 +7,7 @@ import { TrailRawResponse } from './import.service';
 @Injectable({
   providedIn: 'root'
 })
-export class TrailRawService {
+export class AdminTrailRawService {
 
   baseUrl = "api/raw";
   baseAdminUrl = "api/admin/raw";

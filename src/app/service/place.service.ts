@@ -65,51 +65,6 @@ export class PlaceService {
         );
     }
 
-    create(place: PlaceDto): Observable<PlaceResponse> {
-        return this.httpClient.put<PlaceResponse>(this.baseUrl, place).pipe(
-            tap((_) => console.log("")),
-            catchError(this.handleError<PlaceResponse>("Save maintenance", null))
-        );
-    }
-
-    update(place: PlaceDto): Observable<PlaceResponse> {
-        return this.httpClient.post<RestResponse>(this.baseUrl, place).pipe(
-            tap((_) => console.log("")),
-            catchError(this.handleError<RestResponse>("Save maintenance", null))
-        );
-    }
-
-    addMedia(
-        placeId: String,
-        linkedMedia: LinkedMedia
-    ): Observable<PlaceResponse> {
-        return this.httpClient
-            .put<PlaceResponse>(this.baseUrl + "/" + placeId, linkedMedia)
-            .pipe(
-                tap((_) => console.log("")),
-                catchError(this.handleError<PlaceResponse>("Save maintenance", null))
-            );
-    }
-
-    removeMedia(
-        placeId: String,
-        linkedMedia: UnlinkMedia
-    ): Observable<PlaceResponse> {
-        return this.httpClient
-            .post<PlaceResponse>(this.baseUrl + "/" + placeId, linkedMedia)
-            .pipe(
-                tap((_) => console.log("")),
-                catchError(this.handleError<PlaceResponse>("", null))
-            );
-    }
-
-    deleteById(_id: any): Observable<PlaceResponse> {
-        return this.httpClient.delete<PlaceResponse>(this.baseUrl + "/" + _id).pipe(
-            tap((_) => console.log("")),
-            catchError(this.handleError<PlaceResponse>("", null))
-        );
-    }
-
     /**
      * Handle Http operation that failed.
      * Let the app continue.
