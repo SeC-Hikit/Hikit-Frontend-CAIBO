@@ -6,6 +6,7 @@ import {components} from "src/binding/Binding";
 import {RestResponse} from "../RestResponse";
 
 export type PlaceDto = components["schemas"]["PlaceDto"];
+export type PlaceRefDto = components["schemas"]["PlaceRefDto"];
 export type PlaceResponse = components["schemas"]["PlaceResponse"];
 export type LinkedMedia = components["schemas"]["LinkedMediaDto"];
 export type UnlinkMedia = components["schemas"]["UnLinkeMediaRequestDto"];

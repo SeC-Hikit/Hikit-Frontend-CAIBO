@@ -2,6 +2,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Coordinates2D, TrailIntersection} from "../service/geo-trail-service";
 import {TrailImportRequest} from "../service/import.service";
 import {FileDetailsDto} from "../service/trail-service.service";
+import * as moment from "moment";
+import {DateUtils} from "./DateUtils";
 
 export class TrailImportFormUtils {
 
@@ -47,106 +49,60 @@ export class TrailImportFormUtils {
 
     static getImportRequestFromControls(tfv: any,
                                         coordinates: Coordinates2D[],
-                                        fileDetailsDto : FileDetailsDto): TrailImportRequest {
+                                        fileDetailsDto: FileDetailsDto): TrailImportRequest {
         console.log(tfv);
 
+        let mappedStartLocation = {
+            name: tfv.startPos.name,
+            placeId: tfv.startPos.id,
+            coordinates: {
+                altitude: tfv.startPos.altitude,
+                longitude: tfv.startPos.altitude,
+                latitude: tfv.startPos.longitude,
+            }
+        };
+        let mappedEndLocation = {
+            name: tfv.finalPos.name,
+            placeId: tfv.finalPos.id,
+            coordinates: {
+                altitude: tfv.finalPos.altitude,
+                longitude: tfv.finalPos.altitude,
+                latitude: tfv.finalPos.longitude,
+            }
+        };
+        let mappedIntermediateLocations = tfv.locations.map(l => {
+            return {
+                name: l.name,
+                placeId: l.id,
+                coordinates: {
+                    altitude: l.altitude,
+                    longitude: l.altitude,
+                    latitude: l.longitude,
+                }
+            }
+        });
         return {
             code: tfv.code,
             classification: tfv.classification,
             country: "Italy",
             description: tfv.description,
             trailStatus: "DRAFT",
-            lastUpdate: tfv.lastUpdate.day + "-" + tfv.lastUpdate.month + "-" + tfv.lastUpdate.year,
+            lastUpdate: moment(DateUtils.formatStringDateToDashes(tfv.lastUpdate.day, tfv.lastUpdate.month, tfv.lastUpdate.year),
+                DateUtils.DATE_FORMAT).toISOString(),
             maintainingSection: tfv.maintainingSection,
             linkedMediaDtos: [],
             territorialDivision: "",
             name: tfv.name,
             variant: false,
             officialEta: tfv.officialEta,
-            startLocation: {
-                name: tfv.startPos.name,
-                placeId: tfv.startPos.id,
-                coordinates: {
-                    altitude: tfv.startPos.altitude,
-                   longitude: tfv.startPos.altitude,
-                    latitude: tfv.startPos.longitude,
-                }
-            },
-            endLocation: {
-                name: tfv.finalPos.name,
-                placeId: tfv.finalPos.id,
-                coordinates: {
-                    altitude: tfv.finalPos.altitude,
-                    longitude: tfv.finalPos.altitude,
-                    latitude: tfv.finalPos.longitude,
-                }
-            },
+            startLocation: mappedStartLocation,
+            endLocation: mappedEndLocation,
             coordinates: coordinates,
-            locations: tfv.locations.map(l=> {
-                return {
-                    name: l.name,
-                    placeId: l.id,
-                    coordinates: {
-                        altitude: l.altitude,
-                        longitude: l.altitude,
-                        latitude: l.longitude,
-                    }
-                }
-            }),
+            locations: [mappedStartLocation].concat(
+                mappedIntermediateLocations)
+                .concat([mappedEndLocation]),
             fileDetailsDto: fileDetailsDto
         };
     }
 
-// {
-//     "code": "801aBO",
-//     "eta": "",
-//     "name": "",
-//     "classification": "T",
-//     "description": "Ozzano Dell'emilia - Sant'Andrea - La Torre",
-//     "lastUpdate": {
-//         "year": 2021,
-//         "day": 22,
-//         "month": 10
-//     },
-//     "intersections": [],
-//     "maintainingSection": "cai-bologna",
-//     "startPos": {
-//         "name": "avc",
-//         "tags": "",
-//         "latitude": 44.44203409902705,
-//         "longitude": 11.473108400502145,
-//         "altitude": 0,
-//         "distanceFromTrailStart": 0
-//     },
-//     "finalPos": {
-//         "name": "cde",
-//         "tags": "",
-//         "latitude": 44.403291399463534,
-//         "longitude": 11.460721299425249,
-//         "altitude": 0,
-//         "distanceFromTrailStart": 6975
-//     },
-//     "locations": [
-//         {
-//             "name": "1234",
-//             "tags": "",
-//             "latitude": "",
-//             "longitude": "",
-//             "altitude": "",
-//             "distanceFromTrailStart": ""
-//         }
-//     ],
-//     "cyclo": {
-//         "classification": "TC+",
-//         "wayForward": {
-//             "feasible": "true",
-//             "portage": "0"
-//         },
-//         "wayBack": {
-//             "feasible": "true",
-//             "portage": "15"
-//         },
-//         "description": ""
-//     }
-// }
 }

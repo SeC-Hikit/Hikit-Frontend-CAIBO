@@ -201,7 +201,7 @@
                 <app-place-picker-selector
                         [places]="geoLocatedPlaceResponse.content"
                         [targetPoint]="{  }"
-                        (onCancel)="this.closePlacePicker()"
+                        (onCancel)="this.togglePlacePicker()"
                 ></app-place-picker-selector>
             </div>
 
@@ -238,7 +238,7 @@
                                 [autoDetectOnFirstSelection]="true"
                                 [markers]="[]"
                                 [otherTrails]="[]"
-                                (onTextFocus)="geolocatePlace($event)"
+                                (onTextFocus)="onGeolocatePlace($event)"
                         >
                         </app-location-entry>
                     </div>
@@ -257,7 +257,7 @@
                                 [autoDetectOnFirstSelection]="true"
                                 [markers]="[]"
                                 [otherTrails]="[]"
-                                (onTextFocus)="geolocatePlace($event)"
+                                (onTextFocus)="onGeolocatePlace($event)"
                         >
                         </app-location-entry>
                     </div>
@@ -275,7 +275,7 @@
                             [autoDetectOnFirstSelection]="true"
                             [otherTrails]="[]"
                             [markers]="[]"
-                            (onTextFocus)="geolocatePlace($event)"
+                            (onTextFocus)="onGeolocatePlace($event)"
                     >
                     </app-location-entry>
                 </div>

@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Component, OnDestroy, OnInit} from "@angular/core";
+import {FormArray, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ModalDismissReasons, NgbDateStruct, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDateStruct, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Subject} from "rxjs";
 import {
     GeoTrailService,
@@ -20,7 +20,8 @@ import * as moment from "moment";
 import {AuthService} from "../../../service/auth.service";
 import {AdminTrailService} from "../../../service/admin.trail.service";
 import {IndexCoordinateSelector} from "./location-entry/location-entry.component";
-import {PlaceResponse, PlaceService} from "../../../service/place.service";
+import {PlaceDto, PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.service";
+import {environment} from "../../../../environments/environment";
 
 @Component({
     selector: "app-trail-upload-management",
@@ -116,7 +117,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         });
     }
 
-    geolocatePlace(indexCoordinateSelector: IndexCoordinateSelector): void {
+    onGeolocatePlace(indexCoordinateSelector: IndexCoordinateSelector): void {
         this.placeService.geolocatePlace({
             coordinatesDto: {
                 longitude: indexCoordinateSelector.coordinates.longitude,
@@ -126,8 +127,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             distance: 1
         }, 0, 20).subscribe((resp) => {
             this.geoLocatedPlaceResponse = resp;
-            this.isPlacePicking = true;
-            this.openPlacePicker();
+            if (resp.content.length > 0) {
+                this.togglePlacePicker();
+            }
         });
     }
 
@@ -168,6 +170,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     }
 
     populateForm(tpm: TrailRawDto) {
+        this.trailFormGroup.controls["officialEta"].setValue(0);
         this.trailFormGroup.controls["code"].setValue(tpm.name);
         this.trailFormGroup.controls["description"].setValue(tpm.description);
         this.firstPos.controls["name"].setValue("");
@@ -190,47 +193,100 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.isPreviewVisible = !this.isPreviewVisible;
     }
 
-    // validateAllFormFields(formGroup: FormGroup) {
-    //   //{1}
-    //   Object.keys(formGroup.controls).forEach((field) => {
-    //     //{2}
-    //     const control = formGroup.get(field); //{3}
-    //     if (control instanceof FormControl) {
-    //       //{4}
-    //       control.markAsTouched({ onlySelf: true });
-    //     } else if (control instanceof FormGroup) {
-    //       //{5}
-    //       this.validateAllFormFields(control); //{6}
-    //     }
-    //   });
-    // }
-
-    saveTrail() {
-
+    async saveTrail() {
         console.log(this.trailFormGroup);
 
+        let error = [];
 
         if (this.trailFormGroup.valid) {
+            // TODO: Extract this logic
             const trailFormValue = this.trailFormGroup.value;
             const importTrail = this.getTrailFromForm(trailFormValue);
 
             // create places if they do not exist
-            let places = [importTrail.startLocation].concat(importTrail.locations).concat(importTrail.endLocation);
+            let places: PlaceRefDto[] = [importTrail.startLocation].concat(importTrail.locations).concat(importTrail.endLocation);
+            let processedPlaces: PlaceRefDto[] = [];
 
-            places.forEach(
-                place => {
-                    // if it does not exist create it
-
+            for (const place of places) {
+                if (place.placeId == null) {
+                    console.log("Place does not exist, going to create it...")
+                    let response = await this.placeService.create({
+                        name: place.name,
+                        crossingTrailIds: [],
+                        id: null,
+                        description: "",
+                        coordinates: [],
+                        mediaIds: [],
+                        tags: [],
+                        recordDetails: {
+                            uploadedOn: moment().toDate().toDateString(),
+                            onInstance: environment.instance,
+                            realm: importTrail.fileDetailsDto.realm,
+                            uploadedBy: importTrail.fileDetailsDto.uploadedBy
+                        }
+                    }).toPromise();
+                    if (response.content.length > 0) {
+                        const cp: PlaceDto = response.content[0];
+                        const placeRefFromPlaceCreation: PlaceRefDto = {
+                            placeId: cp.id,
+                            name: cp.name,
+                            coordinates: cp.coordinates[0]
+                        }
+                        processedPlaces.push(placeRefFromPlaceCreation);
+                    } else {
+                        error.push("Could not create place. Check the response or the backend logs.")
+                    }
+                } else {
+                    console.log("Place appears to exist, going to check...")
+                    let response = await this.placeService
+                        .getById(place.placeId).toPromise();
+                    if (response.content.length == 0) {
+                        throw new Error("Place should exists but it does not. does not exist!");
+                    }
+                    const cp: PlaceDto = response.content[0];
+                    processedPlaces.push({placeId: cp.id, name: cp.name, coordinates: place.coordinates})
                 }
-            )
 
-            // import trail
+            }
+
             this.adminTrailSaveService
                 .saveTrail(importTrail)
-                .subscribe((response) => this.onSaveRequest(response));
-        } else {
-            alert("Alcuni campi contengono errori");
+                .subscribe((response) => {
+                    // TODO: add this trail ID to place refs - add also tags
+
+
+                    processedPlaces.forEach((pp)=>{
+                        // Add this trail references to all places
+                        // let byId = await this.placeService.getById(pp.placeId).toPromise();
+
+
+                    });
+
+                    this.onSaveRequest(response)
+                });
+
         }
+
+
+    }
+
+    private getErrors(form: FormGroup) {
+        const result = [];
+        Object.keys(form.controls).forEach(key => {
+
+            const controlErrors: ValidationErrors = form.get(key).errors;
+            if (controlErrors) {
+                Object.keys(controlErrors).forEach(keyError => {
+                    result.push({
+                        'control': key,
+                        'error': keyError,
+                        'value': controlErrors[keyError]
+                    });
+                });
+            }
+        });
+
+        return result;
     }
 
     private getTrailFromForm(trailFormValue) {
@@ -267,12 +323,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.isLoading = !this.isLoading;
     }
 
-    openPlacePicker() {
-
-    }
-
-    closePlacePicker() {
-        this.isPlacePicking = false;
+    togglePlacePicker() {
+        this.isPlacePicking = !this.isPlacePicking;
     }
 
     onLoad(restResponse: RestResponse): void {
@@ -288,7 +340,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.router.navigate(['/admin/trail', {success: response.content[0].code}]);
     }
 
-    get locations(): FormArray {
+    get locations()
+        :
+        FormArray {
         return this.trailFormGroup.controls["locations"] as FormArray;
     }
 
