@@ -26,10 +26,11 @@ export class MapPreviewComponent implements OnInit {
   @Input() classPrefix: string;
   @Input() otherTrails?: TrailDto[];
   @Input() markersCoordinates?: Marker[];
+  @Input() showOtherTrails?: boolean;
   @Input() trailPreview?: TrailDto;
   @Input() elementAt?: number;
   @Input() index?: string;
-  @Input() isShowOtherTrailsEnabled?: boolean;
+  @Input() isShowOtherBtnEnabled: boolean;
 
   private map: L.Map;
   private polyline: L.Polyline;
@@ -48,9 +49,7 @@ export class MapPreviewComponent implements OnInit {
     this.index = this.index ? this.index : "0";
     this.classPrefix = this.classPrefix ? this.classPrefix : "map-table-"
     this.markers = this.markers ? this.markers : [];
-    this.isShowOtherTrailsEnabled = this.isShowOtherTrailsEnabled
-      ? this.isShowOtherTrailsEnabled
-      : true;
+    this.showOtherTrails = this.showOtherTrails ? this.showOtherTrails : true;
   }
 
   ngAfterViewInit() {
@@ -77,6 +76,9 @@ export class MapPreviewComponent implements OnInit {
     }
     if (this.markersCoordinates) {
       this.drawMarkers(this.markersCoordinates);
+    }
+    if (this.showOtherTrails) {
+      this.showSecondaryTrails();
     }
   }
 
@@ -149,7 +151,7 @@ export class MapPreviewComponent implements OnInit {
   togglePreview() {
     this.isPreviewVisible = !this.isPreviewVisible;
     if (this.isPreviewVisible) {
-      this.showTrails();
+      this.showSecondaryTrails();
     } else {
       this.remoteTrails();
     }
@@ -161,10 +163,10 @@ export class MapPreviewComponent implements OnInit {
     });
   }
 
-  private showTrails() {
+  private showSecondaryTrails() {
     this.otherTrails.forEach((trail) => {
       let invertedCoords = MapUtils.getCoordinatesInverted(trail.coordinates);
-      let polyline = L.polyline(invertedCoords, { color: "#fff" });
+      let polyline = L.polyline(invertedCoords, { color: "#FF5F49" });
       polyline.bindPopup(trail.code).openPopup();
       polyline.addTo(this.map);
       this.otherTrailPolys.push(polyline);

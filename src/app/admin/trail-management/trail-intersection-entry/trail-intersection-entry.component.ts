@@ -4,6 +4,7 @@ import { Marker } from "src/app/map-preview/map-preview.component";
 import { Coordinates2D } from "src/app/service/geo-trail-service";
 import { PlaceResponse, PlaceService } from "src/app/service/place.service";
 import { TrailDto } from "src/app/service/trail-service.service";
+import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 
 @Component({
   selector: "app-trail-intersection-entry",
@@ -15,8 +16,10 @@ export class TrailIntersectionEntryComponent implements OnInit {
   @Input() inputForm: FormGroup;
   @Input() trail: TrailDto;
   @Input() otherTrail: TrailDto;
-  @Input() crossPoint: Marker;
+  @Input() crossPoint : Coordinates2D;
 
+  crossPointMarker: Marker;
+  crossWayTitle: string = "Crocevia";
   isCompleted: boolean;
   isShowing: boolean;
 
@@ -34,6 +37,13 @@ export class TrailIntersectionEntryComponent implements OnInit {
     this.isCompleted = false;
     this.hasAutoDetectedRun = false;
     this.isAutoDetected = false;
+    this.crossPointMarker = {
+      coords: {
+        latitude: this.crossPoint.latitude,
+        longitude: this.crossPoint.longitude,
+      },
+      icon: MapPinIconType.CROSSWAY_ICON
+    }
   }
 
   toggleShowing(): void {
@@ -47,8 +57,8 @@ export class TrailIntersectionEntryComponent implements OnInit {
         {
           coordinatesDto: {
             altitude: 0,
-            latitude: this.crossPoint.coords.latitude,
-            longitude: this.crossPoint.coords.longitude,
+            latitude: this.crossPoint.latitude,
+            longitude: this.crossPoint.longitude,
           },
           distance: this.GEO_LOCATION_DISTANCE,
         },
@@ -56,10 +66,18 @@ export class TrailIntersectionEntryComponent implements OnInit {
         this.MAX_NUMBER_GEOLOCATION
       )
       .subscribe((response) => {
-        console.log(response)
         this.geolocationResponse = response;
         this.hasAutoDetectedRun = true;
         this.isAutoDetected = response.content.length != 0;
       });
+  }
+
+  changeCrossWayTitle(value: string) {
+    this.isCompleted = this.isComplete(value);
+    this.crossWayTitle = `Crocevia '${value}'`;
+  }
+
+  private isComplete(value: string) {
+    return value.length > 2 && this.hasAutoDetectedRun;
   }
 }

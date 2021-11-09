@@ -50,14 +50,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     closeResult: string;
 
-
-    testCoordinates: Marker = {
-        coords: {
-            latitude: 44.11515289941759,
-            longitude: 10.814071100111235,
-        },
-        icon: MapPinIconType.CROSSWAY_ICON
-    }
+    intersectionTrails : TrailDto[] = [];
+    crossPointOnTrail : Coordinates2D[] = [];
 
     STEPS = ["Info Generali", "Crocevia", "Località"];
 
@@ -241,7 +235,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                             name: cp.name,
                             coordinates: cp.coordinates[0]
                         }
-                        processedPlaces.push({ isCreatedPlace: true, placeRef: placeRefFromPlaceCreation});
+                        processedPlaces.push({isCreatedPlace: true, placeRef: placeRefFromPlaceCreation});
                     } else {
                         error.push("Could not create place. Check the response or the backend logs.")
                     }
@@ -255,13 +249,13 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                     const cp: PlaceDto = response.content[0];
 
                     const placeRef = {placeId: cp.id, name: cp.name, coordinates: place.coordinates};
-                    processedPlaces.push({ isCreatedPlace: false, placeRef: placeRef});
+                    processedPlaces.push({isCreatedPlace: false, placeRef: placeRef});
                 }
             }
 
             importTrail.startLocation = processedPlaces[0].placeRef;
             importTrail.endLocation = processedPlaces[processedPlaces.length - 1].placeRef;
-            importTrail.locations = processedPlaces.map((it)=> it.placeRef);
+            importTrail.locations = processedPlaces.map((it) => it.placeRef);
 
             this.adminTrailSaveService
                 .saveTrail(importTrail)
@@ -295,7 +289,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
         targetPlace.crossingTrailIds.push(tr.id);
 
-        if(!pp.isCreatedPlace) {
+        if (!pp.isCreatedPlace) {
             targetPlace.coordinates.push(pp.placeRef.coordinates);
         }
 
@@ -348,6 +342,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             .subscribe((response) => {
                 this.intersectionResponse = response;
                 response.content.forEach((intersection: TrailIntersection) => {
+                    let metPoint = intersection.points[0];
+                    this.intersectionTrails.push(intersection.trail);
+                    this.crossPointOnTrail.push(metPoint);
                     this.intersections.push(TrailImportFormUtils.getLocationFormGroupFromIntersection(intersection));
                 })
                 this.isCrossingSectionComplete = true;
@@ -376,9 +373,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.router.navigate(['/admin/trail', {success: response.content[0].code}]);
     }
 
-    get locations()
-        :
-        FormArray {
+    get locations(): FormArray {
         return this.trailFormGroup.controls["locations"] as FormArray;
     }
 

@@ -1,10 +1,7 @@
 <div class="container-box">
   <div class="row">
-    <div class="col-md-4">
-      <h2>Crocevia n {{ i }}</h2>
-    </div>
-    <div class="col-md-4">
-      <h2>Completato: {{ isCompleted ? "Si" : "No" }}</h2>
+    <div class="col-md-8">
+      <h2>Crocevia che incontra il sentiero <span class="trailCodeColumn">{{ otherTrail.code }}</span> - #{{ i }}</h2>
     </div>
     <div class="col-md-4">
       <button
@@ -23,9 +20,10 @@
         [classPrefix]="'crossway'"
         [isEditableLocation]="false"
         [trail]="trail"
+        [title]="crossWayTitle"
         [otherTrails]="[otherTrail]"
         [inputForm]="inputForm"
-        [markers]="[crossPoint]"
+        [markers]="[crossPointMarker]"
         [i]="i"
       >
       </app-location-entry>
@@ -35,11 +33,6 @@
       <div class="row">
         <div class="col-md-12">
           <h2>Dettagli</h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Incontra il sentiero {{ otherTrail.code }}</h2>
         </div>
       </div>
       <div class="row">
@@ -63,16 +56,15 @@
       >
         <div class="col-md-12">
           <label>Nome</label>
-          <input type="text" class="form-control" required />
+          <input type="text" class="form-control" (change)="changeCrossWayTitle($event.target.value)" (keyup)="changeCrossWayTitle($event.target.value)" required />
         </div>
         <div class="col-md-12">
           <label>Descrizione</label>
           <input type="text" class="form-control" required />
         </div>
-        <div class="col-md-12">
-          <label>Toponimi (separati da una virgola)</label>
-          <input type="text" class="form-control" placeholder="Es: La Croara, La Fornace, Ca' Foschi" />
-        </div>
+      </div>
+      <div>
+        <h2>Completato: {{ isCompleted ? "Si" : "No" }}</h2>
       </div>
     </div>
   </div>

@@ -27,13 +27,13 @@ export class TrailImportFormUtils {
     }
 
     public static getLocationFormGroupFromIntersection(intersection: TrailIntersection) {
+        let intersectionCoords = intersection.points[0];
         return new FormGroup({
             "id": new FormControl("", Validators.minLength(0)),
             "name": new FormControl("", Validators.minLength(0)),
-            "tags": new FormControl(""),
-            "latitude": new FormControl(intersection.points[0].latitude, Validators.required),
-            "longitude": new FormControl(intersection.points[0].longitude, Validators.required),
-            "altitude": new FormControl(intersection.points[0].altitude, Validators.required),
+            "latitude": new FormControl(intersectionCoords.latitude, Validators.required),
+            "longitude": new FormControl(intersectionCoords.longitude, Validators.required),
+            "altitude": new FormControl(intersectionCoords.altitude, Validators.required),
         });
     }
 
