@@ -190,6 +190,7 @@
                                 [otherTrail]="intersectionTrails[i]"
                                 [i]="i"
                                 [crossPoint]="crossPointOnTrail[i]"
+                                (onPlaceFound)="togglePlacePicker($event)"
                         ></app-trail-intersection-entry>
                     </div>
                 </div>
@@ -198,11 +199,6 @@
             <!-- Modal Selector -->
             <div *ngIf="isPlacePicking">
                 <div class="place-picking-bg"></div>
-                <app-place-picker-selector
-                        [places]="geoLocatedPlaceResponse.content"
-                        [targetPoint]="{  }"
-                        (onCancel)="this.togglePlacePicker()"
-                ></app-place-picker-selector>
             </div>
 
             <div class="location-section" [ngClass]="{ 'hide': this.STEP_INDEX != 2}">

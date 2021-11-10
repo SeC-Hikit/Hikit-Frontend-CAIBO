@@ -3,6 +3,13 @@ import {PlaceDto} from "../../../../service/place.service";
 import {CoordinatesDto, TrailDto} from "../../../../service/trail-service.service";
 import {Marker} from "../../../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../../../assets/icons/MapPinIconType";
+import {ModalDismissReasons, NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+
+
+export interface PickedPlace {
+    place: PlaceDto,
+    pickerId: number
+}
 
 @Component({
     selector: 'app-place-picker-selector',
@@ -11,15 +18,26 @@ import {MapPinIconType} from "../../../../../assets/icons/MapPinIconType";
 })
 export class PlacePickerSelectorComponent implements OnInit {
 
+    closeResult = '';
+
     @Input() places: PlaceDto[];
     @Input() trail: TrailDto;
     @Input() targetPoint: CoordinatesDto;
-    @Output() onSelection: EventEmitter<PlaceDto> = new EventEmitter<PlaceDto>();
+    @Output() onSelection: EventEmitter<PickedPlace> = new EventEmitter<PickedPlace>();
     @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
 
     targetMarker: Marker;
 
-    constructor() {
+    constructor(public activeModal: NgbActiveModal) {}
+
+    private getDismissReason(reason: any): string {
+        if (reason === ModalDismissReasons.ESC) {
+            return 'by pressing ESC';
+        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+            return 'by clicking on a backdrop';
+        } else {
+            return `with: ${reason}`;
+        }
     }
 
     ngOnInit(): void {
@@ -38,6 +56,6 @@ export class PlacePickerSelectorComponent implements OnInit {
     }
 
     onSelect(place: PlaceDto) {
-        // todo show preview
+        this.onSelection.emit({pickerId: 0, place: {}});
     }
 }

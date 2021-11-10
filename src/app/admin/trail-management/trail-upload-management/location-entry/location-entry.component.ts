@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Marker } from "src/app/map-preview/map-preview.component";
-import { Coordinates2D } from "src/app/service/geo-trail-service";
-import {TrailDto, TrailCoordinates, CoordinatesDto} from "src/app/service/trail-service.service";
+import {TrailDto, CoordinatesDto} from "src/app/service/trail-service.service";
 
 
 export interface IndexCoordinateSelector {

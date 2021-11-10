@@ -124,7 +124,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         }, 0, 20).subscribe((resp) => {
             this.geoLocatedPlaceResponse = resp;
             if (resp.content.length > 0) {
-                this.togglePlacePicker();
+                // @ts-ignore
+                this.togglePlacePicker($event);
             }
         });
     }
@@ -354,6 +355,10 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     toggleLoading() {
         this.isLoading = !this.isLoading;
+    }
+
+    onIntersectionPlaceFound() {
+
     }
 
     togglePlacePicker() {
