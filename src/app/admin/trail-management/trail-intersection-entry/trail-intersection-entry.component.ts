@@ -74,10 +74,10 @@ export class TrailIntersectionEntryComponent implements OnInit {
                 this.geolocationResponse = response;
                 this.hasAutoDetectedRun = true;
                 this.isAutoDetected = response.content.length != 0;
-                // if (this.isAutoDetected) {
+                if (this.isAutoDetected) {
                     this.modalService.open(PlacePickerSelectorComponent)
                     // this.onPlaceFound.emit(this.geolocationResponse.content);
-                // }
+                }
             });
     }
 

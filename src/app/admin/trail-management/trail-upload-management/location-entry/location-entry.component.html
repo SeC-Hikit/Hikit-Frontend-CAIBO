@@ -14,7 +14,7 @@
         placeholder="Es: ..."
       />
     </div>
-    <div class="form-group col-md-4 mb-3" *ngIf="isFocusDirty">
+    <div class="form-group col-md-4 mb-3" *ngIf="isFocusTouched">
       <button class="btn btn-primary mt-3" type="button" (click)="reattemptLocalization()">Ripeti geolocalizzazione</button>
     </div>
   </div>

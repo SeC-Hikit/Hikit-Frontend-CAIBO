@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Marker } from "src/app/map-preview/map-preview.component";
 import {TrailDto, CoordinatesDto} from "src/app/service/trail-service.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {PlacePickerSelectorComponent} from "../place-picker-selector/place-picker-selector.component";
 
 
 export interface IndexCoordinateSelector {
@@ -18,7 +20,7 @@ export class LocationEntryComponent implements OnInit {
   private readonly OFFSET_START_POINT = 1;
   private readonly OFFSET_END_POINT = 2;
 
-  isFocusDirty : boolean = false;
+  isFocusTouched : boolean = false;
 
   @Input() title: string;
   @Input() showIndex: boolean;
@@ -39,7 +41,7 @@ export class LocationEntryComponent implements OnInit {
 
   selectedCoordinateIndex: number;
 
-  constructor() {}
+  constructor(private modalService : NgbModal) {}
 
   ngOnInit(): void {
     this.showIndex = this.showIndex != undefined;
@@ -54,7 +56,8 @@ export class LocationEntryComponent implements OnInit {
   onFocus(): void {
     // Run a geo-search to see what possible places are available close-by
     const coordinate = this.trail.coordinates[this.selectedCoordinateIndex];
-    if(!this.isFocusDirty) {
+    if(!this.isFocusTouched) {
+      this.modalService.open(PlacePickerSelectorComponent)
       this.onTextFocus.emit({
         i: this.i, coordinates: {
           altitude: coordinate.altitude,
@@ -62,7 +65,7 @@ export class LocationEntryComponent implements OnInit {
         }
       });
     }
-    this.isFocusDirty = true;
+    this.isFocusTouched = true;
   }
 
   onSliderChange(eventValue: number): void {
@@ -106,7 +109,7 @@ export class LocationEntryComponent implements OnInit {
   }
 
   reattemptLocalization() {
-    this.isFocusDirty = false;
+    this.isFocusTouched = false;
     this.onFocus();
   }
 }
