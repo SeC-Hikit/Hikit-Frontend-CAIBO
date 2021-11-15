@@ -1,3 +1,17 @@
+@import "../../../style/const.scss";
+
 .container-box {
-    background : #E6D8BE;
+
+}
+
+.accordion-head {
+    border-bottom: 1px solid black;
+}
+
+.to-complete {
+    background-color: $soft-action-color;
+}
+
+.completed {
+    background-color: #D1FFBE;
 }

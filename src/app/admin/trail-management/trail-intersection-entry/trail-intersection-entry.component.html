@@ -1,7 +1,7 @@
-<div class="container-box">
-  <div class="row">
+<div class="container-box" [ngClass]="this.isCompleted ? 'completed' : 'to-complete'">
+  <div class="row accordion-head">
     <div class="col-md-8">
-      <h2>Crocevia che incontra il sentiero <span class="trailCodeColumn">{{ otherTrail.code }}</span> - #{{ i }}</h2>
+      <h2>N.{{ i + 1 }}: Crocevia che incontra il sentiero <span class="trailCodeColumn">{{ otherTrail.code }}</span></h2>
     </div>
     <div class="col-md-4">
       <button
@@ -9,7 +9,7 @@
         class="btn actionable full-width"
         (click)="toggleShowing()"
       >
-        <span *ngIf="!isShowing">Mostra</span>
+        <span *ngIf="!isShowing">Mostra e completa</span>
         <span *ngIf="isShowing">Nascondi</span>
       </button>
     </div>

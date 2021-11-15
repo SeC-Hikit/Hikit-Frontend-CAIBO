@@ -50,8 +50,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     closeResult: string;
 
-    intersectionTrails : TrailDto[] = [];
-    crossPointOnTrail : Coordinates2D[] = [];
+    intersectionTrails: TrailDto[] = [];
+    crossPointOnTrail: Coordinates2D[] = [];
 
     STEPS = ["Info Generali", "Crocevia", "Località"];
 
@@ -126,6 +126,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             if (resp.content.length > 0) {
                 // @ts-ignore
                 this.togglePlacePicker($event);
+                console.log(resp.content);
+
             }
         });
     }

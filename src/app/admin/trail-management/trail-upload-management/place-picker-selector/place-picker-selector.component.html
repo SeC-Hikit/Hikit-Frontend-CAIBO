@@ -15,14 +15,20 @@
             <div class="row">
                 <div class="col-6">
                     <ul>
-                        <li *ngFor="let place of places; index as i" (click)="onSelect(place)">{{place.name}}</li>
+                        <li *ngFor="let place of places; index as i" (click)="onPlaceClick(place)">{{place.name}}</li>
                     </ul>
                 </div>
-                <div class="col-6">
+                <div class="col-6" *ngIf="this.trail">
                     <app-map-preview
                             [classPrefix]="'geolocation-preview'"
                             [markersCoordinates]="[targetMarker]"
                             [isShowOtherBtnEnabled]="false"
+                            [otherTrails]="otherTrails"
+                            [index]="'0'"
+                            [focusPoint]="selectedPlace ?
+                            selectedPlace.coordinates[0] :
+                            targetMarker.coords"
+                            [trailPreview]="trail"
                     ></app-map-preview>
                 </div>
             </div>
@@ -32,6 +38,7 @@
     </div>
     <div class="modal-footer">
         <button
+                (click)="onSelect()"
                 type="button"
                 class="btn btn-outline-dark"
 

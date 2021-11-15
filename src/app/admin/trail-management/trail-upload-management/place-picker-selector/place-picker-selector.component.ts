@@ -22,13 +22,16 @@ export class PlacePickerSelectorComponent implements OnInit {
 
     @Input() places: PlaceDto[];
     @Input() trail: TrailDto;
+    @Input() otherTrails: TrailDto[];
     @Input() targetPoint: CoordinatesDto;
     @Output() onSelection: EventEmitter<PickedPlace> = new EventEmitter<PickedPlace>();
     @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
 
     targetMarker: Marker;
+    selectedPlace: PlaceDto;
 
-    constructor(public activeModal: NgbActiveModal) {}
+    constructor(public activeModal: NgbActiveModal) {
+    }
 
     private getDismissReason(reason: any): string {
         if (reason === ModalDismissReasons.ESC) {
@@ -55,7 +58,15 @@ export class PlacePickerSelectorComponent implements OnInit {
         this.onCancel.emit();
     }
 
-    onSelect(place: PlaceDto) {
-        this.onSelection.emit({pickerId: 0, place: {}});
+    onPlaceClick(place: PlaceDto): void {
+        this.selectedPlace = place;
+    }
+
+    onSelect() {
+        this.onSelection.emit(
+            {
+                pickerId: 0,
+                place: this.selectedPlace
+            });
     }
 }
