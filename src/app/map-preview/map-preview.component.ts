@@ -67,6 +67,7 @@ export class MapPreviewComponent implements OnInit {
         this.map = L.map(this.classPrefix + index, {
             layers: [topoLayer],
             maxZoom: 17,
+            scrollWheelZoom: false,
         });
         this.map.setView([44.498955, 11.327591], 12);
 
