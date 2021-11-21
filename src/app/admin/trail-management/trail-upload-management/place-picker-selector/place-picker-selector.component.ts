@@ -28,6 +28,9 @@ export class PlacePickerSelectorComponent implements OnInit {
     @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
 
     targetMarker: Marker;
+    selectedMarker: Marker;
+
+
     selectedPlace: PlaceDto;
 
     constructor(public activeModal: NgbActiveModal) {
@@ -45,7 +48,7 @@ export class PlacePickerSelectorComponent implements OnInit {
 
     ngOnInit(): void {
         this.targetMarker = {
-            icon: MapPinIconType.RED_PIN,
+            icon: MapPinIconType.PIN,
             coords: {latitude: this.targetPoint.latitude, longitude: this.targetPoint.longitude}
         }
     }
@@ -60,13 +63,19 @@ export class PlacePickerSelectorComponent implements OnInit {
 
     onPlaceClick(place: PlaceDto): void {
         this.selectedPlace = place;
+        // this.selectedMarker = {
+        //     icon: MapPinIconType.PIN,
+        //     coords: {latitude: this.selectedPlace.coordinateslatitude, longitude: this.targetPoint.longitude}
+        // }
     }
 
     onSelect() {
-        this.onSelection.emit(
-            {
-                pickerId: 0,
-                place: this.selectedPlace
-            });
+        let pickedPlace = {
+            pickerId: this.places.indexOf(this.selectedPlace),
+            place: this.selectedPlace
+        };
+        console.log(pickedPlace)
+        this.onSelection.emit(pickedPlace);
+        this.activeModal.close('Selected place')
     }
 }

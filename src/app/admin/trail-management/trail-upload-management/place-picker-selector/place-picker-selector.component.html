@@ -15,13 +15,15 @@
             <div class="row">
                 <div class="col-6">
                     <ul>
-                        <li *ngFor="let place of places; index as i" (click)="onPlaceClick(place)">{{place.name}}</li>
+                        <li *ngFor="let place of places; index as i"
+                            [ngClass]="place == selectedPlace ? 'selected' : null"
+                            (click)="onPlaceClick(place)">{{place.name}}</li>
                     </ul>
                 </div>
                 <div class="col-6" *ngIf="this.trail">
                     <app-map-preview
                             [classPrefix]="'geolocation-preview'"
-                            [markersCoordinates]="[targetMarker]"
+                            [markersCoordinates]="[targetMarker, selectedMarker]"
                             [isShowOtherBtnEnabled]="false"
                             [otherTrails]="otherTrails"
                             [index]="'0'"

@@ -75,7 +75,23 @@ export class TrailIntersectionEntryComponent implements OnInit {
                 this.hasAutoDetectedRun = true;
                 this.isAutoDetected = response.content.length != 0;
                 if (this.isAutoDetected) {
-                    this.modalService.open(PlacePickerSelectorComponent)
+                    let placePickerRef = this.modalService.open(PlacePickerSelectorComponent);
+                    const places : PlaceDto[] = [{
+                        id: "0", name: "Abc", description: "", coordinates: [{latitude:5, altitude:5, longitude:3}], tags: [],
+                        recordDetails: {realm: "this", onInstance: "bla", uploadedOn: "bli", uploadedBy: "blu"},
+                        crossingTrailIds: [], mediaIds: []
+                    }]
+                    placePickerRef.componentInstance.places = places;
+
+                    // id?: string;
+                    // name?: string;
+                    // description?: string;
+                    // tags?: string[];
+                    // mediaIds?: string[];
+                    // coordinates?: components["schemas"]["CoordinatesDto"][];
+                    // crossingTrailIds?: string[];
+                    // recordDetails?: components["schemas"]["RecordDetailsDto"];
+
                     // this.onPlaceFound.emit(this.geolocationResponse.content);
                 }
             });

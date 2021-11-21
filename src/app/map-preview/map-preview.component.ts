@@ -9,7 +9,7 @@ import {EndIcon} from "../../assets/icons/MapPinIconType";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
 import {AlertPinIcon} from "../../assets/icons/MapPinIconType";
 import {CrossWayIcon} from "../../assets/icons/MapPinIconType";
-import {RedPinIcon} from "../../assets/icons/MapPinIconType";
+import {PinIcon} from "../../assets/icons/MapPinIconType";
 
 export interface Marker {
     coords: Coordinates2D;
@@ -203,8 +203,8 @@ export class MapPreviewComponent implements OnInit {
                 return AlertPinIcon.get();
             case MapPinIconType.CROSSWAY_ICON:
                 return CrossWayIcon.get();
-            case MapPinIconType.RED_PIN:
-                return RedPinIcon.get();
+            case MapPinIconType.PIN:
+                return PinIcon.get();
         }
     }
 

@@ -2,7 +2,7 @@
 
 .PlacePickerSelector {
   background: white;
-  top:0;
+  top: 0;
   z-index: 1000;
   box-shadow: 0 5px $primary-bg-color;
 
@@ -10,4 +10,25 @@
     max-height: 500px;
     overflow-y: scroll;
   }
+
+  ul {
+
+    padding: 0;
+
+    li {
+      list-style: none;
+      cursor: pointer;
+    }
+
+    li:hover {
+      background: $action-btn-color;
+    }
+
+    li.selected {
+      background: $action-btn-color;
+    }
+
+  }
+
+
 }
