@@ -74,7 +74,7 @@ export class LocationEntryComponent implements OnInit {
 
                 let place: PlaceDto = {
                     id: "0",
-                    coordinates: [{latitude: 44.143120, longitude: 11.164310, altitude:0}],
+                    coordinates: [{latitude: 44.143120, longitude: 11.164310, altitude: 0}],
                     crossingTrailIds: [],
                     name: "A place",
                     recordDetails: {realm: "Sec", uploadedBy: "", uploadedOn: "", onInstance: ""},
@@ -88,6 +88,8 @@ export class LocationEntryComponent implements OnInit {
                 ngbModalRef.componentInstance.trail = this.trail;
                 ngbModalRef.componentInstance.otherTrails = this.otherTrails;
                 ngbModalRef.componentInstance.places = [place];
+
+
 
                 this.onTextFocus.emit({
                     i: this.i, coordinates: {

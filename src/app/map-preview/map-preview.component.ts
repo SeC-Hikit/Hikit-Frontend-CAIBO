@@ -13,7 +13,8 @@ import {PinIcon} from "../../assets/icons/MapPinIconType";
 
 export interface Marker {
     coords: Coordinates2D;
-    icon: MapPinIconType
+    icon: MapPinIconType;
+    color?: string;
 }
 
 @Component({
@@ -90,7 +91,7 @@ export class MapPreviewComponent implements OnInit {
             if (marker) {
                 return L.marker(
                     {lng: marker.coords.longitude, lat: marker.coords.latitude},
-                    {icon: this.determineIcon(marker.icon)}
+                    {icon: this.determineIcon(marker)}
                 );
             }
         });
@@ -106,9 +107,13 @@ export class MapPreviewComponent implements OnInit {
         }
         this.map.invalidateSize();
         for (const propName in changes) {
-
+            console.log(changes);
             if (propName == "focusPoint") {
                 this.changeView(this.focusPoint)
+            }
+            if (propName == "markersCoordinates") {
+                console.log("cahnged coords")
+                this.drawMarkers(this.markersCoordinates);
             }
             if (propName == "trailPreview") {
                 if (this.trailPreview) {
@@ -197,13 +202,14 @@ export class MapPreviewComponent implements OnInit {
         this.map.fitBounds(this.polyline.getBounds());
     }
 
-    private determineIcon(mapIcon: MapPinIconType) {
-        switch (mapIcon) {
+    private determineIcon(marker : Marker) {
+        switch (marker.icon) {
             case MapPinIconType.ALERT_PIN:
                 return AlertPinIcon.get();
             case MapPinIconType.CROSSWAY_ICON:
                 return CrossWayIcon.get();
             case MapPinIconType.PIN:
+                if(marker.color) return PinIcon.get(marker.color);
                 return PinIcon.get();
         }
     }

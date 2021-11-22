@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {PlaceDto} from "../../../../service/place.service";
 import {CoordinatesDto, TrailDto} from "../../../../service/trail-service.service";
 import {Marker} from "../../../../map-preview/map-preview.component";
@@ -24,11 +24,14 @@ export class PlacePickerSelectorComponent implements OnInit {
     @Input() trail: TrailDto;
     @Input() otherTrails: TrailDto[];
     @Input() targetPoint: CoordinatesDto;
+
     @Output() onSelection: EventEmitter<PickedPlace> = new EventEmitter<PickedPlace>();
     @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
 
     targetMarker: Marker;
     selectedMarker: Marker;
+
+    markers: Marker[] = [];
 
 
     selectedPlace: PlaceDto;
@@ -51,6 +54,13 @@ export class PlacePickerSelectorComponent implements OnInit {
             icon: MapPinIconType.PIN,
             coords: {latitude: this.targetPoint.latitude, longitude: this.targetPoint.longitude}
         }
+        this.markers.push(this.targetMarker);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        for (const propName in changes) {
+
+        }
     }
 
     onClose() {
@@ -63,10 +73,18 @@ export class PlacePickerSelectorComponent implements OnInit {
 
     onPlaceClick(place: PlaceDto): void {
         this.selectedPlace = place;
-        // this.selectedMarker = {
-        //     icon: MapPinIconType.PIN,
-        //     coords: {latitude: this.selectedPlace.coordinateslatitude, longitude: this.targetPoint.longitude}
-        // }
+        console.log(this.selectedPlace);
+        this.selectedMarker = {
+            icon: MapPinIconType.PIN,
+            coords: {
+                latitude: this.selectedPlace.coordinates[0].latitude,
+                longitude: this.selectedPlace.coordinates[0].longitude
+            }
+        }
+        if (this.markers.length > 1) {
+            this.markers.pop()
+        }
+        this.markers = [].concat([this.selectedMarker]);
     }
 
     onSelect() {

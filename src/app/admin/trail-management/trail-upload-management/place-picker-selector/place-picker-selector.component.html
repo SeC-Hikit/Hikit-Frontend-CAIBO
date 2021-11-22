@@ -23,7 +23,7 @@
                 <div class="col-6" *ngIf="this.trail">
                     <app-map-preview
                             [classPrefix]="'geolocation-preview'"
-                            [markersCoordinates]="[targetMarker, selectedMarker]"
+                            [markersCoordinates]="markers"
                             [isShowOtherBtnEnabled]="false"
                             [otherTrails]="otherTrails"
                             [index]="'0'"
