@@ -7,28 +7,42 @@
   box-shadow: 0 5px $primary-bg-color;
 
   .modal-body {
-    max-height: 500px;
+    max-height: 600px;
     overflow-y: scroll;
   }
 
   ul {
-
     padding: 0;
 
     li {
       list-style: none;
       cursor: pointer;
+      padding: 1%;
     }
 
     li:hover {
       background: $action-btn-color;
     }
 
-    li.selected {
-      background: $action-btn-color;
+    .choice {
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
     }
 
-  }
+    li.selected {
+      background: $action-btn-color;
 
+      .place-info {
+        background: $action-btn-color;
+        color: white;
+
+        table thead {
+          color: black;
+        }
+      }
+    }
+
+
+  }
 
 }

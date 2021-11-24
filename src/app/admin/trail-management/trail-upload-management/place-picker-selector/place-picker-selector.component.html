@@ -16,8 +16,27 @@
                 <div class="col-6">
                     <ul>
                         <li *ngFor="let place of places; index as i"
+                            class="choice"
+                            title="Sentieri che contengono questa località: {{place.crossingTrailIds.length}}"
                             [ngClass]="place == selectedPlace ? 'selected' : null"
-                            (click)="onPlaceClick(place)">{{place.name}}</li>
+                            (click)="onPlaceClick(place)">{{place.name}}
+                            <div class="place-info" *ngIf="selectedPlace">
+                                <table>
+                                    <thead>
+                                    <td>Descrizione</td>
+                                    <td>Toponimi</td>
+                                    </thead>
+                                    <tr>
+                                        <td class="ellipsis">
+                                            {{selectedPlace.description}}
+                                        </td>
+                                        <td>
+                                            {{selectedPlace.tags}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-6" *ngIf="this.trail">
@@ -26,7 +45,7 @@
                             [markersCoordinates]="markers"
                             [isShowOtherBtnEnabled]="false"
                             [otherTrails]="otherTrails"
-                            [index]="'0'"
+                            [index]="'-picker'"
                             [focusPoint]="selectedPlace ?
                             selectedPlace.coordinates[0] :
                             targetMarker.coords"

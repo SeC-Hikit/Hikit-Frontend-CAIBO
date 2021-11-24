@@ -3,7 +3,7 @@ import {PlaceDto} from "../../../../service/place.service";
 import {CoordinatesDto, TrailDto} from "../../../../service/trail-service.service";
 import {Marker} from "../../../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../../../assets/icons/MapPinIconType";
-import {ModalDismissReasons, NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 
 export interface PickedPlace {
@@ -32,7 +32,6 @@ export class PlacePickerSelectorComponent implements OnInit {
     selectedMarker: Marker;
 
     markers: Marker[] = [];
-
 
     selectedPlace: PlaceDto;
 

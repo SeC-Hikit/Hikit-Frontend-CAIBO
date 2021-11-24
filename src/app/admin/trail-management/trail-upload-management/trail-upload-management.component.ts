@@ -14,8 +14,6 @@ import {Status} from "src/app/Status";
 import {AdminTrailRawService} from "src/app/service/admin-trail-raw.service";
 import {TrailResponse, FileDetailsDto, TrailDto} from "src/app/service/trail-service.service";
 import {CreatedPlaceRefDto, TrailImportFormUtils} from "src/app/utils/TrailImportFormUtils";
-import {Marker} from "src/app/map-preview/map-preview.component";
-import {MapPinIconType} from "src/assets/icons/MapPinIconType";
 import * as moment from "moment";
 import {AuthService} from "../../../service/auth.service";
 import {AdminTrailService} from "../../../service/admin-trail.service";
