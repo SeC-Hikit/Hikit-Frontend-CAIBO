@@ -137,7 +137,7 @@ export class MapComponent implements OnInit {
   toggleAllTrails(): void {
     this.isAllTrailVisible = !this.isAllTrailVisible;
     if (this.trailList.length == 0 && this.isAllTrailVisible) {
-      this.loadAllTrails();
+      // this.loadAllTrails();
     }
   }
 
