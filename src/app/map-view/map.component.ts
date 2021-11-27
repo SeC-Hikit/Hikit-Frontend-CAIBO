@@ -29,12 +29,12 @@ export class MapComponent implements OnInit {
   userPosition: UserCoordinates;
   highlightedLocation: TrailCoordinates;
 
-  isTrailSelectedVisible: boolean;
-  isTrailFullScreenVisible: boolean;
-  isTrailListVisible: boolean;
-  isAllTrailVisible: boolean;
-  isNotificationModalVisible: boolean;
-  isUserPositionToggled: boolean;
+  isTrailSelectedVisible: boolean = false;
+  isTrailFullScreenVisible: boolean = false;
+  isTrailListVisible: boolean = false;
+  isAllTrailVisible: boolean = true;
+  isNotificationModalVisible: boolean = false;
+  isUserPositionToggled: boolean = false;
 
   constructor(
     private trailService: TrailService,
@@ -44,19 +44,10 @@ export class MapComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.isTrailSelectedVisible = false;
-    this.isTrailListVisible = false;
-    this.isAllTrailVisible = true;
-    this.isNotificationModalVisible = false;
-    this.isTrailFullScreenVisible = false;
-    this.isUserPositionToggled = false;
     this.changeTileLayer("topo");
     this.trailPreviewList = [];
     this.trailList = [];
     this.handleQueryParam();
-    if(this.isAllTrailVisible){
-      this.loadAllTrails();
-    }
   }
 
   private handleQueryParam() {
@@ -94,10 +85,6 @@ export class MapComponent implements OnInit {
   
   loadLastMaintenaceForTrail(code: string): void {
     this.maintenanceService.getPastForTrail(code).subscribe(maintenanceResponse => { this.lastMaintenance = maintenanceResponse.content[0] });
-  }
-
-  loadAllTrails(): void {
-    this.trailService.getTrailsLight().subscribe(trailResponse => { this.trailList = trailResponse.content });
   }
 
   loadBinaryPath(): void {

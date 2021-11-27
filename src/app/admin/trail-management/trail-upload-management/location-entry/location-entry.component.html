@@ -74,9 +74,18 @@
       </svg>
     </div>
   </div>
-  <div class="row" *ngClass="{ collapse: true }">
+  <div class="row">
+<!--       *ngClass="{ collapse: true }"-->
     <div class="form-row">
       <div class="form-group col-md-3 mb-3">
+        <p>Id</p>
+        <input
+                type="text"
+                formControlName="id"
+                disabled
+                class="form-control"
+                required
+        />
         <p>Latitudine</p>
         <input
           type="text"

@@ -10,7 +10,7 @@ import { TrailResponse } from './trail-service.service';
 export type TrailIntersectionResponse = components["schemas"]["TrailIntersectionResponse"];
 export type TrailIntersection = components["schemas"]["TrailIntersectionDto"];
 export type GeoLine = components["schemas"]["GeoLineDto"];
-export type Rectangle = components["schemas"]["RectangleDto"];
+export type RectangleDto = components["schemas"]["RectangleDto"];
 export type Coordinates2D = components["schemas"]["Coordinates2D"];
 
 @Injectable({
@@ -33,7 +33,7 @@ export class GeoTrailService {
       );
   }
 
-  locate(rectangle: Rectangle): Observable<TrailResponse> {
+  locate(rectangle: RectangleDto): Observable<TrailResponse> {
     return this.httpClient.post<TrailResponse>(this.baseUrl + "/locate", rectangle)
       .pipe(
         tap(),

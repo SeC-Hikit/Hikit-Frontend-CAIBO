@@ -48,6 +48,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     closeResult: string;
 
+    trailsInArea: TrailDto[] = [];
+
     intersectionTrails: TrailDto[] = [];
     crossPointOnTrail: Coordinates2D[] = [];
 
@@ -112,6 +114,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     }
 
     onGeolocatePlace(indexCoordinateSelector: IndexCoordinateSelector): void {
+        console.log("HELLO!");
+        console.log(indexCoordinateSelector);
         this.placeService.geolocatePlace({
             coordinatesDto: {
                 longitude: indexCoordinateSelector.coordinates.longitude,
@@ -124,7 +128,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             if (resp.content.length > 0) {
                 // @ts-ignore
                 this.togglePlacePicker($event);
-                console.log(resp.content);
 
             }
         });

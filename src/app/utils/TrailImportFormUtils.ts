@@ -7,7 +7,7 @@ import {DateUtils} from "./DateUtils";
 import {PlaceRefDto} from "../service/place.service";
 
 export interface CreatedPlaceRefDto {
-    placeRef : PlaceRefDto,
+    placeRef: PlaceRefDto,
     isCreatedPlace: boolean
 }
 
@@ -17,6 +17,7 @@ export class TrailImportFormUtils {
 
     public static getLocationFormGroup() {
         return new FormGroup({
+            "id": new FormControl(""),
             "name": new FormControl("", Validators.minLength(0)),
             "tags": new FormControl(""),
             "latitude": new FormControl("", Validators.required),

@@ -8,7 +8,7 @@ import {PlaceDto, PlaceService} from "../../../../service/place.service";
 
 
 export interface IndexCoordinateSelector {
-    i: number,
+    formComponent: string,
     coordinates: CoordinatesDto
 }
 
@@ -27,7 +27,9 @@ export class LocationEntryComponent implements OnInit {
     @Input() showIndex: boolean;
     @Input() classPrefix: string;
     @Input() i: number;
+
     @Input() inputForm: FormGroup;
+
     @Input() trail: TrailDto;
     @Input() otherTrails?: TrailDto[];
     @Input() markers?: Marker[];
@@ -89,16 +91,18 @@ export class LocationEntryComponent implements OnInit {
                 ngbModalRef.componentInstance.otherTrails = this.otherTrails;
                 ngbModalRef.componentInstance.places = [place];
 
+                ngbModalRef.componentInstance.onSelection.subscribe(place => {
+                    console.log(place);
 
+                });
 
                 this.onTextFocus.emit({
-                    i: this.i, coordinates: {
+                    formComponent: `${this.classPrefix}${this.i}`, coordinates: {
                         altitude: coordinate.altitude,
                         latitude: coordinate.latitude,
                         longitude: coordinate.longitude
                     }
                 });
-                // }
             });
         }
         this.isFocusTouched = true;

@@ -36,14 +36,6 @@ export class TrailService {
       );
   }
 
-  getTrailsLight(): Observable<TrailResponse> {
-    return this.httpClient.get<TrailResponse>(this.baseUrl + "/?light=true")
-      .pipe(
-        tap(),
-        catchError(this.handleError<TrailResponse>('get all trail', null))
-      );
-  }
-
   deleteByCode(code: string): Observable<TrailResponse> {
     return this.httpClient.delete<TrailResponse>(this.baseUrl + "/" + code)
       .pipe(
