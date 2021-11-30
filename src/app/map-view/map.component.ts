@@ -35,6 +35,7 @@ export class MapComponent implements OnInit {
   isAllTrailVisible: boolean = true;
   isNotificationModalVisible: boolean = false;
   isUserPositionToggled: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private trailService: TrailService,

@@ -1,5 +1,14 @@
 @import "../style/const.scss";
 
+.MapComponent {
+
+
+    .progress-bar {
+        background-color: $error-color;
+    }
+
+}
+
 .relative-map {
     position: relative;
     overflow: hidden;

@@ -1,4 +1,9 @@
-<div>
+<div class="MapComponent">
+
+    <div *ngIf="isLoading" class="progress progress-indeterminate">
+        <span class="sr-only">Caricamento...</span>
+        <div class="progress-bar" role="progressbar"></div>
+    </div>
     <div class="row relative-map">
         <div [ngClass]="{ 'hideaway' : !isTrailFullScreenVisible }">
             <app-map-trail-full [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications" [lastMaintenance]="lastMaintenance"

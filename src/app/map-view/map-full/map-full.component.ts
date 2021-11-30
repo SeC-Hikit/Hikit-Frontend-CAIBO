@@ -69,10 +69,17 @@ export class MapFullComponent implements OnInit {
             this.onMoved(event)
         });
 
+        this.map.on("move", (event) => {
+            this.onStartMoving(event)
+        });
+
+    }
+
+    private onStartMoving(event: LeafletEvent) {
+        clearTimeout(this.intervalObject);
     }
 
     private onMoved(event: LeafletEvent) {
-
         let bounds = this.map.getBounds();
         clearTimeout(this.intervalObject);
         this.intervalObject = setTimeout(() => {
@@ -244,6 +251,7 @@ export class MapFullComponent implements OnInit {
                 throw new Error("TileLayer not in list");
         }
     }
+
 
 
 }
