@@ -114,8 +114,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     }
 
     onGeolocatePlace(indexCoordinateSelector: IndexCoordinateSelector): void {
-        console.log("HELLO!");
-        console.log(indexCoordinateSelector);
         this.placeService.geolocatePlace({
             coordinatesDto: {
                 longitude: indexCoordinateSelector.coordinates.longitude,

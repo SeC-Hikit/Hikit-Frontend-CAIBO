@@ -3,7 +3,7 @@ import {FormGroup} from "@angular/forms";
 import {Marker} from "src/app/map-preview/map-preview.component";
 import {TrailDto, CoordinatesDto} from "src/app/service/trail-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {PlacePickerSelectorComponent} from "../place-picker-selector/place-picker-selector.component";
+import {PickedPlace, PlacePickerSelectorComponent} from "../place-picker-selector/place-picker-selector.component";
 import {PlaceDto, PlaceService} from "../../../../service/place.service";
 
 
@@ -91,9 +91,8 @@ export class LocationEntryComponent implements OnInit {
                 ngbModalRef.componentInstance.otherTrails = this.otherTrails;
                 ngbModalRef.componentInstance.places = [place];
 
-                ngbModalRef.componentInstance.onSelection.subscribe(place => {
-                    console.log(place);
-
+                ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
+                    this.inputForm.controls["id"].setValue(picked.place.id);
                 });
 
                 this.onTextFocus.emit({

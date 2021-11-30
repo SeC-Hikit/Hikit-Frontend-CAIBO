@@ -56,12 +56,6 @@ export class PlacePickerSelectorComponent implements OnInit {
         this.markers.push(this.targetMarker);
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        for (const propName in changes) {
-
-        }
-    }
-
     onClose() {
         this.onCancelEvent();
     }
