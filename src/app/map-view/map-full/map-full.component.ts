@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@an
 import 'leaflet';
 import {LatLngBounds, LeafletEvent, LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
-import {Coordinates2D, RectangleDto} from 'src/app/service/geo-trail-service';
+import {RectangleDto} from 'src/app/service/geo-trail-service';
 import {TrailDto, TrailCoordinates} from 'src/app/service/trail-service.service';
 import {UserCoordinates} from 'src/app/UserCoordinates';
 import {GraphicUtils} from 'src/app/utils/GraphicUtils';
@@ -41,12 +41,17 @@ export class MapFullComponent implements OnInit {
     @Output() selectCodeEvent = new EventEmitter<string>();
     @Output() onViewChange = new EventEmitter<RectangleDto>();
 
+    @Output() onLoading = new EventEmitter<void>();
+    @Output() onDoneLoading = new EventEmitter<void>();
+
+
     constructor() {
         this.otherTrailsPolylines = [];
     }
 
 
     ngOnInit(): void {
+        this.onLoading.emit();
         this.openStreetmapCopy =
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         this.selectedLayer = this.getLayerByName("topo");
@@ -61,7 +66,9 @@ export class MapFullComponent implements OnInit {
         L.control.scale({position: 'topright'}).addTo(this.map);
 
         L.geoJSON(MapUtils.getERShape()).addTo(this.map);
+        this.emitBounds()
         this.attachEventListeners();
+        this.onDoneLoading.emit();
     }
 
     attachEventListeners(): void {
@@ -76,17 +83,22 @@ export class MapFullComponent implements OnInit {
     }
 
     private onStartMoving(event: LeafletEvent) {
+        this.onLoading.emit();
         clearTimeout(this.intervalObject);
     }
 
     private onMoved(event: LeafletEvent) {
-        let bounds = this.map.getBounds();
+        this.onDoneLoading.emit();
         clearTimeout(this.intervalObject);
         this.intervalObject = setTimeout(() => {
-            let rectangleDtoFromLatLng = this.getRectangleDtoFromLatLng(bounds);
-            console.log(rectangleDtoFromLatLng);
-            this.onViewChange.emit(rectangleDtoFromLatLng)
+            this.emitBounds();
         }, this.timeIntervalMsBeforeTrigger);
+    }
+
+    private emitBounds() {
+        let bounds = this.map.getBounds();
+        let rectangleDtoFromLatLng = this.getRectangleDtoFromLatLng(bounds);
+        this.onViewChange.emit(rectangleDtoFromLatLng)
     }
 
     private getRectangleDtoFromLatLng(bounds: LatLngBounds): RectangleDto {

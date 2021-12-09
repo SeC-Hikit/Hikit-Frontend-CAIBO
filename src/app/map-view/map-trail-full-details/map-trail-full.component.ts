@@ -24,10 +24,13 @@ export class MapTrailFullComponent implements OnInit {
   @Output() isVisibleEvent = new EventEmitter<void>();
   @Output() onDownloadBinaryEvent = new EventEmitter<void>();
   @Output() toggleNotificationModalEvent = new EventEmitter<void>();
+  @Output() onLoading = new EventEmitter<void>();
+  @Output() onDoneLoading = new EventEmitter<void>();
 
   constructor() { }
 
   ngOnInit(): void {
+    this.onLoading.emit();
     this.chartOptions = ChartUtils.getChartOptions();
     this.chart = new Chart("chartHike", {
       type: "line",

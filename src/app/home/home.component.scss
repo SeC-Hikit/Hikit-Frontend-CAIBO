@@ -72,6 +72,11 @@
   .fixed {
     position: absolute;
     bottom: 2.5em;
-    width: 100%;
+  }
+
+  .bottom-right{
+    position: absolute;
+    right: 10px;
+    bottom: 0;
   }
 }

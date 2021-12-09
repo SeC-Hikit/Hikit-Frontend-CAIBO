@@ -6,18 +6,27 @@
     </div>
     <div class="row relative-map">
         <div [ngClass]="{ 'hideaway' : !isTrailFullScreenVisible }">
-            <app-map-trail-full [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications" [lastMaintenance]="lastMaintenance"
-                (isVisibleEvent)="toggleFullPageTrail()" (toggleNotificationModalEvent)="toggleNotificationsModal()" (onDownloadBinaryEvent)="onDownloadBinary()">
+            <app-map-trail-full [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications"
+                                [lastMaintenance]="lastMaintenance"
+                                (isVisibleEvent)="toggleFullPageTrail()"
+                                (toggleNotificationModalEvent)="toggleNotificationsModal()"
+                                (onDownloadBinaryEvent)="onDownloadBinary()"
+                                (onLoading)="onLoading()"
+                                (onDoneLoading)="onDoneLoading()"
+            >
             </app-map-trail-full>
         </div>
         <div class="control">
             <div class="features">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label (click)="changeTileLayer('topo')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'topo' }">
+                    <label (click)="changeTileLayer('topo')" class="btn btn-light"
+                           [ngClass]="{'active': selectedTileLayer == 'topo' }">
                         <input autocomplete="off" checked id="option1" name="options" type="radio">Topo</label>
-                    <label (click)="changeTileLayer('geopolitic')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'geopolitic' }">
+                    <label (click)="changeTileLayer('geopolitic')" class="btn btn-light"
+                           [ngClass]="{'active': selectedTileLayer == 'geopolitic' }">
                         <input autocomplete="off" id="option2" name="options" type="radio">Geopolitica</label>
-                    <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light" [ngClass]="{'active': selectedTileLayer == 'geopolitic2' }">
+                    <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light"
+                           [ngClass]="{'active': selectedTileLayer == 'geopolitic2' }">
                         <input autocomplete="off" id="option3" name="options" type="radio">Viabilità</label>
                 </div>
             </div>
@@ -25,38 +34,51 @@
             <!--  -->
             <div class="features">
                 <div class="btn-group-toggle" data-toggle="buttons">
-                    <label (click)="toggleAllTrails()" class="btn btn-light" placement="bottom" ngbTooltip="Mostra/nascondi sentieri" tooltipClass="tooltip-c"
-                        [ngClass]="{ 'active' : isAllTrailVisible }">
+                    <label (click)="toggleAllTrails()" class="btn btn-light" placement="bottom"
+                           ngbTooltip="Mostra/nascondi sentieri" tooltipClass="tooltip-c"
+                           [ngClass]="{ 'active' : isAllTrailVisible }">
                         <svg class="bi" width="24" height="24" fill="currentColor">
-                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#eye" />
+                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
                         </svg>
                     </label>
-                    <label (click)="toggleUserPosition()" class="btn btn-light" placement="bottom" ngbTooltip="Mostra la tua posizione" tooltipClass="tooltip-c"
-                        [ngClass]="{ 'active' : isUserPositionToggled }">
+                    <label (click)="toggleUserPosition()" class="btn btn-light" placement="bottom"
+                           ngbTooltip="Mostra la tua posizione" tooltipClass="tooltip-c"
+                           [ngClass]="{ 'active' : isUserPositionToggled }">
                         <svg class="bi" width="24" height="24" fill="currentColor">
-                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#geo-fill" />
+                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#geo-fill"/>
                         </svg>
                     </label>
-                    <label (click)="toggleList()" class="btn btn-light" placement="bottom" ngbTooltip="Mostra/nascondi lista sentieri" tooltipClass="tooltip-c"
-                        [ngClass]="{ 'active' : isTrailListVisible }">
+                    <label (click)="toggleList()" class="btn btn-light" placement="bottom"
+                           ngbTooltip="Mostra/nascondi lista sentieri" tooltipClass="tooltip-c"
+                           [ngClass]="{ 'active' : isTrailListVisible }">
                         <svg class="bi" width="24" height="24" fill="currentColor">
-                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#list-ol" />
+                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#list-ol"/>
                         </svg>
                     </label>
                 </div>
             </div>
         </div>
     </div>
-    <app-map-full id="map-full-container" [selectedTrail]="selectedTrail" [tileLayerName]="selectedTileLayer" [trailList]="trailList"
-        [userPosition]="userPosition" [highlightedLocation]="highlightedLocation" (selectCodeEvent)="loadTrail($event)">
+    <app-map-full id="map-full-container" [selectedTrail]="selectedTrail" [tileLayerName]="selectedTileLayer"
+                  [trailList]="trailList"
+                  [userPosition]="userPosition" [highlightedLocation]="highlightedLocation"
+                  (onViewChange)="geoLocateTrails($event)"
+                  (selectCodeEvent)="loadTrail($event)"
+                  (onLoading)="onLoading()"
+                  (onDoneLoading)="onDoneLoading()"
+    >
     </app-map-full>
     <div id="absolute-wrapper">
         <div class="row">
-            <div class="column-map col-12 col-md-3 white details functional-column" [ngClass]="{ 'hide' : !isTrailSelectedVisible }"
-                id="trail-detail-column">
-                <app-map-trail-details [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications" [lastMaintenance]="lastMaintenance"
-                    (onDownloadBinaryEvent)="onDownloadBinary()" (toggleFullTrailPageEvent)="toggleFullPageTrail()" (toggleNotificationListEvent)="toggleNotificationsModal()"
-                    (onNavigateToLocation)="navigateToLocation($event)">
+            <div class="column-map col-12 col-md-3 white details functional-column"
+                 [ngClass]="{ 'hide' : !isTrailSelectedVisible }"
+                 id="trail-detail-column">
+                <app-map-trail-details [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications"
+                                       [lastMaintenance]="lastMaintenance"
+                                       (onDownloadBinaryEvent)="onDownloadBinary()"
+                                       (toggleFullTrailPageEvent)="toggleFullPageTrail()"
+                                       (toggleNotificationListEvent)="toggleNotificationsModal()"
+                                       (onNavigateToLocation)="navigateToLocation($event)">
                 </app-map-trail-details>
             </div>
             <div class="column-map col-12 col-md-3">
@@ -64,7 +86,8 @@
             </div>
             <div class="column-map col-12 col-md-3 showHideButtons">
             </div>
-            <div class="column-map col-12 col-md-3 column-hike-title white functional-column" id="trail-list-column" [ngClass]="{ 'hide' : !isTrailListVisible }">
+            <div class="column-map col-12 col-md-3 column-hike-title white functional-column" id="trail-list-column"
+                 [ngClass]="{ 'hide' : !isTrailListVisible }">
                 <app-map-trail-list [trailsPreviewList]="trailPreviewList" (selectCodeEvent)="loadTrail($event)">
                 </app-map-trail-list>
             </div>
