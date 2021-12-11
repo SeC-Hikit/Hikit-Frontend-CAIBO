@@ -51,7 +51,6 @@ export class MapFullComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.onLoading.emit();
         this.openStreetmapCopy =
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         this.selectedLayer = this.getLayerByName("topo");
@@ -83,12 +82,10 @@ export class MapFullComponent implements OnInit {
     }
 
     private onStartMoving(event: LeafletEvent) {
-        this.onLoading.emit();
         clearTimeout(this.intervalObject);
     }
 
     private onMoved(event: LeafletEvent) {
-        this.onDoneLoading.emit();
         clearTimeout(this.intervalObject);
         this.intervalObject = setTimeout(() => {
             this.emitBounds();
@@ -116,13 +113,16 @@ export class MapFullComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-        let mapHeight = GraphicUtils.getFullHeightSizeMenu();
-        document.getElementById(MapFullComponent.MAP_ID).style.height = mapHeight.toString() + "px";
+        let mapHeight = GraphicUtils.getMenuHeight();
+        let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenuImage();
+        document.getElementById(MapFullComponent.MAP_ID).style.height = fullSizeWOBorder.toString() + "px";
+
         console.log(mapHeight)
         this.map.invalidateSize();
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        this.onLoading.emit();
         if (this.isInitialized()) {
             for (const propName in changes) {
                 if (propName == "tileLayerName") {
@@ -142,6 +142,7 @@ export class MapFullComponent implements OnInit {
                 }
             }
         }
+        this.onDoneLoading.emit();
     }
 
     focusOnLocation(highlightedLocation: TrailCoordinates) {
@@ -164,7 +165,7 @@ export class MapFullComponent implements OnInit {
         this.clearPathFromList(selectedTrail);
         let polyline = L.polyline(MapUtils.getCoordinatesInverted(selectedTrail.coordinates));
         polyline.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
-        polyline.setText(MapUtils.generateTextForMap(selectedTrail.code), MapUtils.getTextSyle(true));
+        polyline.setText(MapUtils.generateTextForMap(selectedTrail.code), MapUtils.getTextStyle(true));
         polyline.bindPopup(selectedTrail.code);
         polyline.addTo(this.map);
         this.map.fitBounds(polyline.getBounds());

@@ -54,7 +54,7 @@ export class MapUtils {
     return isSelectedLine ? "red" : "#ff5252";
   }
 
-  static getTextSyle(isSelectedLine: boolean): any {
+  static getTextStyle(isSelectedLine: boolean): any {
     return {
       repeat: true,
       offset: -10,

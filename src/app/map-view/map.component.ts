@@ -154,9 +154,11 @@ export class MapComponent implements OnInit {
     }
 
     geoLocateTrails($event: RectangleDto) {
-        this.geoTrailService.locate($event).subscribe((e) => {
-            // TODO -> this needs to be more efficient
+        console.log($event);
+        this.onLoading();
+        this.geoTrailService.locate($event, "MEDIUM").subscribe((e) => {
             this.trailList = e.content;
+            this.onDoneLoading();
         });
     }
 

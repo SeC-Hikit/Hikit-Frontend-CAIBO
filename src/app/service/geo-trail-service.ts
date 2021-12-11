@@ -33,8 +33,8 @@ export class GeoTrailService {
       );
   }
 
-  locate(rectangle: RectangleDto): Observable<TrailResponse> {
-    return this.httpClient.post<TrailResponse>(this.baseUrl + "/locate", rectangle)
+  locate(rectangle: RectangleDto, level: string = "MEDIUM"): Observable<TrailResponse> {
+    return this.httpClient.post<TrailResponse>(this.baseUrl + "/locate?level=" + level, rectangle)
       .pipe(
         tap(),
         catchError(this.handleError<TrailResponse>('', null))
