@@ -51,8 +51,21 @@ button,
   letter-spacing: 0px !important;
 }
 
+
+.navbar-nav {
+  height: 40px;
+}
+
 .menu-wrapper .nav-item {
+  height: 40px;
+  padding: 0 0;
+  margin: 0;
   font-size: $menu-primary-font-size;
+}
+
+.nav-item .nav-link {
+  padding: 0;
+  height: 20px !important;
 }
 
 .upload-button-management__label,
@@ -61,7 +74,7 @@ input[type="submit"],
 .upload[type="file"] + label,
 .btn-primary {
   background: $action-btn-color !important;
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .upload-button-management__label span,
@@ -118,7 +131,7 @@ table {
   }
 }
 
-.nav-tabs .nav-item .active {
+.nav-tabs .active {
   color: $action-btn-color !important;
   border-bottom: 2px solid $action-btn-color !important;
 }

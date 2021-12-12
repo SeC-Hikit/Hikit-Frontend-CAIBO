@@ -61,7 +61,8 @@ export class MapComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-        let fullSize = GraphicUtils.getFullHeightSizeMenu();
+        let fullSize = GraphicUtils.getFullHeightSizeWOMenu();
+        document.getElementById("relative-map").style.height = fullSize.toString() + "px";
         document.getElementById(MapComponent.TRAIL_LIST_COLUMN_ID).style.minHeight = fullSize.toString() + "px";
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
     }

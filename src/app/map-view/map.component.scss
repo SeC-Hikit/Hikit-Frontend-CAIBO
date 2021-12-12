@@ -18,39 +18,40 @@
   }
 
   .control {
-    position: absolute;
-    z-index: 10000;
-    right: 2%;
-    bottom: 2%;
+
+    position: relative;
+    width: 100%;
     .features {
       width: 100%;
-      float: right;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      .btn-group-toggle {
 
+      }
     }
   }
 
   .relative-map {
+
+    #absolute-wrapper {
+      position: relative;
+    }
+    
     position: relative;
-    //overflow: hidden;
-    height: 100%;
-    width: 100%;
+    width: 0;
+    float: left;
+    z-index: 2;
   }
 
 }
 
-
-
 #map-full-container {
-  width: 100%;
   margin: 20px 0 0 0;
   border-top: 3px solid $secondary-bg-color;
 }
 
-#absolute-wrapper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
+
 
 .column-map {
   padding: 1%;

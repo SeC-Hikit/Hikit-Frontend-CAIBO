@@ -4,17 +4,33 @@ a {
   color: white;
 }
 
+.it-brand-text {
+  h2, h3 {
+    float: left;
+  }
+
+  h3 {
+    margin-left: 10px;
+  }
+}
+
+.it-brand-wrapper {
+  #inst-icon {
+    //width: 17%;
+  }
+}
+
 .it-header-center-wrapper
-  .it-header-center-content-wrapper
-  .it-brand-wrapper
-  a
-  .icon {
+.it-header-center-content-wrapper
+.it-brand-wrapper
+a
+.icon {
   width: 72px;
-  height: 62px;
+  height: 50px;
 }
 
 .it-header-center-wrapper {
-  height: 90px;
+  height: 50px;
   width: 100%;
   margin: 0 auto;
 }

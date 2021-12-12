@@ -116,6 +116,7 @@ export class MapFullComponent implements OnInit {
         let mapHeight = GraphicUtils.getMenuHeight();
         let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenuImage();
         document.getElementById(MapFullComponent.MAP_ID).style.height = fullSizeWOBorder.toString() + "px";
+        document.getElementById(MapFullComponent.MAP_ID).style.height = fullSizeWOBorder.toString() + "px";
 
         console.log(mapHeight)
         this.map.invalidateSize();
