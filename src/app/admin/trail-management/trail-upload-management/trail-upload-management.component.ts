@@ -84,7 +84,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             code: new FormControl("", Validators.required),
             officialEta: new FormControl(""),
             name: new FormControl(""),
-            classification: new FormControl("", Validators.required),
+            classification: new FormControl("T", Validators.required),
             description: new FormControl("", Validators.required),
             lastUpdate: new FormControl(""),
             intersections: new FormArray([]),
