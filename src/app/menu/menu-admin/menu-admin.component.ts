@@ -10,13 +10,11 @@ import { AuthService } from "../../service/auth.service";
   styleUrls: ["./menu-admin.component.scss"],
 })
 export class MenuAdminComponent implements OnInit {
-  // usernameToShow: string;
   isVisible: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    // this.usernameToShow = "Accesso";
     this.router.events.subscribe((change) => {
       if (change instanceof NavigationEnd) {
         this.assignNewUsername();

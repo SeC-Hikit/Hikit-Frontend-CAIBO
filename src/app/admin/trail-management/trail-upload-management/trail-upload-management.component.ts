@@ -113,22 +113,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         });
     }
 
-    onGeolocatePlace(indexCoordinateSelector: IndexCoordinateSelector): void {
-        this.placeService.geolocatePlace({
-            coordinatesDto: {
-                longitude: indexCoordinateSelector.coordinates.longitude,
-                latitude: indexCoordinateSelector.coordinates.latitude,
-                altitude: indexCoordinateSelector.coordinates.altitude,
-            },
-            distance: 1
-        }, 0, 20).subscribe((resp) => {
-            this.geoLocatedPlaceResponse = resp;
-            if (resp.content.length > 0) {
-                // @ts-ignore
-                this.togglePlacePicker($event);
+    onSetPlace(indexCoordinateSelector: IndexCoordinateSelector): void {
 
-            }
-        });
     }
 
     ngOnDestroy(): void {

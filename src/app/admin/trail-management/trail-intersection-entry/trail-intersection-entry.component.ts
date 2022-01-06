@@ -58,7 +58,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     findPlaceCorrespondingTo() {
         // TODO: add call
         this.placeService
-            .geolocatePlace(
+            .geoLocatePlace(
                 {
                     coordinatesDto: {
                         altitude: 0,

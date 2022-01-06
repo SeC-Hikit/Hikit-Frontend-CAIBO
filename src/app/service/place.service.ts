@@ -50,7 +50,7 @@ export class PlaceService {
             );
     }
 
-    geolocatePlace(
+    geoLocatePlace(
         pointGeoLocationCoordinates: PointGeolocationDto,
         skip: number,
         limit: number

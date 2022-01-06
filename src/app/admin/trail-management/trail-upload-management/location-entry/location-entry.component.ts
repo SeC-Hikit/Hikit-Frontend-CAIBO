@@ -4,7 +4,7 @@ import {Marker} from "src/app/map-preview/map-preview.component";
 import {TrailDto, CoordinatesDto} from "src/app/service/trail-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PickedPlace, PlacePickerSelectorComponent} from "../place-picker-selector/place-picker-selector.component";
-import {PlaceDto, PlaceService} from "../../../../service/place.service";
+import {PlaceService} from "../../../../service/place.service";
 
 
 export interface IndexCoordinateSelector {
@@ -18,10 +18,13 @@ export interface IndexCoordinateSelector {
     styleUrls: ["./location-entry.component.scss"],
 })
 export class LocationEntryComponent implements OnInit {
+
     private readonly OFFSET_START_POINT = 1;
     private readonly OFFSET_END_POINT = 2;
 
-    isFocusTouched: boolean = false;
+    private GEOLOCATION_DISTANCE = 5000;
+
+
 
     @Input() title: string;
     @Input() showIndex: boolean;
@@ -43,6 +46,8 @@ export class LocationEntryComponent implements OnInit {
     @Output() onSearchBtnClick?: EventEmitter<number> = new EventEmitter<number>();
 
     selectedCoordinateIndex: number;
+    hasBeenLocalizedFirstTime: boolean = false;
+    hasBeenLocalized: boolean = false;
 
     constructor(private modalService: NgbModal,
                 private placeService: PlaceService) {
@@ -59,40 +64,28 @@ export class LocationEntryComponent implements OnInit {
     }
 
     onFocus(): void {
+        this.hasBeenLocalizedFirstTime = true;
         // Run a geo-search to see what possible places are available close-by
         const coordinate = this.trail.coordinates[this.selectedCoordinateIndex];
-        if (!this.isFocusTouched) {
+        this.placeService.geoLocatePlace({
+            coordinatesDto: {
+                altitude: coordinate.altitude,
+                latitude: coordinate.latitude,
+                longitude: coordinate.longitude
+            }, distance: this.GEOLOCATION_DISTANCE // expressed in m
+        }, 0, 100).subscribe((resp) => {
 
-            this.placeService.geolocatePlace({
-                coordinatesDto: {
-                    altitude: coordinate.altitude,
-                    latitude: coordinate.latitude,
-                    longitude: coordinate.longitude
-                }, distance: 1
-            }, 0, 100).subscribe((resp) => {
-                // if (resp.content.length > 0) {
+            if (resp.content.length > 0) {
                 let ngbModalRef = this.modalService.open(PlacePickerSelectorComponent);
-
-
-                let place: PlaceDto = {
-                    id: "0",
-                    coordinates: [{latitude: 44.143120, longitude: 11.164310, altitude: 0}],
-                    crossingTrailIds: [],
-                    name: "A place",
-                    recordDetails: {realm: "Sec", uploadedBy: "", uploadedOn: "", onInstance: ""},
-                    tags: [""],
-                    mediaIds: [],
-                    description: ""
-
-                }
-
                 ngbModalRef.componentInstance.targetPoint = this.trail.coordinates[this.selectedCoordinateIndex];
                 ngbModalRef.componentInstance.trail = this.trail;
                 ngbModalRef.componentInstance.otherTrails = this.otherTrails;
-                ngbModalRef.componentInstance.places = [place];
+                ngbModalRef.componentInstance.places = resp.content;
 
                 ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
                     this.inputForm.controls["id"].setValue(picked.place.id);
+                    this.inputForm.controls["name"].setValue(picked.place.name);
+                    this.inputForm.controls["tags"].setValue(picked.place.tags.join(", "));
                 });
 
                 this.onTextFocus.emit({
@@ -102,15 +95,18 @@ export class LocationEntryComponent implements OnInit {
                         longitude: coordinate.longitude
                     }
                 });
-            });
-        }
-        this.isFocusTouched = true;
+            }
+        });
+        this.hasBeenLocalized = true;
     }
 
     onSliderChange(eventValue: number): void {
         if (!this.isEditableLocation) {
             return;
         }
+
+        this.deselectLocalization();
+
         this.selectedCoordinateIndex = eventValue;
         this.inputForm.controls["latitude"].setValue(
             this.trail.coordinates[eventValue].latitude
@@ -136,6 +132,7 @@ export class LocationEntryComponent implements OnInit {
         ) {
             this.selectedCoordinateIndex++;
         }
+        this.onSliderChange(this.selectedCoordinateIndex);
     }
 
     onPrevPoint() {
@@ -145,10 +142,22 @@ export class LocationEntryComponent implements OnInit {
         if (this.selectedCoordinateIndex > this.OFFSET_START_POINT) {
             this.selectedCoordinateIndex--;
         }
+        this.onSliderChange(this.selectedCoordinateIndex);
     }
 
     reattemptLocalization() {
-        this.isFocusTouched = false;
+        this.hasBeenLocalized = false;
         this.onFocus();
+    }
+
+    changeName($event) {
+        this.inputForm.controls["name"].setValue($event.target.value);
+        if(this.hasBeenLocalized) this.deselectLocalization()
+    }
+
+    deselectLocalization() {
+        this.hasBeenLocalized = false;
+        this.inputForm.controls["tags"].setValue("");
+        this.inputForm.controls["id"].setValue(null);
     }
 }

@@ -8,9 +8,9 @@
         type="button"
         class="btn actionable full-width"
         (click)="toggleShowing()"
+        *ngIf="!isShowing"
       >
         <span *ngIf="!isShowing">Mostra e completa</span>
-        <span *ngIf="isShowing">Nascondi</span>
       </button>
     </div>
   </div>

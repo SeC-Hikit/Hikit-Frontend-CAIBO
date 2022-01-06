@@ -1,12 +1,28 @@
 @import "../../style/const.scss";
 
+
+.it-nav-wrapper-admin {
+  .navbar .navbar-collapsable .navbar-nav li a.nav-link {
+    padding: 0 0.5em;
+    border-bottom: 0;
+  }
+
+  .nav-item {
+    height: auto;
+  }
+
+  ul {
+    height: 20px;
+  }
+}
 .it-header-center-wrapper{
-  max-height: 60px;
+  max-height: 40px;
 }
 
 .it-nav-wrapper-admin .it-header-center-wrapper {
   background: $primary-text-color;
   color: white;
+  padding: 0;
 }
 
 .it-header-navbar-wrapper {
@@ -24,14 +40,14 @@
 
   text-align: right;
 
-  .sub-menu {
-    display: none;
-    float: left;
-    width: 100%;
-    .nav-link {
-      float:left;
-    }
-  }
+  //.sub-menu {
+  //  display: none;
+  //  float: left;
+  //  width: 100%;
+  //  .nav-link {
+  //    float:left;
+  //  }
+  //}
 }
 
 .nav-link {

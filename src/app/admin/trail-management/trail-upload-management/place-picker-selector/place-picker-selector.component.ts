@@ -51,7 +51,8 @@ export class PlacePickerSelectorComponent implements OnInit {
     ngOnInit(): void {
         this.targetMarker = {
             icon: MapPinIconType.PIN,
-            coords: {latitude: this.targetPoint.latitude, longitude: this.targetPoint.longitude}
+            coords: {latitude: this.targetPoint.latitude, longitude: this.targetPoint.longitude},
+            color: "black"
         }
         this.markers.push(this.targetMarker);
     }
@@ -64,7 +65,7 @@ export class PlacePickerSelectorComponent implements OnInit {
         this.onCancel.emit();
     }
 
-    onPlaceClick(place: PlaceDto): void {
+     onPlaceClick(place: PlaceDto): void {
         this.selectedPlace = place;
         console.log(this.selectedPlace);
         this.selectedMarker = {

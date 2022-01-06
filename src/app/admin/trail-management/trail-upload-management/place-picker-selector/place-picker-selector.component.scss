@@ -36,9 +36,17 @@
         background: $action-btn-color;
         color: white;
 
-        table thead {
-          color: black;
+        table {
+          thead {
+            color: black;
+          }
+
+          tr, td {
+            border: 1px solid black;
+            margin: 2px;
+          }
         }
+
       }
     }
 

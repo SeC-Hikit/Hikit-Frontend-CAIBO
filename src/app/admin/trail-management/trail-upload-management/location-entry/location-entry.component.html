@@ -1,130 +1,151 @@
 <div class="entry space-up" [formGroup]="inputForm">
-  <h4>{{title}} {{ showIndex ?  "#" + (i | increaseOne) : null }} </h4>
-  <div class="form-row" *ngIf="isEditableLocation">
-    <div class="form-group col-md-4 mb-3">
-      <p>Nome</p>
-      <input type="text" formControlName="name" placeholder="Es: Rasora" (click)="onFocus()" />
+    <h4>{{title}} {{ showIndex ? "#" + (i | increaseOne) : null }} </h4>
+    <div class="form-row" *ngIf="isEditableLocation">
+        <div class="col-md-12 mb-12 top-margin" *ngIf="!showPositionControls">
+            <button class="btn btn-info col-sm-12" type="button" (click)="reattemptLocalization()">
+                {{ hasBeenLocalized ? "Ri-geolocalizza" : "Geolocalizza"}}
+            </button>
+        </div>
+        <div *ngIf="hasBeenLocalizedFirstTime" class="top-margin col-md-12">
+            <h5>Aggiungi nuova località</h5>
+            <p>Nome</p>
+            <div class="col-md-12 mb-12">
+                <input type="text" (change)="this.changeName($event)" formControlName="name" placeholder="Es: Rasora"/>
+            </div>
+            <p>Altri nomi - separati da una virgola</p>
+            <div class="col-md-12 mb-12">
+                <input
+                        type="text"
+                        formControlName="tags"
+                        class="form-control"
+                        placeholder="Es: ..."
+                />
+            </div>
+        </div>
     </div>
-    <div class="form-group col-md-4 mb-3">
-      <p>Altri nomi - separati da una virgola</p>
-      <input
-        type="text"
-        formControlName="tags"
-        class="form-control"
-        placeholder="Es: ..."
-      />
+    <div class="row top-margin">
+        <div class="col-md-12 map-container">
+            <div
+                    class="arrow-left arrow-control btn actionable white-fill"
+                    *ngIf="isEditableLocation && showPositionControls" (click)="onPrevPoint()"
+            >
+                <svg class="bi" width="32" height="32" fill="currentColor">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-circle-fill"
+                    />
+                </svg>
+            </div>
+
+            <app-map-preview *ngIf="isEditableLocation"
+                             [classPrefix]="classPrefix"
+                             [index]="(i | increaseOne).toString()"
+                             [trailPreview]="trail"
+                             [otherTrails]="otherTrails"
+                             [elementAt]="selectedCoordinateIndex"
+                             [markersCoordinates]="markers"
+                             [isShowOtherBtnEnabled]="false"
+            ></app-map-preview>
+            <app-map-preview *ngIf="!isEditableLocation"
+                             [classPrefix]="classPrefix"
+                             [index]="(i | increaseOne).toString()"
+                             [trailPreview]="trail"
+                             [otherTrails]="otherTrails"
+                             [markersCoordinates]="markers"
+                             [isShowOtherBtnEnabled]="false"
+            ></app-map-preview>
+            <div
+                    class="arrow-right arrow-control btn actionable white-fill"
+                    *ngIf="isEditableLocation && showPositionControls" (click)="onNextPoint()"
+            >
+                <svg class="bi" width="32" height="32" fill="currentColor">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-right-circle-fill"
+                    />
+                </svg>
+            </div>
+        </div>
     </div>
-    <div class="form-group col-md-4 mb-3" *ngIf="isFocusTouched">
-      <button class="btn btn-primary mt-3" type="button" (click)="reattemptLocalization()">Ripeti geolocalizzazione</button>
+    <div class="row top-margin-x2" *ngIf="isEditableLocation && showPositionControls">
+        <div class="col-md-1 icon-center">
+            <svg class="bi" width="32" height="32" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#forward"/>
+            </svg>
+        </div>
+        <div class="col-md-10">
+            <input
+                    type="range"
+                    value="{{ selectedCoordinateIndex }}"
+                    min="0"
+                    max="{{ trail.coordinates.length - 1 }}"
+                    class="form-control"
+                    (change)="onSliderChange($event.target.value)"
+                    required
+            />
+        </div>
+        <div class="col-md-1 icon-center">
+            <svg class="bi" width="32" height="32" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#flag-fill"/>
+            </svg>
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 map-container">
-      <div
-        class="arrow-left arrow-control btn actionable white-fill"
-        *ngIf="isEditableLocation && showPositionControls" (click)="onPrevPoint()"
-      >
-        <svg class="bi" width="32" height="32" fill="currentColor">
-          <use
-            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-circle-fill"
-          />
-        </svg>
-      </div>
-      <app-map-preview
-        [classPrefix]="classPrefix"
-        [index]="(i | increaseOne).toString()"
-        [trailPreview]="trail"
-        [otherTrails]="otherTrails"
-        [elementAt]="selectedCoordinateIndex"
-        [markersCoordinates]="markers"
-        [isShowOtherBtnEnabled]="false"
-      ></app-map-preview>
-      <div
-        class="arrow-right arrow-control btn actionable white-fill"
-        *ngIf="isEditableLocation && showPositionControls" (click)="onNextPoint()"
-      >
-        <svg class="bi" width="32" height="32" fill="currentColor">
-          <use
-            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-right-circle-fill"
-          />
-        </svg>
-      </div>
+    <div class="row" *ngIf="showPositionControls">
+        <div class="col-md-12 mb-12 top-margin">
+            <button class="btn btn-info col-sm-12" type="button" (click)="reattemptLocalization()">
+                {{ hasBeenLocalized ? "Ri-geolocalizza" : "Geolocalizza"}}
+            </button>
+        </div>
     </div>
-  </div>
-  <div class="row top-margin-x2" *ngIf="isEditableLocation && showPositionControls">
-    <div class="col-md-1 icon-center">
-      <svg class="bi" width="32" height="32" fill="currentColor">
-        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#forward" />
-      </svg>
+    <div class="row">
+        <!--       *ngClass="{ collapse: true }"-->
+        <div class="form-row">
+            <div class="form-group col-md-3 mb-3">
+                <p>Id</p>
+                <input
+                        type="text"
+                        formControlName="id"
+                        disabled
+                        class="form-control"
+                        required
+                />
+                <p>Latitudine</p>
+                <input
+                        type="text"
+                        formControlName="latitude"
+                        disabled
+                        class="form-control"
+                        required
+                />
+            </div>
+            <div class="form-group col-md-3 mb-3">
+                <p>Longitudine</p>
+                <input
+                        type="text"
+                        formControlName="longitude"
+                        disabled
+                        class="form-control"
+                        required
+                />
+            </div>
+            <div class="form-group col-md-3 mb-3">
+                <p>Altitudine</p>
+                <input
+                        type="text"
+                        formControlName="altitude"
+                        disabled
+                        class="form-control"
+                        required
+                />
+            </div>
+            <div class="form-group col-md-3 mb-3">
+                <p>Distanza dalla partenza</p>
+                <input
+                        type="text"
+                        formControlName="distanceFromTrailStart"
+                        disabled
+                        class="form-control"
+                        required
+                />
+            </div>
+        </div>
     </div>
-    <div class="col-md-10">
-      <input
-        type="range"
-        value="{{ selectedCoordinateIndex }}"
-        min="0"
-        max="{{ trail.coordinates.length - 1 }}"
-        class="form-control"
-        (change)="onSliderChange($event.target.value)"
-        required
-      />
-    </div>
-    <div class="col-md-1 icon-center">
-      <svg class="bi" width="32" height="32" fill="currentColor">
-        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#flag-fill" />
-      </svg>
-    </div>
-  </div>
-  <div class="row">
-<!--       *ngClass="{ collapse: true }"-->
-    <div class="form-row">
-      <div class="form-group col-md-3 mb-3">
-        <p>Id</p>
-        <input
-                type="text"
-                formControlName="id"
-                disabled
-                class="form-control"
-                required
-        />
-        <p>Latitudine</p>
-        <input
-          type="text"
-          formControlName="latitude"
-          disabled
-          class="form-control"
-          required
-        />
-      </div>
-      <div class="form-group col-md-3 mb-3">
-        <p>Longitudine</p>
-        <input
-          type="text"
-          formControlName="longitude"
-          disabled
-          class="form-control"
-          required
-        />
-      </div>
-      <div class="form-group col-md-3 mb-3">
-        <p>Altitudine</p>
-        <input
-          type="text"
-          formControlName="altitude"
-          disabled
-          class="form-control"
-          required
-        />
-      </div>
-      <div class="form-group col-md-3 mb-3">
-        <p>Distanza dalla partenza</p>
-        <input
-          type="text"
-          formControlName="distanceFromTrailStart"
-          disabled
-          class="form-control"
-          required
-        />
-      </div>
-    </div>
-  </div>
 </div>

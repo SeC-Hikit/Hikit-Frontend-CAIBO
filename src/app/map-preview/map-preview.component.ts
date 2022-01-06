@@ -18,7 +18,8 @@ export interface Marker {
 }
 
 @Component({
-    selector: "app-map-preview",
+    selector: "app-map-p" +
+        "review",
     templateUrl: "./map-preview.component.html",
     styleUrls: ["./map-preview.component.scss"],
 })
@@ -67,10 +68,10 @@ export class MapPreviewComponent implements OnInit {
     private initMap(topoLayer: L.TileLayer, index: string) {
         this.map = L.map(this.classPrefix + index, {
             layers: [topoLayer],
-            maxZoom: 17,
+            maxZoom: 16,
             scrollWheelZoom: false,
         });
-        this.map.setView([44.498955, 11.327591], 12);
+        this.map.setView([44.498955, 11.327591], 11);
 
         if (this.trailPreview) {
             this.onPreview(this.trailPreview.coordinates);

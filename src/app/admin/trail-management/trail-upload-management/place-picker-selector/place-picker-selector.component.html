@@ -9,14 +9,16 @@
                     <ul>
                         <li *ngFor="let place of places; index as i"
                             class="choice"
-                            title="Sentieri che contengono questa località: {{place.crossingTrailIds.length}}"
                             [ngClass]="place == selectedPlace ? 'selected' : null"
-                            (click)="onPlaceClick(place)">{{place.name}}
+                            (click)="onPlaceClick(place)">
+                            {{ place.name }}
                             <div class="place-info" *ngIf="selectedPlace">
                                 <table>
                                     <thead>
                                     <td>Descrizione</td>
                                     <td>Toponimi</td>
+                                    <td>Inserito da</td>
+                                    <td>Inserito sezione</td>
                                     </thead>
                                     <tr>
                                         <td class="ellipsis">
@@ -24,6 +26,12 @@
                                         </td>
                                         <td>
                                             {{selectedPlace.tags}}
+                                        </td>
+                                        <td>
+                                            {{selectedPlace.recordDetails.uploadedBy}}
+                                        </td>
+                                        <td>
+                                            {{selectedPlace.recordDetails.realm}}
                                         </td>
                                     </tr>
                                 </table>

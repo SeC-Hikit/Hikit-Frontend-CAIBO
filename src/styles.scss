@@ -174,7 +174,15 @@ select {
 }
 
 .btn-error {
-  background-color: $error-color;
+  background-color: $error-color !important;
+}
+
+.btn-success {
+  background-color: $primary-text-color !important;
+}
+
+.btn-info {
+  background-color: $info-color !important;
 }
 
 .actionable {
