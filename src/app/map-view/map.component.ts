@@ -9,8 +9,8 @@ import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
 import {GeoTrailService, RectangleDto} from "../service/geo-trail-service";
 
-export interface View {
-    NONE, TRAIL, PLACE_IN_TRAIL
+export enum ViewState {
+    NONE="NONE", TRAIL="TRAIL", PLACE_IN_TRAIL="PLACE_IN_TRAIL"
 }
 
 export enum TrailSimplifierLevel {
@@ -51,6 +51,7 @@ export class MapComponent implements OnInit {
     isLoading: boolean = false;
 
     zoomLevel = 12;
+    sideView = ViewState.NONE;
 
     constructor(
         private trailService: TrailService,
@@ -70,7 +71,7 @@ export class MapComponent implements OnInit {
 
     private handleQueryParam() {
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
-        this.selectTrails(idFromPath);
+        this.selectTrail(idFromPath);
     }
 
     ngAfterViewInit(): void {
@@ -87,9 +88,10 @@ export class MapComponent implements OnInit {
         });
     }
 
-    selectTrails(_id: string): void {
+    selectTrail(_id: string): void {
         let singletonTrail = this.trailList.filter(t=> t.id == _id);
         if(singletonTrail.length > 0) {
+            this.sideView = ViewState.TRAIL;
             this.selectedTrail = singletonTrail[0];
         }
     }
@@ -106,7 +108,7 @@ export class MapComponent implements OnInit {
         });
     }
 
-    loadBinaryPath(): void {
+    onDownloadGpx(): void {
         this.trailService.downloadGpx(this.selectedTrail.code).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
             const url = window.URL.createObjectURL(blob);
@@ -114,8 +116,20 @@ export class MapComponent implements OnInit {
         });
     }
 
-    onDownloadBinary(): void {
-        this.loadBinaryPath();
+    onDownloadKml(): void {
+        this.trailService.downloadKml(this.selectedTrail.code).subscribe(response => {
+            let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
+            const url = window.URL.createObjectURL(blob);
+            FileSaver.saveAs(blob, this.selectedTrail.code + ".kml");
+        });
+    }
+
+    onDownloadPdf(): void {
+        this.trailService.downloadPdf(this.selectedTrail.code).subscribe(response => {
+            let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
+            const url = window.URL.createObjectURL(blob);
+            FileSaver.saveAs(blob, this.selectedTrail.code + ".pdf");
+        });
     }
 
     changeTileLayer(type: string): void {

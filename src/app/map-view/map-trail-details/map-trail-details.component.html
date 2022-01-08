@@ -11,14 +11,41 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
                         <h4>Classificazione</h4>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
+                        <h4>Lunghezza</h4>
+                    </div>
+                    <div class="col-6">
                         <span> {{ selectedTrail.classification }}</span>
+                    </div>
+                    <div class="col-6">
+                        <div>{{ getDistance() }}m</div>
                     </div>
                 </div>
             </div>
+            <!--            -->
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        <h4>Tempo di percorrenza</h4>
+                    </div>
+                    <div class="col-6">
+                        <h4>Dislivello</h4>
+                    </div>
+                    <div class="col-6">
+                        <span>Circa {{ selectedTrail.statsTrailMetadata.eta | eta }}</span>
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <div>Positivo: {{ selectedTrail.statsTrailMetadata.totalRise }}m</div>
+                            <div>Negativo: {{ selectedTrail.statsTrailMetadata.totalFall }}m</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--            -->
             <div class="col-12">
                 <div class="row">
                     <div class="col-12">
@@ -52,7 +79,8 @@
                         <h4>Percorribilita'</h4>
                     </div>
                     <div class="col-12">
-                        <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow" class="clickable">
+                        <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow"
+                             class="clickable">
                             <div>
                                 <div>
                                     <ul>
@@ -87,36 +115,72 @@
                     </div>
                 </div>
             </div>
-
-
-
-            <h4>Lunghezza</h4>
-            <div>{{ getDistance() }}m</div>
-            <h4>Tempo di percorrenza</h4>
-            <div>{{ selectedTrail.statsTrailMetadata.eta | eta }} <span>(circa {{getMinutes()}}
-                minuti)</span></div>
-            <h4>Dislivello</h4>
-            <div>Positivo: {{ selectedTrail.statsTrailMetadata.totalRise }}m</div>
-            <div>Negativo: {{ selectedTrail.statsTrailMetadata.totalFall }}m</div>
-            <h4>Altro</h4>
-            <div class="row  clickable">
-                <div class="col-md-2 space-up">
-                    <svg class="bi" width="32" height="32" fill="red">
-                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
-                    </svg>
-                </div>
-                <div class="col-md-10 space-up">
-                    <a (click)="onDownloadGpx()" target="_blank">Download</a>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Download</h4>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <a (click)="onDownloadGpxClick()" target="_blank">
+                                    <svg class="bi" width="24" height="24" fill="red">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <a (click)="onDownloadGpxClick()" target="_blank">
+                                    <span>Traccia .gpx</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row clickable">
+                            <div class="col-md-2">
+                                <a (click)="onDownloadKmlClick()" target="_blank">
+                                    <svg class="bi" width="24" height="24" fill="red">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <a (click)="onDownloadKmlClick()" target="_blank">
+                                    <span>Traccia .kml</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <a (click)="onDownloadPdfClick()" target="_blank">
+                                    <svg class="bi" width="24" height="24" fill="red">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <a (click)="onDownloadPdfClick()" target="_blank">
+                                    <span>Foglio .pdf</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row clickable">
-                <div class="col-md-2 space-up clickable">
-                    <svg class="bi" width="32" height="32" fill="red">
-                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#geo-alt"/>
-                    </svg>
-                </div>
-                <div class="col-md-10 space-up">
-                    <a target="_blank">Apri su Maps</a>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Sentieri collegati</h4>
+                    </div>
+                    <div class="col-12">
+                        <ul>
+                            <li class="trailCodeColumn">BO123</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

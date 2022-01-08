@@ -1,4 +1,26 @@
+@import "/src/app/style/const.scss";
+
 .MapTrailDetails {
+
+  a {
+    width: 100%;
+  }
+
+  .row {
+    margin-bottom: 2%;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+  ul li {
+    list-style: none;
+  }
 
   .trailCodeColumn{
     width: fit-content;

@@ -155,7 +155,8 @@ export class MapFullComponent implements OnInit {
     }
 
     focusOnLocation(highlightedLocation: TrailCoordinates) {
-        this.map.flyTo([highlightedLocation.latitude, highlightedLocation.longitude]);
+        console.log(highlightedLocation);
+        this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude});
     }
 
     focusOnUser(userPosition: UserCoordinates) {

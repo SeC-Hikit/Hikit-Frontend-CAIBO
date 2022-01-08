@@ -45,13 +45,27 @@ export class TrailService {
   }
 
   downloadGpx(code: string): any {
-    return this.httpClient.get(this.baseUrl + "/download/" + code, {responseType: 'blob'})
+    return this.httpClient.get(this.baseUrl + "/file/gpx/" + code + ".gpx", {responseType: 'blob'})
       .pipe(tap(),
         catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
       );
   }
 
-/**
+  downloadKml(code: string): any {
+    return this.httpClient.get(this.baseUrl + "/file/kml/" + code + ".kml", {responseType: 'blob'})
+        .pipe(tap(),
+            catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
+        );  }
+
+  downloadPdf(code: string): any {
+    return this.httpClient.get(this.baseUrl + "/file/pdf/" + code + ".pdf", {responseType: 'blob'})
+        .pipe(tap(),
+            catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
+        );
+  }
+
+
+  /**
 * Handle Http operation that failed.
 * Let the app continue.
 * @param operation - name of the operation that failed

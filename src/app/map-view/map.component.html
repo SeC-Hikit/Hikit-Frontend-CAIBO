@@ -1,4 +1,8 @@
 <div class="MapComponent">
+    <div *ngIf="isLoading" class="progress progress-indeterminate">
+        <span class="sr-only">Caricamento...</span>
+        <div class="progress-bar" role="progressbar"></div>
+    </div>
     <!--    <div class="row relative-map" id="relative-map">-->
 
 
@@ -58,15 +62,14 @@
     <div class="row">
         <div class="column-map col-lg-4 col-md-4 white details functional-column">
             <div class="row">
-                <div class="col-12" *ngIf="isLoading" class="progress progress-indeterminate">
-                    <span class="sr-only">Caricamento...</span>
-                    <div class="progress-bar" role="progressbar"></div>
-                </div>
                 <div class="col-11 offset-1" id="trail-detail-column">
-                    <app-map-trail-details [selectedTrail]="selectedTrail"
+                    <div *ngIf="sideView=='NONE'">Ciao</div>
+                    <app-map-trail-details *ngIf="sideView=='TRAIL'" [selectedTrail]="selectedTrail"
                                            [trailNotifications]="trailNotifications"
                                            [lastMaintenance]="lastMaintenance"
-                                           (onDownloadBinaryEvent)="onDownloadBinary()"
+                                           (onDownloadGpx)="onDownloadGpx()"
+                                           (onDownloadKml)="onDownloadKml()"
+                                           (onDownloadPdf)="onDownloadPdf()"
                                            (toggleFullTrailPageEvent)="toggleFullPageTrail()"
                                            (toggleNotificationListEvent)="toggleNotificationsModal()"
                                            (onNavigateToLocation)="navigateToLocation($event)">
@@ -87,7 +90,7 @@
                           [userPosition]="userPosition"
                           [highlightedLocation]="highlightedLocation"
                           (onViewChange)="geoLocateTrails($event)"
-                          (onTrailClick)="selectTrails($event)"
+                          (onTrailClick)="selectTrail($event)"
                           (onZoomChange)="onZoomChange($event)"
                           (onLoading)="onLoading()"
                           (onDoneLoading)="onDoneLoading()">

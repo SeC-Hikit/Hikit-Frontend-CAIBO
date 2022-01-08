@@ -3,7 +3,6 @@ import * as moment from 'moment';
 import { Maintenance } from 'src/app/service/maintenance.service';
 import { AccessibilityNotification } from 'src/app/service/notification-service.service';
 import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.service';
-import { GraphicUtils } from 'src/app/utils/GraphicUtils';
 
 @Component({
   selector: 'app-map-trail-details',
@@ -18,7 +17,9 @@ export class MapTrailDetailsComponent implements OnInit {
 
   @Output() toggleFullTrailPageEvent = new EventEmitter<void>();
   @Output() toggleNotificationListEvent = new EventEmitter<void>();
-  @Output() onDownloadBinaryEvent = new EventEmitter<void>();
+  @Output() onDownloadGpx = new EventEmitter<void>();
+  @Output() onDownloadKml = new EventEmitter<void>();
+  @Output() onDownloadPdf = new EventEmitter<void>();
   @Output() onNavigateToLocation = new EventEmitter<TrailCoordinates>();
 
 
@@ -40,8 +41,16 @@ export class MapTrailDetailsComponent implements OnInit {
     this.toggleNotificationListEvent.emit();
   }
 
-  onDownloadGpx() : void {
-    this.onDownloadBinaryEvent.emit();
+  onDownloadGpxClick() : void {
+    this.onDownloadGpx.emit();
+  }
+
+  onDownloadKmlClick() : void {
+    this.onDownloadKml.emit();
+  }
+
+  onDownloadPdfClick() {
+    this.onDownloadPdf.emit();
   }
 
   moveTo(location: TrailCoordinates) {
@@ -62,4 +71,5 @@ export class MapTrailDetailsComponent implements OnInit {
   formatDate(dateString: string) : string {
     return moment(dateString).format("DD/MM/YYYY");
   }
+
 }
