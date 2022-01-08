@@ -37,9 +37,11 @@ export class MapFullComponent implements OnInit {
     @Input() trailList: TrailDto[];
     @Input() tileLayerName: string;
     @Input() highlightedLocation: TrailCoordinates;
+    @Input() startingZoomLevel: number;
 
     @Output() onTrailClick = new EventEmitter<string>();
     @Output() onViewChange = new EventEmitter<RectangleDto>();
+    @Output() onZoomChange = new EventEmitter<number>();
 
     @Output() onLoading = new EventEmitter<void>();
     @Output() onDoneLoading = new EventEmitter<void>();
@@ -57,9 +59,10 @@ export class MapFullComponent implements OnInit {
         this.selectedLayer.on("load", function () {
             console.log("loaded");
         })
-        this.map = L.map(MapFullComponent.MAP_ID, {layers: [this.selectedLayer], maxZoom: 17}).setView(
+        this.map = L.map(MapFullComponent.MAP_ID, {layers: [this.selectedLayer], maxZoom: 17})
+            .setView(
             [44.498955, 11.327591],
-            12
+            this.startingZoomLevel
         );
 
         L.control.scale({position: 'topright'}).addTo(this.map);
@@ -71,21 +74,25 @@ export class MapFullComponent implements OnInit {
     }
 
     attachEventListeners(): void {
-        this.map.on("moveend", (event) => {
-            this.onMoved(event)
+        this.map.on("moveend", (_) => {
+            this.onMoved()
         });
 
-        this.map.on("move", (event) => {
-            this.onStartMoving(event)
+        this.map.on("move", (_) => {
+            this.onStartMoving()
+        });
+
+        this.map.on("zoomend", (_) => {
+            this.onZoomChange.emit(this.map.getZoom());
         });
 
     }
 
-    private onStartMoving(event: LeafletEvent) {
+    private onStartMoving() {
         clearTimeout(this.intervalObject);
     }
 
-    private onMoved(event: LeafletEvent) {
+    private onMoved() {
         clearTimeout(this.intervalObject);
         this.intervalObject = setTimeout(() => {
             this.emitBounds();
@@ -95,6 +102,7 @@ export class MapFullComponent implements OnInit {
     private emitBounds() {
         let bounds = this.map.getBounds();
         let rectangleDtoFromLatLng = this.getRectangleDtoFromLatLng(bounds);
+        console.log(rectangleDtoFromLatLng)
         this.onViewChange.emit(rectangleDtoFromLatLng)
     }
 
@@ -250,9 +258,9 @@ export class MapFullComponent implements OnInit {
     getLayerByName(layerName: string): L.TileLayer {
         switch (layerName) {
             case "topo":
-                return L.tileLayer(
+                return L.tileLayer.wms(
                     "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-                    {attribution: this.openStreetmapCopy}
+                    {attribution: this.openStreetmapCopy, opacity: 0.75}
                 );
             case "geopolitic":
                 return L.tileLayer(

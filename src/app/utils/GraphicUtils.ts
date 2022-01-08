@@ -15,7 +15,6 @@ export class GraphicUtils {
     let slimHeaderWrapHeight = document.getElementById("header-slim-wrapper")
       .offsetHeight;
     let footerInfoHeight = document.getElementById("footer-info").offsetHeight;
-    console.warn(footerInfoHeight);
     return (
       documentHeight -
       headerWrapperHeight -
@@ -25,6 +24,10 @@ export class GraphicUtils {
   }
 
   public static getFullHeightSizeWOMenu() {
+    return document.documentElement.scrollHeight;
+  }
+
+  public static getFullHeightSizeWOMenuMap() {
     return document.documentElement.scrollHeight;
   }
 

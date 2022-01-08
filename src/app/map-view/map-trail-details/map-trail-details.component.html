@@ -1,83 +1,123 @@
-<div *ngIf="selectedTrail" class="row clickable" [ngClass]="{ 'hide' : selectedTrail }" (click)="toggleFullTrailPage()">
-    <div class="col-md-10">
-        <h1>{{ selectedTrail.code }}</h1>
-    </div>
-    <div class="col-md-2 space-up" (click)="toggleFullTrailPage()">
-        <svg class="bi" width="24" height="24" fill="red">
-            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#arrow-up-right-square" />
-        </svg>
-    </div>
-</div>
-<div *ngIf="selectedTrail" id="scrollable-content" class="col-12 white scrollable details"
-    [ngClass]="{ 'hide' : selectedTrail }">
-    <div>
-        <h4>Classificazione</h4>
-        <div> {{ selectedTrail.classification }}</div>
-        <h4>Località</h4>
-        <div>
-            <div (click)="moveTo(selectedTrail.startLocation.coordinates)" class="clickable"><span class="arrow down"></span>{{
-                selectedTrail.startLocation.name }}</div>
-            <div *ngFor="let location of selectedTrail.locations">
-                <span class="clickable" (click)="moveTo(location.coordinates)"><span class="arrow down"></span>{{ location.name }}</span>
+<div class="MapTrailDetails row">
+    <div *ngIf="selectedTrail" class="top-margin col-12" [ngClass]="{ 'hide' : selectedTrail }">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="trailCodeColumn">{{ selectedTrail.code }}</h1>
             </div>
-            <div (click)="moveTo(selectedTrail.endLocation.coordinates)" class="clickable"><span class="arrow down"></span>{{
-                selectedTrail.endLocation.name }}</div>
         </div>
-        <h4>Descrizione</h4>
-        <div [innerHTML]="selectedTrail.description"></div>
-        <h4>Percorribilita'</h4>
-        <div class="way">
-            <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow" class="clickable">
-                <div>
-                    <div>
-                        <ul>
-                            <svg class="bi pulse" width="24" height="24" fill="red">
-                                <use
-                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill" />
-                            </svg>
-                            <li *ngFor="let notification of trailNotifications" class="clickable"
-                                (click)="moveTo(notification.coordinates)">{{notification.description}}</li>
-                        </ul>
+    </div>
+    <div *ngIf="selectedTrail" id="scrollable-content" class="col-12"
+         [ngClass]="{ 'hide' : selectedTrail }">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Classificazione</h4>
+                    </div>
+                    <div class="col-12">
+                        <span> {{ selectedTrail.classification }}</span>
                     </div>
                 </div>
             </div>
-            <ng-template #notShow>
-                <div>
-                    <svg class="bi" width="24" height="24">
-                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all" />
-                    </svg>
-                    Non ci sono problemi di percorribilita
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Località</h4>
+                    </div>
+                    <div class="col-md-12 ">
+                        <span (click)="moveTo(selectedTrail.startLocation.coordinates)" class="clickable"><span
+                                class="arrow down"></span>{{
+                            selectedTrail.startLocation.name }}</span>
+                        <span>↔</span>
+                        <span (click)="moveTo(selectedTrail.endLocation.coordinates)" class="clickable"><span
+                                class="arrow down"></span>{{
+                            selectedTrail.endLocation.name }}
+                        </span>
+                    </div>
                 </div>
-            </ng-template>
-        </div>
-        <h4>Ultima manuntenzione</h4>
-        <div *ngIf="lastMaintenance">Eseguita il {{formatDate(lastMaintenance.date)}}</div>
-        <h4>Lunghezza</h4>
-        <div>{{ selectedTrail.statsTrailMetadata.length }}m</div>
-        <h4>Tempo di percorrenza</h4>
-        <div>{{ selectedTrail.statsTrailMetadata.eta | eta }} <span>(circa {{selectedTrail.statsTrailMetadata.eta}} minuti)</span></div>
-        <h4>Dislivello</h4>
-        <div>Positivo: {{ selectedTrail.statsTrailMetadata.totalRise }}m</div>
-        <div>Negativo: {{ selectedTrail.statsTrailMetadata.totalFall }}m</div>
-        <h4>Altro</h4>
-        <div class="row  clickable">
-            <div class="col-md-2 space-up">
-                <svg class="bi" width="32" height="32" fill="red">
-                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download" />
-                </svg>
             </div>
-            <div class="col-md-10 space-up">
-                <a (click)="onDownloadGpx()" target="_blank">Download</a>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Descrizione</h4>
+                    </div>
+                    <div class="col-12">
+                        <div [innerHTML]="selectedTrail.description"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row clickable">
-            <div class="col-md-2 space-up clickable">
-                <svg class="bi" width="32" height="32" fill="red">
-                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#geo-alt" />
-                </svg>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Percorribilita'</h4>
+                    </div>
+                    <div class="col-12">
+                        <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow" class="clickable">
+                            <div>
+                                <div>
+                                    <ul>
+                                        <svg class="bi pulse" width="24" height="24" fill="red">
+                                            <use
+                                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill"/>
+                                        </svg>
+                                        <li *ngFor="let notification of trailNotifications" class="clickable"
+                                            (click)="moveTo(notification.coordinates)">{{notification.description}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #notShow>
+                            <div>
+                                <svg class="bi" width="24" height="24">
+                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
+                                </svg>
+                                Non ci sono problemi di percorribilita
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-10 space-up">
-                <a target="_blank">Apri su Maps</a>
+            <div class="col-12" *ngIf="lastMaintenance">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Ultima manuntenzione</h4>
+                    </div>
+                    <div class="col-12">
+                        <span>Eseguita il {{formatDate(lastMaintenance.date)}}</span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <h4>Lunghezza</h4>
+            <div>{{ getDistance() }}m</div>
+            <h4>Tempo di percorrenza</h4>
+            <div>{{ selectedTrail.statsTrailMetadata.eta | eta }} <span>(circa {{getMinutes()}}
+                minuti)</span></div>
+            <h4>Dislivello</h4>
+            <div>Positivo: {{ selectedTrail.statsTrailMetadata.totalRise }}m</div>
+            <div>Negativo: {{ selectedTrail.statsTrailMetadata.totalFall }}m</div>
+            <h4>Altro</h4>
+            <div class="row  clickable">
+                <div class="col-md-2 space-up">
+                    <svg class="bi" width="32" height="32" fill="red">
+                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+                    </svg>
+                </div>
+                <div class="col-md-10 space-up">
+                    <a (click)="onDownloadGpx()" target="_blank">Download</a>
+                </div>
+            </div>
+            <div class="row clickable">
+                <div class="col-md-2 space-up clickable">
+                    <svg class="bi" width="32" height="32" fill="red">
+                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#geo-alt"/>
+                    </svg>
+                </div>
+                <div class="col-md-10 space-up">
+                    <a target="_blank">Apri su Maps</a>
+                </div>
             </div>
         </div>
     </div>

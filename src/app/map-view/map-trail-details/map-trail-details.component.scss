@@ -1,71 +1,7 @@
-.column-map {
-    padding: 1%;
-    padding-bottom: 0;
-    z-index: 1;
-}
+.MapTrailDetails {
 
-.scrollable {
-    overflow-y: scroll;
-    height: 750px;
-}
-
-.clickable:hover {
-  color: #D04341;
-}
-
-.pulse {
-    animation: pulse-animation 1s infinite alternate-reverse;
-}
-
-h4 {
-  font-size:18px;
-  margin-top: 3%;
-}
-
-.arrow {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-  margin:0 2% 2% 2%;
-  translate: 0px 5px;
-}
-
-.down {
-  transform: rotate(45deg);
-  /* translate: 10px; */
-  -webkit-transform: rotate(45deg);
-}
-
-.circle {
-  height: 12px;
-  width: 12px;
-  background-color: #555;
-  display: inline-block;
-  border-radius: 50%;
-  margin:1%;
-}
-
-ul li {
-  list-style: none;
-}
-
-.way svg {
-  float:left;
-  translate:0px 3px;
-  padding-right: 5px;
-}
-
-.way ul { 
-  padding-left: 0px;
-}
-
-
-@keyframes pulse-animation {
-    0% {
-      opacity: 0.3;
-    }
-    100% {
-      opacity: 1;
-    }
+  .trailCodeColumn{
+    width: fit-content;
+    padding: 0 0.3em;
   }
+}

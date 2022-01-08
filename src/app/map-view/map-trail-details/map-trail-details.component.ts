@@ -27,10 +27,10 @@ export class MapTrailDetailsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void { 
-    let fullSize = GraphicUtils.getFullHeightSizeMenu() - 500;
-    document.getElementById("scrollable-content").style.height = fullSize.toString() + "px";
-  }
+  // ngAfterViewInit(): void {
+  //   let fullSize = GraphicUtils.getFullHeightSizeMenu() - 500;
+  //   document.getElementById("scrollable-content").style.height = fullSize.toString() + "px";
+  // }
 
   toggleFullTrailPage(): void {
     this.toggleFullTrailPageEvent.emit();
@@ -47,6 +47,16 @@ export class MapTrailDetailsComponent implements OnInit {
   moveTo(location: TrailCoordinates) {
     console.log(location);
     this.onNavigateToLocation.emit(location);
+  }
+
+  getDistance() {
+    let s = this.selectedTrail.statsTrailMetadata.length;
+    return Math.round(s);
+  }
+
+  getMinutes(){
+    let s = this.selectedTrail.statsTrailMetadata.eta;
+    return Math.round(s);
   }
 
   formatDate(dateString: string) : string {

@@ -6,7 +6,7 @@
     top: 0px;
     z-index: 2;
   }
-  
+
   #fullTrailPage .scrollable-subcontainer {
     overflow-y: scroll;
     max-height: 700px;
@@ -23,7 +23,7 @@
     font-size:24px;
     margin-top: 3%;
   }
-  
+
   .clickable:hover {
     color: #D04341;
   }
@@ -44,18 +44,18 @@
   ul li {
     list-style: none;
   }
-  
+
  svg {
     float:left;
     margin: 0 1% 0 1%;
   }
-  
+
   .down {
     transform: rotate(45deg);
     /* translate: 10px; */
     -webkit-transform: rotate(45deg);
   }
-  
+
   .circle {
     height: 12px;
     width: 12px;

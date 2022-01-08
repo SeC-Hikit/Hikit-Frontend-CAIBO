@@ -9,6 +9,17 @@ import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
 import {GeoTrailService, RectangleDto} from "../service/geo-trail-service";
 
+export interface View {
+    NONE, TRAIL, PLACE_IN_TRAIL
+}
+
+export enum TrailSimplifierLevel {
+    NONE = "none",
+    LOW = "low",
+    MEDIUM = "medium",
+    HIGH = "high",
+    FULL = "full"
+}
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -16,7 +27,7 @@ import {GeoTrailService, RectangleDto} from "../service/geo-trail-service";
 })
 export class MapComponent implements OnInit {
 
-    static TRAIL_LIST_COLUMN_ID = "trail-list-column"
+    // static TRAIL_LIST_COLUMN_ID = "trail-list-column"
     static TRAIL_DETAILS_ID = "trail-detail-column";
 
     // Bound elements
@@ -39,6 +50,8 @@ export class MapComponent implements OnInit {
     isUserPositionToggled: boolean = false;
     isLoading: boolean = false;
 
+    zoomLevel = 12;
+
     constructor(
         private trailService: TrailService,
         private geoTrailService: GeoTrailService,
@@ -57,14 +70,14 @@ export class MapComponent implements OnInit {
 
     private handleQueryParam() {
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
-        this.loadTrail(idFromPath);
+        this.selectTrails(idFromPath);
     }
 
     ngAfterViewInit(): void {
-        let fullSize = GraphicUtils.getFullHeightSizeWOMenu();
-        document.getElementById("relative-map").style.height = fullSize.toString() + "px";
-        document.getElementById(MapComponent.TRAIL_LIST_COLUMN_ID).style.minHeight = fullSize.toString() + "px";
+        let fullSize = GraphicUtils.getFullHeightSizeWOMenuImage();
+        console.log(fullSize);
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
+        document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
     }
 
     loadPreviews(): void {
@@ -74,19 +87,11 @@ export class MapComponent implements OnInit {
         });
     }
 
-    loadTrail(code: string): void {
-        console.log(code);
-        // if (code) {
-        //     this.trailService.getTrailById(code).subscribe(
-        //         trailResponse => {
-        //             this.selectedTrail = trailResponse.content[0];
-        //             // this.selectedTrail.statsTrailMetadata.eta = Math.round(this.selectedTrail.statsTrailMetadata.officialEta);
-        //             this.selectedTrail.statsTrailMetadata.length = Math.round(this.selectedTrail.statsTrailMetadata.length);
-        //             this.loadNotificationsForTrail(code);
-        //             this.loadLastMaintenaceForTrail(code);
-        //             this.isTrailSelectedVisible = true;
-        //         });
-        // }
+    selectTrails(_id: string): void {
+        let singletonTrail = this.trailList.filter(t=> t.id == _id);
+        if(singletonTrail.length > 0) {
+            this.selectedTrail = singletonTrail[0];
+        }
     }
 
     loadNotificationsForTrail(code: string): void {
@@ -156,9 +161,13 @@ export class MapComponent implements OnInit {
     }
 
     geoLocateTrails($event: RectangleDto) {
-        console.log($event);
+        if(!$event) { return; }
         this.onLoading();
-        this.geoTrailService.locate($event, "MEDIUM").subscribe((e) => {
+        let level = this.electTrailSimplifierLevel(this.zoomLevel);
+        if(level == TrailSimplifierLevel.NONE) return;
+        this.geoTrailService
+            .locate($event, level.toUpperCase())
+            .subscribe((e) => {
             this.trailList = e.content;
             this.onDoneLoading();
         });
@@ -170,5 +179,16 @@ export class MapComponent implements OnInit {
 
     onDoneLoading() {
         this.isLoading = false;
+    }
+
+    onZoomChange(zoomLevel: number) {
+        this.zoomLevel = zoomLevel;
+    }
+
+    electTrailSimplifierLevel(zoom : number) : TrailSimplifierLevel {
+        if(zoom <= 10) return TrailSimplifierLevel.NONE;
+        if(zoom < 12) return TrailSimplifierLevel.LOW;
+        if(zoom <= 15) return TrailSimplifierLevel.MEDIUM;
+        if(zoom >= 16) return TrailSimplifierLevel.HIGH;
     }
 }
