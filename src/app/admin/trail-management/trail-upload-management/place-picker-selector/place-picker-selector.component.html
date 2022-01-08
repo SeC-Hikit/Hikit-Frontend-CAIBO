@@ -5,7 +5,7 @@
     <div class="modal-body">
         <div class="list-of-georeferenced-places">
             <div class="row">
-                <div class="col-6">
+                <div class="col-lg-6 col-md-12">
                     <ul>
                         <li *ngFor="let place of places; index as i"
                             class="choice"
@@ -39,7 +39,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-6" *ngIf="this.trail">
+                <div class="col-lg-6 col-md-12" *ngIf="this.trail">
                     <app-map-preview
                             [classPrefix]="'geolocation-preview'"
                             [markersCoordinates]="markers"

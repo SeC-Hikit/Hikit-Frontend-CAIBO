@@ -75,17 +75,18 @@ export class MapComponent implements OnInit {
     }
 
     loadTrail(code: string): void {
-        if (code) {
-            this.trailService.getTrailById(code).subscribe(
-                trailResponse => {
-                    this.selectedTrail = trailResponse.content[0];
-                    // this.selectedTrail.statsTrailMetadata.eta = Math.round(this.selectedTrail.statsTrailMetadata.officialEta);
-                    this.selectedTrail.statsTrailMetadata.length = Math.round(this.selectedTrail.statsTrailMetadata.length);
-                    this.loadNotificationsForTrail(code);
-                    this.loadLastMaintenaceForTrail(code);
-                    this.isTrailSelectedVisible = true;
-                });
-        }
+        console.log(code);
+        // if (code) {
+        //     this.trailService.getTrailById(code).subscribe(
+        //         trailResponse => {
+        //             this.selectedTrail = trailResponse.content[0];
+        //             // this.selectedTrail.statsTrailMetadata.eta = Math.round(this.selectedTrail.statsTrailMetadata.officialEta);
+        //             this.selectedTrail.statsTrailMetadata.length = Math.round(this.selectedTrail.statsTrailMetadata.length);
+        //             this.loadNotificationsForTrail(code);
+        //             this.loadLastMaintenaceForTrail(code);
+        //             this.isTrailSelectedVisible = true;
+        //         });
+        // }
     }
 
     loadNotificationsForTrail(code: string): void {

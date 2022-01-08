@@ -38,7 +38,7 @@ export class MapFullComponent implements OnInit {
     @Input() tileLayerName: string;
     @Input() highlightedLocation: TrailCoordinates;
 
-    @Output() selectCodeEvent = new EventEmitter<string>();
+    @Output() onTrailClick = new EventEmitter<string>();
     @Output() onViewChange = new EventEmitter<RectangleDto>();
 
     @Output() onLoading = new EventEmitter<void>();
@@ -175,6 +175,7 @@ export class MapFullComponent implements OnInit {
     renderAllTrail(trailList: TrailDto[]) {
         this.otherTrailsPolylines = trailList.map(trail => {
             return new TrailToPolyline(trail.code,
+                trail.id,
                 trail.classification,
                 L.polyline(MapUtils.getCoordinatesInverted(trail.coordinates),
                     MapUtils.getLineStyle(false, trail.classification)))
@@ -188,16 +189,18 @@ export class MapFullComponent implements OnInit {
     }
 
     dehighlightTrail(trailToPoly: TrailToPolyline): LeafletMouseEventHandlerFn {
-        return function () {
-            console.log(trailToPoly.getCode());
+         return () => {
             trailToPoly.getPolyline().setStyle(
-                MapUtils.getLineStyle(false, trailToPoly.getClassification()));
+                MapUtils.getLineStyle(false,
+                    trailToPoly.getClassification()));
         }
     }
 
     highlightTrail(trailToPoly: TrailToPolyline): LeafletMouseEventHandlerFn {
-        return function () {
-            trailToPoly.getPolyline().setStyle({
+        return ()=> {
+            trailToPoly
+                .getPolyline()
+                .setStyle({
                 color: 'yellow',
                 opacity: 3,
                 weight: 5
@@ -206,9 +209,9 @@ export class MapFullComponent implements OnInit {
     }
 
     onSelectTrail(trailToPoly: TrailToPolyline) {
-        let codeEmitter = this.selectCodeEvent;
+        let codeEmitter = this.onTrailClick;
         return function () {
-            codeEmitter.emit(trailToPoly.getCode())
+            codeEmitter.emit(trailToPoly.getId())
         };
     }
 

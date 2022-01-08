@@ -90,7 +90,7 @@
                   [trailList]="trailList"
                   [userPosition]="userPosition" [highlightedLocation]="highlightedLocation"
                   (onViewChange)="geoLocateTrails($event)"
-                  (selectCodeEvent)="loadTrail($event)"
+                  (onTrailClick)="loadTrail($event)"
                   (onLoading)="onLoading()"
                   (onDoneLoading)="onDoneLoading()"
     >
