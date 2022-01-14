@@ -109,7 +109,7 @@ export class MapComponent implements OnInit {
     }
 
     onDownloadGpx(): void {
-        this.trailService.downloadGpx(this.selectedTrail.code).subscribe(response => {
+        this.trailService.downloadGpx(this.getFileName(this.selectedTrail)).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
             const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + ".gpx");
@@ -117,7 +117,7 @@ export class MapComponent implements OnInit {
     }
 
     onDownloadKml(): void {
-        this.trailService.downloadKml(this.selectedTrail.code).subscribe(response => {
+        this.trailService.downloadKml(this.getFileName(this.selectedTrail)).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
             const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + ".kml");
@@ -125,7 +125,7 @@ export class MapComponent implements OnInit {
     }
 
     onDownloadPdf(): void {
-        this.trailService.downloadPdf(this.selectedTrail.code).subscribe(response => {
+        this.trailService.downloadPdf(this.getFileName(this.selectedTrail)).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
             const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + ".pdf");
@@ -197,6 +197,10 @@ export class MapComponent implements OnInit {
 
     onZoomChange(zoomLevel: number) {
         this.zoomLevel = zoomLevel;
+    }
+
+    getFileName(fileName: TrailDto) : string {
+        return fileName.code + "_" + fileName.id;
     }
 
     electTrailSimplifierLevel(zoom : number) : TrailSimplifierLevel {
