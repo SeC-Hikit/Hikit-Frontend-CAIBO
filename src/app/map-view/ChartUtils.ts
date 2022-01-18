@@ -13,6 +13,17 @@ export class ChartUtils {
         return {
             tooltips: {
                 enabled: true,
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: false,
+                onHover: function (e, item) {
+                    if (item.length) {
+                        // TODO
+                        console.log(item, "");
+                    }
+                }
             },
             maintainAspectRatio: true,
             spanGaps: false,
@@ -31,7 +42,7 @@ export class ChartUtils {
 
                         }, ticks: {
                             autoSkip: true,
-                            maxTicksLimit: 10
+                            maxTicksLimit: 5
                         },
                     },
                 ],

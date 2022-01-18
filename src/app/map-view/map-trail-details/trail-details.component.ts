@@ -3,6 +3,9 @@ import * as moment from 'moment';
 import { Maintenance } from 'src/app/service/maintenance.service';
 import { AccessibilityNotification } from 'src/app/service/notification-service.service';
 import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.service';
+import {ChartUtils} from "../ChartUtils";
+import * as Chart from "chart.js";
+import {ChartOptions} from "chart.js";
 
 @Component({
   selector: 'app-map-trail-details',
@@ -10,6 +13,9 @@ import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.servic
   styleUrls: ['./trail-details.component.scss']
 })
 export class TrailDetailsComponent implements OnInit {
+
+  private chart: Chart;
+  private chartOptions: ChartOptions;
 
   @Input() selectedTrail: TrailDto;
   @Input() trailNotifications: AccessibilityNotification[];
@@ -22,16 +28,40 @@ export class TrailDetailsComponent implements OnInit {
   @Output() onDownloadPdf = new EventEmitter<void>();
   @Output() onNavigateToLocation = new EventEmitter<TrailCoordinates>();
 
-
   constructor() {}
 
   ngOnInit(): void {
   }
 
-  // ngAfterViewInit(): void {
-  //   let fullSize = GraphicUtils.getFullHeightSizeMenu() - 500;
-  //   document.getElementById("scrollable-content").style.height = fullSize.toString() + "px";
-  // }
+  ngAfterViewInit(): void {
+    this.chartOptions = ChartUtils.getChartOptions();
+    this.chart = new Chart("hikeChart", {
+      type: "line",
+      options: this.chartOptions,
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.selectedTrail) { return; }
+    for (const propName in changes) {
+      if (propName == "selectedTrail") { this.updateChart() }
+    }
+  }
+
+  updateChart(): void {
+    if(!this.chart) { setTimeout(()=> this.updateChart(), 150); }
+    ChartUtils.clearChart(this.chart);
+    let altitudeDataPoints = this.selectedTrail.coordinates.map(c => c.altitude);
+    this.chart.data.labels = this.selectedTrail.coordinates.map(c => c.distanceFromTrailStart + "m");
+    this.chart.data.datasets = [{
+      backgroundColor: "rgb(255, 99, 132)",
+      borderColor: "rgb(255, 99, 132)",
+      pointRadius: 0,
+      data: altitudeDataPoints,
+      label: "Sentiero " + this.selectedTrail.code,
+    }]
+    this.chart.update();
+  }
 
   toggleFullTrailPage(): void {
     this.toggleFullTrailPageEvent.emit();
@@ -72,4 +102,7 @@ export class TrailDetailsComponent implements OnInit {
     return moment(dateString).format("DD/MM/YYYY");
   }
 
+  onReportIssueToTrailClick() {
+
+  }
 }
