@@ -3,77 +3,75 @@
         <span class="sr-only">Caricamento...</span>
         <div class="progress-bar" role="progressbar"></div>
     </div>
-    <!--    <div class="row relative-map" id="relative-map">-->
-
-
-    <!--        <div [ngClass]="{ 'hideaway' : !isTrailFullScreenVisible }">-->
-    <!--            <app-map-trail-full [selectedTrail]="selectedTrail" [trailNotifications]="trailNotifications"-->
-    <!--                                [lastMaintenance]="lastMaintenance"-->
-    <!--                                (isVisibleEvent)="toggleFullPageTrail()"-->
-    <!--                                (toggleNotificationModalEvent)="toggleNotificationsModal()"-->
-    <!--                                (onDownloadBinaryEvent)="onDownloadBinary()"-->
-    <!--                                (onLoading)="onLoading()"-->
-    <!--                                (onDoneLoading)="onDoneLoading()"-->
-    <!--            >-->
-    <!--            </app-map-trail-full>-->
-    <!--        </div>-->
-
-    <!--        <div class="control">-->
-    <!--            <div class="features">-->
-    <!--                <div class="btn-group btn-group-toggle" data-toggle="buttons">-->
-    <!--                    <label (click)="changeTileLayer('topo')" class="btn btn-light"-->
-    <!--                           [ngClass]="{'active': selectedTileLayer == 'topo' }">-->
-    <!--                        <input autocomplete="off" checked id="option1" name="options" type="radio">Topo</label>-->
-    <!--                    <label (click)="changeTileLayer('geopolitic')" class="btn btn-light"-->
-    <!--                           [ngClass]="{'active': selectedTileLayer == 'geopolitic' }">-->
-    <!--                        <input autocomplete="off" id="option2" name="options" type="radio">Geopolitica</label>-->
-    <!--                    <label (click)="changeTileLayer('geopolitic2')" class="btn btn-light"-->
-    <!--                           [ngClass]="{'active': selectedTileLayer == 'geopolitic2' }">-->
-    <!--                        <input autocomplete="off" id="option3" name="options" type="radio">Viabilità</label>-->
-    <!--                </div>-->
-    <!--            </div>-->
-
-    <!--            &lt;!&ndash;  &ndash;&gt;-->
-    <!--            <div class="features">-->
-    <!--                <div class="btn-group-toggle" data-toggle="buttons">-->
-    <!--                    &lt;!&ndash;                    <label (click)="toggleAllTrails()" class="btn btn-light" placement="bottom"&ndash;&gt;-->
-    <!--                    &lt;!&ndash;                           ngbTooltip="Mostra/nascondi sentieri" tooltipClass="tooltip-c"&ndash;&gt;-->
-    <!--                    &lt;!&ndash;                           [ngClass]="{ 'active' : isAllTrailVisible }">&ndash;&gt;-->
-    <!--                    &lt;!&ndash;                        <svg class="bi" width="24" height="24" fill="currentColor">&ndash;&gt;-->
-    <!--                    &lt;!&ndash;                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#eye"/>&ndash;&gt;-->
-    <!--                    &lt;!&ndash;                        </svg>&ndash;&gt;-->
-    <!--                    &lt;!&ndash;                    </label>&ndash;&gt;-->
-    <!--                    <label (click)="toggleUserPosition()" class="btn btn-light" placement="bottom"-->
-    <!--                           ngbTooltip="Mostra la tua posizione" tooltipClass="tooltip-c"-->
-    <!--                           [ngClass]="{ 'active' : isUserPositionToggled }">-->
-    <!--                        <svg class="bi" width="24" height="24" fill="currentColor">-->
-    <!--                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#geo-fill"/>-->
-    <!--                        </svg>-->
-    <!--                    </label>-->
-    <!--                    <label (click)="toggleList()" class="btn btn-light" placement="bottom"-->
-    <!--                           ngbTooltip="Mostra/nascondi lista sentieri" tooltipClass="tooltip-c"-->
-    <!--                           [ngClass]="{ 'active' : isTrailListVisible }">-->
-    <!--                        <svg class="bi" width="24" height="24" fill="currentColor">-->
-    <!--                            <use xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#list-ol"/>-->
-    <!--                        </svg>-->
-    <!--                    </label>-->
-    <!--                </div>-->
-    <!--            </div>-->
     <div class="row">
         <div class="column-map col-lg-4 col-md-4 white details functional-column">
             <div class="row">
                 <div class="col-11 offset-1" id="trail-detail-column">
-                    <div *ngIf="sideView=='NONE'">Ciao</div>
-                    <app-map-trail-details *ngIf="sideView=='TRAIL'" [selectedTrail]="selectedTrail"
-                                           [trailNotifications]="trailNotifications"
-                                           [lastMaintenance]="lastMaintenance"
-                                           (onDownloadGpx)="onDownloadGpx()"
-                                           (onDownloadKml)="onDownloadKml()"
-                                           (onDownloadPdf)="onDownloadPdf()"
-                                           (toggleFullTrailPageEvent)="toggleFullPageTrail()"
-                                           (toggleNotificationListEvent)="toggleNotificationsModal()"
-                                           (onNavigateToLocation)="navigateToLocation($event)">
-                    </app-map-trail-details>
+                    <div *ngIf="sideView!='TRAIL'" class="row search-section top-margin-x2">
+                        <div class="col-11">
+                            <input type="text" class="search-box"
+                                   placeholder="Cerca per codice sentiero (e.g: 100)"
+                                    (keyup)="onSearchKeyPress($event)"
+                            >
+                        </div>
+                    </div>
+
+                    <div *ngIf="sideView!='TRAIL'" class="row top-margin">
+                        <div class="custom-control custom-switch col-12">
+                            <span class="col-lg-11 offset-lg-1 col-md-10 offset-md-2 col-xs-4 offset-xs-8">
+                                <input type="checkbox"
+                                       class="custom-control-input"
+                                       [defaultChecked]="isCycloToggled"
+                                       (change)="toggleCycloOption()"
+                                       id="customSwitch1">
+                                <label class="custom-control-label" for="customSwitch1">Cicloturismo</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="sideView=='NONE'">
+                        <div class="row align-middle">
+                            <div class="col-md-12">
+                                <p>Benvenuto su S&C!</p>
+                                <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
+                                        class="clickable"
+                                        (click)="loadFullList()">lista di sentieri del {{sectionName}}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="map-icon"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="sideView=='TRAIL_LIST'" class="top-margin">
+                        <app-map-trail-list
+                                [trailsPreviewList]="trailPreviewList"
+                                (selectCodeEvent)="onSelectTrail($event)"
+                        >
+                        </app-map-trail-list>
+                    </div>
+                    <div *ngIf="sideView=='TRAIL'" class="top-margin">
+                        <div class="navigation-back clickable" (click)="loadFullList()">
+                            <svg class="bi pulse" width="24" height="24" fill="#D04341">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+                            </svg>
+                            <span class="back">
+                            Vai a lista sentieri
+                            </span>
+                        </div>
+                        <app-map-trail-details
+                                [selectedTrail]="selectedTrail"
+                                [trailNotifications]="trailNotifications"
+                                [lastMaintenance]="lastMaintenance"
+                                (onDownloadGpx)="onDownloadGpx()"
+                                (onDownloadKml)="onDownloadKml()"
+                                (onDownloadPdf)="onDownloadPdf()"
+                                (toggleFullTrailPageEvent)="toggleFullPageTrail()"
+                                (toggleNotificationListEvent)="toggleNotificationsModal()"
+                                (onNavigateToLocation)="navigateToLocation($event)">
+                        </app-map-trail-details>
+                    </div>
                 </div>
             </div>
 
@@ -90,7 +88,7 @@
                           [userPosition]="userPosition"
                           [highlightedLocation]="highlightedLocation"
                           (onViewChange)="geoLocateTrails($event)"
-                          (onTrailClick)="selectTrail($event)"
+                          (onTrailClick)="onSelectTrail($event)"
                           (onZoomChange)="onZoomChange($event)"
                           (onLoading)="onLoading()"
                           (onDoneLoading)="onDoneLoading()">

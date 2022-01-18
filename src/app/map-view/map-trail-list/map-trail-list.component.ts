@@ -18,8 +18,8 @@ export class MapTrailListComponent implements OnInit {
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {
-    console.log("selected" + selectedTrailPreview.code);
-    this.selectCodeEvent.emit(selectedTrailPreview.code);
+    console.log("selected" + selectedTrailPreview.id);
+    this.selectCodeEvent.emit(selectedTrailPreview.id);
   }
 
   

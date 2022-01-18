@@ -6,10 +6,10 @@ import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.servic
 
 @Component({
   selector: 'app-map-trail-details',
-  templateUrl: './map-trail-details.component.html',
-  styleUrls: ['./map-trail-details.component.scss']
+  templateUrl: './trail-details.component.html',
+  styleUrls: ['./trail-details.component.scss']
 })
-export class MapTrailDetailsComponent implements OnInit {
+export class TrailDetailsComponent implements OnInit {
 
   @Input() selectedTrail: TrailDto;
   @Input() trailNotifications: AccessibilityNotification[];

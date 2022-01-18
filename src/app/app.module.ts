@@ -19,7 +19,7 @@ import { LoadingPanelComponent } from "./loading-panel/loading-panel.component";
 import { MapPreviewComponent } from "./map-preview/map-preview.component";
 import { MapComponent } from "./map-view/map.component";
 import { MapFullComponent } from "./map-view/map-full/map-full.component";
-import { MapTrailDetailsComponent } from "./map-view/map-trail-details/map-trail-details.component";
+import { TrailDetailsComponent } from "./map-view/map-trail-details/trail-details.component";
 import { MapTrailListComponent } from "./map-view/map-trail-list/map-trail-list.component";
 import { MapTrailFullComponent } from "./map-view/map-trail-full-details/map-trail-full.component";
 import { AdminComponent } from "./admin/admin.component";
@@ -75,7 +75,7 @@ import { PlacePickerSelectorComponent } from './admin/trail-management/trail-upl
     TrailDetailPageComponent,
     MapFullComponent,
     MapTrailListComponent,
-    MapTrailDetailsComponent,
+    TrailDetailsComponent,
     LoadingPanelComponent,
     MapPreviewComponent,
     MapTrailFullComponent,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
 
 export type TrailPreviewResponse = components["schemas"]["TrailPreviewResponse"];
@@ -12,13 +12,25 @@ export type TrailPreview = components["schemas"]["TrailPreviewDto"];
 })
 export class TrailPreviewService {
 
-
   baseUrl = "api/preview";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private httpClient: HttpClient) { }
+
+  findByCode(code: string, skip: number, limit: number, realm?: string): Observable<TrailPreviewResponse> {
+    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    if (code == "") { return of() }
+    if (realm) {
+      params.append("realm", realm);
+    }
+    return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/find/code/" + code, { params: params })
+        .pipe(
+            tap(_ => console.log(_)),
+            catchError(this.handleError<TrailPreviewResponse>('find previews by code', null))
+        );
+  }
 
 
   getPreview(id: string): Observable<TrailPreviewResponse> {
@@ -66,4 +78,6 @@ export class TrailPreviewService {
       return of(result as T);
     };
   }
+
+
 }
