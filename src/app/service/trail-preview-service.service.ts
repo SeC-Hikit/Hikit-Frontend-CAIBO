@@ -23,7 +23,7 @@ export class TrailPreviewService {
     findByCode(code: string, skip: number, limit: number, realm?: string): Observable<TrailPreviewResponse> {
         let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
         if (code == "") {
-            return this.getPreviews(0, limit, realm);
+            return this.getPreviews(skip, limit, realm);
         }
         if (realm) {
             params.append("realm", realm);

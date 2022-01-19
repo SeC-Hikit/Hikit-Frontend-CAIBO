@@ -11,7 +11,7 @@
                         <div class="col-11">
                             <input type="text" class="search-box"
                                    placeholder="Cerca per codice sentiero (e.g: 100)"
-                                    (keyup)="onSearchKeyPress($event)"
+                                   (keyup)="onSearchKeyPress($event)"
                             >
                         </div>
                     </div>
@@ -32,10 +32,10 @@
                     <div *ngIf="sideView=='NONE'">
                         <div class="row align-middle">
                             <div class="col-md-12">
-                                <p>Benvenuto su S&C!</p>
+                                <p>S&C v0.5</p>
                                 <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
                                         class="clickable"
-                                        (click)="loadFullList()">lista di sentieri del {{sectionName}}</span>
+                                        (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
                                 </p>
                             </div>
                             <div class="col-md-12">
@@ -49,9 +49,20 @@
                                 (selectCodeEvent)="onSelectTrail($event)"
                         >
                         </app-map-trail-list>
+                        <div class="pagination-position">
+                            <ngb-pagination
+                                    [pageSize]="maxTrailEntriesPerPage"
+                                    [collectionSize]="trailPreviewCount"
+                                    [(page)]="trailPreviewPage"
+                                    [size]="'sm'"
+                                    [ellipses]="true"
+                                    aria-label="Default pagination"
+                                    (pageChange)="loadTrailPreview($event)"
+                            ></ngb-pagination>
+                        </div>
                     </div>
                     <div *ngIf="sideView=='TRAIL'" class="top-margin">
-                        <div class="navigation-back clickable" (click)="loadFullList()">
+                        <div class="navigation-back clickable" (click)="showTrailList()">
                             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
@@ -64,6 +75,7 @@
                                 [selectedTrail]="selectedTrail"
                                 [trailNotifications]="trailNotifications"
                                 [lastMaintenance]="lastMaintenance"
+                                [isCycloSwitchOn]="isCycloToggled"
                                 (onDownloadGpx)="onDownloadGpx()"
                                 (onDownloadKml)="onDownloadKml()"
                                 (onDownloadPdf)="onDownloadPdf()"

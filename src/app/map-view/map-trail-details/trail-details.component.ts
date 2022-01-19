@@ -6,7 +6,6 @@ import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.servic
 import {ChartUtils} from "../ChartUtils";
 import * as Chart from "chart.js";
 import {ChartOptions} from "chart.js";
-import {GraphicUtils} from "../../utils/GraphicUtils";
 
 @Component({
   selector: 'app-map-trail-details',
@@ -18,9 +17,12 @@ export class TrailDetailsComponent implements OnInit {
   private chart: Chart;
   private chartOptions: ChartOptions;
 
+  private showIntermediateLocations: boolean = false;
+
   @Input() selectedTrail: TrailDto;
   @Input() trailNotifications: AccessibilityNotification[];
   @Input() lastMaintenance: Maintenance;
+  @Input() isCycloSwitchOn: boolean;
 
   @Output() toggleFullTrailPageEvent = new EventEmitter<void>();
   @Output() toggleNotificationListEvent = new EventEmitter<void>();

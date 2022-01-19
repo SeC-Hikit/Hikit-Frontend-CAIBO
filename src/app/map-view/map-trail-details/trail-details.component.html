@@ -18,7 +18,10 @@
                         <h4>Lunghezza</h4>
                     </div>
                     <div class="col-6">
-                        <span> {{ selectedTrail.classification }}</span>
+                        <span>{{ selectedTrail.classification }}</span>
+                        <span *ngIf="isCycloSwitchOn"> / </span>
+                        <span>{{ selectedTrail.cycloDetails.cycloClassification == "UNCLASSIFIED" ?
+                            "ND" : selectedTrail.cycloDetails.cycloClassification }}</span>
                     </div>
                     <div class="col-6">
                         <div>{{ getDistance() }}m</div>
@@ -36,6 +39,7 @@
                     </div>
                     <div class="col-6">
                         <span>Circa {{ selectedTrail.statsTrailMetadata.eta | eta }}</span>
+                        <span *ngIf="isCycloSwitchOn && selectedTrail.cycloDetails.officialEta">/ {{ selectedTrail.cycloDetails.officialEta | eta }}</span>
                     </div>
                     <div class="col-6">
                         <div>
@@ -70,6 +74,67 @@
                     </div>
                     <div class="col-12">
                         <div [innerHTML]="selectedTrail.description"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="isCycloSwitchOn && selectedTrail.cycloDetails.description != ''">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Dettagli ciclistici</h4>
+                    </div>
+                    <div class="col-12">
+                        <div [innerHTML]="selectedTrail.cycloDetails.description"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Percorribilità</h4>
+                    </div>
+                    <div class="col-12">
+                        <span (click)="moveTo(selectedTrail.startLocation.coordinates)" class="clickable"><span
+                                class="arrow down"></span>{{
+                            selectedTrail.startLocation.name }}</span>
+                        <span> → </span>
+                        <span (click)="moveTo(selectedTrail.endLocation.coordinates)" class="clickable"><span
+                                class="arrow down"></span>{{
+                            selectedTrail.endLocation.name }}
+                        </span>
+                        <span *ngIf="selectedTrail.cycloDetails.cycloClassification != 'UNCLASSIFIED'">
+                            <span *ngIf="selectedTrail.cycloDetails.wayBack.feasible">
+                                <svg class="bi" width="24" height="24">
+                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
+                                </svg>
+                            </span>
+                            <span *ngIf="!selectedTrail.cycloDetails.wayBack.feasible">
+                                <svg class="bi" width="24" height="24">
+                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill"/>
+                                </svg>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="col-12">
+                        <span (click)="moveTo(selectedTrail.endLocation.coordinates)" class="clickable"><span
+                                class="arrow down"></span>{{
+                            selectedTrail.endLocation.name }}
+                        </span>
+                        <span> → </span>
+                        <span (click)="moveTo(selectedTrail.startLocation.coordinates)" class="clickable"><span
+                                class="arrow down"></span>{{
+                            selectedTrail.startLocation.name }}
+                        </span>
+                        <span *ngIf="selectedTrail.cycloDetails.cycloClassification != 'UNCLASSIFIED'">
+                            <span *ngIf="selectedTrail.cycloDetails.wayBack.feasible">
+                                <svg class="bi" width="24" height="24">
+                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
+                                </svg>
+                            </span>
+                            <span *ngIf="!selectedTrail.cycloDetails.wayBack.feasible">
+                                <svg class="bi" width="24" height="24">
+                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill"/>
+                                </svg>
+                            </span>
+                        </span>
+
                     </div>
                 </div>
             </div>
@@ -121,7 +186,7 @@
                         <h4>Download</h4>
                     </div>
                     <div class="col-12">
-                        <div class="row">
+                        <div class="row clickable">
                             <div class="col-md-2">
                                 <a (click)="onDownloadGpxClick()" target="_blank">
                                     <svg class="bi" width="24" height="24" fill="red">
@@ -153,7 +218,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="row">
+                        <div class="row clickable">
                             <div class="col-md-2">
                                 <a (click)="onDownloadPdfClick()" target="_blank">
                                     <svg class="bi" width="24" height="24" fill="red">
@@ -182,19 +247,21 @@
             </div>
 
             <!--            <div class="col-12">-->
-<!--                <div class="row">-->
-<!--                    <div class="col-12">-->
-<!--                        <h4>Sentieri collegati</h4>-->
-<!--                    </div>-->
-<!--                    <div class="col-12">-->
-<!--                        <ul>-->
-<!--                            <li class="trailCodeColumn">BO123</li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--                <div class="row">-->
+            <!--                    <div class="col-12">-->
+            <!--                        <h4>Sentieri collegati</h4>-->
+            <!--                    </div>-->
+            <!--                    <div class="col-12">-->
+            <!--                        <ul>-->
+            <!--                            <li class="trailCodeColumn">BO123</li>-->
+            <!--                        </ul>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <div class="col-11">
-                <button type="button" class="btn btn-outline-warning" (click)="onReportIssueToTrailClick()">Riporta un problema di percorrenza</button>
+                <button type="button" class="btn btn-outline-warning" (click)="onReportIssueToTrailClick()">Riporta un
+                    problema di percorrenza
+                </button>
             </div>
         </div>
     </div>

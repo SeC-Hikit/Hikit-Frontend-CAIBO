@@ -24,8 +24,7 @@ export class MapFullComponent implements OnInit {
 
     timeIntervalMsBeforeTrigger : number = 600;
     intervalObject: number;
-
-    selectionCircle
+    selectionCircle;
 
     map: L.Map;
     selectedLayer: L.TileLayer;
@@ -71,9 +70,7 @@ export class MapFullComponent implements OnInit {
             );
 
         L.control.scale({position: 'topright'}).addTo(this.map);
-
         L.geoJSON(MapUtils.getERShape()).addTo(this.map);
-        this.emitBounds()
         this.attachEventListeners();
         this.onDoneLoading.emit();
     }
@@ -155,14 +152,14 @@ export class MapFullComponent implements OnInit {
                     this.focusOnUser(this.userPosition)
                 }
                 if (propName == "highlightedLocation") {
-                    this.focusOnLocation(this.highlightedLocation)
+                    this.flyToLocation(this.highlightedLocation)
                 }
             }
         }
         this.onDoneLoading.emit();
     }
 
-    focusOnLocation(highlightedLocation: TrailCoordinates) {
+    flyToLocation(highlightedLocation: TrailCoordinates) {
         this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude});
     }
 
@@ -301,7 +298,9 @@ export class MapFullComponent implements OnInit {
         console.log(selectedTrailIndex);
         if (this.selectedTrailIndex >= 0 && this.selectedTrailIndex <
             this.selectedTrail.coordinates.length) {
-            this.focusOnLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
+
+            this.map.setZoom(14, {animate: true});
+            this.flyToLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
             this.highlightLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
         }
     }

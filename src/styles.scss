@@ -48,11 +48,20 @@ li,
 button,
 .upload-button-management__label {
   font-family: "Bebas Neue", cursive;
-  letter-spacing: 0px !important;
+  letter-spacing: 0 !important;
 }
 
 .btn-outline-warning {
   background: white !important;
+}
+
+.active a {
+  color: $secondary-bg-color !important;
+  font-size: smaller;
+}
+
+.pagination .page-item {
+  margin-right: 0 !important;
 }
 
 .navbar-nav {
@@ -123,6 +132,7 @@ table {
     border-radius: 5px;
     color: white;
   }
+
   .ellipsis {
     white-space: nowrap;
     overflow: hidden;
@@ -196,3 +206,4 @@ select {
 .modal-dialog {
   min-width: 60% !important;
 }
+

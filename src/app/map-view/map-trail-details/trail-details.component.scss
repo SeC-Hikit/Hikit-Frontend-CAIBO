@@ -16,6 +16,10 @@
 
   .clickable {
     cursor: pointer;
+    color: $primary-bg-color;
+  }
+  .clickable:hover {
+    color: $secondary-bg-color;
   }
 
   ul li {

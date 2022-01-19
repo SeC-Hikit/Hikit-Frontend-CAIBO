@@ -35,7 +35,7 @@ export class MapComponent implements OnInit {
     static MAP_ID = "map-full";
 
 
-    static MAX_TRAIL_ENTRIES_PER_PAGE = 15;
+    maxTrailEntriesPerPage = 10;
 
     sectionName = environment.publicName;
 
@@ -43,7 +43,11 @@ export class MapComponent implements OnInit {
 
     isCycloToggled = true;
     // Bound elements
+    searchTermString: string = "";
     trailPreviewList: TrailPreview[];
+    trailPreviewCount: number = 0;
+    trailPreviewPage: number = 0;
+
     selectedTrail: TrailDto;
     trailList: TrailDto[];
 
@@ -85,18 +89,26 @@ export class MapComponent implements OnInit {
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
             debounceTime(1000),
             distinctUntilChanged(),
-            switchMap((data: string,) => this.getTrailPreviewResponseObservable(data)));
+            switchMap((data: string,) => {
+                this.searchTermString = data;
+                return this.getTrailPreviewResponseObservable(data, 0)
+            }));
 
         observable.subscribe(
             (resp) => {
                 this.trailPreviewList = resp.content;
+                this.trailPreviewCount = resp.totalCount;
                 this.showListOnSide();
             });
     }
 
-    private getTrailPreviewResponseObservable(data: string): Observable<TrailPreviewResponse> {
-        return this.trailPreviewService.findByCode(data, 0,
-            MapComponent.MAX_TRAIL_ENTRIES_PER_PAGE, environment.realm);
+    private getTrailPreviewResponseObservable(code: string, page: number): Observable<TrailPreviewResponse> {
+        return this.trailPreviewService.findByCode(code, page * this.maxTrailEntriesPerPage,
+            this.maxTrailEntriesPerPage * this.getNextPageNumber(page), environment.realm);
+    }
+
+    private getNextPageNumber(page: number) {
+        return page + 1;
     }
 
     private handleQueryParam() {
@@ -118,15 +130,23 @@ export class MapComponent implements OnInit {
             queryParams: {trail: id},
             queryParamsHandling: 'merge'
         });
-        this.selectTrail(id);
+        this.selectTrail(id, true);
     }
 
-    selectTrail(_id: string): void {
-        let singletonTrail = this.trailList.filter(t => t.id == _id);
+    selectTrail(id: string, refresh? : boolean): void {
+        let singletonTrail = this.trailList.filter(t => t.id == id);
 
         if (singletonTrail.length > 0) {
             this.sideView = ViewState.TRAIL;
             this.selectedTrail = singletonTrail[0];
+            return;
+        }
+
+        if(refresh) {
+            this.trailService.getTrailById(id).subscribe((resp)=> {
+                this.sideView = ViewState.TRAIL;
+                this.selectedTrail = resp.content[0];
+            })
         }
     }
 
@@ -194,13 +214,6 @@ export class MapComponent implements OnInit {
         this.highlightedLocation = location;
     }
 
-    toggleAllTrails(): void {
-        this.isAllTrailVisible = !this.isAllTrailVisible;
-        if (this.trailList.length == 0 && this.isAllTrailVisible) {
-            // this.loadAllTrails();
-        }
-    }
-
     geoLocateTrails($event: RectangleDto) {
         if (!$event) {
             return;
@@ -232,11 +245,9 @@ export class MapComponent implements OnInit {
         return fileName.code + "_" + fileName.id;
     }
 
-    loadFullList() {
-        this.trailPreviewService.getPreviews(0, 10).subscribe(previewResponse => {
-            this.trailPreviewList = previewResponse.content;
-            this.showListOnSide();
-        });
+    showTrailList() {
+        this.loadTrailPreview(0 );
+        this.showListOnSide();
     }
 
     private showListOnSide() {
@@ -268,5 +279,14 @@ export class MapComponent implements OnInit {
                 queryParams: {trail: trailId},
                 queryParamsHandling: 'merge'
             });
+    }
+
+    loadTrailPreview(page: number) {
+        this.trailPreviewPage = page;
+        this.getTrailPreviewResponseObservable(
+            this.searchTermString, page - 1).subscribe((resp)=> {
+                this.trailPreviewCount = resp.totalCount;
+                this.trailPreviewList = resp.content;
+        })
     }
 }
