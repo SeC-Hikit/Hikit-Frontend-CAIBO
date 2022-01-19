@@ -3,7 +3,7 @@ import 'leaflet';
 import {LatLngBounds, LeafletEvent, LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
 import {RectangleDto} from 'src/app/service/geo-trail-service';
-import {TrailDto, TrailCoordinates} from 'src/app/service/trail-service.service';
+import {TrailDto, TrailCoordinates, CoordinatesDto} from 'src/app/service/trail-service.service';
 import {UserCoordinates} from 'src/app/UserCoordinates';
 import {GraphicUtils} from 'src/app/utils/GraphicUtils';
 import {MapUtils} from '../MapUtils';
@@ -20,8 +20,12 @@ export class MapFullComponent implements OnInit {
 
     private static MAP_ID: string = "map-full"
 
-    timeIntervalMsBeforeTrigger = 600;
+    private static CIRCLE_SIZE : number = 40;
+
+    timeIntervalMsBeforeTrigger : number = 600;
     intervalObject: number;
+
+    selectionCircle
 
     map: L.Map;
     selectedLayer: L.TileLayer;
@@ -38,6 +42,7 @@ export class MapFullComponent implements OnInit {
     @Input() tileLayerName: string;
     @Input() highlightedLocation: TrailCoordinates;
     @Input() startingZoomLevel: number;
+    @Input() selectedTrailIndex?: number;
 
     @Output() onTrailClick = new EventEmitter<string>();
     @Output() onViewChange = new EventEmitter<RectangleDto>();
@@ -61,9 +66,9 @@ export class MapFullComponent implements OnInit {
         })
         this.map = L.map(MapFullComponent.MAP_ID, {layers: [this.selectedLayer], maxZoom: 17})
             .setView(
-            [44.498955, 11.327591],
-            this.startingZoomLevel
-        );
+                [44.498955, 11.327591],
+                this.startingZoomLevel
+            );
 
         L.control.scale({position: 'topright'}).addTo(this.map);
 
@@ -126,7 +131,7 @@ export class MapFullComponent implements OnInit {
         document.getElementById(MapFullComponent.MAP_ID).style.height = fullSizeWOBorder.toString() + "px";
         document.getElementById(MapFullComponent.MAP_ID).style.height = fullSizeWOBorder.toString() + "px";
 
-        console.log(mapHeight)
+        // console.log(mapHeight)
         this.map.invalidateSize();
     }
 
@@ -134,6 +139,9 @@ export class MapFullComponent implements OnInit {
         this.onLoading.emit();
         if (this.isInitialized()) {
             for (const propName in changes) {
+                if (propName == "selectedTrailIndex") {
+                    this.focusOnLocationIndex(this.selectedTrailIndex);
+                }
                 if (propName == "tileLayerName") {
                     this.renderTileLayer(this.tileLayerName)
                 }
@@ -155,7 +163,6 @@ export class MapFullComponent implements OnInit {
     }
 
     focusOnLocation(highlightedLocation: TrailCoordinates) {
-        console.log(highlightedLocation);
         this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude});
     }
 
@@ -198,7 +205,7 @@ export class MapFullComponent implements OnInit {
     }
 
     dehighlightTrail(trailToPoly: TrailToPolyline): LeafletMouseEventHandlerFn {
-         return () => {
+        return () => {
             trailToPoly.getPolyline().setStyle(
                 MapUtils.getLineStyle(false,
                     trailToPoly.getClassification()));
@@ -206,14 +213,14 @@ export class MapFullComponent implements OnInit {
     }
 
     highlightTrail(trailToPoly: TrailToPolyline): LeafletMouseEventHandlerFn {
-        return ()=> {
+        return () => {
             trailToPoly
                 .getPolyline()
                 .setStyle({
-                color: 'yellow',
-                opacity: 3,
-                weight: 5
-            });
+                    color: 'yellow',
+                    opacity: 3,
+                    weight: 5
+                });
         }
     }
 
@@ -278,6 +285,25 @@ export class MapFullComponent implements OnInit {
         }
     }
 
+    private highlightLocation(coordinate: CoordinatesDto) {
+        if (this.selectionCircle) {
+            this.map.removeLayer(this.selectionCircle);
+        }
+        this.selectionCircle = L.circle(
+            [coordinate.latitude, coordinate.longitude],
+            {radius: MapFullComponent.CIRCLE_SIZE, color: "red"})
+            .addTo(this.map);
+        this.map.addLayer(this.selectionCircle);
+    }
 
+
+    private focusOnLocationIndex(selectedTrailIndex: number) {
+        console.log(selectedTrailIndex);
+        if (this.selectedTrailIndex >= 0 && this.selectedTrailIndex <
+            this.selectedTrail.coordinates.length) {
+            this.focusOnLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
+            this.highlightLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
+        }
+    }
 
 }

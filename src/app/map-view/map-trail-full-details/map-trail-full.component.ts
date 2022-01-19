@@ -31,7 +31,7 @@ export class MapTrailFullComponent implements OnInit {
 
   ngOnInit(): void {
     this.onLoading.emit();
-    this.chartOptions = ChartUtils.getChartOptions();
+    // this.chartOptions = ChartUtils.getChartOptions();
     this.chart = new Chart("chartHike", {
       type: "line",
       options: this.chartOptions,

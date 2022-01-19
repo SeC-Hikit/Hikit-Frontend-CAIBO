@@ -2,6 +2,10 @@ import { Chart, ChartOptions } from 'chart.js';
 
 export class ChartUtils {
 
+    private static DEBOUNCE_TIME = 300;
+    private static interval : ReturnType<typeof setTimeout> = null;
+
+
     static clearChart(chart: Chart) {
         chart.data.datasets.forEach((dataset) => {
             dataset.data.pop();
@@ -9,7 +13,7 @@ export class ChartUtils {
         chart.update();
     }
 
-    public static getChartOptions(): ChartOptions {
+    public static getChartOptions( onHoverCallback: (index: number) => void ): ChartOptions {
         return {
             tooltips: {
                 enabled: true,
@@ -18,11 +22,19 @@ export class ChartUtils {
             hover: {
                 mode: 'nearest',
                 intersect: false,
-                onHover: function (e, item) {
-                    if (item.length) {
-                        // TODO
-                        console.log(item, "");
+                onHover: function (e, item: any[]) {
+                    if(ChartUtils.interval) {
+                        clearTimeout(ChartUtils.interval);
                     }
+
+                    ChartUtils.interval = setTimeout(
+                        ()=> {
+                            if (item.length) {
+                                console.log(item);
+                                onHoverCallback(item[0]._index)
+                            }
+                        },
+                        ChartUtils.DEBOUNCE_TIME);
                 }
             },
             maintainAspectRatio: true,

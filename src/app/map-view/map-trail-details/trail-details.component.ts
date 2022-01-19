@@ -6,6 +6,7 @@ import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.servic
 import {ChartUtils} from "../ChartUtils";
 import * as Chart from "chart.js";
 import {ChartOptions} from "chart.js";
+import {GraphicUtils} from "../../utils/GraphicUtils";
 
 @Component({
   selector: 'app-map-trail-details',
@@ -27,6 +28,10 @@ export class TrailDetailsComponent implements OnInit {
   @Output() onDownloadKml = new EventEmitter<void>();
   @Output() onDownloadPdf = new EventEmitter<void>();
   @Output() onNavigateToLocation = new EventEmitter<TrailCoordinates>();
+  @Output() onNavigateToSelectedTrailCoordIndex = new EventEmitter<number>();
+  @Output() onNavigateToTrailReportIssue = new EventEmitter<string>();
+
+
 
   constructor() {}
 
@@ -34,11 +39,16 @@ export class TrailDetailsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.chartOptions = ChartUtils.getChartOptions();
+    this.chartOptions = ChartUtils.getChartOptions(
+        (number)=> this.onHoverAltiGraph(number));
     this.chart = new Chart("hikeChart", {
       type: "line",
       options: this.chartOptions,
     });
+  }
+
+  onHoverAltiGraph(index: number) : void {
+    this.onNavigateToSelectedTrailCoordIndex.emit(index);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -49,7 +59,9 @@ export class TrailDetailsComponent implements OnInit {
   }
 
   updateChart(): void {
-    if(!this.chart) { setTimeout(()=> this.updateChart(), 150); }
+    if(!this.chart) {
+      setTimeout(()=> this.updateChart(), 150);
+      return; }
     ChartUtils.clearChart(this.chart);
     let altitudeDataPoints = this.selectedTrail.coordinates.map(c => c.altitude);
     this.chart.data.labels = this.selectedTrail.coordinates.map(c => c.distanceFromTrailStart + "m");
@@ -103,6 +115,6 @@ export class TrailDetailsComponent implements OnInit {
   }
 
   onReportIssueToTrailClick() {
-
+    this.onNavigateToTrailReportIssue.emit(this.selectedTrail.id);
   }
 }

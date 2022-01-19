@@ -34,4 +34,13 @@ export class GraphicUtils {
   public static getFullHeightSizeWOMenuImage() {
     return document.documentElement.clientHeight;
   }
+
+  public static getFullHeightSizeWOMenuHeights() {
+    let headerWrapperHeight = document.getElementById("header-wrapper")
+        .offsetHeight;
+    let slimHeaderWrapHeight = document.getElementById("header-slim-wrapper")
+        .offsetHeight;
+    let number = headerWrapperHeight + slimHeaderWrapHeight;
+    return document.documentElement.clientHeight - number;
+  }
 }

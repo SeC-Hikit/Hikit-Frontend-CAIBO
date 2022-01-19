@@ -31,9 +31,11 @@ export enum TrailSimplifierLevel {
 })
 export class MapComponent implements OnInit {
 
-    static TRAIL_DETAILS_ID = "trail-detail-column";
+    static TRAIL_DETAILS_ID = "side-column";
+    static MAP_ID = "map-full";
 
-    static MAX_TRAIL_ENTRIES_PER_PAGE = 25;
+
+    static MAX_TRAIL_ENTRIES_PER_PAGE = 15;
 
     sectionName = environment.publicName;
 
@@ -62,6 +64,7 @@ export class MapComponent implements OnInit {
 
     zoomLevel = 12;
     sideView = ViewState.NONE;
+    selectedTrailIndex: number = 0;
 
     constructor(
         private trailService: TrailService,
@@ -78,7 +81,6 @@ export class MapComponent implements OnInit {
         this.trailPreviewList = [];
         this.trailList = [];
         this.handleQueryParam();
-
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
             debounceTime(1000),
@@ -103,10 +105,11 @@ export class MapComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-        let fullSize = GraphicUtils.getFullHeightSizeWOMenuImage();
+        let fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
         console.log(fullSize);
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
+        document.getElementById(MapComponent.MAP_ID).style.height = fullSize.toString() + "px";
     }
 
     onSelectTrail(id: string) {
@@ -251,7 +254,19 @@ export class MapComponent implements OnInit {
         this.isCycloToggled = !this.isCycloToggled;
     }
 
+    navigateToSelectedTrailIndex(index: number) {
+        this.selectedTrailIndex = index;
+    }
+
     onSearchKeyPress($event) {
         this.searchTerms.next($event.target.value);
+    }
+
+    navigateToTrailReportIssue(trailId: string) {
+        this.router.navigate(["accessibility", "reporting-form"],
+            {
+                queryParams: {trail: trailId},
+                queryParamsHandling: 'merge'
+            });
     }
 }
