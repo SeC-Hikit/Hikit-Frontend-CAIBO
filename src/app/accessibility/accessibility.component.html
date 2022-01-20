@@ -4,59 +4,36 @@
             <h1>
                 Percorribilità dei sentieri
             </h1>
-            <p>Hai notato un problema che blocca un percorso? <a routerLink="./reporting-form">Segnalacelo.</a></p>
+            <p>Hai notato un problema che blocca un sentiero? <a routerLink="./reporting-form">Segnalalo.</a></p>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-12">
+            <table *ngIf="unresolvedNotifications.length > 0; else notShow"
+                   class="table table-striped interactive-table">
+                <thead>
+                <tr>
+                    <th scope="col">Codice sentiero</th>
+                    <th scope="col">Data Segnalazione</th>
+                    <th scope="col">Descrizione Problema</th>
+                    <th scope="col">Aggirabile?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let notification of unresolvedNotifications">
+                    <th class="clickable" routerLink='/map/{{notification.trailId}}'
+                        scope="row">{{ notification.trailId }}</th>
+                    <td>{{ formatDate(notification.reportDate) }}</td>
+                    <td>{{ notification.description }}</td>
+                    <td>{{ notification.minor ? 'si' : 'no' }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <ng-template #notShow>
+                <app-items-not-found class="top-margin-x2"
+                        text="✔️ Nessun problema di percorrenza trovato."></app-items-not-found>
+            </ng-template>
         </div>
     </div>
 </div>
-
-<!-- 
-<table *ngIf="unresolvedNotifications.length > 0; else notShow" class="table table-striped interactive-table">
-    <thead>
-        <tr>
-            <th scope="col">Codice sentiero</th>
-            <th scope="col">Data Segnalazione</th>
-            <th scope="col">Descrizione Problema</th>
-            <th scope="col">Aggirabile?</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let notification of unresolvedNotifications">
-            <th class="clickable" routerLink='/map/{{notification.code}}' scope="row">{{ notification.code }}</th>
-            <td>{{ formatDate(notification.reportDate) }}</td>
-            <td>{{ notification.description }}</td>
-            <td>{{ notification.isMinor ? 'si' : 'no' }}</td>
-        </tr>
-    </tbody>
-</table>
-<ng-template #notShow>
-    <p>
-        Non ci sono ancora notifiche di percorrenza da mostrare.
-    </p>
-</ng-template>
-</div>
-<div class="col-12 col-md-12">
-<h1>Risoluzioni</h1>
-<table *ngIf="solvedNotifications.length > 0; else notShow" class="table table-striped interactive-table">
-    <thead>
-        <tr>
-            <th scope="col">Codice sentiero</th>
-            <th scope="col">Data segnalazione</th>
-            <th scope="col">Descrizione Problema</th>
-            <th scope="col">Data risoluzione</th>
-            <th scope="col">Risoluzione</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of solvedNotifications">
-            <th scope="row">{{ item.code }}</th>
-            <td>{{ formatDate(item.reportDate) }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ formatDate(item.resolutionDate) }}</td>
-            <td>{{ item.resolution }}</td>
-    </tbody>
-</table>
-<ng-template #notShow>
-    <p>
-        Non ci sono ancora notifiche di percorrenza da mostrare.
-    </p>
-</ng-template> -->

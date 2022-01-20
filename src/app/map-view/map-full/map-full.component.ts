@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import 'leaflet';
-import {LatLngBounds, LeafletEvent, LeafletMouseEventHandlerFn} from 'leaflet';
+import {LatLngBounds, LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
 import {RectangleDto} from 'src/app/service/geo-trail-service';
 import {TrailDto, TrailCoordinates, CoordinatesDto} from 'src/app/service/trail-service.service';
@@ -20,9 +20,9 @@ export class MapFullComponent implements OnInit {
 
     private static MAP_ID: string = "map-full"
 
-    private static CIRCLE_SIZE : number = 40;
+    private static CIRCLE_SIZE: number = 40;
 
-    timeIntervalMsBeforeTrigger : number = 600;
+    timeIntervalMsBeforeTrigger: number = 600;
     intervalObject: number;
     selectionCircle;
 
@@ -30,6 +30,7 @@ export class MapFullComponent implements OnInit {
     selectedLayer: L.TileLayer;
     selectedTrailLayer: L.Polyline;
     selectedMarkerLayer: L.Marker;
+    trailCodeMarkers: L.Marker[] = [];
 
     otherTrailsPolylines: TrailToPolyline[];
 
@@ -41,6 +42,7 @@ export class MapFullComponent implements OnInit {
     @Input() tileLayerName: string;
     @Input() highlightedLocation: TrailCoordinates;
     @Input() startingZoomLevel: number;
+    @Input() showTrailCodeMarkers: boolean;
     @Input() selectedTrailIndex?: number;
 
     @Output() onTrailClick = new EventEmitter<string>();
@@ -139,6 +141,9 @@ export class MapFullComponent implements OnInit {
                 if (propName == "selectedTrailIndex") {
                     this.focusOnLocationIndex(this.selectedTrailIndex);
                 }
+                if (propName == "showTrailCodeMarkers") {
+                    this.toggleTrailMarkers(this.showTrailCodeMarkers);
+                }
                 if (propName == "tileLayerName") {
                     this.renderTileLayer(this.tileLayerName)
                 }
@@ -175,12 +180,13 @@ export class MapFullComponent implements OnInit {
     renderTrail(selectedTrail: TrailDto) {
         // Shall take the polyline from the full list - do not instantiate a new polyline each tim
         // USE restorePathFromList(x);
+        if (this.selectionCircle) {
+            this.map.removeLayer(this.selectionCircle);
+        }
         this.clearPreviouslySelectedLayer();
         this.clearPathFromList(selectedTrail);
         let polyline = L.polyline(MapUtils.getCoordinatesInverted(selectedTrail.coordinates));
         polyline.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
-        polyline.setText(MapUtils.generateTextForMap(selectedTrail.code), MapUtils.getTextStyle(true));
-        polyline.bindPopup(selectedTrail.code);
         polyline.addTo(this.map);
         this.map.fitBounds(polyline.getBounds());
     }
@@ -195,7 +201,7 @@ export class MapFullComponent implements OnInit {
         });
         this.otherTrailsPolylines.forEach(trailToPoly => {
             trailToPoly.getPolyline().addTo(this.map)
-            trailToPoly.getPolyline().on("click", this.onSelectTrail(trailToPoly));
+            trailToPoly.getPolyline().on("click", ()=> { this.onSelectTrail(trailToPoly.getId()) });
             trailToPoly.getPolyline().on("mouseover", this.highlightTrail(trailToPoly));
             trailToPoly.getPolyline().on("mouseout", this.dehighlightTrail(trailToPoly));
         });
@@ -221,10 +227,10 @@ export class MapFullComponent implements OnInit {
         }
     }
 
-    onSelectTrail(trailToPoly: TrailToPolyline) {
+    onSelectTrail(id: string) {
         let codeEmitter = this.onTrailClick;
         return function () {
-            codeEmitter.emit(trailToPoly.getId())
+            codeEmitter.emit(id)
         };
     }
 
@@ -260,6 +266,26 @@ export class MapFullComponent implements OnInit {
         return this.map != null;
     }
 
+    showTrailMarkers() {
+        this.trailList.forEach((trail => {
+            let middleCoordinateInTrail = MapFullComponent.getMiddleCoordinateInTrail(trail);
+            let icon = MapUtils.getTrailIcon(trail.code);
+            let marker =
+                L.marker([middleCoordinateInTrail.latitude,
+                    middleCoordinateInTrail.longitude], {icon: icon});
+            marker.on("click", this.onSelectTrail(trail.id))
+            this.trailCodeMarkers.push(marker);
+            marker.addTo(this.map)
+        }))
+    }
+
+    removeTrailMarkers() {
+        this.trailCodeMarkers
+            .forEach((tcm) => {
+                this.map.removeLayer(tcm);
+            })
+    }
+
     getLayerByName(layerName: string): L.TileLayer {
         switch (layerName) {
             case "topo":
@@ -293,7 +319,6 @@ export class MapFullComponent implements OnInit {
         this.map.addLayer(this.selectionCircle);
     }
 
-
     private focusOnLocationIndex(selectedTrailIndex: number) {
         console.log(selectedTrailIndex);
         if (this.selectedTrailIndex >= 0 && this.selectedTrailIndex <
@@ -305,4 +330,18 @@ export class MapFullComponent implements OnInit {
         }
     }
 
+    private static getMiddleCoordinateInTrail(selectedTrail: TrailDto): CoordinatesDto {
+        let number = Math.ceil(selectedTrail.coordinates.length / 2);
+        return selectedTrail.coordinates[number];
+    }
+
+    private toggleTrailMarkers(showTrailCodeMarkers: boolean) {
+        if (showTrailCodeMarkers) {
+            console.log("Showing trail markers")
+            this.showTrailMarkers();
+            return;
+        }
+        console.log("Not showing trail markers")
+        this.removeTrailMarkers();
+    }
 }

@@ -207,3 +207,27 @@ select {
   min-width: 60% !important;
 }
 
+#map-full {
+
+  .trailmap-marker {
+    width: max-content;
+  }
+
+  .code {
+    font-size: 10px;
+  }
+
+  .red {
+    float: left;
+    width: 18px;
+    height: 20px;
+    background: $error-color;
+  }
+
+  .white {
+    float: left;
+    height: 20px;
+    background: white;
+    padding: 2.5px 5px;
+  }
+}

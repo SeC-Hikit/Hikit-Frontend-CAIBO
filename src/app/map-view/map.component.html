@@ -73,7 +73,7 @@
                         </div>
                         <app-map-trail-details
                                 [selectedTrail]="selectedTrail"
-                                [trailNotifications]="trailNotifications"
+                                [trailNotifications]="selectedTrailNotifications"
                                 [lastMaintenance]="lastMaintenance"
                                 [isCycloSwitchOn]="isCycloToggled"
                                 (onDownloadGpx)="onDownloadGpx()"
@@ -102,6 +102,7 @@
                           [trailList]="trailList"
                           [startingZoomLevel]="zoomLevel"
                           [userPosition]="userPosition"
+                          [showTrailCodeMarkers]="showTrailCodeMarkers"
                           [highlightedLocation]="highlightedLocation"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"

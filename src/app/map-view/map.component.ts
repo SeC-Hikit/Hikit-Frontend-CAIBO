@@ -53,7 +53,7 @@ export class MapComponent implements OnInit {
 
     selectedTileLayer: string;
     selectedTrailBinaryPath: string;
-    trailNotifications: AccessibilityNotification[];
+    selectedTrailNotifications: AccessibilityNotification[];
     lastMaintenance: Maintenance;
     userPosition: UserCoordinates;
     highlightedLocation: TrailCoordinates;
@@ -69,6 +69,7 @@ export class MapComponent implements OnInit {
     zoomLevel = 12;
     sideView = ViewState.NONE;
     selectedTrailIndex: number = 0;
+    showTrailCodeMarkers: boolean;
 
     constructor(
         private trailService: TrailService,
@@ -139,20 +140,22 @@ export class MapComponent implements OnInit {
         if (singletonTrail.length > 0) {
             this.sideView = ViewState.TRAIL;
             this.selectedTrail = singletonTrail[0];
-            return;
         }
 
-        if(refresh) {
+        if(refresh || singletonTrail.length == 0) {
             this.trailService.getTrailById(id).subscribe((resp)=> {
                 this.sideView = ViewState.TRAIL;
                 this.selectedTrail = resp.content[0];
+
             })
         }
+
+        this.loadNotificationsForTrail(id);
     }
 
     loadNotificationsForTrail(code: string): void {
         this.accessibilityService.getUnresolvedByTrailByCode(code).subscribe(notificationResponse => {
-            this.trailNotifications = notificationResponse.content
+            this.selectedTrailNotifications = notificationResponse.content
         });
     }
 
@@ -225,6 +228,7 @@ export class MapComponent implements OnInit {
             .locate($event, level.toUpperCase())
             .subscribe((e) => {
                 this.trailList = e.content;
+                this.showTrailCodeMarkers = this.electShowTrailCodes(this.zoomLevel);
                 this.onDoneLoading();
             });
     }
@@ -288,5 +292,9 @@ export class MapComponent implements OnInit {
                 this.trailPreviewCount = resp.totalCount;
                 this.trailPreviewList = resp.content;
         })
+    }
+
+    private electShowTrailCodes(zoomLevel: number) {
+        return zoomLevel > 12;
     }
 }

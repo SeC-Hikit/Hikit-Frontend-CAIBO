@@ -21,7 +21,6 @@ import { MapComponent } from "./map-view/map.component";
 import { MapFullComponent } from "./map-view/map-full/map-full.component";
 import { TrailDetailsComponent } from "./map-view/map-trail-details/trail-details.component";
 import { MapTrailListComponent } from "./map-view/map-trail-list/map-trail-list.component";
-import { MapTrailFullComponent } from "./map-view/map-trail-full-details/map-trail-full.component";
 import { AdminComponent } from "./admin/admin.component";
 import { TrailManagementComponent } from "./admin/trail-management/trail-management.component";
 import { TrailUploadManagementComponent } from "./admin/trail-management/trail-upload-management/trail-upload-management.component";
@@ -78,7 +77,6 @@ import { PlacePickerSelectorComponent } from './admin/trail-management/trail-upl
     TrailDetailsComponent,
     LoadingPanelComponent,
     MapPreviewComponent,
-    MapTrailFullComponent,
     AdminComponent,
     TrailManagementComponent,
     TrailUploadManagementComponent,
