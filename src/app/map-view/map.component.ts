@@ -126,6 +126,7 @@ export class MapComponent implements OnInit {
     }
 
     onSelectTrail(id: string) {
+        if(!id) { return; }
         this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: {trail: id},
@@ -135,6 +136,7 @@ export class MapComponent implements OnInit {
     }
 
     selectTrail(id: string, refresh? : boolean): void {
+        if(!id) { return; }
         let singletonTrail = this.trailList.filter(t => t.id == id);
 
         if (singletonTrail.length > 0) {
@@ -153,8 +155,9 @@ export class MapComponent implements OnInit {
         this.loadNotificationsForTrail(id);
     }
 
-    loadNotificationsForTrail(code: string): void {
-        this.accessibilityService.getUnresolvedByTrailByCode(code).subscribe(notificationResponse => {
+    loadNotificationsForTrail(id: string): void {
+        if(!id) { return; }
+        this.accessibilityService.getUnresolvedByTrailByCode(id).subscribe(notificationResponse => {
             this.selectedTrailNotifications = notificationResponse.content
         });
     }
