@@ -1,4 +1,4 @@
-<div class="not-found-items">
-    <img class="image" src="../../../assets/cai/missing_content.png"/> 
-    <p>{{text == null ? "Nessun contenuto trovato" : text}}</p>
+<div class="not-found-items top-margin-x2">
+    <img class="image" src="../../../assets/cai/missing_content.png"/>
+    <p class="inner-message" [innerHTML]="text == null ? 'Nessun contenuto trovato' : text"></p>
 </div>

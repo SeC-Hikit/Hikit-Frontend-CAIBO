@@ -1,69 +1,75 @@
 <div class="container my-4">
-  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-  <h1>Gestione Tracce</h1>
-  <div class="flex-container">
-    <app-upload-button-management
-      class="trail-upload-management__container-button button"
-      [isMultipleUpload]="false"
-      [isDisabled]="this.isLoading"
-      (uploadedFiles)="uploadFile($event)"
-    ></app-upload-button-management>
-    <app-upload-button-management
-      [isMultipleUpload]="true"
-      [isDisabled]="this.isLoading"
-      class="trail-upload-management__container-button button"
-      (uploadedFiles)="uploadFiles($event)"
-    ></app-upload-button-management>
-  </div>
-
-  <div *ngIf="trailRawList && trailRawList.length > 0">
-    <p>Le seguenti sono tracce ancora da arricchire con i dovuti metadati</p>
-    <table
-      id="trailTable"
-      class="table table-striped interactive-table thin-rows"
-    >
-      <thead class="">
-        <tr>
-          <th scope="col">Nome file</th>
-          <th scope="col">Caricato il</th>
-          <th scope="col">Caricato da</th>
-          <th scope="col">Compila</th>
-          <th scope="col">Cancella</th>
-        </tr>
-      </thead>
-      <tbody class="short-list">
-        <tr *ngFor="let tr of trailRawList" class="trailPreview">
-          <td>
-            {{ tr.fileDetails.originalFilename }}
-          </td>
-          <td>{{ formatDate(tr.fileDetails.uploadedOn) }}</td>
-          <td>{{ tr.fileDetails.uploadedBy }}</td>
-          <td class="clickable" (click)="navigateToEdit(tr.id)">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-              <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
-              />
-            </svg>
-          </td>
-          <td (click)="deleteRawTrail(tr.id)" class="clickable">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-              <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
-              />
-            </svg>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="pagination-position">
-      <ngb-pagination
-        [pageSize]="entryPerPage"
-        [collectionSize]="totalRaw"
-        [(page)]="page"
-        aria-label="Default pagination"
-        (pageChange)="loadRawTrails(page)"
-      ></ngb-pagination>
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    <div class="row">
+        <h1>Gestione Tracce</h1>
     </div>
-  </div>
-  <div *ngIf="trailRawList.length == 0">Non ci sono ancora tracce caricate</div>
+    <div class="row">
+        <div class="col-6">
+            <app-upload-button-management
+                    class="trail-upload-management__container-button button"
+                    [isMultipleUpload]="false"
+                    [isDisabled]="this.isLoading"
+                    (uploadedFiles)="uploadFile($event)"
+            ></app-upload-button-management>
+        </div>
+        <div class="col-6">
+            <app-upload-button-management
+                    [isMultipleUpload]="true"
+                    [isDisabled]="this.isLoading"
+                    class="trail-upload-management__container-button button"
+                    (uploadedFiles)="uploadFiles($event)"
+            ></app-upload-button-management>
+        </div>
+    </div>
+
+    <div *ngIf="trailRawList && trailRawList.length > 0">
+        <p>Le seguenti sono tracce ancora da arricchire con i dovuti metadati</p>
+        <table
+                id="trailTable"
+                class="table table-striped interactive-table thin-rows"
+        >
+            <thead class="">
+            <tr>
+                <th scope="col">Nome file</th>
+                <th scope="col">Caricato il</th>
+                <th scope="col">Caricato da</th>
+                <th scope="col">Compila</th>
+                <th scope="col">Cancella</th>
+            </tr>
+            </thead>
+            <tbody class="short-list">
+            <tr *ngFor="let tr of trailRawList" class="trailPreview">
+                <td>
+                    {{ tr.fileDetails.originalFilename }}
+                </td>
+                <td>{{ formatDate(tr.fileDetails.uploadedOn) }}</td>
+                <td>{{ tr.fileDetails.uploadedBy }}</td>
+                <td class="clickable" (click)="navigateToEdit(tr.id)">
+                    <svg class="bi" width="32" height="32" fill="currentColor">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
+                        />
+                    </svg>
+                </td>
+                <td (click)="deleteRawTrail(tr.id)" class="clickable">
+                    <svg class="bi" width="32" height="32" fill="currentColor">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                        />
+                    </svg>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination-position">
+            <ngb-pagination
+                    [pageSize]="entryPerPage"
+                    [collectionSize]="totalRaw"
+                    [(page)]="page"
+                    aria-label="Default pagination"
+                    (pageChange)="loadRawTrails(page)"
+            ></ngb-pagination>
+        </div>
+    </div>
+    <div *ngIf="trailRawList.length == 0">Non ci sono ancora tracce caricate</div>
 </div>

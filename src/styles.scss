@@ -231,3 +231,21 @@ select {
     padding: 2.5px 5px;
   }
 }
+
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 97.5% !important;
+    padding: 0 1.25%;
+  }
+
+  #main {
+    .container {
+      max-width: 97% !important;
+      padding: 0 1.5%;
+    }
+  }
+
+
+}
+
+

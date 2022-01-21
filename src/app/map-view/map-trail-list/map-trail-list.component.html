@@ -1,5 +1,5 @@
 <div class="col-md-12">
-    <table *ngIf="trailsPreviewList" class="table table-striped interactive-table">
+    <table *ngIf="trailsPreviewList && trailsPreviewList.length > 0; else notShow" class="table table-striped interactive-table">
         <thead>
             <tr>
                 <th scope="col">Codice</th>
@@ -15,4 +15,7 @@
             </tr>
         </tbody>
     </table>
+    <ng-template #notShow>
+        <app-items-not-found></app-items-not-found>
+    </ng-template>
 </div>
