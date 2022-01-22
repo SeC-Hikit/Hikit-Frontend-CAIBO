@@ -7,12 +7,12 @@
             </div>
             <div class="col-sm-6">
                 <h1 class="steps">
-<!--          <span-->
-<!--                  class="actionable"-->
-<!--                  *ngIf="this.STEP_INDEX > 0"-->
-<!--                  (click)="goBack()"-->
-<!--          >⬅</span-->
-<!--          >-->
+                    <!--          <span-->
+                    <!--                  class="actionable"-->
+                    <!--                  *ngIf="this.STEP_INDEX > 0"-->
+                    <!--                  (click)="goBack()"-->
+                    <!--          >⬅</span-->
+                    <!--          >-->
                     Step {{ this.STEP_INDEX + 1 }}/{{ this.STEPS.length }} :
                     {{ this.STEPS[STEP_INDEX] }}
                 </h1>
@@ -59,106 +59,109 @@
             </div>
         </div>
 
+
         <form
                 class="container"
                 (ngSubmit)="saveTrail()"
                 [formGroup]="trailFormGroup"
                 *ngIf="!isLoading"
         >
-            <div class="general-section" *ngIf="this.STEP_INDEX == 0">
-                <h3 id="dati-generali" class="space-up">Dati generali</h3>
-                <div class="form-row">
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Codice sentiero*</p>
-                        <input
-                                type="text"
-                                class="form-control"
-                                formControlName="code"
-                                placeholder="Codice (es: 100BO)"
-                                required
-                        />
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Nome sentiero</p>
-                        <input
-                                type="text"
-                                class="form-control"
-                                formControlName="name"
-                                placeholder="Nome sentiero, se diverso dal codice"
-                        />
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Classificazione*</p>
-                        <select
-                                title="Scegli una opzione"
-                                formControlName="classification"
-                                class="form-control"
-                                id="classification_select"
-                        >
-                            <option value="T">T</option>
-                            <option value="E">E</option>
-                            <option value="EE">EE</option>
-                            <option value="EEA">EEA</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row top-margin">
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Data rilevazione*</p>
-                        <div class="input-group">
+            <div class="row">
+                <div class="general-section col-12" *ngIf="this.STEP_INDEX == 0">
+                    <h3 id="dati-generali" class="space-up">Dati generali</h3>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Codice sentiero <span class="mandatory-field-asterisk">*</span></p>
                             <input
+                                    type="text"
                                     class="form-control"
-                                    formControlName="lastUpdate"
-                                    placeholder="gg/mm/aaaa"
-                                    name="dp"
-                                    ngbDatepicker
-                                    [(ngModel)]="date"
-                                    #d="ngbDatepicker"
-                            />
-                            <div class="input-group-append">
-                                <button
-                                        class="btn btn-outline-secondary calendar"
-                                        (click)="d.toggle()"
-                                        type="button"
-                                >
-                                    <svg width="24" height="24" fill="white" class="inner">
-                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <p>Tempo registrato di percorrenza, in minuti</p>
-                        <div class="bootstrap-select-wrapper">
-                            <input
-                                    type="number"
-                                    class="form-control"
-                                    formControlName="officialEta"
-                                    placeholder="Tempo di percorrenza in minuti"
+                                    formControlName="code"
+                                    placeholder="Codice (es: 100BO)"
                                     required
                             />
                         </div>
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Nome sentiero</p>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="name"
+                                    placeholder="Nome sentiero, se diverso dal codice"
+                            />
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Classificazione escursionistica <span class="mandatory-field-asterisk">*</span></p>
+                            <select
+                                    title="Scegli una opzione"
+                                    formControlName="classification"
+                                    class="form-control"
+                                    id="classification_select"
+                            >
+                                <option value="T">T</option>
+                                <option value="E">E</option>
+                                <option value="EE">EE</option>
+                                <option value="EEA">EEA</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-row top-margin">
-                    <label
-                            placement="right"
-                            ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
-                    >
-                        Descrizione
-                    </label>
-                    <div class="form-group col-md-12 mb-12" *ngIf="!isLoading">
-                        <quill-editor
-                                formControlName="description"
-                                [modules]="{
+                    <div class="form-row top-margin">
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Data rilevazione <span class="mandatory-field-asterisk">*</span></p>
+                            <div class="input-group">
+                                <input
+                                        class="form-control"
+                                        formControlName="lastUpdate"
+                                        placeholder="gg/mm/aaaa"
+                                        name="dp"
+                                        ngbDatepicker
+                                        [(ngModel)]="date"
+                                        #d="ngbDatepicker"
+                                />
+                                <div class="input-group-append">
+                                    <button
+                                            class="btn btn-outline-secondary calendar"
+                                            (click)="d.toggle()"
+                                            type="button"
+                                    >
+                                        <svg width="24" height="24" fill="white" class="inner">
+                                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Tempo registrato di percorrenza, in minuti</p>
+                            <div class="bootstrap-select-wrapper">
+                                <input
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="officialEta"
+                                        placeholder="Tempo di percorrenza in minuti"
+                                        required
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row top-margin">
+                        <label
+                                placement="right"
+                                ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
+                        >
+                            Descrizione <span class="mandatory-field-asterisk">*</span>
+                        </label>
+                        <div class="form-group col-md-12 mb-12" *ngIf="!isLoading">
+                            <quill-editor
+                                    formControlName="description"
+                                    [modules]="{
                 toolbar: [
                   ['bold', 'italic', 'underline'],
                   [{ list: 'ordered' }, { list: 'bullet' }],
                   ['link']
                 ]
               }"
-                        ></quill-editor>
+                            ></quill-editor>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -283,7 +286,7 @@
                     </button>
                 </div>
             </div>
-            <div class="form-row" *ngIf="this.STEP_INDEX == 2">
+            <div class="form-row" *ngIf="this.STEP_INDEX == 2" (click)="proceed()">
                 <div class="col col-md-12 top-margin-x2">
                     <button class="btn btn-primary full-width" type="submit">
                         Salva sentiero
@@ -291,10 +294,18 @@
                 </div>
             </div>
 
+            <div class="row errors top-margin-x2" *ngIf="errors.length > 0">
+                <div class="col-12">
+                    <ul>
+                        <li *ngFor="let error of errors">{{error}}</li>
+                    </ul>
+                </div>
+            </div>
+
 
             <div class="row" *ngIf="this.STEP_INDEX < 2">
                 <div class="col top-margin">
-                    <button class="btn btn-primary full-width" (click)="goToNext()">
+                    <button class="btn btn-primary full-width" (click)="proceed()">
                         Vai allo step {{ this.STEP_INDEX + 2 }}:
                         {{ this.STEPS[this.STEP_INDEX + 1] }}
                     </button>

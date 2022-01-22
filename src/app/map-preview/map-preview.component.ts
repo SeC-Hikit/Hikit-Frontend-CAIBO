@@ -1,4 +1,4 @@
-import {SimpleChanges} from "@angular/core";
+import {EventEmitter, Output, SimpleChanges} from "@angular/core";
 import {Component, Input, OnInit} from "@angular/core";
 import * as L from "leaflet";
 import {Coordinates2D} from "../service/geo-trail-service";
@@ -18,8 +18,7 @@ export interface Marker {
 }
 
 @Component({
-    selector: "app-map-p" +
-        "review",
+    selector: "app-map-preview",
     templateUrl: "./map-preview.component.html",
     styleUrls: ["./map-preview.component.scss"],
 })
@@ -34,6 +33,8 @@ export class MapPreviewComponent implements OnInit {
     @Input() index?: string;
     @Input() isShowOtherBtnEnabled: boolean;
     @Input() focusPoint?: CoordinatesDto;
+
+    @Output() onClick? = new EventEmitter<Coordinates2D>();
 
     private map: L.Map;
     private polyline: L.Polyline;
@@ -72,6 +73,14 @@ export class MapPreviewComponent implements OnInit {
             scrollWheelZoom: false,
         });
         this.map.setView([44.498955, 11.327591], 11);
+
+        this.map.on("click", (event: any) => {
+            this.onClick.emit(
+                {
+                    longitude: event.latlng.longitude,
+                    latitude: event.latlng.latitude
+                })
+        })
 
         if (this.trailPreview) {
             this.onPreview(this.trailPreview.coordinates);
@@ -203,14 +212,14 @@ export class MapPreviewComponent implements OnInit {
         this.map.fitBounds(this.polyline.getBounds());
     }
 
-    private determineIcon(marker : Marker) {
+    private determineIcon(marker: Marker) {
         switch (marker.icon) {
             case MapPinIconType.ALERT_PIN:
                 return AlertPinIcon.get();
             case MapPinIconType.CROSSWAY_ICON:
                 return CrossWayIcon.get();
             case MapPinIconType.PIN:
-                if(marker.color) return PinIcon.get(marker.color);
+                if (marker.color) return PinIcon.get(marker.color);
                 return PinIcon.get();
         }
     }

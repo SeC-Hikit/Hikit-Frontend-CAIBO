@@ -23,6 +23,9 @@ import {AccessibilityViewComponent} from "./admin/accessibility-management/acces
 import {ReportingFormComponent} from "./accessibility/reporting-form/reporting-form.component";
 import {CycloComponent} from "./info/cyclo/cyclo.component";
 import {CycloManagementComponent} from "./admin/trail-management/cyclo-management/cyclo-management.component";
+import {PlaceViewTableComponent} from "./admin/place-management/place-view-table/place-view-table.component";
+import {PlaceAddComponent} from "./admin/place-management/place-add/place-add.component";
+import {PlaceManagementComponent} from "./admin/place-management/place-management.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -85,6 +88,15 @@ const routes: Routes = [
                     {path: "modify/:id", component: PoiAddComponent},
                 ],
                 component: PoiManagementComponent,
+            },
+            {
+                path: "place-management",
+                children: [
+                    {path: "view", component: PlaceViewTableComponent},
+                    {path: "add", component: PlaceAddComponent},
+                    {path: "modify/:id", component: PoiAddComponent},
+                ],
+                component: PlaceManagementComponent,
             },
             {
                 path: "trail-management",

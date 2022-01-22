@@ -53,10 +53,17 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     intersectionTrails: TrailDto[] = [];
     crossPointOnTrail: Coordinates2D[] = [];
 
+    crossingGeolocationExecutedChecks: boolean[] = [];
+
     STEPS = ["Info Generali", "Crocevia", "Località"];
 
-    CROSSWAY_INDEX = 1;
+    private GENERAL_INFO_INDEX = 0;
+    private CROSSWAY_INDEX = 1;
+    private LOCATION_INDEX = 2;
+
     STEP_INDEX = 0;
+
+    errors = [];
 
     private destroy$ = new Subject();
 
@@ -129,19 +136,49 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.isLoading = false;
     }
 
-    goToNext(): void {
-        this.STEP_INDEX++;
-        this.scrollUp();
-
+    proceed(): boolean {
+        if (this.STEP_INDEX == this.GENERAL_INFO_INDEX) {
+            this.errors = this.checkGeneralInfoForErrors();
+            if(this.errors.length == 0) this.onDetectCrossings();
+        }
         if (this.STEP_INDEX == this.CROSSWAY_INDEX) {
-            this.ensureCheckCrossing();
+            this.errors = this.checkCrossingsForErrors();
+        }
+        if (this.STEP_INDEX == this.LOCATION_INDEX) {
+            this.errors = []; //this.checkLocationsForErrors();
+            return true;
+        }
+
+
+        if (this.errors.length == 0) {
+            this.STEP_INDEX++;
+            this.scrollUp();
+            return false; // prevents the submission
         }
     }
 
-    private ensureCheckCrossing() {
-        if (!this.isCrossingSectionComplete) {
-            this.onDetectCrossings();
-        }
+
+    private checkGeneralInfoForErrors() : string[] {
+        let errors = [];
+        if(!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
+        if(!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
+        return errors;
+    }
+
+    private checkCrossingsForErrors() : string[] {
+        let errors = [];
+        if((this.crossingGeolocationExecutedChecks.filter(a=>!a)).length > 0)
+            errors.push("Uno o più crocevia non sono stati ancora geolocalizzati e completati");
+        if(!this.intersections.valid)
+            errors.push("Uno o più crocevia non è completato");
+        return errors;
+    }
+
+    private checkLocationsForErrors() : string[] {
+        let errors = [];
+        if(!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
+        if(!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
+        return errors;
     }
 
     goBack(): void {
@@ -183,7 +220,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         let error = [];
 
         if (this.trailFormGroup.valid) {
-
+            return;
             this.isLoading = true;
 
             // Grab values
@@ -232,7 +269,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                     let response = await this.placeService
                         .getById(place.placeId).toPromise();
                     if (response.content.length == 0) {
-                        throw new Error("Place should exists but it does not. does not exist!");
+                        throw new Error("Place should exists but it does not exist!");
                     }
                     const cp: PlaceDto = response.content[0];
 
@@ -328,12 +365,14 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.geoTrailService
             .intersect({coordinates: coords2d})
             .subscribe((response) => {
+                this.crossingGeolocationExecutedChecks = [];
                 this.intersectionResponse = response;
                 response.content.forEach((intersection: TrailIntersection) => {
                     let metPoint = intersection.points[0];
                     this.intersectionTrails.push(intersection.trail);
                     this.crossPointOnTrail.push(metPoint);
                     this.intersections.push(TrailImportFormUtils.getLocationFormGroupFromIntersection(intersection));
+                    this.crossingGeolocationExecutedChecks.push(false);
                 })
                 this.isCrossingSectionComplete = true;
                 this.toggleLoading();
@@ -380,5 +419,4 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     get intersections() {
         return this.trailFormGroup.controls["intersections"] as FormArray;
     }
-
 }

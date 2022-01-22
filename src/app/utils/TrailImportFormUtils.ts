@@ -31,7 +31,7 @@ export class TrailImportFormUtils {
         let intersectionCoords = intersection.points[0];
         return new FormGroup({
             "id": new FormControl("", Validators.minLength(0)),
-            "name": new FormControl("", Validators.minLength(0)),
+            "name": new FormControl("", Validators.minLength(2)),
             "latitude": new FormControl(intersectionCoords.latitude, Validators.required),
             "longitude": new FormControl(intersectionCoords.longitude, Validators.required),
             "altitude": new FormControl(intersectionCoords.altitude, Validators.required),
@@ -65,7 +65,7 @@ export class TrailImportFormUtils {
             coordinates: {
                 altitude: tfv.startPos.altitude,
                 longitude: tfv.startPos.longitude,
-                latitude: tfv.startPos.longitude,
+                latitude: tfv.startPos.latitude,
             }
         };
         let mappedEndLocation = {
@@ -74,7 +74,7 @@ export class TrailImportFormUtils {
             coordinates: {
                 altitude: tfv.finalPos.altitude,
                 longitude: tfv.finalPos.longitude,
-                latitude: tfv.finalPos.longitude,
+                latitude: tfv.finalPos.latitude,
             }
         };
         let mappedIntermediateLocations = tfv.locations.map(l => {
@@ -84,7 +84,7 @@ export class TrailImportFormUtils {
                 coordinates: {
                     altitude: l.altitude,
                     longitude: l.longitude,
-                    latitude: l.longitude,
+                    latitude: l.latitude,
                 }
             }
         });

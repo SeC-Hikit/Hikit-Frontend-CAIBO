@@ -56,6 +56,10 @@ import { CycloComponent } from './info/cyclo/cyclo.component';
 import {NgbDateCustomParserFormatter} from "./conf/NgbDateCustomParserFormatter";
 import { CycloManagementComponent } from './admin/trail-management/cyclo-management/cyclo-management.component';
 import { PlacePickerSelectorComponent } from './admin/trail-management/trail-upload-management/place-picker-selector/place-picker-selector.component';
+import { PlaceManagementComponent } from './admin/place-management/place-management.component';
+import { PlaceViewTableComponent } from './admin/place-management/place-view-table/place-view-table.component';
+import { PlaceAddComponent } from './admin/place-management/place-add/place-add.component';
+import { PlacePickerComponent } from './admin/place-management/place-picker/place-picker.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +110,10 @@ import { PlacePickerSelectorComponent } from './admin/trail-management/trail-upl
     CycloComponent,
     CycloManagementComponent,
     PlacePickerSelectorComponent,
+    PlaceManagementComponent,
+    PlaceViewTableComponent,
+    PlaceAddComponent,
+    PlacePickerComponent,
   ],
   imports: [
     BrowserModule,

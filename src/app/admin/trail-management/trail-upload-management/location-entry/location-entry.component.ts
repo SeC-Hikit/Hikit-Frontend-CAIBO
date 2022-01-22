@@ -63,7 +63,7 @@ export class LocationEntryComponent implements OnInit {
         this.selectedCoordinateIndex = this.startPoint != undefined ? this.startPoint : this.OFFSET_START_POINT;
     }
 
-    onFocus(): void {
+    onLocalize(): void {
         this.hasBeenLocalizedFirstTime = true;
         // Run a geo-search to see what possible places are available close-by
         const coordinate = this.trail.coordinates[this.selectedCoordinateIndex];
@@ -147,7 +147,7 @@ export class LocationEntryComponent implements OnInit {
 
     reattemptLocalization() {
         this.hasBeenLocalized = false;
-        this.onFocus();
+        this.onLocalize();
     }
 
     changeName($event) {

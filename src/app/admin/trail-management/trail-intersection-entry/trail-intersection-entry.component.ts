@@ -6,7 +6,10 @@ import {PlaceDto, PlaceResponse, PlaceService} from "src/app/service/place.servi
 import {TrailDto} from "src/app/service/trail-service.service";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {PlacePickerSelectorComponent} from "../trail-upload-management/place-picker-selector/place-picker-selector.component";
+import {
+    PickedPlace,
+    PlacePickerSelectorComponent
+} from "../trail-upload-management/place-picker-selector/place-picker-selector.component";
 
 @Component({
     selector: "app-trail-intersection-entry",
@@ -75,24 +78,24 @@ export class TrailIntersectionEntryComponent implements OnInit {
                 this.hasAutoDetectedRun = true;
                 this.isAutoDetected = response.content.length != 0;
                 if (this.isAutoDetected) {
-                    let placePickerRef = this.modalService.open(PlacePickerSelectorComponent);
-                    const places : PlaceDto[] = [{
-                        id: "0", name: "Abc", description: "", coordinates: [{latitude:5, altitude:5, longitude:3}], tags: [],
-                        recordDetails: {realm: "this", onInstance: "bla", uploadedOn: "bli", uploadedBy: "blu"},
-                        crossingTrailIds: [], mediaIds: []
-                    }]
-                    placePickerRef.componentInstance.places = places;
+                    if (response.content.length > 0) {
+                        let ngbModalRef = this.modalService.open(PlacePickerSelectorComponent);
 
-                    // id?: string;
-                    // name?: string;
-                    // description?: string;
-                    // tags?: string[];
-                    // mediaIds?: string[];
-                    // coordinates?: components["schemas"]["CoordinatesDto"][];
-                    // crossingTrailIds?: string[];
-                    // recordDetails?: components["schemas"]["RecordDetailsDto"];
+                        ngbModalRef.componentInstance.targetPoint = {
+                            latitude: this.crossPoint.latitude,
+                            longitude: this.crossPoint.longitude,
+                        }
+                        ngbModalRef.componentInstance.trail = this.trail;
+                        ngbModalRef.componentInstance.otherTrails = this.otherTrail;
+                        ngbModalRef.componentInstance.places = response.content;
 
-                    // this.onPlaceFound.emit(this.geolocationResponse.content);
+                        ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
+                            this.inputForm.controls["id"].setValue(picked.place.id);
+                            this.inputForm.controls["name"].setValue(picked.place.name);
+                            this.inputForm.controls["tags"].setValue(picked.place.tags.join(", "));
+                        });
+                        this.onPlaceFound.emit([]);
+                    }
                 }
             });
     }
