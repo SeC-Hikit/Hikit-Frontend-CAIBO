@@ -1,30 +1,31 @@
 <div class="row">
-  <div class="col-md-12">
-    <div class="map-preview" id="{{ classPrefix }}{{ index }}"></div>
-  </div>
+    <div class="col-md-12">
+        <div class="map-preview" id="{{ classPrefix }}{{ index }}"></div>
+    </div>
 </div>
 <div class="row">
-  <div class="col-sm-6 top-margin">
-    <button
-      type="button"
-      class="btn full-width actionable"
-      (click)="focusOnTrail()"
-    >
-      <svg class="bi" width="16" height="16" fill="currentColor">
-        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#fullscreen" />
-      </svg>
-    </button>
-  </div>
-  <div class="col-sm-6 top-margin">
-    <button
-      [attr.disabled]="isShowOtherBtnEnabled ? null : 'disabled'"
-      type="button"
-      class="btn full-width actionable"
-      (click)="togglePreview()"
-    >
-      <svg class="bi" width="16" height="16" fill="currentColor">
-        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye" />
-      </svg>
-    </button>
-  </div>
+    <div class="col-sm-6 top-margin">
+        <button
+                [attr.disabled]="isShowFitToShapeBtnEnabled ? null : 'disabled'"
+                type="button"
+                class="btn full-width actionable"
+                (click)="focusOnTrail()"
+        >
+            <svg class="bi" width="16" height="16" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#fullscreen"/>
+            </svg>
+        </button>
+    </div>
+    <div class="col-sm-6 top-margin">
+        <button
+                [attr.disabled]="isShowOtherBtnEnabled ? null : 'disabled'"
+                type="button"
+                class="btn full-width actionable"
+                (click)="togglePreview()"
+        >
+            <svg class="bi" width="16" height="16" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
+            </svg>
+        </button>
+    </div>
 </div>

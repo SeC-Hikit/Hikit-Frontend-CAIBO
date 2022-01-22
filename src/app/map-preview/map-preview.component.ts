@@ -32,6 +32,7 @@ export class MapPreviewComponent implements OnInit {
     @Input() elementAt?: number;
     @Input() index?: string;
     @Input() isShowOtherBtnEnabled: boolean;
+    @Input() isShowFitToShapeBtnEnabled?: boolean;
     @Input() focusPoint?: CoordinatesDto;
 
     @Output() onClick? = new EventEmitter<Coordinates2D>();
@@ -55,6 +56,7 @@ export class MapPreviewComponent implements OnInit {
         this.classPrefix = this.classPrefix ? this.classPrefix : "map-table-"
         this.markers = this.markers ? this.markers : [];
         this.showOtherTrails = this.showOtherTrails ? this.showOtherTrails : true;
+        if(this.isShowFitToShapeBtnEnabled == null) this.isShowFitToShapeBtnEnabled = true;
     }
 
     ngAfterViewInit() {
@@ -77,8 +79,8 @@ export class MapPreviewComponent implements OnInit {
         this.map.on("click", (event: any) => {
             this.onClick.emit(
                 {
-                    longitude: event.latlng.longitude,
-                    latitude: event.latlng.latitude
+                    longitude: event.latlng.lng,
+                    latitude: event.latlng.lat
                 })
         })
 
@@ -97,6 +99,7 @@ export class MapPreviewComponent implements OnInit {
     }
 
     drawMarkers(markersCoords: Marker[]) {
+        this.markers.forEach(it=> this.map.removeLayer(it));
         this.markers = markersCoords.map((marker) => {
             if (marker) {
                 return L.marker(

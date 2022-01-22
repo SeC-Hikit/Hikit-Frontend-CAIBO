@@ -1,37 +1,69 @@
-<div>
+<div class="location-management-add">
     <div class="row">
-        <dic class="col-12">
+        <div class="col-12">
             <h2>Aggiungi/modifica una località/crocevia</h2>
-        </dic>
+        </div>
     </div>
     <div class="row">
-<!--        <form>-->
+        <!--        <form>-->
         <div class="col-md-12 col-lg-4">
             <label>Nome</label>
             <input type="text">
         </div>
         <div class="col-md-12 col-lg-4">
             <label>Toponimi</label>
-            <input type="text" placeholder="Toponimi divisi da una virgola ','">
+            <input type="text" placeholder="Toponimi divisi da una virgola">
         </div>
-        <div class="col-md-12 col-lg-4">
+        <div class="col-md-12 col-lg-4 hidden">
             <label>Id</label>
             <input disabled type="text">
         </div>
     </div>
-    <div class="row">
-
+    <div class="row top-margin-x2">
+        <div class="col-md-12 col-lg-12">
+            <label>Descrizione</label>
+            <quill-editor
+                    [className]="'description'"
+                    [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"
+            ></quill-editor>
+        </div>
+        <div class="col-md-12 col-lg-12">
+            <p>Seleziona un punto sulla mappa</p>
+            <app-map-preview
+                    [classPrefix]="'selector'"
+                    [isShowOtherBtnEnabled]="false"
+                    [isShowFitToShapeBtnEnabled]="false"
+                    [markersCoordinates]="markers"
+                    [otherTrails]="[]"
+                    (onClick)="onMapClick($event)"
+            ></app-map-preview>
+        </div>
+    </div>
+    <div class="row hidden">
+        <div class="col-md-12 col-lg-6">
+            <label>Latitude</label>
+            <input type="text">
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <label>Longitude</label>
+            <input type="text" placeholder="Toponimi divisi da una virgola">
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <label>Altitude</label>
+            <input disabled type="text">
+        </div>
     </div>
 
-<!--        PlaceDto: {-->
-<!--        id?: string;-->
-<!--    v    name?: string;-->
-<!--        description?: string;-->
-<!--        tags?: string[];-->
-<!--        mediaIds?: string[];-->
-<!--        coordinates?: components["schemas"]["CoordinatesDto"][];-->
-<!--        crossingTrailIds?: string[];-->
-<!--        recordDetails?: components["schemas"]["RecordDetailsDto"];-->
-<!--        };-->
-<!--        </form>-->
+    <div class="row top-margin-x2">
+        <div class="col-12">
+            <button class="btn btn-primary">Salva località</button>
+        </div>
+
+    </div>
 </div>
