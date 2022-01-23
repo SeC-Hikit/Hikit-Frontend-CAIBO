@@ -4,66 +4,78 @@
             <h2>Aggiungi/modifica una località/crocevia</h2>
         </div>
     </div>
-    <div class="row">
-        <!--        <form>-->
-        <div class="col-md-12 col-lg-4">
-            <label>Nome</label>
-            <input type="text">
+    <form [formGroup]="formGroup" (ngSubmit)="processModule()">
+        <div class="row">
+            <!--        <form>-->
+            <div class="col-md-12 col-lg-4">
+                <label>Nome <span class="mandatory-field-asterisk">*</span></label>
+                <input [formControlName]="'name'" type="text">
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <label>Toponimi (divisi da una virgola)</label>
+                <input [formControlName]="'tags'" type="text" placeholder="Toponimi divisi da una virgola">
+            </div>
+            <div class="col-md-12 col-lg-4 hidden">
+                <label>Id</label>
+                <input [formControlName]="'id'" disabled type="text">
+            </div>
         </div>
-        <div class="col-md-12 col-lg-4">
-            <label>Toponimi</label>
-            <input type="text" placeholder="Toponimi divisi da una virgola">
-        </div>
-        <div class="col-md-12 col-lg-4 hidden">
-            <label>Id</label>
-            <input disabled type="text">
-        </div>
-    </div>
-    <div class="row top-margin-x2">
-        <div class="col-md-12 col-lg-12">
-            <label>Descrizione</label>
-            <quill-editor
-                    [className]="'description'"
-                    [modules]="{
+        <div class="row top-margin-x2">
+            <div class="col-md-12 col-lg-12">
+                <label>Descrizione</label>
+                <quill-editor
+                        [formControlName]="'description'"
+                        [className]="'description'"
+                        [modules]="{
                 toolbar: [
                   ['bold', 'italic', 'underline'],
                   [{ list: 'ordered' }, { list: 'bullet' }],
                   ['link']
                 ]
               }"
-            ></quill-editor>
+                ></quill-editor>
+            </div>
+            <div class="col-md-12 col-lg-12">
+                <p>Seleziona un punto sulla mappa <span class="mandatory-field-asterisk">*</span></p>
+                <app-map-preview
+                        [classPrefix]="'selector'"
+                        [isShowOtherBtnEnabled]="false"
+                        [isShowFitToShapeBtnEnabled]="false"
+                        [markersCoordinates]="markers"
+                        [otherTrails]="[]"
+                        (onClick)="onMapClick($event)"
+                ></app-map-preview>
+            </div>
         </div>
-        <div class="col-md-12 col-lg-12">
-            <p>Seleziona un punto sulla mappa</p>
-            <app-map-preview
-                    [classPrefix]="'selector'"
-                    [isShowOtherBtnEnabled]="false"
-                    [isShowFitToShapeBtnEnabled]="false"
-                    [markersCoordinates]="markers"
-                    [otherTrails]="[]"
-                    (onClick)="onMapClick($event)"
-            ></app-map-preview>
-        </div>
-    </div>
-    <div class="row hidden">
-        <div class="col-md-12 col-lg-6">
-            <label>Latitude</label>
-            <input type="text">
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <label>Longitude</label>
-            <input type="text" placeholder="Toponimi divisi da una virgola">
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <label>Altitude</label>
-            <input disabled type="text">
-        </div>
-    </div>
-
-    <div class="row top-margin-x2">
-        <div class="col-12">
-            <button class="btn btn-primary">Salva località</button>
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <label>Latitude</label>
+                <input type="text" disabled [formControlName]="'coordLatitude'">
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <label>Longitude</label>
+                <input type="text" disabled [formControlName]="'coordLongitude'">
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <label>Altitude</label>
+                <input type="text" disabled [formControlName]="'coordAltitude'">
+            </div>
         </div>
 
-    </div>
+        <div class="row top-margin-x2 errors">
+            <div class="col-12">
+                <ul>
+                    <li *ngFor="let error of errors">
+                        {{error}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row top-margin-x2">
+            <div class="col-12">
+                <button class="btn btn-primary">Salva località</button>
+            </div>
+        </div>
+    </form>
 </div>

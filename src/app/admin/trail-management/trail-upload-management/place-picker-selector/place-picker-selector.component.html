@@ -21,8 +21,7 @@
                                     <td>Inserito sezione</td>
                                     </thead>
                                     <tr>
-                                        <td class="ellipsis">
-                                            {{selectedPlace.description}}
+                                        <td class="ellipsis" [innerHTML]="selectedPlace.description">
                                         </td>
                                         <td>
                                             {{selectedPlace.tags}}

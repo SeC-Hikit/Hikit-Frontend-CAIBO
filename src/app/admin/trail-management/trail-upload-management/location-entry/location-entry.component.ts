@@ -24,8 +24,6 @@ export class LocationEntryComponent implements OnInit {
 
     private GEOLOCATION_DISTANCE = 5000;
 
-
-
     @Input() title: string;
     @Input() showIndex: boolean;
     @Input() classPrefix: string;

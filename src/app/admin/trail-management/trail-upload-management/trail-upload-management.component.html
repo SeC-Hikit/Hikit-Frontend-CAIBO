@@ -62,7 +62,7 @@
 
         <form
                 class="container"
-                (ngSubmit)="saveTrail()"
+                (ngSubmit)="processForm()"
                 [formGroup]="trailFormGroup"
                 *ngIf="!isLoading"
         >
@@ -185,9 +185,9 @@
                             presenti.
                         </p>
                     </div>
-                    <div class="col-md-12" *ngFor="let place of intersections.controls; index as i">
+                    <div class="col-md-12 top-margin" *ngFor="let place of intersections.controls; index as i">
                         <app-trail-intersection-entry
-                                [inputForm]="firstPos"
+                                [inputForm]="place"
                                 [trail]="trailRawDto"
                                 [otherTrail]="intersectionTrails[i]"
                                 [i]="i"
@@ -294,8 +294,8 @@
                 </div>
             </div>
 
-            <div class="row errors top-margin-x2" *ngIf="errors.length > 0">
-                <div class="col-12">
+            <div class="row errors" *ngIf="errors.length > 0">
+                <div class="col-12 top-margin-x2">
                     <ul>
                         <li *ngFor="let error of errors">{{error}}</li>
                     </ul>
@@ -304,7 +304,7 @@
 
 
             <div class="row" *ngIf="this.STEP_INDEX < 2">
-                <div class="col top-margin">
+                <div class="col top-margin-x2">
                     <button class="btn btn-primary full-width" (click)="proceed()">
                         Vai allo step {{ this.STEP_INDEX + 2 }}:
                         {{ this.STEPS[this.STEP_INDEX + 1] }}

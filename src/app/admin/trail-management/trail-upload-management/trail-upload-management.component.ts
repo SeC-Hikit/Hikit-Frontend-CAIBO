@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {FormArray, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgbDateStruct, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Subject} from "rxjs";
@@ -139,7 +139,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     proceed(): boolean {
         if (this.STEP_INDEX == this.GENERAL_INFO_INDEX) {
             this.errors = this.checkGeneralInfoForErrors();
-            if(this.errors.length == 0) this.onDetectCrossings();
+            if (this.errors.length == 0) this.onDetectCrossings();
         }
         if (this.STEP_INDEX == this.CROSSWAY_INDEX) {
             this.errors = this.checkCrossingsForErrors();
@@ -158,26 +158,24 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     }
 
 
-    private checkGeneralInfoForErrors() : string[] {
+    private checkGeneralInfoForErrors(): string[] {
         let errors = [];
-        if(!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
-        if(!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
+        if (!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
+        if (!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
         return errors;
     }
 
-    private checkCrossingsForErrors() : string[] {
+    private checkCrossingsForErrors(): string[] {
         let errors = [];
-        if((this.crossingGeolocationExecutedChecks.filter(a=>!a)).length > 0)
-            errors.push("Uno o più crocevia non sono stati ancora geolocalizzati e completati");
-        if(!this.intersections.valid)
-            errors.push("Uno o più crocevia non è completato");
+        if (!this.intersections.valid)
+            errors.push("Uno o più crocevia non sono stati ancora geolocalizzati o completati");
         return errors;
     }
 
-    private checkLocationsForErrors() : string[] {
+    private checkLocationsForErrors(): string[] {
         let errors = [];
-        if(!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
-        if(!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
+        if (!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
+        if (!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
         return errors;
     }
 
@@ -214,38 +212,44 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         this.isPreviewVisible = !this.isPreviewVisible;
     }
 
-    async saveTrail() {
+    async processForm() {
         console.log(this.trailFormGroup);
 
         let error = [];
 
         if (this.trailFormGroup.valid) {
-            return;
+            // return;
             this.isLoading = true;
 
             // Grab values
             const trailFormValue = this.trailFormGroup.value;
             const importTrail = this.getTrailFromForm(trailFormValue);
 
+
             // create places if they do not exist
-            let places: PlaceRefDto[] = importTrail.locations;
+            // let places: PlaceRefDto[] = importTrail.locations;
             let processedPlaces: CreatedPlaceRefDto[] = [];
 
-            for (const place of places) {
-                if (place.placeId == null) {
+            const intermediatePlaces = this.locations.controls;
+            const placesControls = [this.firstPos as AbstractControl]
+                .concat(intermediatePlaces).concat(this.finalPos as AbstractControl);
+
+            for (const place of placesControls) {
+                const placeId = place.get("id").value.trim();
+                if (placeId == "") {
                     /**
                      * Currently, we shall start creating the place with the first pair of coordinates.
                      * Later, upon creating the trail, we shall assign the missing cross Trail ID
                      */
                     console.log("Place does not exist, going to create it...")
                     let response = await this.adminPlaceService.create({
-                        name: place.name,
+                        name: place.get("name").value.trim(),
                         crossingTrailIds: [],
                         id: null,
-                        description: "",
-                        coordinates: [place.coordinates],
+                        description: place.get("description").value,
+                        coordinates: [],
                         mediaIds: [],
-                        tags: [],
+                        tags: [place.get("tags").value.split(",").map(t => t.trim())],
                         recordDetails: {
                             uploadedOn: moment().toDate().toISOString(),
                             onInstance: environment.instance,
@@ -267,13 +271,20 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 } else {
                     console.log("Place appears to exist, going to check...")
                     let response = await this.placeService
-                        .getById(place.placeId).toPromise();
+                        .getById(placeId).toPromise();
                     if (response.content.length == 0) {
                         throw new Error("Place should exists but it does not exist!");
                     }
                     const cp: PlaceDto = response.content[0];
 
-                    const placeRef = {placeId: cp.id, name: cp.name, coordinates: place.coordinates};
+                    const placeRef: PlaceRefDto = {
+                        placeId: cp.id, name: cp.name,
+                        coordinates: {
+                            altitude: place.get("altitude").value,
+                            latitude: place.get("latitude").value,
+                            longitude: place.get("longitude").value,
+                        }
+                    };
                     processedPlaces.push({isCreatedPlace: false, placeRef: placeRef});
                 }
             }
@@ -295,10 +306,17 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                         await this.processPlace(pp, savedTrail);
                     }
 
+                    // Create intersections in case they did not exist
+                    this.createIntersectionPlaces(savedTrail.id,
+                        this.intersections.controls.filter((c) => c.get("id").value.trim() == ""))
+                    // ... update the ones that exist
+                    this.updateIntersectionPlaces(savedTrail.id,
+                        this.intersections.controls.filter((c) => c.get("id").value.trim() != ""))
+
                     console.log(`Going to remove trail raw file with ${this.trailRawDto.id}...`)
                     this.rawTrailService.deleteById(this.trailRawDto.id);
 
-                    this.onSaveRequest(response)
+                    this.onSaveRequest(response);
                 });
 
         }
@@ -311,13 +329,10 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         }
         let targetPlace = byId.content[0];
 
-
-        targetPlace.crossingTrailIds.push(tr.id);
-
         if (!pp.isCreatedPlace) {
+            targetPlace.crossingTrailIds.push(tr.id);
             targetPlace.coordinates.push(pp.placeRef.coordinates);
         }
-
         this.adminPlaceService.update(targetPlace).subscribe((response) => {
             if (response.status != "OK") {
                 throw new Error("An issue occurred with updating the place with ID='" + targetPlace.id + "'");
@@ -344,17 +359,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private getTrailFromForm(trailFormValue) {
-        return TrailImportFormUtils.getImportRequestFromControls(trailFormValue,
-            this.trailRawDto.coordinates.map(tc => {
-                return {
-                    latitude: tc.latitude,
-                    longitude: tc.longitude,
-                    altitude: tc.altitude
-                }
-            }),
-            this.trailRawDto.fileDetails);
-    }
 
     onDetectCrossings() {
         this.toggleLoading();
@@ -371,7 +375,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                     let metPoint = intersection.points[0];
                     this.intersectionTrails.push(intersection.trail);
                     this.crossPointOnTrail.push(metPoint);
-                    this.intersections.push(TrailImportFormUtils.getLocationFormGroupFromIntersection(intersection));
+                    let locationFormGroupFromIntersection =
+                        TrailImportFormUtils.getLocationFormGroupFromIntersection(intersection);
+                    this.intersections.push(locationFormGroupFromIntersection);
                     this.crossingGeolocationExecutedChecks.push(false);
                 })
                 this.isCrossingSectionComplete = true;
@@ -400,6 +406,50 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         }
     }
 
+    private getTrailFromForm(trailFormValue) {
+        return TrailImportFormUtils.getImportRequestFromControls(trailFormValue,
+            this.trailRawDto.coordinates.map(tc => {
+                return {
+                    latitude: tc.latitude,
+                    longitude: tc.longitude,
+                    altitude: tc.altitude
+                }
+            }),
+            this.trailRawDto.fileDetails);
+    }
+
+    private createIntersectionPlaces(newlyCreatedTrailId: string,
+                                     intersectionsControls: AbstractControl[]) {
+        let realm = this.authHelper.getRealm();
+        this.authHelper.getUsername().then((username) => {
+            return TrailImportFormUtils.getNewIntersectionRequestFromControls(
+                newlyCreatedTrailId, username,
+                realm, intersectionsControls);
+        });
+    }
+
+    private updateIntersectionPlaces(newlyCreatedTrailId: string,
+                                     intersectionControls: AbstractControl[]) {
+        intersectionControls.forEach((it) => {
+            let placeId = it.get("id").value;
+            let coords = {
+                longitude: it.get("latitude").value,
+                altitude: it.get("altitude").value,
+                latitude: it.get("longitude").value
+            };
+            this.placeService.getById(placeId).subscribe((placeResponse) => {
+                if (placeResponse.content.length == 0) {
+                    console.error("Cannot update place with id '" + placeId + "'")
+                    return;
+                }
+                let electedPlace = placeResponse.content[0];
+                electedPlace.crossingTrailIds.push(newlyCreatedTrailId);
+                electedPlace.coordinates.push(coords);
+                this.adminPlaceService.update(electedPlace);
+            });
+        })
+    }
+
     private onSaveRequest(response: TrailResponse) {
         this.router.navigate(['/admin/trail', {success: response.content[0].code}]);
     }
@@ -415,6 +465,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     get finalPos() {
         return this.trailFormGroup.controls["finalPos"] as FormGroup;
     }
+
 
     get intersections() {
         return this.trailFormGroup.controls["intersections"] as FormArray;

@@ -11,6 +11,10 @@
     overflow-y: scroll;
   }
 
+  .ellipsis {
+    max-width: 300px;
+  }
+
   ul {
     padding: 0;
 
@@ -25,8 +29,7 @@
     }
 
     .choice {
-      border-top: 1px solid black;
-      border-bottom: 1px solid black;
+
     }
 
     li.selected {

@@ -1,8 +1,18 @@
 @import "../../../style/const.scss";
 
 .container-box {
+
+    $color: #d000ff;
+
     padding: 5px;
     border: 1px solid black;
+
+    .description {
+        max-height: 300px;
+        float: left;
+        width: 100%;
+        background: white;
+    }
 }
 
 .accordion-head {

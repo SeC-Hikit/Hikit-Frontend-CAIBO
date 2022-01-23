@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {Marker} from "src/app/map-preview/map-preview.component";
 import {Coordinates2D} from "src/app/service/geo-trail-service";
 import {PlaceDto, PlaceResponse, PlaceService} from "src/app/service/place.service";
@@ -10,6 +10,7 @@ import {
     PickedPlace,
     PlacePickerSelectorComponent
 } from "../trail-upload-management/place-picker-selector/place-picker-selector.component";
+import {GeoToolsService} from "../../../service/geotools.service";
 
 @Component({
     selector: "app-trail-intersection-entry",
@@ -17,6 +18,7 @@ import {
     styleUrls: ["./trail-intersection-entry.component.scss"],
 })
 export class TrailIntersectionEntryComponent implements OnInit {
+
     @Input() i: number;
     @Input() inputForm: FormGroup;
     @Input() trail: TrailDto;
@@ -27,6 +29,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     crossPointMarker: Marker;
     crossWayTitle: string = "Crocevia";
     isCompleted: boolean;
+    isSelectedFromSystem: boolean = false;
     isShowing: boolean;
 
     isAutoDetected: boolean;
@@ -34,11 +37,12 @@ export class TrailIntersectionEntryComponent implements OnInit {
 
     geolocationResponse: PlaceResponse;
 
-    private readonly GEO_LOCATION_DISTANCE = 250;
-    private readonly MAX_NUMBER_GEOLOCATION = 3;
+    private readonly GEO_LOCATION_DISTANCE = 200;
+    private readonly MAX_NUMBER_GEOLOCATION = 15;
 
     constructor(private placeService: PlaceService,
-                private modalService : NgbModal) {
+                private geoToolService: GeoToolsService,
+                private modalService: NgbModal) {
     }
 
     ngOnInit(): void {
@@ -52,6 +56,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
             },
             icon: MapPinIconType.CROSSWAY_ICON
         }
+        console.log(this.inputForm)
     }
 
     toggleShowing(): void {
@@ -93,8 +98,12 @@ export class TrailIntersectionEntryComponent implements OnInit {
                             this.inputForm.controls["id"].setValue(picked.place.id);
                             this.inputForm.controls["name"].setValue(picked.place.name);
                             this.inputForm.controls["tags"].setValue(picked.place.tags.join(", "));
+                            this.onPlaceFound.emit([picked.place]);
+                            this.changeCrossWayTitle(picked.place.name)
+                            this.isSelectedFromSystem = true;
+                            this.isCompleted = true;
                         });
-                        this.onPlaceFound.emit([]);
+
                     }
                 }
             });
@@ -103,9 +112,41 @@ export class TrailIntersectionEntryComponent implements OnInit {
     changeCrossWayTitle(value: string) {
         this.isCompleted = this.isComplete(value);
         this.crossWayTitle = `Crocevia '${value}'`;
+        if (this.isCompleted) {
+            this.name.setValue(value);
+        }
+    }
+
+    deleteGeolocalizedData() {
+        this.id.setValue("");
+        this.name.setValue("");
+        this.tags.setValue("");
+        this.description.setValue("");
+
+        this.isCompleted = false;
+        this.isAutoDetected = false;
+        this.hasAutoDetectedRun = false;
     }
 
     private isComplete(value: string) {
         return value.length > 2 && this.hasAutoDetectedRun;
     }
+
+    get id() {
+        return this.inputForm.controls["id"] as FormControl;
+    }
+
+    get name() {
+        return this.inputForm.controls["name"] as FormControl;
+    }
+
+    get tags() {
+        return this.inputForm.controls["tags"] as FormControl;
+    }
+
+    get description() {
+        return this.inputForm.controls["description"] as FormControl;
+    }
+
+
 }

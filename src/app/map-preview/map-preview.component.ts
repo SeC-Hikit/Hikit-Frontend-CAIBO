@@ -39,6 +39,7 @@ export class MapPreviewComponent implements OnInit {
 
     private map: L.Map;
     private polyline: L.Polyline;
+    private polylineBorder: L.Polyline;
     private lastPointMarker: L.Marker;
     private startPointMarker: L.Marker;
     private markers: L.Marker[];
@@ -158,7 +159,18 @@ export class MapPreviewComponent implements OnInit {
         );
         this.polyline = L.polyline(coordinatesLatLngs, {
             color: "red",
+            fillColor: "red",
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0.7
         });
+        this.polylineBorder = L.polyline(coordinatesLatLngs, {
+            color: "white",
+            weight: 8,
+            opacity: 1,
+            fillOpacity: 0.7
+        });
+        this.polylineBorder.addTo(this.map);
         this.polyline.addTo(this.map);
         this.startPointMarker = L.marker(coordinatesLatLngs[0], {
             icon: StartIcon.get(),
@@ -191,7 +203,7 @@ export class MapPreviewComponent implements OnInit {
     private showSecondaryTrails() {
         this.otherTrails.forEach((trail) => {
             let invertedCoords = MapUtils.getCoordinatesInverted(trail.coordinates);
-            let polyline = L.polyline(invertedCoords, {color: "#FF5F49"});
+            let polyline = L.polyline(invertedCoords, {color: "#d000ff"});
             polyline.bindPopup(trail.code).openPopup();
             polyline.addTo(this.map);
             this.otherTrailPolys.push(polyline);
@@ -201,6 +213,7 @@ export class MapPreviewComponent implements OnInit {
     clearMap(): void {
         if (this.polyline != null) {
             this.map.removeLayer(this.polyline);
+            this.map.removeLayer(this.polylineBorder);
         }
         if (this.lastPointMarker != null) {
             this.map.removeLayer(this.lastPointMarker);

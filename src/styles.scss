@@ -32,6 +32,16 @@
   margin-top: 2%;
 }
 
+form {
+  .errors {
+    color: $error-color;
+  }
+  .mandatory-field-asterisk {
+    color: $error-color;
+  }
+}
+
+
 * {
   font-family: "Fira Sans", sans-serif;
 }
@@ -112,6 +122,16 @@ table td,
 th {
   font-size: 16px;
   font-weight: 100;
+}
+
+.hidden {
+  display: none !important;
+}
+
+table tbody {
+  tr:hover {
+    background: $soft-action-color !important;
+  }
 }
 
 table td {

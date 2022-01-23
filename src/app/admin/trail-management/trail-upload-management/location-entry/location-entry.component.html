@@ -1,25 +1,55 @@
 <div class="entry space-up" [formGroup]="inputForm">
     <h4>{{title}} {{ showIndex ? "#" + (i | increaseOne) : null }} </h4>
-    <div class="form-row" *ngIf="isEditableLocation">
+    <div class="row" *ngIf="isEditableLocation">
         <div class="col-md-12 mb-12 top-margin" *ngIf="!showPositionControls">
             <button class="btn btn-info col-sm-12" type="button" (click)="reattemptLocalization()">
                 {{ hasBeenLocalized ? "Ri-geolocalizza" : "Geolocalizza"}}
             </button>
         </div>
         <div *ngIf="hasBeenLocalizedFirstTime" class="top-margin col-md-12">
-            <h5>Aggiungi nuova località</h5>
-            <p>Nome</p>
-            <div class="col-md-12 mb-12">
-                <input type="text" (change)="this.changeName($event)" formControlName="name" placeholder="Es: Rasora"/>
+            <div class="row">
+                <div class="col-12">
+                    <h5>Aggiungi nuova località</h5>
+                </div>
             </div>
-            <p>Altri nomi - separati da una virgola</p>
-            <div class="col-md-12 mb-12">
-                <input
-                        type="text"
-                        formControlName="tags"
-                        class="form-control"
-                        placeholder="Es: ..."
-                />
+            <div class="row top-margin">
+                <div class="col-12">
+                    <label>Nome <span class="mandatory-field-asterisk">*</span></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-12">
+                    <input type="text" (change)="this.changeName($event)" formControlName="name"
+                           placeholder="Es: Rasora"/>
+                </div>
+            </div>
+            <div class="row top-margin">
+                <label>Toponomi - separati da una virgola</label>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-12">
+                    <input
+                            type="text"
+                            formControlName="tags"
+                            class="form-control"
+                            placeholder="Es: ..."
+                    />
+                </div>
+            </div>
+            <div class="row top-margin">
+                <label>Descrizione</label>
+            </div>
+            <div class="row">
+                <quill-editor
+                        [formControlName]="'description'"
+                        [className]="'description'"
+                        [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"></quill-editor>
             </div>
         </div>
     </div>
@@ -95,7 +125,7 @@
             </button>
         </div>
     </div>
-    <div class="row">
+    <div class="row hidden">
         <!--       *ngClass="{ collapse: true }"-->
         <div class="form-row">
             <div class="form-group col-md-3 mb-3">

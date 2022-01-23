@@ -1,10 +1,11 @@
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Coordinates2D, TrailIntersection} from "../service/geo-trail-service";
 import {TrailImportRequest} from "../service/import.service";
 import {FileDetailsDto} from "../service/trail-service.service";
 import * as moment from "moment";
 import {DateUtils} from "./DateUtils";
-import {PlaceRefDto} from "../service/place.service";
+import {PlaceDto, PlaceRefDto} from "../service/place.service";
+import {environment} from "../../environments/environment.prod";
 
 export interface CreatedPlaceRefDto {
     placeRef: PlaceRefDto,
@@ -17,7 +18,7 @@ export class TrailImportFormUtils {
 
     public static getLocationFormGroup() {
         return new FormGroup({
-            "id": new FormControl(""),
+            "id": new FormControl("", []),
             "name": new FormControl("", Validators.minLength(0)),
             "tags": new FormControl(""),
             "latitude": new FormControl("", Validators.required),
@@ -30,11 +31,15 @@ export class TrailImportFormUtils {
     public static getLocationFormGroupFromIntersection(intersection: TrailIntersection) {
         let intersectionCoords = intersection.points[0];
         return new FormGroup({
-            "id": new FormControl("", Validators.minLength(0)),
-            "name": new FormControl("", Validators.minLength(2)),
+            "id": new FormControl(" "), // one char empty string - Strange issue
+            "name": new FormControl("", Validators.required),
+            "description": new FormControl(" "),
+            "tags": new FormControl(" "),
+            "crossingTrailIds": new FormControl(intersection.trail.id),
             "latitude": new FormControl(intersectionCoords.latitude, Validators.required),
             "longitude": new FormControl(intersectionCoords.longitude, Validators.required),
             "altitude": new FormControl(intersectionCoords.altitude, Validators.required),
+            "distanceFromTrailStart": new FormControl("0"),
         });
     }
 
@@ -94,7 +99,8 @@ export class TrailImportFormUtils {
             country: "Italy",
             description: tfv.description,
             trailStatus: "DRAFT",
-            lastUpdate: moment(DateUtils.formatStringDateToDashes(tfv.lastUpdate.day, tfv.lastUpdate.month, tfv.lastUpdate.year),
+            lastUpdate: moment(DateUtils.formatStringDateToDashes(
+                    tfv.lastUpdate.day, tfv.lastUpdate.month, tfv.lastUpdate.year),
                 DateUtils.DATE_FORMAT).toISOString(),
             maintainingSection: tfv.maintainingSection,
             linkedMediaDtos: [],
@@ -110,6 +116,71 @@ export class TrailImportFormUtils {
                 .concat([mappedEndLocation]),
             fileDetailsDto: fileDetailsDto
         };
+    }
+
+    static getNewIntersectionRequestFromControls(trailId: string, username: string, realm: string,
+                                                 controls: AbstractControl[]): PlaceDto[] {
+        return controls.map((control) => {
+            let coords = {
+                longitude: control.get("latitude").value,
+                altitude: control.get("altitude").value,
+                latitude: control.get("longitude").value
+            };
+            return {
+                    id: control.get("id").value,
+                    name: control.get("name").value,
+                    coordinates: [
+                        coords,
+                        coords
+                    ],
+                    tags: control.get("tags").value.split(",").map(t => t.trim()),
+                    description: control.get("description").value,
+                    crossingTrailIds: control.get("crossingTrailIds").value.map((t) => {
+                        t.trim()
+                    }).concat(trailId),
+                    mediaIds: [],
+                    recordDetails: {
+                        uploadedOn: moment().toDate().toISOString(),
+                        onInstance: environment.instance,
+                        realm: realm,
+                        uploadedBy: username
+                    }
+                }
+            })
+    }
+
+    static getUpdatedIntersectionRequestFromControls(trailId: string, username: string, realm: string,
+                                                 controls: AbstractControl[]): PlaceDto[] {
+        return controls.map((control) => {
+            return {
+                id: control.get("id").value,
+                name: control.get("name").value,
+                coordinates: [
+                    {
+                        longitude: control.get("latitude").value,
+                        altitude: control.get("altitude").value,
+                        latitude: control.get("longitude").value
+                    },
+                    {
+                        longitude: control.get("latitude").value,
+                        altitude: control.get("altitude").value,
+                        latitude: control.get("longitude").value
+                    }
+                ],
+                tags: control.get("tags").value.split(",").map(t => t.trim()),
+                description: control.get("description").value,
+                crossingTrailIds: control.get("crossingTrailIds").value.map((t) => {
+                    t.trim()
+                }).concat(trailId),
+                mediaIds: [],
+                recordDetails: {
+                    uploadedOn: moment().toDate().toISOString(),
+                    onInstance: environment.instance,
+                    realm: realm,
+                    uploadedBy: username
+                }
+            }
+        })
     }
 
 }

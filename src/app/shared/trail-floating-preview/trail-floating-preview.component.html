@@ -1,17 +1,26 @@
 <div
-  *ngIf="isVisible"
-  [ngClass]="{
+        *ngIf="isVisible"
+        [ngClass]="{
     'floating-hide-panel': true
   }"
 >
-  <span class="close-btn" (click)="onClose.emit()">ｘ</span>
-  <label>Anteprima {{ trails[0].code }}</label>
-  <div class="form-group col-md-12 mb-12">
+    <span class="close-btn" (click)="onClose.emit()">ｘ</span>
+    <label>Anteprima {{ trails.length > 0 ? trails[0].code : '' }}</label>
+    <div class="form-group col-md-12 mb-12">
+    <span *ngIf="this.trails.length > 0; else noTrail">
     <app-map-preview
-      [trailPreview]="this.trails[0]"
-      [otherTrails]="[]"
-      [index]="'0'"
-      [markersCoordinates]="markers"
+            [trailPreview]="this.trails[0]"
+            [otherTrails]="[]"
+            [index]="'0'"
+            [markersCoordinates]="markers"
     ></app-map-preview>
-  </div>
+    </span>
+        <ng-template #noTrail>
+            <app-map-preview
+                    [otherTrails]="[]"
+                    [markersCoordinates]="markers"
+            ></app-map-preview>
+        </ng-template>
+
+    </div>
 </div>

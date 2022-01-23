@@ -123,6 +123,9 @@ export interface paths {
   "/preview/raw": {
     get: operations["getRawTrailPreviews"];
   };
+  "/preview/find/code/{code}": {
+    get: operations["findByTrailCode"];
+  };
   "/poi": {
     get: operations["get_2"];
   };
@@ -170,6 +173,9 @@ export interface paths {
   };
   "/maintenance/count": {
     get: operations["getCount_3"];
+  };
+  "/geo-tool/altitude": {
+    get: operations["geoLocateTrail_1"];
   };
   "/dataset": {
     get: operations["getTrailDatasetV"];
@@ -251,6 +257,7 @@ export interface components {
       realm?: string;
       filename?: string;
       originalFilename?: string;
+      lastModifiedBy?: string;
     };
     KeyValueDto: {
       key?: string;
@@ -481,7 +488,9 @@ export interface components {
       id?: string;
       name?: string;
       fileName?: string;
+      extension?: string;
       fileUrl?: string;
+      resolutionSuffixes?: string[];
       mime?: string;
       fileSize?: number;
       fileDetails?: components["schemas"]["FileDetailsDto"];
@@ -805,7 +814,7 @@ export interface operations {
   geoLocateTrail: {
     parameters: {
       query: {
-        level: "LOW" | "MEDIUM" | "HIGH" | "FULL";
+        level?: "LOW" | "MEDIUM" | "HIGH" | "FULL";
       };
     };
     responses: {
@@ -1135,7 +1144,7 @@ export interface operations {
   };
   getById_1: {
     parameters: {
-      query: {
+      path: {
         id: string;
       };
     };
@@ -1150,8 +1159,8 @@ export interface operations {
   };
   validate: {
     parameters: {
-      query: {
-        validationId?: string;
+      path: {
+        validationId: string;
       };
     };
     responses: {
@@ -1165,8 +1174,10 @@ export interface operations {
   };
   getUpgraded: {
     parameters: {
-      query: {
+      path: {
         realm: string;
+      };
+      query: {
         skip?: number;
         limit?: number;
       };
@@ -1182,8 +1193,10 @@ export interface operations {
   };
   getByTrailId: {
     parameters: {
-      query: {
+      path: {
         id: string;
+      };
+      query: {
         skip?: number;
         limit?: number;
       };
@@ -1199,8 +1212,10 @@ export interface operations {
   };
   getUnapgraded: {
     parameters: {
-      query: {
+      path: {
         realm: string;
+      };
+      query: {
         skip?: number;
         limit?: number;
       };
@@ -1216,7 +1231,7 @@ export interface operations {
   };
   getCount_1: {
     parameters: {
-      query: {
+      path: {
         realm: string;
       };
     };
@@ -1308,11 +1323,32 @@ export interface operations {
       };
     };
   };
+  findByTrailCode: {
+    parameters: {
+      path: {
+        code: string;
+      };
+      query: {
+        skip?: number;
+        limit?: number;
+        realm?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailPreviewResponse"];
+        };
+      };
+    };
+  };
   get_2: {
     parameters: {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1548,6 +1584,22 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["CountResponse"];
+        };
+      };
+    };
+  };
+  geoLocateTrail_1: {
+    parameters: {
+      query: {
+        latitude: number;
+        longitude: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["CoordinatesDto"];
         };
       };
     };
