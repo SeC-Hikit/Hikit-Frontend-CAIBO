@@ -271,7 +271,9 @@
                             [showPositionControls]="true"
                             [otherTrails]="[]"
                             [markers]="[]"
+                            [isDeletable]="true"
                             (onTextFocus)="onSetPlace($event)"
+                            (onDelete)="onDeletePlace($event)"
                     >
                     </app-location-entry>
                 </div>

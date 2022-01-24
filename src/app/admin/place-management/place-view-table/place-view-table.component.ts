@@ -6,6 +6,7 @@ import {TrailDto, TrailService} from "../../../service/trail-service.service";
 import {Marker} from "../../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {ActivatedRoute, Router} from "@angular/router";
+import {AdminPlaceService} from "../../../service/admin-place.service";
 
 @Component({
     selector: 'app-place-view-table',
@@ -27,6 +28,7 @@ export class PlaceViewTableComponent implements OnInit {
     selectedPage: number = 0;
 
     constructor(private placeService: PlaceService,
+                private adminPlaceService: AdminPlaceService,
                 private trailService: TrailService,
                 private activatedRoute: ActivatedRoute,
                 private router: Router) {
@@ -81,5 +83,15 @@ export class PlaceViewTableComponent implements OnInit {
 
     togglePreview() {
         this.isPlacePreviewVisible = !this.isPlacePreviewVisible;
+    }
+
+    onDelete(id: string) {
+        this.adminPlaceService.deleteById(id).subscribe(()=> {
+            this.onPlaceLoad(this.selectedPage)
+        });
+    }
+
+    showTrailCode(crossingTrailIds: string[]) {
+        // TODO
     }
 }

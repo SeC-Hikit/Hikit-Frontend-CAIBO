@@ -28,6 +28,7 @@ export class LocationEntryComponent implements OnInit {
     @Input() showIndex: boolean;
     @Input() classPrefix: string;
     @Input() i: number;
+    @Input() isDeletable?: boolean;
 
     @Input() inputForm: FormGroup;
 
@@ -42,6 +43,7 @@ export class LocationEntryComponent implements OnInit {
 
     @Output() onTextFocus?: EventEmitter<IndexCoordinateSelector> = new EventEmitter<IndexCoordinateSelector>();
     @Output() onSearchBtnClick?: EventEmitter<number> = new EventEmitter<number>();
+    @Output() onDelete?: EventEmitter<number> = new EventEmitter<number>();
 
     selectedCoordinateIndex: number;
     hasBeenLocalizedFirstTime: boolean = false;
@@ -157,5 +159,9 @@ export class LocationEntryComponent implements OnInit {
         this.hasBeenLocalized = false;
         this.inputForm.controls["tags"].setValue("");
         this.inputForm.controls["id"].setValue(null);
+    }
+
+    onDeleteThis() {
+        this.onDelete.emit(this.i);
     }
 }

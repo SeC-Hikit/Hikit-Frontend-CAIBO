@@ -16,10 +16,11 @@ export class TrailImportFormUtils {
 
     public static DEFAULT_CYCLO = "UNCLASSIFIED";
 
-    public static getLocationFormGroup() {
+    public static getLocationForGroup() {
         return new FormGroup({
             "id": new FormControl("", []),
             "name": new FormControl("", Validators.minLength(0)),
+            "description": new FormControl("", Validators.minLength(0)),
             "tags": new FormControl(""),
             "latitude": new FormControl("", Validators.required),
             "longitude": new FormControl("", Validators.required),
@@ -28,7 +29,7 @@ export class TrailImportFormUtils {
         });
     }
 
-    public static getLocationFormGroupFromIntersection(intersection: TrailIntersection) {
+    public static getLocationFormGroupForIntersection(intersection: TrailIntersection) {
         let intersectionCoords = intersection.points[0];
         return new FormGroup({
             "id": new FormControl(" "), // one char empty string - Strange issue

@@ -96,8 +96,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             lastUpdate: new FormControl(""),
             intersections: new FormArray([]),
             maintainingSection: new FormControl(this.authHelper.getSection(), Validators.required),
-            startPos: TrailImportFormUtils.getLocationFormGroup(),
-            finalPos: TrailImportFormUtils.getLocationFormGroup(),
+            startPos: TrailImportFormUtils.getLocationForGroup(),
+            finalPos: TrailImportFormUtils.getLocationForGroup(),
             locations: new FormArray([]),
         });
 
@@ -129,7 +129,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     }
 
     onAddLocation(): void {
-        this.locations.push(TrailImportFormUtils.getLocationFormGroup());
+        this.locations.push(TrailImportFormUtils.getLocationForGroup());
     }
 
     onReload(): void {
@@ -145,7 +145,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             this.errors = this.checkCrossingsForErrors();
         }
         if (this.STEP_INDEX == this.LOCATION_INDEX) {
-            this.errors = []; //this.checkLocationsForErrors();
+            this.errors = this.checkLocationsForErrors();
             return true;
         }
 
@@ -153,29 +153,36 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         if (this.errors.length == 0) {
             this.STEP_INDEX++;
             this.scrollUp();
-            return false; // prevents the submission
         }
+        return false;
     }
 
 
     private checkGeneralInfoForErrors(): string[] {
-        let errors = [];
+        const errors = [];
         if (!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
         if (!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
         return errors;
     }
 
     private checkCrossingsForErrors(): string[] {
-        let errors = [];
+        const errors = [];
         if (!this.intersections.valid)
             errors.push("Uno o più crocevia non sono stati ancora geolocalizzati o completati");
         return errors;
     }
 
     private checkLocationsForErrors(): string[] {
-        let errors = [];
-        if (!this.trailFormGroup.get("code").valid) errors.push("'Codice sentiero' non completato");
-        if (!this.trailFormGroup.get("description").valid) errors.push("Descrizione non completata, ma richiesta");
+        const errors = [];
+        if(!this.firstPos.valid){
+            errors.push("Alcuni errori esistono sulla località di partenza")
+        }
+        if(!this.finalPos.valid){
+            errors.push("Alcuni errori esistono nella località d'arrivo")
+        }
+        if(!this.locations.valid){
+            errors.push("Alcuni errori esistono sulle località intermedie")
+        }
         return errors;
     }
 
@@ -376,7 +383,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                     this.intersectionTrails.push(intersection.trail);
                     this.crossPointOnTrail.push(metPoint);
                     let locationFormGroupFromIntersection =
-                        TrailImportFormUtils.getLocationFormGroupFromIntersection(intersection);
+                        TrailImportFormUtils.getLocationFormGroupForIntersection(intersection);
                     this.intersections.push(locationFormGroupFromIntersection);
                     this.crossingGeolocationExecutedChecks.push(false);
                 })
@@ -404,6 +411,10 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 {success: this.trailRawDto.name},
             ]);
         }
+    }
+
+    onDeletePlace(index: number) {
+        this.locations.controls.splice(index - 1, 1);
     }
 
     private getTrailFromForm(trailFormValue) {

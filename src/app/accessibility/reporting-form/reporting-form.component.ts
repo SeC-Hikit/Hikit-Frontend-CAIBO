@@ -40,7 +40,7 @@ export class ReportingFormComponent implements OnInit {
             lastUpdate: new FormControl("", Validators.required),
             intersectionExample: new FormControl("", Validators.required),
             maintainingSection: new FormControl("", Validators.required),
-            position: TrailImportFormUtils.getLocationFormGroup(),
+            position: TrailImportFormUtils.getLocationForGroup(),
         });
 
         this.loadPreviews();
