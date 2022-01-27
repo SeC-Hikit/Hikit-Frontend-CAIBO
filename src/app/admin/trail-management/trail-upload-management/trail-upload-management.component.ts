@@ -8,7 +8,7 @@ import {
     Coordinates2D,
     TrailIntersectionResponse, TrailIntersection,
 } from "src/app/service/geo-trail-service";
-import {ImportService, TrailRawDto} from "src/app/service/import.service";
+import {ImportService, TrailImportRequest, TrailRawDto} from "src/app/service/import.service";
 import {RestResponse} from "src/app/RestResponse";
 import {Status} from "src/app/Status";
 import {AdminTrailRawService} from "src/app/service/admin-trail-raw.service";
@@ -175,13 +175,13 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     private checkLocationsForErrors(): string[] {
         const errors = [];
         if(!this.firstPos.valid){
-            errors.push("Alcuni errori esistono sulla località di partenza")
+            errors.push("Località di partenza non compilata e/o geolocalizzata")
         }
         if(!this.finalPos.valid){
-            errors.push("Alcuni errori esistono nella località d'arrivo")
+            errors.push("Località d'arrivo non compilata e/o geolocalizzata")
         }
         if(!this.locations.valid){
-            errors.push("Alcuni errori esistono sulle località intermedie")
+            errors.push("Località intermedie non compilate e/o geolocalizzate")
         }
         return errors;
     }
@@ -224,13 +224,34 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
         let error = [];
 
+        /**
+         *
+         * 1. Check which intersection Places exists
+         * exist?
+         * [NO] -> create them & gets the IDs
+         * [YES] -> ensure they exists - get them by IDs
+         *
+         * 2. Check which places Places exists
+         * exist?
+         * [NO] -> creates them & gets the IDs
+         * [YES] -> ensure they exists - get them by IDs
+         *
+         * 3. Save the trail
+         *
+         * 4. Update trail with places
+         * 5. Update places with trail IDs and coordinates
+         *
+         */
+
         if (this.trailFormGroup.valid) {
             // return;
             this.isLoading = true;
 
             // Grab values
             const trailFormValue = this.trailFormGroup.value;
-            const importTrail = this.getTrailFromForm(trailFormValue);
+            const importTrail : TrailImportRequest = this.getTrailFromForm(trailFormValue);
+
+
 
 
             // create places if they do not exist

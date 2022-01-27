@@ -195,6 +195,9 @@
                                 (onPlaceFound)="togglePlacePicker()"
                         ></app-trail-intersection-entry>
                     </div>
+                    <div class="col-md-12 top-margin" *ngIf="intersections.controls == 0">
+                      ✔️ Nessun crocevia rilevato
+                    </div>
                 </div>
             </div>
 
@@ -288,13 +291,6 @@
                     </button>
                 </div>
             </div>
-            <div class="form-row" *ngIf="this.STEP_INDEX == 2" (click)="proceed()">
-                <div class="col col-md-12 top-margin-x2">
-                    <button class="btn btn-primary full-width" type="submit">
-                        Salva sentiero
-                    </button>
-                </div>
-            </div>
 
             <div class="row errors" *ngIf="errors.length > 0">
                 <div class="col-12 top-margin-x2">
@@ -304,7 +300,13 @@
                 </div>
             </div>
 
-
+            <div class="form-row" *ngIf="this.STEP_INDEX == 2" (click)="proceed()">
+                <div class="col col-md-12 top-margin-x2">
+                    <button class="btn btn-primary full-width" type="submit">
+                        Salva sentiero
+                    </button>
+                </div>
+            </div>
             <div class="row" *ngIf="this.STEP_INDEX < 2">
                 <div class="col top-margin-x2">
                     <button class="btn btn-primary full-width" (click)="proceed()">

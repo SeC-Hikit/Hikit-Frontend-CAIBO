@@ -6,34 +6,46 @@
                     <div class="it-header-center-content-wrapper">
                         <div class="it-brand-wrapper">
                             <a href="#">
-                                <img src="/assets/cai/cai_logo_slim.png" class="icon" />
+                                <img src="/assets/cai/cai_logo_slim.png" class="icon"/>
                                 <div class="it-brand-text">
                                     <h2 class="no_toc">{{ publicName }}</h2>
                                     <h3 class="no_toc d-none d-md-block">Sentieri e Cartografia</h3>
                                 </div>
                             </a>
                         </div>
+
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
                         <div class="it-right-zone">
                             <div class="it-header-navbar-wrapper">
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <nav class="navbar navbar-expand-lg has-megamenu">
-                                                <div class="navbar-collapsable" id="nav10">
+                                            <nav class="navbar navbar-expand-lg navbar-expand-md">
+                                                <div class="collapse navbar-collapse" id="menu-principale">
                                                     <div class="overlay"></div>
                                                     <div class="close-div sr-only">
                                                         <button class="btn close-menu" type="button"><span
-                                                                class="it-close"></span>close</button>
+                                                                class="it-close"></span>close
+                                                        </button>
                                                     </div>
                                                     <div class="menu-wrapper">
                                                         <ul class="navbar-nav">
-                                                            <a routerLink="/map" routerLinkActive="active" class="nav-item nav-link">
+                                                            <a routerLink="/map" routerLinkActive="active"
+                                                               class="nav-item nav-link">
                                                                 Sentieri
                                                             </a>
-                                                            <a routerLink="/accessibility" routerLinkActive="active" class="nav-item nav-link">
+                                                            <a routerLink="/accessibility" routerLinkActive="active"
+                                                               class="nav-item nav-link">
                                                                 Percorribilità
                                                             </a>
-                                                            <a routerLink="/maintenance" routerLinkActive="active" class="nav-item nav-link">
+                                                            <a routerLink="/maintenance" routerLinkActive="active"
+                                                               class="nav-item nav-link">
                                                                 Manutenzioni
                                                             </a>
                                                         </ul>

@@ -22,7 +22,7 @@ export class LocationEntryComponent implements OnInit {
     private readonly OFFSET_START_POINT = 1;
     private readonly OFFSET_END_POINT = 2;
 
-    private GEOLOCATION_DISTANCE = 5000;
+    private GEOLOCATION_DISTANCE = 200;
 
     @Input() title: string;
     @Input() showIndex: boolean;
