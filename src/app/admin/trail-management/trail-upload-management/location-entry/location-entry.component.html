@@ -22,37 +22,13 @@
             </div>
             <div class="row">
                 <div class="col-md-12 mb-12">
-                    <input type="text" (change)="this.changeName($event)" formControlName="name"
+                    <input type="text"
+                           (change)="this.changeName($event)" formControlName="name"
                            placeholder="Es: Rasora"/>
                 </div>
             </div>
             <div class="row top-margin">
-                <label>Toponomi - separati da una virgola</label>
-            </div>
-            <div class="row">
-                <div class="col-md-12 mb-12">
-                    <input
-                            type="text"
-                            formControlName="tags"
-                            class="form-control"
-                            placeholder="Es: ..."
-                    />
-                </div>
-            </div>
-            <div class="row top-margin">
                 <label>Descrizione</label>
-            </div>
-            <div class="row">
-                <quill-editor
-                        [formControlName]="'description'"
-                        [className]="'description'"
-                        [modules]="{
-                toolbar: [
-                  ['bold', 'italic', 'underline'],
-                  [{ list: 'ordered' }, { list: 'bullet' }],
-                  ['link']
-                ]
-              }"></quill-editor>
             </div>
         </div>
     </div>
@@ -122,7 +98,6 @@
         </div>
     </div>
     <div class="row hidden">
-        <!--       *ngClass="{ collapse: true }"-->
         <div class="form-row">
             <div class="form-group col-md-3 mb-3">
                 <p>Id</p>

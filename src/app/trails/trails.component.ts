@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TrailPreview, TrailPreviewService } from '../service/trail-preview-service.service';
-import { TrailDto, TrailCoordinates, TrailService } from '../service/trail-service.service';
+import { TrailDto, TrailCoordinatesDto, TrailService } from '../service/trail-service.service';
 
 @Component({
   selector: 'app-trails',
@@ -11,7 +11,7 @@ export class TrailsComponent implements OnInit {
 
   public trailsResponse: TrailPreview[]
   public selectedTrail: TrailDto
-  public selectedTrailCoords: TrailCoordinates[];
+  public selectedTrailCoords: TrailCoordinatesDto[];
 
   constructor(
     private trailPreviewService: TrailPreviewService,

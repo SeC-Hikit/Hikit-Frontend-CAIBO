@@ -3,7 +3,7 @@ import {Component, Input, OnInit} from "@angular/core";
 import * as L from "leaflet";
 import {Coordinates2D} from "../service/geo-trail-service";
 import {MapUtils} from "../map-view/MapUtils";
-import {TrailDto, TrailCoordinates, CoordinatesDto} from "../service/trail-service.service";
+import {TrailDto, TrailCoordinatesDto, CoordinatesDto} from "../service/trail-service.service";
 import {StartIcon} from "../../assets/icons/MapPinIconType";
 import {EndIcon} from "../../assets/icons/MapPinIconType";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
@@ -45,7 +45,7 @@ export class MapPreviewComponent implements OnInit {
     private markers: L.Marker[];
     private selectionCircle: L.Circle;
 
-    private otherTrailPolys: L.Polyline[];
+    private otherTrailPolys: L.Polyline[] = [];
 
     isPreviewVisible: boolean;
 
@@ -152,7 +152,7 @@ export class MapPreviewComponent implements OnInit {
         this.map.flyTo(this.selectionCircle.getLatLng());
     }
 
-    onPreview(trailPreviewCoordinates: TrailCoordinates[]): void {
+    onPreview(trailPreviewCoordinates: TrailCoordinatesDto[]): void {
         this.clearMap();
         let coordinatesLatLngs = MapUtils.getCoordinatesInverted(
             trailPreviewCoordinates

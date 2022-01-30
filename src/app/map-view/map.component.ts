@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Maintenance, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../service/trail-preview-service.service';
-import {TrailCoordinates, TrailDto, TrailService} from '../service/trail-service.service';
+import {TrailCoordinatesDto, TrailDto, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
@@ -56,7 +56,7 @@ export class MapComponent implements OnInit {
     selectedTrailNotifications: AccessibilityNotification[];
     lastMaintenance: Maintenance;
     userPosition: UserCoordinates;
-    highlightedLocation: TrailCoordinates;
+    highlightedLocation: TrailCoordinatesDto;
 
     isTrailSelectedVisible: boolean = false;
     isTrailFullScreenVisible: boolean = false;
@@ -216,7 +216,7 @@ export class MapComponent implements OnInit {
         }
     }
 
-    navigateToLocation(location: TrailCoordinates) {
+    navigateToLocation(location: TrailCoordinatesDto) {
         this.highlightedLocation = location;
     }
 

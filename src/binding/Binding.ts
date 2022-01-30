@@ -25,9 +25,15 @@ export interface paths {
     put: operations["create_1"];
     post: operations["update_2"];
   };
+  "/admin/place/unlink/trail": {
+    put: operations["unLinkTrailToPlace"];
+  };
   "/admin/place/media/{id}": {
     put: operations["addMedia"];
     post: operations["deleteMedia"];
+  };
+  "/admin/place/link/trail": {
+    put: operations["linkTrailToPlace"];
   };
   "/admin/maintenance": {
     put: operations["create_2"];
@@ -46,6 +52,9 @@ export interface paths {
   };
   "/geo-trail/intersect": {
     post: operations["findTrailIntersection"];
+  };
+  "/geo-tool/distance": {
+    post: operations["radialDistance"];
   };
   "/admin/trail/status": {
     post: operations["updateTrailStatus"];
@@ -152,6 +161,9 @@ export interface paths {
   };
   "/place/name/{name}": {
     get: operations["getLikeNameOrTags"];
+  };
+  "/media": {
+    get: operations["getMedia"];
   };
   "/media/{id}": {
     get: operations["getById_3"];
@@ -272,6 +284,7 @@ export interface components {
       name?: string;
       coordinates?: components["schemas"]["CoordinatesDto"];
       placeId?: string;
+      encounteredTrailIds?: string[];
     };
     StatsTrailMetadataDto: {
       totalRise?: number;
@@ -326,6 +339,7 @@ export interface components {
       startLocation?: components["schemas"]["PlaceRefDto"];
       endLocation?: components["schemas"]["PlaceRefDto"];
       locations?: components["schemas"]["PlaceRefDto"][];
+      crossways?: components["schemas"]["PlaceRefDto"][];
       classification?: "T" | "E" | "EE" | "EEA" | "UNCLASSIFIED";
       country?: string;
       coordinates?: components["schemas"]["TrailCoordinatesDto"][];
@@ -407,6 +421,11 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["PlaceDto"][];
+    };
+    LinkedPlaceDto: {
+      trailId?: string;
+      placeId?: string;
+      coordinatesDto?: components["schemas"]["CoordinatesDto"];
     };
     MaintenanceDto: {
       id?: string;
@@ -701,6 +720,21 @@ export interface operations {
       };
     };
   };
+  unLinkTrailToPlace: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PlaceResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LinkedPlaceDto"];
+      };
+    };
+  };
   addMedia: {
     parameters: {
       path: {
@@ -738,6 +772,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UnLinkeMediaRequestDto"];
+      };
+    };
+  };
+  linkTrailToPlace: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PlaceResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LinkedPlaceDto"];
       };
     };
   };
@@ -849,6 +898,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["GeoLineDto"];
+      };
+    };
+  };
+  radialDistance: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CoordinatesDto"][];
       };
     };
   };
@@ -1488,6 +1552,23 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["PlaceResponse"];
+        };
+      };
+    };
+  };
+  getMedia: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
+        realm?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["MediaResponse"];
         };
       };
     };

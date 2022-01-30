@@ -97,7 +97,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
                         ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
                             this.inputForm.controls["id"].setValue(picked.place.id);
                             this.inputForm.controls["name"].setValue(picked.place.name);
-                            this.inputForm.controls["tags"].setValue(picked.place.tags.join(", "));
                             this.onPlaceFound.emit([picked.place]);
                             this.changeCrossWayTitle(picked.place.name)
                             this.isSelectedFromSystem = true;

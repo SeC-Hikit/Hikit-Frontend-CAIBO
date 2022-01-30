@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import * as moment from 'moment';
 import { Maintenance } from 'src/app/service/maintenance.service';
 import { AccessibilityNotification } from 'src/app/service/notification-service.service';
-import { TrailDto, TrailCoordinates } from 'src/app/service/trail-service.service';
+import { TrailDto, TrailCoordinatesDto } from 'src/app/service/trail-service.service';
 import {ChartUtils} from "../ChartUtils";
 import * as Chart from "chart.js";
 import {ChartOptions} from "chart.js";
@@ -29,7 +29,7 @@ export class TrailDetailsComponent implements OnInit {
   @Output() onDownloadGpx = new EventEmitter<void>();
   @Output() onDownloadKml = new EventEmitter<void>();
   @Output() onDownloadPdf = new EventEmitter<void>();
-  @Output() onNavigateToLocation = new EventEmitter<TrailCoordinates>();
+  @Output() onNavigateToLocation = new EventEmitter<TrailCoordinatesDto>();
   @Output() onNavigateToSelectedTrailCoordIndex = new EventEmitter<number>();
   @Output() onNavigateToTrailReportIssue = new EventEmitter<string>();
 
@@ -97,7 +97,7 @@ export class TrailDetailsComponent implements OnInit {
     this.onDownloadPdf.emit();
   }
 
-  moveTo(location: TrailCoordinates) {
+  moveTo(location: TrailCoordinatesDto) {
     console.log(location);
     this.onNavigateToLocation.emit(location);
   }

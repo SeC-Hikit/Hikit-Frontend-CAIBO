@@ -3,7 +3,7 @@ import 'leaflet';
 import {LatLngBounds, LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
 import {RectangleDto} from 'src/app/service/geo-trail-service';
-import {TrailDto, TrailCoordinates, CoordinatesDto} from 'src/app/service/trail-service.service';
+import {TrailDto, TrailCoordinatesDto, CoordinatesDto} from 'src/app/service/trail-service.service';
 import {UserCoordinates} from 'src/app/UserCoordinates';
 import {GraphicUtils} from 'src/app/utils/GraphicUtils';
 import {MapUtils} from '../MapUtils';
@@ -40,7 +40,7 @@ export class MapFullComponent implements OnInit {
     @Input() selectedTrail: TrailDto;
     @Input() trailList: TrailDto[];
     @Input() tileLayerName: string;
-    @Input() highlightedLocation: TrailCoordinates;
+    @Input() highlightedLocation: TrailCoordinatesDto;
     @Input() startingZoomLevel: number;
     @Input() showTrailCodeMarkers: boolean;
     @Input() selectedTrailIndex?: number;
@@ -164,7 +164,7 @@ export class MapFullComponent implements OnInit {
         this.onDoneLoading.emit();
     }
 
-    flyToLocation(highlightedLocation: TrailCoordinates) {
+    flyToLocation(highlightedLocation: TrailCoordinatesDto) {
         this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude});
     }
 

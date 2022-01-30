@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { AccessibilityNotification, NotificationService } from 'src/app/service/notification-service.service';
 import { Status } from 'src/app/Status';
 import { TrailPreviewResponse, TrailPreviewService } from 'src/app/service/trail-preview-service.service';
-import { TrailCoordinates, TrailResponse, TrailService } from 'src/app/service/trail-service.service';
+import { TrailCoordinatesDto, TrailResponse, TrailService } from 'src/app/service/trail-service.service';
 
 @Component({
   selector: 'app-accessibility-add',
@@ -18,7 +18,7 @@ export class AccessibilityAddComponent implements OnInit {
 
   trailIds: string[];
   trailResponse: TrailPreviewResponse
-  previewCoords: TrailCoordinates[];
+  previewCoords: TrailCoordinatesDto[];
 
   constructor(
     private trailPreviewService: TrailPreviewService,

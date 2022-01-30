@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Marker } from "src/app/map-preview/map-preview.component";
-import { TrailDto, TrailCoordinates } from "src/app/service/trail-service.service";
+import { TrailDto, TrailCoordinatesDto } from "src/app/service/trail-service.service";
 
 @Component({
   selector: "app-trail-floating-preview",

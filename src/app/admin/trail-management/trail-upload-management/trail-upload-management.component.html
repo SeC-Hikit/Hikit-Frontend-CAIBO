@@ -195,7 +195,7 @@
                                 (onPlaceFound)="togglePlacePicker()"
                         ></app-trail-intersection-entry>
                     </div>
-                    <div class="col-md-12 top-margin" *ngIf="intersections.controls == 0">
+                    <div class="col-md-12 top-margin" *ngIf="intersections.controls.length == 0">
                       ✔️ Nessun crocevia rilevato
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                         <app-location-entry
                                 [title]="'Località iniziale'"
                                 [classPrefix]="'startPos'"
-                                [inputForm]="firstPos"
+                                [inputForm]="startPos"
                                 [trail]="trailRawDto"
                                 [startPoint]="0"
                                 [i]="-1"
@@ -238,7 +238,7 @@
                                 [autoDetectOnFirstSelection]="true"
                                 [markers]="[]"
                                 [otherTrails]="[]"
-                                (onTextFocus)="onSetPlace($event)"
+                                (onTextFocus)="onSetPlace()"
                         >
                         </app-location-entry>
                     </div>
@@ -257,7 +257,7 @@
                                 [autoDetectOnFirstSelection]="true"
                                 [markers]="[]"
                                 [otherTrails]="[]"
-                                (onTextFocus)="onSetPlace($event)"
+                                (onTextFocus)="onSetPlace()"
                         >
                         </app-location-entry>
                     </div>
@@ -275,7 +275,7 @@
                             [otherTrails]="[]"
                             [markers]="[]"
                             [isDeletable]="true"
-                            (onTextFocus)="onSetPlace($event)"
+                            (onTextFocus)="onSetPlace()"
                             (onDelete)="onDeletePlace($event)"
                     >
                     </app-location-entry>

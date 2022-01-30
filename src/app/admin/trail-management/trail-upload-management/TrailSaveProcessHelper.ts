@@ -1,37 +1,64 @@
-import {PlaceDto} from "../../../service/place.service";
-import {TrailImportDto} from "../../../service/admin-trail.service";
+import {PlaceDto, PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.service";
+import {AdminTrailService, TrailImportDto} from "../../../service/admin-trail.service";
+import {FileDetailsDto, TrailCoordinatesDto, TrailResponse} from "../../../service/trail-service.service";
+
+
+
+export interface TrailDataForSaving {
+    code: string;
+    name: string;
+    description: string;
+    officialEta: number;
+    classification?: "T" | "E" | "EE" | "EEA" | "UNCLASSIFIED";
+    country: string;
+    coordinates: TrailCoordinatesDto[];
+    maintainingSection: string;
+    territorialDivision: string;
+    linkedMediaDtos: string[];
+    lastUpdate: string;
+    fileDetailsDto: FileDetailsDto;
+    trailStatus?: "DRAFT" | "PUBLIC";
+    variant: boolean;
+}
 
 export class TrailSaveProcessHelper {
 
-
-    public constructor() {
+    public constructor(
+        private placeService: PlaceService,
+        private adminTrailService: AdminTrailService) {
     }
-    /**
-     * Saves the Trail and
-     * process the related places
-     *
-     * 1. Check which intersection Places exists
-     * exist?
-     * [NO] -> create them & gets the IDs
-     * [YES] -> ensure they exists - get them by IDs
-     *
-     * 2. Check which places Places exists
-     * exist?
-     * [NO] -> creates them & gets the IDs
-     * [YES] -> ensure they exists - get them by IDs
-     *
-     * 3. Save the trail
-     *
-     * 4. Update trail with places
-     * 5. Update places with trail IDs and coordinates
-     *
-     *
-     * @param trail
-     * @param intersections
-     * @param places
-     */
-    public processSaveTrail(trail : TrailImportDto, intersections: PlaceDto, places: PlaceDto) {
 
+    public async startProcessing(trailData: TrailDataForSaving,
+                                 intersections: PlaceRefDto[],
+                                 places: PlaceRefDto[],
+                                 onComplete: (trailResponse: TrailResponse) => void) {
+
+            console.log("Saving trail...")
+            const trailImport: TrailImportDto = {
+                name: trailData.name,
+                coordinates: trailData.coordinates,
+                variant: trailData.variant,
+                startLocation: places[0],
+                endLocation: places[places.length - 1],
+                locations: places,
+                crossways: intersections,
+                fileDetailsDto: trailData.fileDetailsDto,
+                officialEta: trailData.officialEta,
+                territorialDivision: trailData.territorialDivision,
+                lastUpdate: trailData.lastUpdate,
+                trailStatus: "DRAFT",
+                linkedMediaDtos: [],
+                description: trailData.description,
+                country: trailData.country,
+                maintainingSection: trailData.maintainingSection,
+                code: trailData.code,
+                classification: trailData.classification
+            };
+
+            this.adminTrailService.saveTrail(trailImport)
+                .toPromise().then((resp) => {
+                    onComplete(resp);
+            });
     }
 
 }

@@ -5,7 +5,6 @@ import { tap, catchError } from "rxjs/operators";
 import { components } from "src/binding/Binding";
 import { RestResponse } from "../RestResponse";
 import {TrailDto, TrailResponse} from "./trail-service.service";
-import {TrailImportRequest} from "./import.service";
 
 export type TrailImportDto = components['schemas']['TrailImportDto'];
 

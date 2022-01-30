@@ -79,26 +79,6 @@
                            (change)="changeCrossWayTitle($event.target.value)"
                            (keyup)="changeCrossWayTitle($event.target.value)" required/>
                 </div>
-                <div class="col-md-12 top-margin">
-                    <label>Toponimi</label>
-                    <input type="text" class="form-control"
-                           placeholder="Toponimi divisi da una virgola"
-                           [disabled]="isSelectedFromSystem"
-                           [formControl]="tags" required/>
-                </div>
-                <div class="col-md-12 top-margin">
-                    <label>Descrizione</label>
-                    <quill-editor
-                            [formControl]="description"
-                            [className]="'description'"
-                            [modules]="{
-                toolbar: [
-                  ['bold', 'italic', 'underline'],
-                  [{ list: 'ordered' }, { list: 'bullet' }],
-                  ['link']
-                ]
-              }"></quill-editor>
-                </div>
             </div>
             <div class="row top-margin-x2">
                 <div class="col-12">

@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import {TrailCoordinates} from "../service/trail-service.service";
+import {TrailCoordinatesDto} from "../service/trail-service.service";
 import {TrailClassification} from "../TrailClassification";
 
 export class MapUtils {
@@ -9,7 +9,7 @@ export class MapUtils {
     }
 
     public static getCoordinatesInverted(
-        coordinates: TrailCoordinates[]
+        coordinates: TrailCoordinatesDto[]
     ): [number, number][] {
         return coordinates.map((x) => [x.latitude, x.longitude]);
     }
