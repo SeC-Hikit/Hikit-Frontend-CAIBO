@@ -1,4 +1,4 @@
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Coordinates2D, TrailIntersection} from "../service/geo-trail-service";
 import {FileDetailsDto} from "../service/trail-service.service";
 import * as moment from "moment";
@@ -18,7 +18,9 @@ export class TrailImportFormUtils {
     public static getLocationForGroup() {
         return new FormGroup({
             "id": new FormControl("", {validators: null}), // one char empty string - Strange issue
-            "name": new FormControl("", Validators.minLength(0)),
+            "name": new FormControl("", [Validators.required,
+                Validators.minLength(2),
+                TrailImportFormUtils.nameValidator]),
             "crossingTrailIds": new FormControl(""),
             "latitude": new FormControl("", Validators.required),
             "longitude": new FormControl("", Validators.required),
@@ -31,7 +33,10 @@ export class TrailImportFormUtils {
         let intersectionCoords = intersection.points[0];
         return new FormGroup({
             "id": new FormControl(" "), // one char empty string - Strange issue
-            "name": new FormControl("", Validators.minLength(0)),
+            "name": new FormControl("", [
+                Validators.required,
+                Validators.minLength(2),
+                TrailImportFormUtils.nameValidator]),
             "crossingTrailIds": new FormControl(intersection.trail.id),
             "latitude": new FormControl(intersectionCoords.latitude, Validators.required),
             "longitude": new FormControl(intersectionCoords.longitude, Validators.required),
@@ -54,19 +59,6 @@ export class TrailImportFormUtils {
             "feasible": new FormControl("", Validators.required),
             "portage": new FormControl("", Validators.required),
         });
-    }
-
-    static getPlaceDtoRequestFromControls(it: AbstractControl): PlaceDto {
-
-        return {
-            name: it.get("name").value,
-            id: it.get("id").value,
-            tags: it.get("tags").value.split(",").trim(),
-            mediaIds: [],
-            recordDetails: {}
-
-
-        }
     }
 
     static getImportRequestFromControls(tfv: any,
@@ -104,8 +96,15 @@ export class TrailImportFormUtils {
             name: control.get("name").value,
             coordinates: coords,
             encounteredTrailIds: control.get("crossingTrailIds")
-                .value.split(",").map(t=>t.trim()).filter(t=> t && t != "")
+                .value.split(",").map(t => t.trim()).filter(t => t && t != "")
         }
+    }
+
+    static nameValidator(control: FormControl): ValidationErrors | null {
+        if (control.value.trim().length == 0) {
+            return ["Not good"];
+        }
+        return null;
     }
 
 }

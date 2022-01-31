@@ -38,8 +38,10 @@
                                         (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
                                 </p>
                             </div>
-                            <div class="col-md-12">
-                                <div class="map-icon"></div>
+                            <div class="col-md-12 top-margin-x2">
+                                <div class="row">
+                                    <div class="map-icon offset-md-3 offset-sm-0"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -49,7 +51,7 @@
                                 (selectCodeEvent)="onSelectTrail($event)"
                         >
                         </app-map-trail-list>
-                        <div class="pagination-position">
+                        <div class="pagination-position" *ngIf="trailPreviewList.length > 0">
                             <ngb-pagination
                                     [pageSize]="maxTrailEntriesPerPage"
                                     [collectionSize]="trailPreviewCount"
@@ -111,13 +113,5 @@
                           (onDoneLoading)="onDoneLoading()">
             </app-map-full>
         </div>
-        <!--        <div class="column-map col-12 col-md-3 showHideButtons">-->
-        <!--        </div>-->
-        <!--        <div class="column-map col-12 col-md-3 column-hike-title white functional-column" id="trail-list-column"-->
-        <!--             [ngClass]="{ 'hide' : !isTrailListVisible }">-->
-        <!--            <app-map-trail-list [trailsPreviewList]="trailPreviewList" (selectCodeEvent)="loadTrail($event)">-->
-        <!--            </app-map-trail-list>-->
-        <!--        </div>-->
-
     </div>
 </div>

@@ -35,6 +35,13 @@ export class GeoToolsService {
         );
     }
 
+    public getDistance(coordinates : CoordinatesDto[]) : Observable<string> {
+        return this.httpClient.post<any>(this.baseUrl + "/distance", coordinates).pipe(
+            tap((_) => console.log("")),
+            catchError(this.handleError<CoordinatesDto>("", null))
+        );
+    }
+
     /**
      * Handle Http operation that failed.
      * Let the app continue.

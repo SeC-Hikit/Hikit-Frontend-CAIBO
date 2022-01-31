@@ -28,6 +28,23 @@ export class AdminTrailService {
       );
   }
 
+  deleteTrail(trailImportRequest: TrailImportDto): Observable<TrailResponse> {
+    return this.httpClient
+        .put<RestResponse>(this.baseUrl + "/save", trailImportRequest)
+        .pipe(
+            tap((_) => console.log("")),
+            catchError(this.handleError<RestResponse>("get all trail", null))
+        );
+  }
+
+  deleteById(id: string): Observable<TrailResponse> {
+    return this.httpClient.delete<TrailResponse>(this.baseUrl + "/" + id)
+        .pipe(
+            tap(),
+            catchError(this.handleError<TrailResponse>('get all trail', null))
+        );
+  }
+
   updateTrail(trailImportRequest: TrailDto): Observable<TrailResponse> {
     return this.httpClient
         .put<RestResponse>(this.baseUrl + "/update", trailImportRequest)

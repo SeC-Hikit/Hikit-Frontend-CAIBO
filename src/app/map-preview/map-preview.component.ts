@@ -34,6 +34,7 @@ export class MapPreviewComponent implements OnInit {
     @Input() isShowOtherBtnEnabled: boolean;
     @Input() isShowFitToShapeBtnEnabled?: boolean;
     @Input() focusPoint?: CoordinatesDto;
+    @Input() showDistanceBetweenMarkers?: boolean;
 
     @Output() onClick? = new EventEmitter<Coordinates2D>();
 
@@ -44,6 +45,7 @@ export class MapPreviewComponent implements OnInit {
     private startPointMarker: L.Marker;
     private markers: L.Marker[];
     private selectionCircle: L.Circle;
+    private distancePoly: L.Polyline;
 
     private otherTrailPolys: L.Polyline[] = [];
 
@@ -57,7 +59,7 @@ export class MapPreviewComponent implements OnInit {
         this.classPrefix = this.classPrefix ? this.classPrefix : "map-table-"
         this.markers = this.markers ? this.markers : [];
         this.showOtherTrails = this.showOtherTrails ? this.showOtherTrails : true;
-        if(this.isShowFitToShapeBtnEnabled == null) this.isShowFitToShapeBtnEnabled = true;
+        if (this.isShowFitToShapeBtnEnabled == null) this.isShowFitToShapeBtnEnabled = true;
     }
 
     ngAfterViewInit() {
@@ -100,7 +102,13 @@ export class MapPreviewComponent implements OnInit {
     }
 
     drawMarkers(markersCoords: Marker[]) {
-        this.markers.forEach(it=> this.map.removeLayer(it));
+        this.markers.forEach(it => this.map.removeLayer(it));
+        if (this.distancePoly) this.map.removeLayer(this.distancePoly);
+
+        if (this.showDistanceBetweenMarkers) {
+            this.drawDistanceLine(markersCoords);
+        }
+
         this.markers = markersCoords.map((marker) => {
             if (marker) {
                 return L.marker(
@@ -201,6 +209,7 @@ export class MapPreviewComponent implements OnInit {
     }
 
     private showSecondaryTrails() {
+        if(!this.otherTrails) return;
         this.otherTrails.forEach((trail) => {
             let invertedCoords = MapUtils.getCoordinatesInverted(trail.coordinates);
             let polyline = L.polyline(invertedCoords, {color: "#d000ff"});
@@ -244,5 +253,10 @@ export class MapPreviewComponent implements OnInit {
     private changeView(focusPoint: Coordinates2D) {
         this.map.flyTo([focusPoint.latitude, focusPoint.longitude],
             16);
+    }
+
+    private drawDistanceLine(markers: Marker[]) {
+        this.distancePoly = L.polyline(markers.map(t => [t.coords.latitude, t.coords.longitude]), {color: "#000"});
+        this.map.addLayer(this.distancePoly);
     }
 }

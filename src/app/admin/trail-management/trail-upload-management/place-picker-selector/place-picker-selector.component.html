@@ -15,13 +15,14 @@
                             <div class="place-info" *ngIf="selectedPlace">
                                 <table>
                                     <thead>
-                                    <td>Descrizione</td>
+                                    <td>Distanza da crocevia</td>
                                     <td>Toponimi</td>
                                     <td>Inserito da</td>
                                     <td>Inserito sezione</td>
                                     </thead>
                                     <tr>
-                                        <td class="ellipsis" [innerHTML]="selectedPlace.description">
+                                        <td>
+                                            {{ distance }}
                                         </td>
                                         <td>
                                             {{selectedPlace.tags}}
@@ -48,6 +49,7 @@
                             [focusPoint]="selectedPlace ?
                             selectedPlace.coordinates[0] :
                             targetMarker.coords"
+                            [showDistanceBetweenMarkers]="true"
                             [trailPreview]="trail"
                     ></app-map-preview>
                 </div>

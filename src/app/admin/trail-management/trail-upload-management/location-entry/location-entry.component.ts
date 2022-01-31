@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {Marker} from "src/app/map-preview/map-preview.component";
 import {TrailDto, CoordinatesDto} from "src/app/service/trail-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -22,7 +22,7 @@ export class LocationEntryComponent implements OnInit {
     private readonly OFFSET_START_POINT = 1;
     private readonly OFFSET_END_POINT = 2;
 
-    private GEOLOCATION_DISTANCE = 200;
+    private GEOLOCATION_DISTANCE = 5000;
 
     @Input() title: string;
     @Input() showIndex: boolean;
@@ -83,8 +83,10 @@ export class LocationEntryComponent implements OnInit {
                 ngbModalRef.componentInstance.places = resp.content;
 
                 ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
-                    this.inputForm.controls["id"].setValue(picked.place.id);
-                    this.inputForm.controls["name"].setValue(picked.place.name);
+                    this.id.setValue(picked.place.id);
+                    this.name.setValue(picked.place.name);
+                    this.id.disable();
+                    this.name.disable();
                 });
 
                 this.onTextFocus.emit({
@@ -94,9 +96,11 @@ export class LocationEntryComponent implements OnInit {
                         longitude: coordinate.longitude
                     }
                 });
+
+                this.hasBeenLocalized = true;
             }
         });
-        this.hasBeenLocalized = true;
+
     }
 
     onSliderChange(eventValue: number): void {
@@ -161,5 +165,19 @@ export class LocationEntryComponent implements OnInit {
 
     onDeleteThis() {
         this.onDelete.emit(this.i);
+    }
+
+    deleteGeolocalization() {
+        this.id.setValue(" ");
+        this.name.setValue(" ");
+        this.name.enable();
+    }
+
+    get id() {
+        return this.inputForm.controls["id"] as FormControl;
+    }
+
+    get name() {
+        return this.inputForm.controls["name"] as FormControl;
     }
 }

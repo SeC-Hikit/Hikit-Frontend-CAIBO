@@ -39,14 +39,6 @@ export class TrailService {
             );
     }
 
-    deleteByCode(code: string): Observable<TrailResponse> {
-        return this.httpClient.delete<TrailResponse>(this.baseUrl + "/" + code)
-            .pipe(
-                tap(),
-                catchError(this.handleError<TrailResponse>('get all trail', null))
-            );
-    }
-
     downloadGpx(code: string): any {
         return this.httpClient.get(this.baseUrl + "/file/gpx/" + code + ".gpx", {responseType: 'blob'})
             .pipe(tap(),

@@ -15,7 +15,7 @@ export class CycloManagementComponent implements OnInit {
     trailFormGroup: FormGroup;
 
     constructor(private route: ActivatedRoute,
-                private trailApi: TrailService) {
+                private trailService: TrailService) {
     }
 
     ngOnInit(): void {
@@ -23,7 +23,7 @@ export class CycloManagementComponent implements OnInit {
             cyclo: TrailImportFormUtils.getCylcloFormGroup()
         });
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
-        this.trailApi.getTrailById(idFromPath).subscribe((resp)=>{
+        this.trailService.getTrailById(idFromPath).subscribe((resp)=>{
             if(resp.content.length == 1) {
                 // TODO: load this in
             }

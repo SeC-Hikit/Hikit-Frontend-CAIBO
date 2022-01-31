@@ -29,7 +29,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     crossPointMarker: Marker;
     crossWayTitle: string = "Crocevia";
     isCompleted: boolean;
-    isSelectedFromSystem: boolean = false;
+    isInputDisabled: boolean = false;
     isShowing: boolean;
 
     isAutoDetected: boolean;
@@ -37,7 +37,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
 
     geolocationResponse: PlaceResponse;
 
-    private readonly GEO_LOCATION_DISTANCE = 200;
+    private readonly GEO_LOCATION_DISTANCE = 500;
     private readonly MAX_NUMBER_GEOLOCATION = 15;
 
     constructor(private placeService: PlaceService,
@@ -91,7 +91,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                             longitude: this.crossPoint.longitude,
                         }
                         ngbModalRef.componentInstance.trail = this.trail;
-                        ngbModalRef.componentInstance.otherTrails = this.otherTrail;
+                        ngbModalRef.componentInstance.otherTrails = [this.otherTrail];
                         ngbModalRef.componentInstance.places = response.content;
 
                         ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
@@ -99,7 +99,8 @@ export class TrailIntersectionEntryComponent implements OnInit {
                             this.inputForm.controls["name"].setValue(picked.place.name);
                             this.onPlaceFound.emit([picked.place]);
                             this.changeCrossWayTitle(picked.place.name)
-                            this.isSelectedFromSystem = true;
+                            this.name.disable();
+                            this.isInputDisabled = true;
                             this.isCompleted = true;
                         });
 
@@ -117,14 +118,11 @@ export class TrailIntersectionEntryComponent implements OnInit {
     }
 
     deleteGeolocalizedData() {
-        this.id.setValue("");
+        this.id.setValue(" ");
         this.name.setValue("");
-        this.tags.setValue("");
-        this.description.setValue("");
-
+        this.name.enable();
         this.isCompleted = false;
         this.isAutoDetected = false;
-        this.hasAutoDetectedRun = false;
     }
 
     private isComplete(value: string) {
@@ -138,14 +136,5 @@ export class TrailIntersectionEntryComponent implements OnInit {
     get name() {
         return this.inputForm.controls["name"] as FormControl;
     }
-
-    get tags() {
-        return this.inputForm.controls["tags"] as FormControl;
-    }
-
-    get description() {
-        return this.inputForm.controls["description"] as FormControl;
-    }
-
 
 }

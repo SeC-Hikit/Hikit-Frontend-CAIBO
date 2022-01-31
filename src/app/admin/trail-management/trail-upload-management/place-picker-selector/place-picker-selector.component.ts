@@ -4,6 +4,7 @@ import {CoordinatesDto, TrailDto} from "../../../../service/trail-service.servic
 import {Marker} from "../../../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../../../assets/icons/MapPinIconType";
 import {ModalDismissReasons, NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {GeoToolsService} from "../../../../service/geotools.service";
 
 
 export interface PickedPlace {
@@ -22,7 +23,7 @@ export class PlacePickerSelectorComponent implements OnInit {
 
     @Input() places: PlaceDto[];
     @Input() trail: TrailDto;
-    @Input() otherTrails: TrailDto[];
+    @Input() otherTrails: TrailDto[] = [];
     @Input() targetPoint: CoordinatesDto;
 
     @Output() onSelection: EventEmitter<PickedPlace> = new EventEmitter<PickedPlace>();
@@ -30,12 +31,14 @@ export class PlacePickerSelectorComponent implements OnInit {
 
     targetMarker: Marker;
     selectedMarker: Marker;
+    distance: string
 
     markers: Marker[] = [];
 
     selectedPlace: PlaceDto;
 
-    constructor(public activeModal: NgbActiveModal) {
+    constructor(public activeModal: NgbActiveModal,
+                private geoToolService: GeoToolsService) {
     }
 
     private getDismissReason(reason: any): string {
@@ -49,12 +52,19 @@ export class PlacePickerSelectorComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.targetMarker = {
-            icon: MapPinIconType.PIN,
-            coords: {latitude: this.targetPoint.latitude, longitude: this.targetPoint.longitude},
-            color: "black"
-        }
+        this.targetMarker = this.getInitialMarker()
         this.markers.push(this.targetMarker);
+    }
+
+    private getInitialMarker(): Marker {
+        return {
+            icon: MapPinIconType.PIN,
+            coords: {
+                latitude: this.targetPoint.latitude,
+                longitude: this.targetPoint.longitude
+            },
+            color: "black"
+        };
     }
 
     onClose() {
@@ -65,9 +75,9 @@ export class PlacePickerSelectorComponent implements OnInit {
         this.onCancel.emit();
     }
 
-     onPlaceClick(place: PlaceDto): void {
+    onPlaceClick(place: PlaceDto): void {
+        this.distance = "...";
         this.selectedPlace = place;
-        console.log(this.selectedPlace);
         this.selectedMarker = {
             icon: MapPinIconType.PIN,
             coords: {
@@ -75,10 +85,9 @@ export class PlacePickerSelectorComponent implements OnInit {
                 longitude: this.selectedPlace.coordinates[0].longitude
             }
         }
-        if (this.markers.length > 1) {
-            this.markers.pop()
-        }
-        this.markers = [].concat([this.selectedMarker]);
+        this.markers = [this.getInitialMarker()].concat([this.selectedMarker]);
+        let distanceObs = this.geoToolService.getDistance(this.markers.map(it=>it.coords));
+        distanceObs.subscribe((it)=> this.distance = parseFloat(it).toFixed(0) + "m")
     }
 
     onSelect() {

@@ -22,6 +22,10 @@
       list-style: none;
       cursor: pointer;
       padding: 1%;
+
+      .place-info {
+        display: none;
+      }
     }
 
     li:hover {
@@ -33,20 +37,23 @@
     }
 
     li.selected {
+
       background: $action-btn-color;
 
       .place-info {
+        display: inline;
         background: $action-btn-color;
         color: white;
+        font-weight: bold;
 
         table {
           thead {
             color: black;
+            border-bottom: 1px solid black;
           }
 
           tr, td {
-            border: 1px solid black;
-            margin: 2px;
+            padding: 5px;
           }
         }
 

@@ -9,10 +9,15 @@
                 {{ hasBeenLocalized ? "Ri-geolocalizza" : "Geolocalizza"}}
             </button>
         </div>
+        <div class="col-md-12 mb-12 top-margin" *ngIf="hasBeenLocalized">
+            <button class="btn col-sm-12" type="button" (click)="deleteGeolocalization()">
+                Cancella dati geolocalizzati
+            </button>
+        </div>
         <div *ngIf="hasBeenLocalizedFirstTime" class="top-margin col-md-12">
             <div class="row">
                 <div class="col-12">
-                    <h5>Aggiungi nuova località</h5>
+                    <h5>Località</h5>
                 </div>
             </div>
             <div class="row top-margin">

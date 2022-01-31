@@ -289,9 +289,10 @@ export class MapComponent implements OnInit {
     }
 
     loadTrailPreview(page: number) {
-        this.trailPreviewPage = page;
+        let electedValue = page ? page : 1;
+        this.trailPreviewPage = electedValue;
         this.getTrailPreviewResponseObservable(
-            this.searchTermString, page - 1).subscribe((resp)=> {
+            this.searchTermString, electedValue - 1).subscribe((resp)=> {
                 this.trailPreviewCount = resp.totalCount;
                 this.trailPreviewList = resp.content;
         })

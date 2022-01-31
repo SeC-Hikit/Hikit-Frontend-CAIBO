@@ -8,6 +8,7 @@ import {
 import {  takeUntil, tap } from "rxjs/operators";
 import { TrailDto, TrailService } from "src/app/service/trail-service.service";
 import { Subject } from "rxjs";
+import {AdminTrailService} from "../../service/admin-trail.service";
 @Component({
   selector: "app-trail-management",
   templateUrl: "./trail-management.component.html",
@@ -30,6 +31,7 @@ export class TrailManagementComponent implements OnInit {
   constructor(
     private trailPreviewService: TrailPreviewService,
     private trailService: TrailService,
+    private adminTrailService: AdminTrailService,
   ) {}
 
   ngOnInit(): void {
@@ -65,8 +67,8 @@ export class TrailManagementComponent implements OnInit {
         "'?"
     );
     if (isUserCancelling) {
-      this.trailService
-        .deleteByCode(selectedTrailPreview.code)
+      this.adminTrailService
+        .deleteById(selectedTrailPreview.id)
         .subscribe((r) => {
           if (r.status == Status.OK) {
             this.onDeleteSuccess(selectedTrailPreview);
