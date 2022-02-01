@@ -3,6 +3,6 @@ export const environment = {
 
   // S&C Env vars
   realm: "cai-bologna",
-  instance: "S&C_1",
+  instance: "sec_bologna_1",
   publicName: "CAI Bologna"
 };

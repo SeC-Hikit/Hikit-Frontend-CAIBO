@@ -6,9 +6,9 @@ export const environment = {
   production: false,
 
   // S&C Env vars
-  realm: "S&C",
-  instance: "S&C_1",
-  publicName: "CAI Bologna",
+  realm: "cai-bologna",
+  instance: "sec_bologna_1",
+  publicName: "CAI Bologna"
 };
 
 /*
