@@ -77,11 +77,9 @@
                                 />
                             </svg>
                         </td>
-                        <td
-                                class="clickable"
-                                routerLink="/admin/trails/edit/{{ trailPreview.id }}"
-                        >
-                            <svg class="bi" width="24" height="24" fill="currentColor">
+                        <td>
+                            <svg *ngIf="realm == trailPreview.fileDetails.realm" class="bi clickable" width="24" height="24" fill="currentColor"
+                                 routerLink="/admin/trails/edit/{{ trailPreview.id }}">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen"
                                 />

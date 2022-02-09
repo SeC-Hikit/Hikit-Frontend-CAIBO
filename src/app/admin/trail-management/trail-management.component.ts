@@ -9,6 +9,7 @@ import {  takeUntil, tap } from "rxjs/operators";
 import { TrailDto, TrailService } from "src/app/service/trail-service.service";
 import { Subject } from "rxjs";
 import {AdminTrailService} from "../../service/admin-trail.service";
+import {AuthService} from "../../service/auth.service";
 @Component({
   selector: "app-trail-management",
   templateUrl: "./trail-management.component.html",
@@ -27,15 +28,18 @@ export class TrailManagementComponent implements OnInit {
 
   savedTrailCode: string;
   totalTrail: number;
+  realm: string = "";
 
   constructor(
     private trailPreviewService: TrailPreviewService,
     private trailService: TrailService,
     private adminTrailService: AdminTrailService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.getAllPreviews();
+    this.realm = this.authService.getRealm();
     // TODO use toast service
     // let codeTrailSaved = this.route.snapshot.paramMap.get("success") as string;
     // if(codeTrailSaved) { this.onFileSave(codeTrailSaved); }

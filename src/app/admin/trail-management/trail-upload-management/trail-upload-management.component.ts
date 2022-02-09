@@ -18,8 +18,7 @@ import {TrailImportFormUtils} from "src/app/utils/TrailImportFormUtils";
 import * as moment from "moment";
 import {AuthService} from "../../../service/auth.service";
 import {AdminTrailService} from "../../../service/admin-trail.service";
-import {IndexCoordinateSelector} from "./location-entry/location-entry.component";
-import {PlaceDto, PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.service";
+import {PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.service";
 import {AdminPlaceService} from "../../../service/admin-place.service";
 import {TrailDataForSaving, TrailSaveProcessHelper} from "./TrailSaveProcessHelper";
 
@@ -70,6 +69,12 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     errors = [];
 
     private destroy$ = new Subject();
+    today = moment()
+    maxDate: NgbDateStruct = {
+        year: this.today.year(),
+        month: this.today.month(),
+        day: this.today.day()
+    };
 
 
     constructor(

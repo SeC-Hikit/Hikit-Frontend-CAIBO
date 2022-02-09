@@ -22,7 +22,7 @@ export class LocationEntryComponent implements OnInit {
     private readonly OFFSET_START_POINT = 1;
     private readonly OFFSET_END_POINT = 2;
 
-    private GEOLOCATION_DISTANCE = 5000;
+    private MAX_GEOLOCATION_M = 200;
 
     @Input() title: string;
     @Input() showIndex: boolean;
@@ -72,7 +72,7 @@ export class LocationEntryComponent implements OnInit {
                 altitude: coordinate.altitude,
                 latitude: coordinate.latitude,
                 longitude: coordinate.longitude
-            }, distance: this.GEOLOCATION_DISTANCE // expressed in m
+            }, distance: this.MAX_GEOLOCATION_M // expressed in m
         }, 0, 100).subscribe((resp) => {
 
             if (resp.content.length > 0) {
@@ -81,6 +81,7 @@ export class LocationEntryComponent implements OnInit {
                 ngbModalRef.componentInstance.trail = this.trail;
                 ngbModalRef.componentInstance.otherTrails = this.otherTrails;
                 ngbModalRef.componentInstance.places = resp.content;
+                ngbModalRef.componentInstance.radius = this.MAX_GEOLOCATION_M;
 
                 ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
                     this.id.setValue(picked.place.id);

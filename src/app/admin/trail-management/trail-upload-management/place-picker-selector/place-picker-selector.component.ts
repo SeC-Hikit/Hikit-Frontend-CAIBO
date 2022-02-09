@@ -25,6 +25,7 @@ export class PlacePickerSelectorComponent implements OnInit {
     @Input() trail: TrailDto;
     @Input() otherTrails: TrailDto[] = [];
     @Input() targetPoint: CoordinatesDto;
+    @Input() radius: number;
 
     @Output() onSelection: EventEmitter<PickedPlace> = new EventEmitter<PickedPlace>();
     @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();

@@ -7,6 +7,7 @@ import {Marker} from "../../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AdminPlaceService} from "../../../service/admin-place.service";
+import {AuthService} from "../../../service/auth.service";
 
 @Component({
     selector: 'app-place-view-table',
@@ -22,7 +23,7 @@ export class PlaceViewTableComponent implements OnInit {
 
     isPlacePreviewVisible = false;
 
-    realm = environment.realm;
+    realm = "";
     entryPerPage = 10;
     totalPlaces = 0;
     selectedPage: number = 0;
@@ -31,12 +32,13 @@ export class PlaceViewTableComponent implements OnInit {
                 private adminPlaceService: AdminPlaceService,
                 private trailService: TrailService,
                 private activatedRoute: ActivatedRoute,
+                private authService: AuthService,
                 private router: Router) {
     }
 
     ngOnInit(): void {
         this.onPlaceLoad(1);
-
+        this.realm = this.authService.getRealm();
     }
 
     private onPlaceLoad(page: number) {

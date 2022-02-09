@@ -113,6 +113,7 @@
                                         formControlName="lastUpdate"
                                         placeholder="gg/mm/aaaa"
                                         name="dp"
+                                        [maxDate]="maxDate"
                                         ngbDatepicker
                                         [(ngModel)]="date"
                                         #d="ngbDatepicker"
@@ -180,9 +181,7 @@
                     </div>
                     <div class="col-md-12">
                         <p>
-                            I crocevia sono punti di collegamento di diversi sentieri.<br/>
-                            Questi vengono rilevati in automatico sulla base dei sentieri
-                            presenti.
+                            I crocevia sono punti di collegamento tra diversi sentieri. Vengono rilevati in automatico sulla base dei sentieri presenti.
                         </p>
                     </div>
                     <div class="col-md-12 top-margin" *ngFor="let place of intersections.controls; index as i">

@@ -37,8 +37,8 @@ export class TrailIntersectionEntryComponent implements OnInit {
 
     geolocationResponse: PlaceResponse;
 
-    private readonly GEO_LOCATION_DISTANCE = 500;
-    private readonly MAX_NUMBER_GEOLOCATION = 15;
+    private readonly GEO_LOCATION_DISTANCE = 200;
+    private readonly MAX_GEOLOCATION_M = 15;
 
     constructor(private placeService: PlaceService,
                 private geoToolService: GeoToolsService,
@@ -76,7 +76,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                     distance: this.GEO_LOCATION_DISTANCE,
                 },
                 0,
-                this.MAX_NUMBER_GEOLOCATION
+                this.MAX_GEOLOCATION_M
             )
             .subscribe((response) => {
                 this.geolocationResponse = response;
@@ -93,6 +93,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                         ngbModalRef.componentInstance.trail = this.trail;
                         ngbModalRef.componentInstance.otherTrails = [this.otherTrail];
                         ngbModalRef.componentInstance.places = response.content;
+                        ngbModalRef.componentInstance.radius = this.MAX_GEOLOCATION_M;
 
                         ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
                             this.inputForm.controls["id"].setValue(picked.place.id);
