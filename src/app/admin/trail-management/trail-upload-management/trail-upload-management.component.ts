@@ -72,8 +72,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     today = moment()
     maxDate: NgbDateStruct = {
         year: this.today.year(),
-        month: this.today.month(),
-        day: this.today.day()
+        month: this.today.month() + 1,
+        day: this.today.date()
     };
 
 
