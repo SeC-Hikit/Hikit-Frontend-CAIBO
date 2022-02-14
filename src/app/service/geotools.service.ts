@@ -36,6 +36,9 @@ export class GeoToolsService {
     }
 
     public getDistance(coordinates : CoordinatesDto[]) : Observable<string> {
+        if(coordinates.length == 1) {
+            console.error("Need more than one coordinate");
+        }
         return this.httpClient.post<any>(this.baseUrl + "/distance", coordinates).pipe(
             tap((_) => console.log("")),
             catchError(this.handleError<CoordinatesDto>("", null))

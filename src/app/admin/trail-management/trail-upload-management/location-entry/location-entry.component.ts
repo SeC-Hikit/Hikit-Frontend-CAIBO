@@ -4,7 +4,12 @@ import {Marker} from "src/app/map-preview/map-preview.component";
 import {TrailDto, CoordinatesDto} from "src/app/service/trail-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PickedPlace, PlacePickerSelectorComponent} from "../place-picker-selector/place-picker-selector.component";
-import {PlaceService} from "../../../../service/place.service";
+import {PlaceRefDto, PlaceService} from "../../../../service/place.service";
+import {GeoToolsService} from "../../../../service/geotools.service";
+import {TrailConfirmModalComponent} from "../../trail-confirm-modal/trail-confirm-modal.component";
+import {Coordinates2D} from "../../../../service/geo-trail-service";
+import {Crossing} from "../trail-upload-management.component";
+import {Observable} from "rxjs";
 
 
 export interface IndexCoordinateSelector {
@@ -22,7 +27,7 @@ export class LocationEntryComponent implements OnInit {
     private readonly OFFSET_START_POINT = 1;
     private readonly OFFSET_END_POINT = 2;
 
-    private MAX_GEOLOCATION_M = 200;
+    private MAX_GEOLOCATION_M = 50;
 
     @Input() title: string;
     @Input() showIndex: boolean;
@@ -38,19 +43,22 @@ export class LocationEntryComponent implements OnInit {
     @Input() isEditableLocation: boolean;
     @Input() showPositionControls?: boolean;
     @Input() autoDetectOnFirstSelection?: boolean;
+    @Input() crossings: Crossing[];
 
     @Input() startPoint: number;
 
     @Output() onTextFocus?: EventEmitter<IndexCoordinateSelector> = new EventEmitter<IndexCoordinateSelector>();
     @Output() onSearchBtnClick?: EventEmitter<number> = new EventEmitter<number>();
     @Output() onDelete?: EventEmitter<number> = new EventEmitter<number>();
+    @Output() onChange: EventEmitter<PlaceRefDto> = new EventEmitter();
 
     selectedCoordinateIndex: number;
     hasBeenLocalizedFirstTime: boolean = false;
     hasBeenLocalized: boolean = false;
 
     constructor(private modalService: NgbModal,
-                private placeService: PlaceService) {
+                private placeService: PlaceService,
+                private geoToolService: GeoToolsService) {
     }
 
     ngOnInit(): void {
@@ -65,8 +73,46 @@ export class LocationEntryComponent implements OnInit {
 
     onLocalize(): void {
         this.hasBeenLocalizedFirstTime = true;
-        // Run a geo-search to see what possible places are available close-by
         const coordinate = this.trail.coordinates[this.selectedCoordinateIndex];
+
+
+        const calculatedDistancesPromises = [];
+        this.crossings.forEach((crossing) => {
+            calculatedDistancesPromises.push(this.geoToolService.getDistance([coordinate, crossing.coordinate]).toPromise());
+        })
+
+        Promise.all(calculatedDistancesPromises).then((results) => {
+            results.filter((it, index) => {
+                let distance: number = parseFloat(it);
+                if (distance < this.MAX_GEOLOCATION_M) {
+                    let ngbModalRef = this.modalService.open(TrailConfirmModalComponent);
+                    ngbModalRef.componentInstance.maxRadius = this.MAX_GEOLOCATION_M;
+                    ngbModalRef.componentInstance.distance = distance.toFixed(0);
+                    ngbModalRef.componentInstance.trailCode = this.trail.code;
+                    ngbModalRef.componentInstance.locationName = this.getLocationName();
+                    ngbModalRef.componentInstance.crossway = this.crossings[index];
+                    ngbModalRef.componentInstance.onOk.subscribe((picked: PlaceRefDto) => {
+                        this.id.setValue(picked.placeId);
+                        this.name.setValue(picked.name);
+                        this.id.disable();
+                        this.name.disable();
+                    });
+                    ngbModalRef.componentInstance.onRefusal.subscribe(() => {
+                        this.geoLocate(coordinate);
+                    })
+                }
+            });
+        }).finally(() => {
+            if (this.name.value.trim() == "") {
+                this.geoLocate(coordinate);
+            }
+        })
+
+
+    }
+
+    private geoLocate(coordinate: { distanceFromTrailStart?: number; latitude?: number; longitude?: number; altitude?: number }) {
+        // Run a geo-search to see what possible places are available close-by
         this.placeService.geoLocatePlace({
             coordinatesDto: {
                 altitude: coordinate.altitude,
@@ -101,7 +147,6 @@ export class LocationEntryComponent implements OnInit {
                 this.hasBeenLocalized = true;
             }
         });
-
     }
 
     onSliderChange(eventValue: number): void {
@@ -156,7 +201,7 @@ export class LocationEntryComponent implements OnInit {
 
     changeName($event) {
         this.inputForm.controls["name"].setValue($event.target.value);
-        if(this.hasBeenLocalized) this.deselectLocalization()
+        if (this.hasBeenLocalized) this.deselectLocalization()
     }
 
     deselectLocalization() {
@@ -180,5 +225,12 @@ export class LocationEntryComponent implements OnInit {
 
     get name() {
         return this.inputForm.controls["name"] as FormControl;
+    }
+
+    private getLocationName() {
+        if (this.selectedCoordinateIndex == 0) return "iniziale";
+        if (this.selectedCoordinateIndex == this.trail.coordinates.length - 1)
+            return "finale";
+        return "intermedia";
     }
 }

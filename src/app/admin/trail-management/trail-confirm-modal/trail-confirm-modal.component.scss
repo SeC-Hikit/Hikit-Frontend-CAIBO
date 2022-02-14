@@ -1,0 +1,63 @@
+@import "../../../style/const.scss";
+
+.TrailConfirmModal {
+  background: white;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 5px $primary-bg-color;
+
+  .modal-body {
+    max-height: 600px;
+    overflow-y: scroll;
+  }
+
+  .ellipsis {
+    max-width: 300px;
+  }
+
+  ul {
+    padding: 0;
+
+    li {
+      list-style: none;
+      cursor: pointer;
+      padding: 1%;
+
+      .place-info {
+        display: none;
+      }
+    }
+
+    li:hover {
+      background: $action-btn-color;
+    }
+
+    .choice {
+
+    }
+
+    li.selected {
+
+      background: $action-btn-color;
+
+      .place-info {
+        display: inline;
+        background: $action-btn-color;
+        color: white;
+        font-weight: bold;
+
+        table {
+          thead {
+            color: black;
+            border-bottom: 1px solid black;
+          }
+
+          tr, td {
+            padding: 5px;
+          }
+        }
+
+      }
+    }
+  }
+}

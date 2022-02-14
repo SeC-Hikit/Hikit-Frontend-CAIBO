@@ -22,6 +22,12 @@ import {PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.s
 import {AdminPlaceService} from "../../../service/admin-place.service";
 import {TrailDataForSaving, TrailSaveProcessHelper} from "./TrailSaveProcessHelper";
 
+export interface Crossing {
+    name : string,
+    coordinate: Coordinates2D,
+    trail: TrailDto,
+}
+
 @Component({
     selector: "app-trail-upload-management",
     templateUrl: "./trail-upload-management.component.html",
@@ -32,6 +38,8 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     private trailSaveProcessHelper: TrailSaveProcessHelper;
 
     PLACE_OFFSET = 1;
+
+    STEPS = ["Info Generali", "Crocevia", "Località"];
 
     trailFormGroup: FormGroup;
     trailRawDto: TrailRawDto;
@@ -53,12 +61,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     trailsInArea: TrailDto[] = [];
 
-    intersectionTrails: TrailDto[] = [];
-    crossPointOnTrail: Coordinates2D[] = [];
+    crossings: Crossing[] = [];
 
     crossingGeolocationExecutedChecks: boolean[] = [];
-
-    STEPS = ["Info Generali", "Crocevia", "Località"];
 
     private GENERAL_INFO_INDEX = 0;
     private CROSSWAY_INDEX = 1;
@@ -75,7 +80,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
         month: this.today.month() + 1,
         day: this.today.date()
     };
-
 
     constructor(
         private geoTrailService: GeoTrailService,
@@ -312,13 +316,17 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 this.intersectionResponse = response;
                 response.content.forEach((intersection: TrailIntersection) => {
                     let metPoint = intersection.points[0];
-                    this.intersectionTrails.push(intersection.trail);
-                    this.crossPointOnTrail.push(metPoint);
                     let locationFormGroupFromIntersection =
                         TrailImportFormUtils.getLocationFormGroupForIntersection(intersection);
                     this.intersections.push(locationFormGroupFromIntersection);
                     this.crossingGeolocationExecutedChecks.push(false);
                 })
+                this.crossings = response.content.map(
+                    intersection => { return {
+                        trail: intersection.trail,
+                        coordinate: intersection.points[0]
+                    }
+                });
                 this.isCrossingSectionComplete = true;
                 this.toggleLoading();
             });
@@ -366,5 +374,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     get intersections() {
         return this.trailFormGroup.controls["intersections"] as FormArray;
+    }
+
+    changeCrossingName($event: string, i: number) {
+        this.crossings[i].name = $event;
     }
 }

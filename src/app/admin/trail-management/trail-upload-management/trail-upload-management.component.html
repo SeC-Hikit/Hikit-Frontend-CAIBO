@@ -188,10 +188,11 @@
                         <app-trail-intersection-entry
                                 [inputForm]="place"
                                 [trail]="trailRawDto"
-                                [otherTrail]="intersectionTrails[i]"
+                                [otherTrail]="crossings[i].trail"
                                 [i]="i"
-                                [crossPoint]="crossPointOnTrail[i]"
+                                [crossPoint]="crossings[i].coordinate"
                                 (onPlaceFound)="togglePlacePicker()"
+                                (onIntersectionNameChange)="changeCrossingName($event, i)"
                         ></app-trail-intersection-entry>
                     </div>
                     <div class="col-md-12 top-margin" *ngIf="intersections.controls.length == 0">
@@ -237,6 +238,7 @@
                                 [autoDetectOnFirstSelection]="true"
                                 [markers]="[]"
                                 [otherTrails]="[]"
+                                [crossings]="crossings"
                                 (onTextFocus)="onSetPlace()"
                         >
                         </app-location-entry>
@@ -256,6 +258,7 @@
                                 [autoDetectOnFirstSelection]="true"
                                 [markers]="[]"
                                 [otherTrails]="[]"
+                                [crossings]="crossings"
                                 (onTextFocus)="onSetPlace()"
                         >
                         </app-location-entry>
@@ -274,6 +277,7 @@
                             [otherTrails]="[]"
                             [markers]="[]"
                             [isDeletable]="true"
+                            [crossings]="crossings"
                             (onTextFocus)="onSetPlace()"
                             (onDelete)="onDeletePlace($event)"
                     >

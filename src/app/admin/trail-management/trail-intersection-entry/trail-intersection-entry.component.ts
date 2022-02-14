@@ -24,7 +24,9 @@ export class TrailIntersectionEntryComponent implements OnInit {
     @Input() trail: TrailDto;
     @Input() otherTrail: TrailDto;
     @Input() crossPoint: Coordinates2D;
+
     @Output() onPlaceFound: EventEmitter<PlaceDto[]> = new EventEmitter<PlaceDto[]>();
+    @Output() onIntersectionNameChange: EventEmitter<string> = new EventEmitter<string>();
 
     crossPointMarker: Marker;
     crossWayTitle: string = "Crocevia";
@@ -37,8 +39,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
 
     geolocationResponse: PlaceResponse;
 
-    private readonly GEO_LOCATION_DISTANCE = 200;
-    private readonly MAX_GEOLOCATION_M = 15;
+    private readonly MAX_GEOLOCATION_M = 50;
 
     constructor(private placeService: PlaceService,
                 private geoToolService: GeoToolsService,
@@ -73,7 +74,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                         latitude: this.crossPoint.latitude,
                         longitude: this.crossPoint.longitude,
                     },
-                    distance: this.GEO_LOCATION_DISTANCE,
+                    distance: this.MAX_GEOLOCATION_M,
                 },
                 0,
                 this.MAX_GEOLOCATION_M
@@ -113,6 +114,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     changeCrossWayTitle(value: string) {
         this.isCompleted = this.isComplete(value);
         this.crossWayTitle = `Crocevia '${value}'`;
+        this.onIntersectionNameChange.emit(value);
         if (this.isCompleted) {
             this.name.setValue(value);
         }
