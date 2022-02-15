@@ -315,7 +315,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 this.crossingGeolocationExecutedChecks = [];
                 this.intersectionResponse = response;
                 response.content.forEach((intersection: TrailIntersection) => {
-                    let metPoint = intersection.points[0];
                     let locationFormGroupFromIntersection =
                         TrailImportFormUtils.getLocationFormGroupForIntersection(intersection);
                     this.intersections.push(locationFormGroupFromIntersection);
@@ -323,6 +322,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 })
                 this.crossings = response.content.map(
                     intersection => { return {
+                        name: "",
                         trail: intersection.trail,
                         coordinate: intersection.points[0]
                     }

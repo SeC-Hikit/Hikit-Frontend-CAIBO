@@ -55,6 +55,7 @@ export class LocationEntryComponent implements OnInit {
     selectedCoordinateIndex: number;
     hasBeenLocalizedFirstTime: boolean = false;
     hasBeenLocalized: boolean = false;
+    isNameMatchingCrossway: boolean = false;
 
     constructor(private modalService: NgbModal,
                 private placeService: PlaceService,
@@ -82,33 +83,37 @@ export class LocationEntryComponent implements OnInit {
         })
 
         Promise.all(calculatedDistancesPromises).then((results) => {
-            results.filter((it, index) => {
-                let distance: number = parseFloat(it);
-                if (distance < this.MAX_GEOLOCATION_M) {
-                    let ngbModalRef = this.modalService.open(TrailConfirmModalComponent);
-                    ngbModalRef.componentInstance.maxRadius = this.MAX_GEOLOCATION_M;
-                    ngbModalRef.componentInstance.distance = distance.toFixed(0);
-                    ngbModalRef.componentInstance.trailCode = this.trail.code;
-                    ngbModalRef.componentInstance.locationName = this.getLocationName();
-                    ngbModalRef.componentInstance.crossway = this.crossings[index];
-                    ngbModalRef.componentInstance.onOk.subscribe((picked: PlaceRefDto) => {
-                        this.id.setValue(picked.placeId);
-                        this.name.setValue(picked.name);
-                        this.id.disable();
-                        this.name.disable();
-                    });
-                    ngbModalRef.componentInstance.onRefusal.subscribe(() => {
-                        this.geoLocate(coordinate);
-                    })
-                }
-            });
+            this.onCrosswayDistanceCheckShowModal(results, coordinate);
         }).finally(() => {
             if (this.name.value.trim() == "") {
                 this.geoLocate(coordinate);
             }
         })
+    }
 
-
+    private onCrosswayDistanceCheckShowModal(results: unknown[],
+                                             coordinate: CoordinatesDto) {
+        results.filter((it: string, index) => {
+            let distance: number = parseFloat(it);
+            if (distance < this.MAX_GEOLOCATION_M) {
+                let ngbModalRef = this.modalService.open(TrailConfirmModalComponent);
+                ngbModalRef.componentInstance.maxRadius = this.MAX_GEOLOCATION_M;
+                ngbModalRef.componentInstance.distance = distance.toFixed(0);
+                ngbModalRef.componentInstance.trailCode = this.trail.code;
+                ngbModalRef.componentInstance.locationName = this.getLocationName();
+                ngbModalRef.componentInstance.crossway = this.crossings[index];
+                ngbModalRef.componentInstance.onOk.subscribe((picked: PlaceRefDto) => {
+                    this.id.setValue(picked.placeId);
+                    this.name.setValue(picked.name);
+                    this.id.disable();
+                    this.name.disable();
+                    this.hasBeenLocalized = true;
+                });
+                ngbModalRef.componentInstance.onRefusal.subscribe(() => {
+                    this.geoLocate(coordinate);
+                })
+            }
+        });
     }
 
     private geoLocate(coordinate: { distanceFromTrailStart?: number; latitude?: number; longitude?: number; altitude?: number }) {
@@ -204,6 +209,10 @@ export class LocationEntryComponent implements OnInit {
         if (this.hasBeenLocalized) this.deselectLocalization()
     }
 
+    onNameKeyPress($event) {
+        this.ensureMatchingIntersection($event.target.value);
+    }
+
     deselectLocalization() {
         this.hasBeenLocalized = false;
         this.inputForm.controls["id"].setValue("");
@@ -232,5 +241,20 @@ export class LocationEntryComponent implements OnInit {
         if (this.selectedCoordinateIndex == this.trail.coordinates.length - 1)
             return "finale";
         return "intermedia";
+    }
+
+    private ensureMatchingIntersection(name: string) {
+        this.crossings.filter(c => c.name.toLowerCase() ==
+            name.toLocaleString()).forEach((it) => {
+                const calculatedDistancesPromises = [];
+                this.crossings.forEach((crossing) => {
+                    const coordinate = this.trail.coordinates[this.selectedCoordinateIndex];
+                    calculatedDistancesPromises.push(this.geoToolService.getDistance([coordinate, crossing.coordinate]).toPromise());
+                    Promise.all(calculatedDistancesPromises).then((results) => {
+                        this.onCrosswayDistanceCheckShowModal(results, coordinate);
+                    })
+                })
+            }
+        )
     }
 }

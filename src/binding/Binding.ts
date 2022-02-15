@@ -560,6 +560,7 @@ export interface components {
       classification?: "T" | "E" | "EE" | "EEA" | "UNCLASSIFIED";
       startPos?: components["schemas"]["PlaceRefDto"];
       finalPos?: components["schemas"]["PlaceRefDto"];
+      locations?: components["schemas"]["PlaceRefDto"][];
       bikeData?: boolean;
       trailStatus?: "DRAFT" | "PUBLIC";
       fileDetails?: components["schemas"]["FileDetailsDto"];
