@@ -45,12 +45,12 @@ export class AdminTrailService {
         );
   }
 
-  updateTrail(trailImportRequest: TrailDto): Observable<TrailResponse> {
+  updateTrail(trailDto: TrailDto): Observable<TrailResponse> {
     return this.httpClient
-        .put<RestResponse>(this.baseUrl + "/update", trailImportRequest)
+        .put<RestResponse>(this.baseUrl + "/update", trailDto)
         .pipe(
             tap((_) => console.log("")),
-            catchError(this.handleError<RestResponse>("get all trail", null))
+            catchError(this.handleError<RestResponse>("update trail", null))
         );
   }
 

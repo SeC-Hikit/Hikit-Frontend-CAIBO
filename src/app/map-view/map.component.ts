@@ -276,8 +276,8 @@ export class MapComponent implements OnInit {
         this.selectedTrailIndex = index;
     }
 
-    onSearchKeyPress($event) {
-        this.searchTerms.next($event.target.value);
+    onSearchKeyPress($event : string) {
+        this.searchTerms.next($event);
     }
 
     navigateToTrailReportIssue(trailId: string) {

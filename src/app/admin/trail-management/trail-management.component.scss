@@ -12,6 +12,15 @@
   white-space: nowrap;
 }
 
+table {
+  .incomplete{
+    opacity: 0.5;
+  }
+  .incomplete:hover {
+    opacity: 1;
+  }
+}
+
 .hide {
   display: none;
 }

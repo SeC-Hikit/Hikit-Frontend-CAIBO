@@ -8,6 +8,7 @@ export type TrailResponse = components["schemas"]["TrailResponse"]
 export type TrailCoordinatesDto = components["schemas"]["TrailCoordinatesDto"]
 export type CoordinatesDto = components["schemas"]["CoordinatesDto"]
 export type TrailDto = components["schemas"]["TrailDto"]
+export type CycloDetailsDto = components["schemas"]["CycloDetailsDto"]
 export type FileDetailsDto = components["schemas"]["TrailDto"]["fileDetails"]
 
 export enum TrailClassification {

@@ -20,7 +20,8 @@
             <h2>Lista Sentieri</h2>
             <div class="row">
                 <div class="col-12">
-
+                    <app-search-input placeholder="Cerca sentieri per codice"
+                                      (onChange)="onSearch($event)"></app-search-input>
                 </div>
             </div>
             <div *ngIf="trailPreviewList && trailPreviewList.length > 0 else notShow">
@@ -43,7 +44,6 @@
                     <tr
                             *ngFor="let trailPreview of trailPreviewList"
                             class="trailPreview"
-                            (click)="onPreview(trailPreview)"
                     >
                         <th
                                 scope="row"
@@ -54,7 +54,7 @@
                         </th>
 
                         <td>
-                            <span class="trailCodeColumn">{{ trailPreview.code }}</span>
+                            <span (click)="onPreview(trailPreview)" class="trailCodeColumn">{{ trailPreview.code }}</span>
                         </td>
                         <td>
                             {{
@@ -74,15 +74,19 @@
                         <td class="clickable">
                             {{ trailPreview.fileDetails.uploadedBy }}
                         </td>
+
                         <td
+                                [ngClass]="trailPreview.bikeData ? 'complete' : 'incomplete'"
                                 class="clickable"
                                 routerLink="/admin/trail/cyclo/{{ trailPreview.id }}"
                         >
+                            <span ngbTooltip="{{trailPreview.bikeData ? 'Modifica dati ciclo' : 'Aggiungi dati ciclo'}}" class="icon">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
                                 />
                             </svg>
+                            </span>
                         </td>
                         <td>
                             <svg *ngIf="realm == trailPreview.fileDetails.realm" class="bi clickable" width="24"

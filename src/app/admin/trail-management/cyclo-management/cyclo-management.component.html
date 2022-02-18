@@ -1,7 +1,40 @@
 <div class="container my-4 TrailUploadManagement">
-    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-    <h1>Compila dati ciclo-escursionistici per sentiero</h1>
-    <div class="bike-section">
+    <div class="row">
+        <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+        <div class="col-md-10">
+            <h1>Compilazione di dati ciclo-escursionistici per sentiero</h1>
+        </div>
+        <div class="col-sm-2">
+            <div class="features">
+                <div class="btn-group-toggle" data-toggle="buttons">
+                    <label
+                            (click)="togglePreview()"
+                            class="btn btn-primary full-width"
+                            placement="bottom"
+                            ngbTooltip="Mostra/nascondi anteprima"
+                            tooltipClass="tooltip-c"
+                            [ngClass]="{ active: isPreviewVisible }"
+                    >
+                        <svg class="bi" width="24" height="24" fill="currentColor">
+                            <use
+                                    xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
+                            />
+                        </svg>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading">
+        <app-trail-floating-preview
+                [trails]="[trailDto]"
+                [isVisible]="isPreviewVisible"
+                (onClose)="this.togglePreview()"
+        ></app-trail-floating-preview>
+    </div>
+
+    <div class="bike-section" *ngIf="!isLoading">
         <svg class="bi" width="32" height="32" fill="currentColor">
             <use
                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
@@ -10,7 +43,7 @@
         <h3 class="space-up">Ciclo Escursionismo</h3>
 
         <div [formGroup]="cyclo">
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-4 mb-3">
                     <p>Classificazione</p>
                     <select
@@ -22,21 +55,32 @@
                     >
                         <option value="UNCLASSIFIED">Non classificato</option>
                         <option value="TC">TC</option>
-                        <option value="TC+">TC+</option>
+                        <option value="TC_PLUS">TC+</option>
                         <option value="MC">MC</option>
-                        <option value="MC+">MC+</option>
+                        <option value="MC_PLUS">MC+</option>
                         <option value="BC">BC</option>
-                        <option value="BC+">BC+</option>
+                        <option value="BC_PLUS">BC+</option>
                         <option value="OC">OC</option>
-                        <option value="OC+">OC+</option>
+                        <option value="OC_PLUS">OC+</option>
                         <option value="EC">EC</option>
                         <option value="NO">NO</option>
                     </select>
                 </div>
+                <div class="form-group col-md-4 mb-3">
+                    <p>Tempo di percorrenza stimato</p>
+                    <input
+                            type="number"
+                            class="form-control"
+                            formControlName="officialEta"
+                            placeholder="Tempo di percorrenza"
+                            [value]="officialEta"
+                    />
+                </div>
             </div>
             <div [formGroup]="wayForward">
                 <h3>Andata</h3>
-                <div class="form-row">
+                <label>{{trailDto.startLocation.name}} → {{trailDto.endLocation.name}}</label>
+                <div class="row">
                     <div class="form-group col-md-4 mb-3">
                         <p>Percorribile?</p>
                         <select
@@ -70,7 +114,8 @@
         </div>
         <div [formGroup]="wayBack">
             <h3>Ritorno</h3>
-            <div class="form-row">
+            <label>{{trailDto.endLocation.name}} → {{trailDto.startLocation.name}}</label>
+            <div class="row">
                 <div class="form-group col-md-4 mb-3">
                     <p>Percorribile?</p>
                     <select
@@ -99,8 +144,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="form-row">
+        <div class="row">
             <label
                     placement="right"
                     ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
@@ -119,6 +163,18 @@
                 ]
               }"
                 ></quill-editor>
+            </div>
+        </div>
+        <div class="row top-margin-x2">
+            <div class="col-12">
+                <button class="btn btn-primary full-width" (click)="save()">
+                    Salva dati ciclo
+                </button>
+            </div>
+            <div class="col-12">
+                <button routerLink="/admin/trail-management" class="btn btn-outline-warning full-width top-margin">
+                    Torna a gestione sentieri
+                </button>
             </div>
         </div>
     </div>

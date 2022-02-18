@@ -42,9 +42,6 @@ export class TrailManagementComponent implements OnInit {
     ngOnInit(): void {
         this.getAllPreviews();
         this.realm = this.authService.getRealm();
-        // TODO use toast service
-        // let codeTrailSaved = this.route.snapshot.paramMap.get("success") as string;
-        // if(codeTrailSaved) { this.onFileSave(codeTrailSaved); }
     }
 
     getAllPreviews() {
@@ -114,5 +111,9 @@ export class TrailManagementComponent implements OnInit {
     getLocationsFromPreview(trailPreview: TrailPreview): string {
         if (trailPreview.locations == null) return "";
         return trailPreview.locations.map(t => t.name).join("-");
+    }
+
+    onSearch($event: string) {
+
     }
 }

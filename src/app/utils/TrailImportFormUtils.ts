@@ -45,12 +45,13 @@ export class TrailImportFormUtils {
         });
     }
 
-    public static getCylcloFormGroup() {
+    public static getCycloFormGroup() {
         return new FormGroup({
             "classification": new FormControl(this.DEFAULT_CYCLO, Validators.required),
             "wayForward": this.getWayCylcloFormGroup(),
             "wayBack": this.getWayCylcloFormGroup(),
             "description": new FormControl(""),
+            "officialEta": new FormControl(""),
         });
     }
 

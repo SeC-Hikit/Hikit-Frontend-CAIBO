@@ -9,10 +9,9 @@
                 <div class="col-11 offset-1" id="trail-detail-column">
                     <div *ngIf="sideView!='TRAIL'" class="row search-section top-margin-x2">
                         <div class="col-11">
-                            <input type="text" class="search-box"
-                                   placeholder="Cerca per codice sentiero (e.g: 100)"
-                                   (keyup)="onSearchKeyPress($event)"
-                            >
+                            <app-search-input placeholder="Cerca per codice sentiero (e.g: 100)"
+                                              (onChange)="onSearchKeyPress($event)">
+                            </app-search-input>
                         </div>
                     </div>
 
