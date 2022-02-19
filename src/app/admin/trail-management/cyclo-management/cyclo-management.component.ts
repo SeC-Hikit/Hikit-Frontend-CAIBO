@@ -77,21 +77,19 @@ export class CycloManagementComponent implements OnInit {
         };
 
         this.trailAdminService.updateTrail(this.trailDto).subscribe(it => {
-            if(it.content.length == 0) {
-                this.ensureStatusOkNavigation(it);
+            if (it.content.length > 0) {
+                this.ensureStatusOkNavigation(it.content[0]);
             }
         });
     }
 
-    private ensureStatusOkNavigation(it: TrailResponse) {
-        if (it.status === Status.OK) {
-            this.router.navigate([
-                "/admin/trails",
-                {
-                    success: this.trailDto.name
-                },
-            ]);
-        }
+    private ensureStatusOkNavigation(it: TrailDto) {
+        this.router.navigate([
+            "admin/trail-management",
+            {
+                success: it.code
+            },
+        ]);
     }
 
     togglePreview() {
