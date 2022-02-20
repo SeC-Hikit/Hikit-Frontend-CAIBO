@@ -26,6 +26,7 @@ import {CycloManagementComponent} from "./admin/trail-management/cyclo-managemen
 import {PlaceViewTableComponent} from "./admin/place-management/place-view-table/place-view-table.component";
 import {PlaceAddComponent} from "./admin/place-management/place-add/place-add.component";
 import {PlaceManagementComponent} from "./admin/place-management/place-management.component";
+import {TrailModifyManagementComponent} from "./admin/trail-management/trail-modify-management/trail-modify-management.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -100,8 +101,10 @@ const routes: Routes = [
             },
             {
                 path: "trail-management",
-                // children : [
-                // { path: "modify", component:  },
+                children: [
+                    {path: "", component: TrailManagementComponent},
+                    {path: "edit/:id", component: TrailModifyManagementComponent}
+                ],
                 component: TrailManagementComponent,
             },
             {

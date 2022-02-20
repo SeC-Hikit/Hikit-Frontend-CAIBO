@@ -62,6 +62,7 @@ import { PlaceAddComponent } from './admin/place-management/place-add/place-add.
 import { PlacePickerComponent } from './admin/place-management/place-picker/place-picker.component';
 import { TrailConfirmModalComponent } from './admin/trail-management/trail-confirm-modal/trail-confirm-modal.component';
 import { SearchInputComponent } from './generic/search-input/search-input.component';
+import { TrailModifyManagementComponent } from './admin/trail-management/trail-modify-management/trail-modify-management.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { SearchInputComponent } from './generic/search-input/search-input.compon
     PlacePickerComponent,
     TrailConfirmModalComponent,
     SearchInputComponent,
+    TrailModifyManagementComponent,
   ],
   imports: [
     BrowserModule,

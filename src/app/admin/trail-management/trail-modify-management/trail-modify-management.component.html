@@ -1,0 +1,159 @@
+<div class="container my-4 TrailUploadManagement">
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    <div class="table-wrapper space-up">
+        <div class="row">
+            <div class="col-sm-4">
+                <h1>Modifica sentiero {{ trailDto.code }}</h1>
+            </div>
+            <div class="col-sm-2">
+                <div class="features">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label
+                                (click)="togglePreview()"
+                                class="btn btn-primary full-width"
+                                placement="bottom"
+                                ngbTooltip="Mostra/nascondi anteprima"
+                                tooltipClass="tooltip-c"
+                                [ngClass]="{ active: isPreviewVisible }"
+                        >
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use
+                                        xlink:href="assets/bootstrap-icons/bootstrap-icons.svg#map-fill"
+                                />
+                            </svg>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!isLoading">
+            <app-trail-floating-preview
+                    [trails]="[trailDto]"
+                    [isVisible]="isPreviewVisible"
+                    (onClose)="this.togglePreview()"
+            ></app-trail-floating-preview>
+        </div>
+
+        <div class="row" *ngIf="!isLoading">
+            <div class="col">
+                <p>
+                    <b>{{
+                        this.trailDto.fileDetails.originalFilename
+                        }}</b
+                    >, caricata da
+                    <b>{{ this.trailDto.fileDetails.uploadedBy }}</b>
+                </p>
+            </div>
+        </div>
+
+
+        <form
+                class="container"
+                (ngSubmit)="processForm()"
+                [formGroup]="trailFormGroup"
+                *ngIf="!isLoading"
+        >
+            <div class="row">
+                <div class="general-section col-12">
+                    <h3 id="dati-generali" class="space-up">Dati generali</h3>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Codice sentiero <span class="mandatory-field-asterisk">*</span></p>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="code"
+                                    placeholder="Codice (es: 100BO)"
+                                    required
+                            />
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Nome sentiero</p>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="name"
+                                    placeholder="Nome sentiero, se diverso dal codice"
+                            />
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Classificazione escursionistica <span class="mandatory-field-asterisk">*</span></p>
+                            <select
+                                    title="Scegli una opzione"
+                                    formControlName="classification"
+                                    class="form-control"
+                                    id="classification_select"
+                            >
+                                <option value="T">T</option>
+                                <option value="E">E</option>
+                                <option value="EE">EE</option>
+                                <option value="EEA">EEA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row top-margin">
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Data rilevazione <span class="mandatory-field-asterisk">*</span></p>
+                            <div class="input-group">
+                                <input
+                                        class="form-control"
+                                        formControlName="lastUpdate"
+                                        placeholder="gg/mm/aaaa"
+                                        name="dp"
+                                        [maxDate]="maxDate"
+                                        ngbDatepicker
+                                        [(ngModel)]="date"
+                                        #d="ngbDatepicker"
+                                />
+                                <div class="input-group-append">
+                                    <button
+                                            class="btn btn-outline-secondary calendar"
+                                            (click)="d.toggle()"
+                                            type="button"
+                                    >
+                                        <svg width="24" height="24" fill="white" class="inner">
+                                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                            <p>Tempo registrato di percorrenza, in minuti</p>
+                            <div class="bootstrap-select-wrapper">
+                                <input
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="officialEta"
+                                        placeholder="Tempo di percorrenza in minuti"
+                                        required
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row top-margin">
+                        <label
+                                placement="right"
+                                ngbTooltip="La descrizione dovrebbe accomodare informazioni di base per gli utenti."
+                        >
+                            Descrizione <span class="mandatory-field-asterisk">*</span>
+                        </label>
+                        <div class="form-group col-md-12 mb-12" *ngIf="!isLoading">
+                            <quill-editor
+                                    formControlName="description"
+                                    [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"
+                            ></quill-editor>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
