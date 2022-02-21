@@ -85,7 +85,7 @@ export class CycloManagementComponent implements OnInit {
 
     private ensureStatusOkNavigation(it: TrailDto) {
         this.router.navigate([
-            "admin/trail-management",
+            "admin/trail-management/view",
             {
                 success: it.code
             },

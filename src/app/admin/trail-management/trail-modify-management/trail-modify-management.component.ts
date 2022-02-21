@@ -24,7 +24,7 @@ export class TrailModifyManagementComponent implements OnInit {
     trailDto: TrailDto;
     fileDetails: FileDetailsDto;
 
-    isLoading = false;
+    isLoading = true;
     isError: boolean;
     isPreviewVisible = false;
 
@@ -56,11 +56,10 @@ export class TrailModifyManagementComponent implements OnInit {
         });
 
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
-        this.loadRaw(idFromPath);
+        this.loadTrail(idFromPath);
     }
 
-    loadRaw(idFromPath: string) {
-        this.isLoading = true;
+    loadTrail(idFromPath: string) {
         this.trailService.getTrailById(idFromPath)
             .subscribe((response) => {
                 if (response.content.length == 0) {
@@ -76,21 +75,54 @@ export class TrailModifyManagementComponent implements OnInit {
     }
 
     private populateForm(tpm: TrailDto) {
-            this.trailFormGroup.controls["officialEta"].setValue(0);
-            this.trailFormGroup.controls["code"].setValue(tpm.name);
-            this.trailFormGroup.controls["description"].setValue(tpm.description);
-            this.trailFormGroup.controls["name"].setValue(tpm.name);
-            this.trailFormGroup.controls["classification"].setValue(tpm.classification);
-            this.trailFormGroup.controls["lastUpdate"].setValue(tpm.lastUpdate);
-            this.trailFormGroup.controls["maintainingSection"].setValue(tpm.maintainingSection);
+        const trailRecordDate = moment(tpm.lastUpdate);
+
+        this.date = {
+            year: trailRecordDate.year(),
+            month: trailRecordDate.month() + 1,
+            day: trailRecordDate.date()
+        };
+
+        this.trailFormGroup.controls["officialEta"].setValue(tpm.officialEta);
+        this.trailFormGroup.controls["code"].setValue(tpm.code);
+        this.trailFormGroup.controls["description"].setValue(tpm.description);
+        this.trailFormGroup.controls["name"].setValue(tpm.name);
+        this.trailFormGroup.controls["classification"].setValue(tpm.classification);
+        this.trailFormGroup.controls["lastUpdate"].setValue(tpm.lastUpdate);
+        this.trailFormGroup.controls["maintainingSection"].setValue(tpm.maintainingSection);
     }
 
-    processForm() {
+    onModify() {
 
+        const trailDto = this.trailDto;
+        trailDto.officialEta = this.trailFormGroup.controls["officialEta"].value;
+        trailDto.code = this.trailFormGroup.controls["code"].value;
+        trailDto.description = this.trailFormGroup.controls["description"].value;
+        trailDto.name = this.trailFormGroup.controls["name"].value;
+        trailDto.classification = this.trailFormGroup.controls["classification"].value;
+        trailDto.lastUpdate = moment(`${this.date.year}-${this.date.month}-${this.date.day}`,
+            'YYYY-MM-DD').toDate().toISOString();
+        trailDto.maintainingSection = this.trailFormGroup.controls["maintainingSection"].value;
+
+        this.adminTrailService.updateTrail(trailDto).subscribe(it => {
+            if (it.content.length > 0) {
+                this.ensureStatusOkNavigation(it.content[0]);
+            }
+        });
     }
+
+    private ensureStatusOkNavigation(it: TrailDto) {
+        this.router.navigate([
+            "admin/trail-management/view",
+            {
+                success: it.code
+            },
+        ]);
+    }
+
+
 
     togglePreview() {
         this.isPreviewVisible = !this.isPreviewVisible;
     }
-
 }

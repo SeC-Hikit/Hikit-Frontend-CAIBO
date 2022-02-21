@@ -356,7 +356,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     }
 
     private onSaveRequest(response: TrailResponse) {
-        this.router.navigate(['/admin/trail-management',
+        this.router.navigate(['/admin/trail-management/view',
             {success: response.content[0].code}]);
     }
 

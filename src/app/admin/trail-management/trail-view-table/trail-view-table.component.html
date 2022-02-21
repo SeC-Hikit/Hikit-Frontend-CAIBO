@@ -1,0 +1,125 @@
+<div class="row">
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    <div *ngIf="savedTrailCode">
+        <div class="space-up alert alert-success" role="alert">
+            Sentiero {{ savedTrailCode }} aggiunto
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && selectedTrail != null">
+        <app-trail-floating-preview
+                [trails]="[selectedTrail]"
+                [isVisible]="isPreviewVisible"
+                (onClose)="togglePreview()"
+        ></app-trail-floating-preview>
+    </div>
+
+    <div class="row section-distance-up">
+        <div class="col-12 col-md-12">
+            <div class="row">
+                <div class="col-12">
+                    <app-search-input placeholder="Cerca sentieri per codice"
+                                      (onChange)="onSearch($event)"></app-search-input>
+                </div>
+            </div>
+            <div *ngIf="trailPreviewList && trailPreviewList.length > 0 else notShow">
+                <table id="trailTable" class="table table-striped interactive-table">
+                    <thead class="">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Codice</th>
+                        <th scope="col">Stato</th>
+                        <th scope="col">Localita</th>
+                        <th scope="col">Cl.</th>
+                        <th scope="col">Ciclo</th>
+                        <th scope="col">C. da Utente</th>
+                        <th scope="col">+ Ciclo</th>
+                        <th scope="col">Modifica</th>
+                        <th scope="col">Cancella</th>
+                    </tr>
+                    </thead>
+                    <tbody class="short-list">
+                    <tr
+                            *ngFor="let trailPreview of trailPreviewList"
+                            class="trailPreview"
+                    >
+                        <th
+                                scope="row"
+                                class="ellipsis small-column"
+                                title="{{ trailPreview.id }}"
+                        >
+                            {{ trailPreview.id }}
+                        </th>
+
+                        <td>
+                            <span (click)="onPreview(trailPreview)" class="trailCodeColumn">{{ trailPreview.code }}</span>
+                        </td>
+                        <td>
+                            {{
+                            trailPreview.trailStatus == "PUBLIC" ? "Pubblicato" : "Bozza"
+                            }}
+                        </td>
+                        <td>
+                            <span ngbTooltip="{{ getLocationsFromPreview(trailPreview)}}" class="icon">
+                            {{ trailPreview.startPos.name }} -
+                                {{ trailPreview.finalPos.name }}
+                            </span>
+                        </td>
+                        <td>{{ trailPreview.classification }}</td>
+                        <td class="clickable">
+                            {{ trailPreview.bikeData ? "Si" : "No" }}
+                        </td>
+                        <td class="clickable">
+                            {{ trailPreview.fileDetails.uploadedBy }}
+                        </td>
+
+                        <td
+                                [ngClass]="trailPreview.bikeData ? 'complete' : 'incomplete'"
+                                class="clickable"
+                                routerLink="/admin/trail/cyclo/{{ trailPreview.id }}"
+                        >
+                            <span ngbTooltip="{{trailPreview.bikeData ? 'Modifica dati ciclo' : 'Aggiungi dati ciclo'}}" class="icon">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
+                                />
+                            </svg>
+                            </span>
+                        </td>
+                        <td>
+                            <svg *ngIf="realm == trailPreview.fileDetails.realm" class="bi clickable" width="24"
+                                 height="24" fill="currentColor"
+                                 routerLink="/admin/trail-management/edit/{{ trailPreview.id }}">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen"
+                                />
+                            </svg>
+                        </td>
+                        <td class="clickable" (click)="onDelete($event, trailPreview)">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                                />
+                            </svg>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination-position">
+                    <ngb-pagination
+                            [pageSize]="entryPerPage"
+                            [collectionSize]="totalTrail"
+                            [(page)]="page"
+                            aria-label="Default pagination"
+                            (pageChange)="loadTrails(page)"
+                    ></ngb-pagination>
+                </div>
+            </div>
+            <ng-template #notShow>
+                <app-items-not-found
+                        text="Nessun sentiero trovato.</br>
+                         Creano uno caricando una traccia"></app-items-not-found>
+            </ng-template>
+        </div>
+    </div>
+</div>

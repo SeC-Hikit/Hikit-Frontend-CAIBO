@@ -1,11 +1,12 @@
-<div class="container my-4 TrailUploadManagement">
+<div class="TrailUploadManagement">
     <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-    <div class="table-wrapper space-up">
+
+    <div class="table-wrapper space-up" *ngIf="!isLoading">
         <div class="row">
             <div class="col-sm-4">
-                <h1>Modifica sentiero {{ trailDto.code }}</h1>
+                <h2>Modifica sentiero {{ trailDto.code }}</h2>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-2 offset-md-6">
                 <div class="features">
                     <div class="btn-group-toggle" data-toggle="buttons">
                         <label
@@ -43,14 +44,14 @@
                         }}</b
                     >, caricata da
                     <b>{{ this.trailDto.fileDetails.uploadedBy }}</b>
+                    , modificata l'ultima volta da <b>{{ trailDto.fileDetails.lastModifiedBy }}</b>
                 </p>
             </div>
         </div>
 
 
         <form
-                class="container"
-                (ngSubmit)="processForm()"
+                class=""
                 [formGroup]="trailFormGroup"
                 *ngIf="!isLoading"
         >
@@ -58,7 +59,7 @@
                 <div class="general-section col-12">
                     <h3 id="dati-generali" class="space-up">Dati generali</h3>
                     <div class="form-row">
-                        <div class="form-group col-md-4 mb-3">
+                        <div class="form-group col-md-6 mb-3">
                             <p>Codice sentiero <span class="mandatory-field-asterisk">*</span></p>
                             <input
                                     type="text"
@@ -68,7 +69,7 @@
                                     required
                             />
                         </div>
-                        <div class="form-group col-md-4 mb-3">
+                        <div class="form-group col-md-6 mb-3">
                             <p>Nome sentiero</p>
                             <input
                                     type="text"
@@ -77,7 +78,7 @@
                                     placeholder="Nome sentiero, se diverso dal codice"
                             />
                         </div>
-                        <div class="form-group col-md-4 mb-3">
+                        <div class="form-group col-md-6 mb-3">
                             <p>Classificazione escursionistica <span class="mandatory-field-asterisk">*</span></p>
                             <select
                                     title="Scegli una opzione"
@@ -93,7 +94,7 @@
                         </div>
                     </div>
                     <div class="form-row top-margin">
-                        <div class="form-group col-md-4 mb-3">
+                        <div class="form-group col-md-12 mb-3">
                             <p>Data rilevazione <span class="mandatory-field-asterisk">*</span></p>
                             <div class="input-group">
                                 <input
@@ -119,7 +120,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-md-4 mb-3">
+                        <div class="form-group col-md-6 mb-3">
                             <p>Tempo registrato di percorrenza, in minuti</p>
                             <div class="bootstrap-select-wrapper">
                                 <input
@@ -127,7 +128,6 @@
                                         class="form-control"
                                         formControlName="officialEta"
                                         placeholder="Tempo di percorrenza in minuti"
-                                        required
                                 />
                             </div>
                         </div>
@@ -152,6 +152,19 @@
                             ></quill-editor>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 top-margin-x2">
+                    <button class="btn btn-primary full-width" (click)="onModify()">
+                        Salva
+                    </button>
+                </div>
+                <div class="col-12">
+                    <button routerLink="/admin/trail-management/view"
+                            class="btn btn-outline-warning full-width top-margin">
+                        Torna a gestione sentieri
+                    </button>
                 </div>
             </div>
         </form>
