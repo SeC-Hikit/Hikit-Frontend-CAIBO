@@ -70,7 +70,7 @@ export class TrailImportFormUtils {
             classification: tfv.classification,
             country: "Italy",
             description: tfv.description,
-            trailStatus: "DRAFT",
+            trailStatus: "PUBLIC",
             lastUpdate: moment(DateUtils.formatStringDateToDashes(
                     tfv.lastUpdate.day, tfv.lastUpdate.month, tfv.lastUpdate.year),
                 DateUtils.DATE_FORMAT).toISOString(),

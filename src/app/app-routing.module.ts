@@ -28,6 +28,7 @@ import {PlaceAddComponent} from "./admin/place-management/place-add/place-add.co
 import {PlaceManagementComponent} from "./admin/place-management/place-management.component";
 import {TrailModifyManagementComponent} from "./admin/trail-management/trail-modify-management/trail-modify-management.component";
 import {TrailViewTableComponent} from "./admin/trail-management/trail-view-table/trail-view-table.component";
+import {TrailRawViewTableComponent} from "./admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -80,6 +81,10 @@ const routes: Routes = [
             },
             {
                 path: "raw-trail-management",
+                children: [
+                    { path: "view", component: TrailRawViewTableComponent},
+                    {path: "init/:id", component: TrailUploadManagementComponent}
+                ],
                 component: TrailRawManagementComponent,
             },
             {
@@ -87,7 +92,7 @@ const routes: Routes = [
                 children: [
                     {path: "view", component: PoiViewTableComponent},
                     {path: "add", component: PoiAddComponent},
-                    {path: "modify/:id", component: PoiAddComponent},
+                    {path: "edit/:id", component: PoiAddComponent},
                 ],
                 component: PoiManagementComponent,
             },
@@ -96,7 +101,7 @@ const routes: Routes = [
                 children: [
                     {path: "view", component: PlaceViewTableComponent},
                     {path: "add", component: PlaceAddComponent},
-                    {path: "modify/:id", component: PoiAddComponent},
+                    {path: "edit/:id", component: PoiAddComponent},
                 ],
                 component: PlaceManagementComponent,
             },
@@ -104,6 +109,7 @@ const routes: Routes = [
                 path: "trail-management",
                 children: [
                     {path: "view", component: TrailViewTableComponent},
+                    {path: "cyclo/:id", component: CycloManagementComponent},
                     {path: "edit/:id", component: TrailModifyManagementComponent}
                 ],
                 component: TrailManagementComponent,
@@ -113,7 +119,7 @@ const routes: Routes = [
                 children: [
                     {path: "", component: AccessibilityViewComponent},
                     {path: "add", component: AccessibilityAddComponent},
-                    {path: "modify", component: AccessibilityAddComponent},
+                    {path: "edit/:id", component: AccessibilityAddComponent},
                 ],
                 component: AccessibilityManagementComponent,
             },
@@ -121,19 +127,11 @@ const routes: Routes = [
                 path: "maintenance-management",
                 children: [
                     {path: "add", component: AccessibilityAddComponent},
-                    {path: "modify/:id", component: AccessibilityAddComponent},
+                    {path: "edit/:id", component: AccessibilityAddComponent},
                 ],
                 component: MaintenanceManagementComponent,
             },
-            // Change
-            {
-                path: "trail",
-                children: [
-                    {path: "raw/:id", component: TrailUploadManagementComponent},
-                    {path: "cyclo/:id", component: CycloManagementComponent},
-                ],
-            },
-        ],
+        ]
     },
     {path: "404", component: NotFoundComponent},
     {

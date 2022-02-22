@@ -37,6 +37,7 @@
     "leaflet-textpath": "^1.2.3",
     "luxon": "^2.0.2",
     "moment": "^2.29.1",
+    "ng-multiselect-dropdown": "^0.3.8",
     "ng-recaptcha": "7.0.2",
     "ngx-quill": "^13.0.1",
     "openapi-typescript": "^3.2.0",

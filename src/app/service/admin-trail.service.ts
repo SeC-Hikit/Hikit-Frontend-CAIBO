@@ -54,6 +54,15 @@ export class AdminTrailService {
         );
   }
 
+  updateStatus(trailDto: TrailDto) {
+    return this.httpClient
+        .post<RestResponse>(this.baseUrl + "/status", trailDto)
+        .pipe(
+            tap((_) => console.log("")),
+            catchError(this.handleError<RestResponse>("Status trail", null))
+        );
+  }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -69,4 +78,5 @@ export class AdminTrailService {
       return of(result as T);
     };
   }
+
 }

@@ -64,6 +64,8 @@ import { TrailConfirmModalComponent } from './admin/trail-management/trail-confi
 import { SearchInputComponent } from './generic/search-input/search-input.component';
 import { TrailModifyManagementComponent } from './admin/trail-management/trail-modify-management/trail-modify-management.component';
 import { TrailViewTableComponent } from './admin/trail-management/trail-view-table/trail-view-table.component';
+import { InfoModalComponent } from './modal/info-modal/info-modal.component';
+import { TrailRawViewTableComponent } from './admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component';
 
 @NgModule({
   declarations: [
@@ -122,6 +124,8 @@ import { TrailViewTableComponent } from './admin/trail-management/trail-view-tab
     SearchInputComponent,
     TrailModifyManagementComponent,
     TrailViewTableComponent,
+    InfoModalComponent,
+    TrailRawViewTableComponent,
   ],
   imports: [
     BrowserModule,

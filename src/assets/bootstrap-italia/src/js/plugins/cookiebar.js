@@ -167,7 +167,7 @@ const Cookiebar = (($) => {
           event.preventDefault()
         }
 
-        cookiebarInstance.close(this)
+        cookiebarInstance.close()
       }
     }
 
@@ -177,7 +177,7 @@ const Cookiebar = (($) => {
           event.preventDefault()
         }
 
-        cookiebarInstance.close(this)
+        cookiebarInstance.close()
       }
     }
 

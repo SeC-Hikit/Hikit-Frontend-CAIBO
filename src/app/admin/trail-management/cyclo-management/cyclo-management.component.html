@@ -1,8 +1,8 @@
-<div class="container my-4 TrailUploadManagement">
+<div class="TrailUploadManagement">
     <div class="row">
         <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
         <div class="col-md-10">
-            <h1>Compilazione di dati ciclo-escursionistici per sentiero</h1>
+            <h2>Compilazione di dati ciclo-escursionistici per sentiero</h2>
         </div>
         <div class="col-sm-2">
             <div class="features">
@@ -79,7 +79,7 @@
             </div>
             <div [formGroup]="wayForward">
                 <h3>Andata</h3>
-                <label>{{trailDto.startLocation.name}} → {{trailDto.endLocation.name}}</label>
+                <label><b>{{trailDto.startLocation.name}}</b> → <b>{{trailDto.endLocation.name}}</b></label>
                 <div class="row">
                     <div class="form-group col-md-4 mb-3">
                         <p>Percorribile?</p>
@@ -114,7 +114,7 @@
         </div>
         <div [formGroup]="wayBack">
             <h3>Ritorno</h3>
-            <label>{{trailDto.endLocation.name}} → {{trailDto.startLocation.name}}</label>
+            <label><b>{{trailDto.endLocation.name}}</b> → <b>{{trailDto.startLocation.name}}</b></label>
             <div class="row">
                 <div class="form-group col-md-4 mb-3">
                     <p>Percorribile?</p>
