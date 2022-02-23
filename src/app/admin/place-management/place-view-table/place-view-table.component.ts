@@ -8,6 +8,9 @@ import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AdminPlaceService} from "../../../service/admin-place.service";
 import {AuthService} from "../../../service/auth.service";
+import {TrailPreviewService} from "../../../service/trail-preview-service.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 
 @Component({
     selector: 'app-place-view-table',
@@ -21,6 +24,8 @@ export class PlaceViewTableComponent implements OnInit {
     trailsPreview: TrailDto[] = [];
     markersPreview: Marker[] = [];
 
+    trailMap: Map<String, String> = new Map();
+
     isPlacePreviewVisible = false;
 
     realm = "";
@@ -31,14 +36,17 @@ export class PlaceViewTableComponent implements OnInit {
     constructor(private placeService: PlaceService,
                 private adminPlaceService: AdminPlaceService,
                 private trailService: TrailService,
+                private trailPreviewService: TrailPreviewService,
                 private activatedRoute: ActivatedRoute,
                 private authService: AuthService,
+                private modalService: NgbModal,
                 private router: Router) {
     }
 
     ngOnInit(): void {
         this.onPlaceLoad(1);
         this.realm = this.authService.getRealm();
+        this.onLoadTrailMap();
     }
 
     private onPlaceLoad(page: number) {
@@ -54,9 +62,9 @@ export class PlaceViewTableComponent implements OnInit {
 
     onEdit(id: string) {
         this.router.navigate(
-            ["../modify/" + id], {
-            relativeTo: this.activatedRoute,
-        });
+            ["../edit/" + id], {
+                relativeTo: this.activatedRoute,
+            });
     }
 
     formatStringDateToDashes(uploadedOn: string) {
@@ -88,12 +96,28 @@ export class PlaceViewTableComponent implements OnInit {
     }
 
     onDelete(id: string) {
-        this.adminPlaceService.deleteById(id).subscribe(()=> {
+        this.adminPlaceService.deleteById(id).subscribe(() => {
             this.onPlaceLoad(this.selectedPage)
         });
     }
 
     showTrailCode(crossingTrailIds: string[]) {
-        // TODO
+        const trails = crossingTrailIds.map(it => this.trailMap.get(it));
+        const trailsHtml = trails.map((it => `<li>${it}</li>`)).join("");
+        this.openError("Sentieri passanti per " + (crossingTrailIds.length > 1 ? "crocevia" : "località"),
+            "<p>Sentieri:</p><ul>" + trailsHtml + "</ul>");
+    }
+
+    private onLoadTrailMap() {
+        this.trailPreviewService.getMappings(this.realm)
+            .subscribe((resp) => {
+                resp.content.forEach(it => this.trailMap.set(it.id, it.code));
+            });
+    }
+
+    private openError(title: string, body: string) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = title;
+        modal.componentInstance.body = body;
     }
 }

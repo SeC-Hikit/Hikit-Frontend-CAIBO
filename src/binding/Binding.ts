@@ -132,6 +132,9 @@ export interface paths {
   "/preview/raw": {
     get: operations["getRawTrailPreviews"];
   };
+  "/preview/map": {
+    get: operations["getTrailMapping"];
+  };
   "/preview/find/code/{code}": {
     get: operations["findByTrailCode"];
   };
@@ -185,6 +188,9 @@ export interface paths {
   };
   "/maintenance/count": {
     get: operations["getCount_3"];
+  };
+  "/geo-tool/polyline_altitude": {
+    get: operations["getAltitudeTrail"];
   };
   "/geo-tool/altitude": {
     get: operations["geoLocateTrail_1"];
@@ -573,6 +579,24 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["TrailPreviewDto"][];
+    };
+    TrailMappingDto: {
+      id?: string;
+      code?: string;
+      name?: string;
+    };
+    TrailMappingResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["TrailMappingDto"][];
+    };
+    Coordinates2DDto: {
+      longitude?: number;
+      latitude?: number;
     };
     TrailDatasetVersion: {
       version?: number;
@@ -1388,6 +1412,23 @@ export interface operations {
       };
     };
   };
+  getTrailMapping: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
+        realm?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailMappingResponse"];
+        };
+      };
+    };
+  };
   findByTrailCode: {
     parameters: {
       path: {
@@ -1666,6 +1707,21 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["CountResponse"];
+        };
+      };
+    };
+  };
+  getAltitudeTrail: {
+    parameters: {
+      query: {
+        coordinatesDtoList: components["schemas"]["Coordinates2DDto"][];
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["CoordinatesDto"][];
         };
       };
     };

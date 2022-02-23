@@ -5,6 +5,8 @@ import {tap, catchError} from 'rxjs/operators';
 import {components} from 'src/binding/Binding';
 
 export type TrailResponse = components["schemas"]["TrailResponse"]
+export type TrailMappingResponse = components["schemas"]["TrailMappingResponse"]
+export type TrailMappingDto = components["schemas"]["TrailMappingDto"]
 export type TrailCoordinatesDto = components["schemas"]["TrailCoordinatesDto"]
 export type CoordinatesDto = components["schemas"]["CoordinatesDto"]
 export type TrailDto = components["schemas"]["TrailDto"]

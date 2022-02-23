@@ -1,7 +1,7 @@
 <div class="location-management-add">
     <div class="row">
         <div class="col-12">
-            <h2>Aggiungi/modifica una località/crocevia</h2>
+            <h2>Aggiungi una località/crocevia</h2>
         </div>
     </div>
     <form [formGroup]="formGroup" (ngSubmit)="processModule()">
@@ -50,15 +50,15 @@
         <div class="row">
             <div class="col-md-12 col-lg-6">
                 <label>Latitude</label>
-                <input type="text" disabled [formControlName]="'coordLatitude'">
+                <input type="text" disabled/> <!--[formControlName]="'coordLatitude'">-->
             </div>
             <div class="col-md-12 col-lg-6">
                 <label>Longitude</label>
-                <input type="text" disabled [formControlName]="'coordLongitude'">
+                <input type="text" disabled /> <!-- [formControlName]="'coordLongitude'">-->
             </div>
             <div class="col-md-12 col-lg-6">
                 <label>Altitude</label>
-                <input type="text" disabled [formControlName]="'coordAltitude'">
+                <input type="text" disabled/> <!-- [formControlName]="'coordAltitude'"> -->
             </div>
         </div>
 

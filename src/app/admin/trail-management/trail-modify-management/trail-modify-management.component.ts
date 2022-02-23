@@ -3,12 +3,9 @@ import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
 import {Subject} from "rxjs";
 import * as moment from "moment";
-import {TrailRawDto} from "../../../service/import.service";
 import {FileDetailsDto, TrailDto, TrailService} from "../../../service/trail-service.service";
-import {TrailImportFormUtils} from "../../../utils/TrailImportFormUtils";
 import {AuthService} from "../../../service/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AdminTrailRawService} from "../../../service/admin-trail-raw.service";
 import {AdminTrailService} from "../../../service/admin-trail.service";
 
 @Component({

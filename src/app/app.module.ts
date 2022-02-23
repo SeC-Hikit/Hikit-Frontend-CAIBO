@@ -66,6 +66,8 @@ import { TrailModifyManagementComponent } from './admin/trail-management/trail-m
 import { TrailViewTableComponent } from './admin/trail-management/trail-view-table/trail-view-table.component';
 import { InfoModalComponent } from './modal/info-modal/info-modal.component';
 import { TrailRawViewTableComponent } from './admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component';
+import { PlaceEditComponent } from './admin/place-management/place-edit/place-edit.component';
+import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 
 @NgModule({
   declarations: [
@@ -126,6 +128,7 @@ import { TrailRawViewTableComponent } from './admin/trail-raw-management/trail-r
     TrailViewTableComponent,
     InfoModalComponent,
     TrailRawViewTableComponent,
+    PlaceEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -135,6 +138,7 @@ import { TrailRawViewTableComponent } from './admin/trail-raw-management/trail-r
     NgbModule,
     KeycloakAngularModule,
     QuillModule.forRoot(),
+    NgMultiSelectDropDownModule,
   ],
   providers: [
     {

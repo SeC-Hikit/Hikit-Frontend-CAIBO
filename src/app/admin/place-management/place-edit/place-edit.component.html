@@ -1,0 +1,64 @@
+<div class="location-management-modify">
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    <div class="row">
+        <div class="col-12">
+            <h2>Modifica una località/crocevia</h2>
+        </div>
+    </div>
+    <form [formGroup]="formGroup" (ngSubmit)="processModule()">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <label>Nome <span class="mandatory-field-asterisk">*</span></label>
+                <input [formControlName]="'name'" disabled="disabled" type="text">
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="col-md-12 col-lg-12">
+                <label>Toponimi Alternativi (divisi da una virgola)</label>
+                <input [formControlName]="'tags'" type="text" placeholder="Toponimi alternativi divisi da una virgola">
+            </div>
+            <div class="col-md-12 col-lg-4 hidden">
+                <label>Id</label>
+                <input [formControlName]="'id'" disabled type="text">
+            </div>
+        </div>
+        <div class="row top-margin-x2">
+            <div class="col-md-12 col-lg-12">
+                <label>Descrizione</label>
+                <quill-editor
+                        [formControlName]="'description'"
+                        [className]="'description'"
+                        [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"
+                ></quill-editor>
+            </div>
+        </div>
+        <div class="row" *ngIf="!isLoading">
+            <div class="col-12">
+                <label>Sentieri che attraversano la località</label>
+            </div>
+            <div class="col-12">
+                <ul>
+                    <li *ngFor="let crossing of place.crossingTrailIds">{{getTrailCode(crossing)}}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row top-margin-x2">
+            <div class="col-12">
+                <button class="btn btn-primary">Salva località</button>
+            </div>
+            <div class="col-12">
+                <button routerLink="/admin/place-management/view"
+                        class="btn btn-outline-warning full-width top-margin">
+                    Torna a gestione località
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
