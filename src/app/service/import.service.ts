@@ -4,7 +4,7 @@ import { Observable, of } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
 import { components } from "src/binding/Binding";
 import { RestResponse } from "../RestResponse";
-import {TrailResponse} from "./trail-service.service";
+import {TrailDto, TrailMappingResponse, TrailResponse} from "./trail-service.service";
 
 
 export type TrailRawResponse = components['schemas']['TrailRawResponse'];
@@ -52,6 +52,15 @@ export class ImportService {
         tap((_) => console.log("")),
         catchError(this.handleError<RestResponse>("get all trail", null))
       );
+  }
+
+  checkTrail(trailDto: TrailRawDto) : Observable<TrailMappingResponse> {
+    return this.httpClient
+        .post(this.baseUrl + "/check", trailDto)
+        .pipe(
+            tap((_) => console.log("")),
+            catchError(this.handleError<RestResponse>("get trail", null))
+        );
   }
 
   /**
