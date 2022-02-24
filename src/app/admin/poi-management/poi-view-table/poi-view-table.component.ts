@@ -70,4 +70,8 @@ export class PoiViewTableComponent implements OnInit {
         this.isLoading = false;
       });
   }
+
+  onDelete(id: string) {
+
+  }
 }

@@ -62,7 +62,7 @@ export class PlaceViewTableComponent implements OnInit {
 
     onEdit(id: string) {
         this.router.navigate(
-            ["../edit/" + id], {
+            ["./edit/" + id], {
                 relativeTo: this.activatedRoute,
             });
     }

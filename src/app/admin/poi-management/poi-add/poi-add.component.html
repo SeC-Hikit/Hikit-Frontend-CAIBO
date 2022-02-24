@@ -6,102 +6,133 @@
                 <h2>Aggiungi punto d'interesse</h2>
             </div>
         </div>
-        <div class="row">
-            <div *ngIf="isTrailListLoaded">
-                <!-- <form> -->
+        <form [formGroup]="formGroup" (ngSubmit)="processModule()">
+            <div class="row">
+                <div *ngIf="isTrailListLoaded">
+                    <!-- <form> -->
+                    <div class="col-12">
+                        <div *ngIf="trailPreviewResponse.content.length > 0">
+                            <label>Seleziona un sentiero</label>
+                            <select
+                                    title="Scegli un'opzione"
+                                    class="form-control"
+                                    id="trailId_select"
+                                    (change)="onChangeTrail($event)"
+                            >
+                                <option
+                                        *ngFor="let trail of trailPreviewResponse.content"
+                                        [value]="trail.id"
+                                        class="trailPreview"
+                                >
+                                    {{ trail.code }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row top-margin-x2" *ngIf="isTrailLoaded">
+                <div class="col-6">
+                    <label>Nome <span class="mandatory-field-asterisk">*</span></label>
+                    <input type="text"/>
+                </div>
+                <div class="col-6">
+                    <label>Toponimi alternativi (separati da una virgola)</label>
+                    <input type="text"/>
+                </div>
+            </div>
+            <div class="row top-margin-x2" *ngIf="isTrailLoaded">
                 <div class="col-12">
-                    <div *ngIf="trailPreviewResponse.content.length > 0">
-                        <label>Seleziona un sentiero</label>
+                    <label>Macro Tipo <span class="mandatory-field-asterisk">*</span></label>
+                    <select
+                            title="Scegli un'opzione"
+                            class="form-control"
+                            formControlName="macroType"
+                            (change)="onMacroSelection($event)"
+                    >
+                        <option *ngFor="let macroChoice of macroChoices"
+                                [value]="macroChoice.value">{{macroChoice.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row top-margin-x2">
+                <div class="col-12">
+                    <label>Micro Tipi <span class="mandatory-field-asterisk">*</span></label>
+                    <div class="row top-margin" *ngFor="let microType of microTypes.controls">
                         <select
                                 title="Scegli un'opzione"
                                 class="form-control"
-                                id="trailId_select"
-                                (change)="onChangeTrail($event)"
+                                formControlName="microTypes"
                         >
-                            <option
-                                    *ngFor="let trail of trailPreviewResponse.content"
-                                    [value]="trail.id"
-                                    class="trailPreview"
-                            >
-                                {{ trail.code }}
-                            </option>
+                            <option *ngFor="let microChoice of microChoices"
+                                    [value]="microChoice.value">{{microChoice.name}}</option>
                         </select>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row top-margin-x2" *ngIf="isTrailLoaded">
-            <div class="col-6">
-                <label>Nome <span class="mandatory-field-asterisk">*</span></label>
-                <input type="text"/>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary top-margin col-12" (click)="addMicroGroup()">+ Aggiungi micro tipo</button>
+                </div>
             </div>
-            <div class="col-6">
-                <label>Toponimi alternativi (separati da una virgola)</label>
-                <input type="text"/>
+            <div class="top-margin-x2 row">
+                <div class="col-md-12 col-lg-12">
+                    <label>Descrizione</label>
+                    <quill-editor
+                            [formControlName]="'description'"
+                            [className]="'description'"
+                            [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"></quill-editor>
+                </div>
             </div>
-        </div>
-        <div class="row top-margin-x2" *ngIf="isTrailLoaded">
-            <div class="col-6">
-                <label>Macro Tipo <span class="mandatory-field-asterisk">*</span></label>
-                <select
-                        title="Scegli un'opzione"
-                        class="form-control"
-                >
-                    <option [value]="'CULTURAL'">Culturale</option>
-                    <option [value]="'SUPPORT'">Supporto all'escursione</option>
-                    <option [value]="'LANDSCAPE'">Paesaggistico</option>
-                </select>
+
+            <div class="row top-margin-x2" *ngIf="isTrailLoaded">
+                <div class="col-md-12 col-lg-12">
+                    <p>Seleziona un punto sulla mappa, nei pressi del sentiero <span
+                            class="mandatory-field-asterisk">*</span></p>
+                    <span class="target">
+                    <app-map-preview
+                            [trailPreview]="this.selectedTrail"
+                            [classPrefix]="'selector'"
+                            [isShowOtherBtnEnabled]="false"
+                            [isShowFitToShapeBtnEnabled]="false"
+                            [markersCoordinates]="markers"
+                            [otherTrails]="[]"
+                            (onClick)="onMapClick($event)"
+                    ></app-map-preview>
+                    </span>
+                </div>
             </div>
-            <div class="col-6">
-                <label>Micro Tipi <span class="mandatory-field-asterisk">*</span></label>
-                <!--        <ng-multiselect-dropdown-->
-                <!--                [placeholder]="'custom placeholder'"-->
-                <!--                [settings]="dropdownSettings"-->
-                <!--                [data]="dropdownList"-->
-                <!--                [(ngModel)]="selectedItems"-->
-                <!--                (onSelect)="onItemSelect($event)"-->
-                <!--                (onSelectAll)="onSelectAll($event)"-->
-                <!--        >-->
-                <!--        </ng-multiselect-dropdown>-->
+            <div class="row top-margin" *ngIf="isTrailLoaded">
+                <div class="col-md-12 col-lg-6">
+                    <label>Latitude</label>
+                    <input type="text" disabled required [formControlName]="'coordLatitude'">
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <label>Longitude</label>
+                    <input type="text" disabled required [formControlName]="'coordLongitude'">
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <label>Altitude</label>
+                    <input type="text" disabled required [formControlName]="'coordAltitude'">
+                </div>
             </div>
-        </div>
-        <div class="row top-margin-x2" *ngIf="isTrailLoaded">
-            <div class="col-md-12 col-lg-12">
-                <p>Seleziona un punto sulla mappa <span class="mandatory-field-asterisk">*</span></p>
-                <app-map-preview
-                        [classPrefix]="'selector'"
-                        [isShowOtherBtnEnabled]="false"
-                        [isShowFitToShapeBtnEnabled]="false"
-                        [markersCoordinates]="markers"
-                        [otherTrails]="[]"
-                        (onClick)="onMapClick($event)"
-                ></app-map-preview>
+            <div class="row top-margin-x2">
+                <div class="col-12">
+                    <button class="btn btn-primary">Salva POI</button>
+                </div>
+                <div class="col-12">
+                    <button routerLink="/admin/poi-management/view"
+                            class="btn btn-outline-warning full-width top-margin">
+                        Torna a gestione POI
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="row top-margin" *ngIf="isTrailLoaded">
-            <div class="col-md-12 col-lg-6">
-                <label>Latitude</label>
-                <input type="text" disabled [formControlName]="'coordLatitude'">
-            </div>
-            <div class="col-md-12 col-lg-6">
-                <label>Longitude</label>
-                <input type="text" disabled [formControlName]="'coordLongitude'">
-            </div>
-            <div class="col-md-12 col-lg-6">
-                <label>Altitude</label>
-                <input type="text" disabled [formControlName]="'coordAltitude'">
-            </div>
-        </div>
-        <div class="row top-margin-x2">
-            <div class="col-12">
-                <button class="btn btn-primary">Salva POI</button>
-            </div>
-            <div class="col-12">
-                <button routerLink="/admin/poi-management/view"
-                        class="btn btn-outline-warning full-width top-margin">
-                    Torna a gestione POI
-                </button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>

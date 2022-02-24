@@ -83,6 +83,7 @@ const routes: Routes = [
             {
                 path: "raw-trail-management",
                 children: [
+                    {path: "", component: TrailRawViewTableComponent},
                     { path: "view", component: TrailRawViewTableComponent},
                     {path: "init/:id", component: TrailUploadManagementComponent}
                 ],
@@ -91,6 +92,7 @@ const routes: Routes = [
             {
                 path: "poi-management",
                 children: [
+                    {path: "", component: PoiViewTableComponent},
                     {path: "view", component: PoiViewTableComponent},
                     {path: "add", component: PoiAddComponent},
                     {path: "edit/:id", component: PoiAddComponent},
@@ -100,6 +102,7 @@ const routes: Routes = [
             {
                 path: "place-management",
                 children: [
+                    {path: "", component: PlaceViewTableComponent},
                     {path: "view", component: PlaceViewTableComponent},
                     {path: "add", component: PlaceAddComponent},
                     {path: "edit/:id", component: PlaceEditComponent},
@@ -109,6 +112,7 @@ const routes: Routes = [
             {
                 path: "trail-management",
                 children: [
+                    {path: "", component: TrailViewTableComponent},
                     {path: "view", component: TrailViewTableComponent},
                     {path: "cyclo/:id", component: CycloManagementComponent},
                     {path: "edit/:id", component: TrailModifyManagementComponent}
