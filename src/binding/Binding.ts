@@ -67,9 +67,14 @@ export interface paths {
     post: operations["addMediaToTrail"];
     delete: operations["removeMediaFromTrail"];
   };
+  "/admin/resource/status": {
+    post: operations["getGenerationResourceStatus"];
+  };
   "/admin/resource/regenerate": {
-    get: operations["generateResource_1"];
     post: operations["generateResource"];
+  };
+  "/admin/resource/regenerate/all": {
+    post: operations["generateResource_1"];
   };
   "/admin/poi/media/{id}": {
     post: operations["addMediaToPoi"];
@@ -80,6 +85,9 @@ export interface paths {
   };
   "/admin/import": {
     post: operations["importGpx"];
+  };
+  "/admin/import/check": {
+    post: operations["checkMatchingTrails"];
   };
   "/admin/import/bulk": {
     post: operations["importMassiveGpx"];
@@ -499,11 +507,11 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["TrailIntersectionDto"][];
     };
+    ResourceGeneratorResponse: {
+      status?: "OK" | "BUSY";
+    };
     GenerateRequestDto: {
       ids?: string[];
-    };
-    ResourceGeneratorResponse: {
-      status?: "OK" | "ERROR" | "BUSY";
     };
     UnLinkeMediaRequestDto: {
       id?: string;
@@ -547,6 +555,20 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["TrailRawDto"][];
     };
+    TrailMappingDto: {
+      id?: string;
+      code?: string;
+      name?: string;
+    };
+    TrailMappingResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["TrailMappingDto"][];
+    };
     AccessibilityNotificationResolutionDto: {
       id?: string;
       resolution?: string;
@@ -579,20 +601,6 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["TrailPreviewDto"][];
-    };
-    TrailMappingDto: {
-      id?: string;
-      code?: string;
-      name?: string;
-    };
-    TrailMappingResponse: {
-      currentPage?: number;
-      totalPages?: number;
-      size?: number;
-      totalCount?: number;
-      status?: "OK" | "ERROR";
-      messages?: string[];
-      content?: components["schemas"]["TrailMappingDto"][];
     };
     Coordinates2DDto: {
       longitude?: number;
@@ -1036,7 +1044,7 @@ export interface operations {
       };
     };
   };
-  generateResource_1: {
+  getGenerationResourceStatus: {
     responses: {
       /** OK */
       200: {
@@ -1058,6 +1066,16 @@ export interface operations {
     requestBody: {
       content: {
         "multipart/form-data": components["schemas"]["GenerateRequestDto"];
+      };
+    };
+  };
+  generateResource_1: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ResourceGeneratorResponse"];
+        };
       };
     };
   };
@@ -1132,6 +1150,21 @@ export interface operations {
         "multipart/form-data": {
           file?: string;
         };
+      };
+    };
+  };
+  checkMatchingTrails: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailMappingResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TrailRawDto"];
       };
     };
   };

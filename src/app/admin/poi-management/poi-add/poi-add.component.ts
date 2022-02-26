@@ -11,6 +11,10 @@ import {GeoToolsService} from "../../../service/geotools.service";
 import {Marker} from "../../../map-preview/map-preview.component";
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {PoiEnums, SelectChoicesMacro, SelectChoicesMicro} from "../PoiEnums";
+import {PoiDto} from "../poi-management.component";
+import {environment} from "../../../../environments/environment.prod";
+import {AdminPoiService} from "../../../service/admin-poi-service.service";
+import * as moment from "moment";
 
 @Component({
     selector: "app-poi-add",
@@ -26,8 +30,8 @@ export class PoiAddComponent implements OnInit {
     trailPreviewResponse: TrailPreviewResponse;
     markers: Marker[] = [];
 
-    macroChoices : SelectChoicesMacro[] = PoiEnums.macroTypes;
-    microChoices : SelectChoicesMicro[] = [];
+    macroChoices: SelectChoicesMacro[] = PoiEnums.macroTypes;
+    microChoices: SelectChoicesMicro[] = [];
 
     formGroup: FormGroup = new FormGroup({
         id: new FormControl(""),
@@ -44,10 +48,12 @@ export class PoiAddComponent implements OnInit {
 
     constructor(
         private trailPreviewService: TrailPreviewService,
+        private poiAdminService: AdminPoiService,
         private trailService: TrailService,
         private authService: AuthService,
         private geoToolService: GeoToolsService
-    ) {}
+    ) {
+    }
 
     async ngOnInit(): Promise<void> {
         const realm = this.authService.getRealm();
@@ -97,6 +103,33 @@ export class PoiAddComponent implements OnInit {
     }
 
     processModule() {
+        this.authService.getUsername().then((name) => {
+            const poi: PoiDto = {
+                id: "",
+                description: this.formGroup.get("description").value,
+                name: "",
+                tags: [],
+                coordinates: {},
+                macroType: this.formGroup.get("macroType").value,
+                microType: this.formGroup.get("microType").value,
+                createdOn: new Date().toISOString(),
+                keyVal: [],
+                trailIds: [],
+                mediaList: [],
+                recordDetails: {
+                    uploadedOn: moment().toDate().toISOString(),
+                    uploadedBy: name,
+                    realm: this.authService.getRealm(),
+                    onInstance: environment.instance
+                },
+                externalResources: []
+            }
+
+            this.poiAdminService.create(poi).subscribe((resp) =>{
+
+            });
+        });
+
 
     }
 
@@ -107,17 +140,19 @@ export class PoiAddComponent implements OnInit {
 
     private populateMicroChoices(value) {
         this.microChoices = this.macroChoices.filter(it => it.value == value)[0].micro;
-        while(this.microTypes.controls.length > 0) { this.microTypes.controls.pop() }
+        while (this.microTypes.controls.length > 0) {
+            this.microTypes.controls.pop()
+        }
         this.microTypes.push(new FormControl(this.microChoices[0].value));
     }
 
-    private eraseFields(){
+    private eraseFields() {
         this.formGroup.get("coordLongitude").setValue("");
         this.formGroup.get("coordLatitude").setValue("");
         this.formGroup.get("coordAltitude").setValue("");
     }
 
-    get microTypes(): FormArray  {
+    get microTypes(): FormArray {
         return this.formGroup.get("microTypes") as FormArray;
     }
 
