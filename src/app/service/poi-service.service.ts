@@ -5,6 +5,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
 
 export type PoiResponse = components["schemas"]["PoiResponse"];
+export type PoiDto = components["schemas"]["PoiDto"];
+export type KeyValueDto = components["schemas"]["KeyValueDto"];
 
 @Injectable({
   providedIn: 'root'

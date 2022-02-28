@@ -19,7 +19,7 @@
         </tr>
       </thead>
       <tbody class="short-list">
-        <tr *ngFor="let poi of poiResponse.content" class="trailPreview">
+        <tr *ngFor="let poi of poiResponse.content">
           <th scope="row" class="ellipsis small-column" title="{{ poi.id }}">
             {{ poi.id }}
           </th>
@@ -33,15 +33,15 @@
           </td>
           <td>{{ poi.macroType }}</td>
           <td>{{ poi.microType.toString().replace(",", ", ") }}</td>
-          <td class="clickable" routerLink="/admin/poi/edit/{{ poi.id }}">
-            <svg class="bi" width="32" height="32" fill="currentColor">
+          <td class="clickable" routerLink="/admin/poi-management/edit/{{ poi.id }}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
               <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pen"
+                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
               />
             </svg>
           </td>
           <td class="clickable" (click)="onDelete(poi.id)">
-            <svg class="bi" width="32" height="32" fill="currentColor">
+            <svg class="bi" width="24" height="24" fill="currentColor">
               <use
                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
               />

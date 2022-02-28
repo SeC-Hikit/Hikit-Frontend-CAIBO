@@ -6,7 +6,6 @@ import {
 } from "src/app/service/trail-preview-service.service";
 import { components } from "src/binding/Binding";
 
-export type PoiDto = components["schemas"]["PoiDto"];
 @Component({
   selector: "app-poi-management",
   templateUrl: "./poi-management.component.html",

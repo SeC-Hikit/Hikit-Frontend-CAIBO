@@ -9,9 +9,8 @@
         <form [formGroup]="formGroup" (ngSubmit)="processModule()">
             <div class="row">
                 <div *ngIf="isTrailListLoaded">
-                    <!-- <form> -->
                     <div class="col-12">
-                        <div *ngIf="trailPreviewResponse.content.length > 0">
+                        <div *ngIf="trailPreviewResponse.content.length > 1">
                             <label>Seleziona un sentiero</label>
                             <select
                                     title="Scegli un'opzione"
@@ -34,11 +33,11 @@
             <div class="row top-margin-x2" *ngIf="isTrailLoaded">
                 <div class="col-6">
                     <label>Nome <span class="mandatory-field-asterisk">*</span></label>
-                    <input type="text"/>
+                    <input type="text" formControlName="name"/>
                 </div>
                 <div class="col-6">
                     <label>Toponimi alternativi (separati da una virgola)</label>
-                    <input type="text"/>
+                    <input type="text" formControlName="tags"/>
                 </div>
             </div>
             <div class="row top-margin-x2" *ngIf="isTrailLoaded">
@@ -55,24 +54,35 @@
                     </select>
                 </div>
             </div>
-            <div class="row top-margin-x2">
+            <div class="row top-margin-x2" *ngIf="isTrailListLoaded">
                 <div class="col-12">
-                    <label>Micro Tipi <span class="mandatory-field-asterisk">*</span></label>
-                    <div class="row top-margin" *ngFor="let microType of microTypes.controls">
+                    <label>Micro Tipi</label>
+                    <div class="row top-margin"
+                         *ngFor="let microType of microTypes.controls; index as i">
                         <select
                                 title="Scegli un'opzione"
-                                class="form-control"
-                                formControlName="microTypes"
-                        >
+                                class="form-control col-11"
+                                formControlName="microTypes">
                             <option *ngFor="let microChoice of microChoices"
+                                    [formControl]="this.getMicroType(i)"
                                     [value]="microChoice.value">{{microChoice.name}}</option>
                         </select>
+                        <div class="col-1" *ngIf="microTypes.controls.length > 1">
+                            <svg class="bi right-fix clickable align-bottom delete" width="24"
+                                 ngbTooltip="Cancella" (click)="onDeleteMicroType(i)"
+                                 height="24" fill="currentColor">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                                />
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <button class="btn btn-primary top-margin col-12" (click)="addMicroGroup()">+ Aggiungi micro tipo</button>
+                    <button class="btn btn-primary top-margin-x2 col-12" (click)="addMicroGroup()">+ Aggiungi micro tipo
+                    </button>
                 </div>
             </div>
             <div class="top-margin-x2 row">
@@ -88,6 +98,58 @@
                   ['link']
                 ]
               }"></quill-editor>
+                </div>
+            </div>
+            <div class="row top-margin-x2" *ngIf="isTrailLoaded">
+                <div class="col-12">
+                    <label>Tags (coppie di chiave valore)</label>
+                    <div class="row" *ngFor="let tag of tags.controls; index as i">
+                        <input type="text" class="col-5" placeholder="es: anno" (change)="onChangeKey($event, i)"/>
+                        <div class="col-1 text-center align-bottom">=</div>
+                        <input type="text" class="col-5" placeholder="es: 1650" (change)="onChangeValue($event, i)"/>
+                        <div class="col-1">
+                            <svg class="bi clickable align-bottom text-center delete" width="24"
+                                 ngbTooltip="Cancella" (click)="onDeleteTags(i)"
+                                 height="24" fill="currentColor">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary top-margin-x2 col-12" (click)="addTags()">+ Aggiungi tag</button>
+                </div>
+            </div>
+
+            <div class="row top-margin-x2" *ngIf="isTrailLoaded">
+                <div class="col-12">
+                    <label>Risorse esterne</label>
+                    <div class="row" *ngFor="let tag of externalResources.controls; index as i">
+                        <input placeholder="Link esterni" type="text" class="col-11"
+                               [formControl]="getExternalResource(i)"/>
+                        <div class="col-1">
+                            <svg class="bi clickable align-bottom delete" width="24"
+                                 ngbTooltip="Cancella" (click)="onDeleteExternalResource(i)"
+                                 height="24" fill="currentColor">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary top-margin-x2 col-12"
+                            (click)="addExternalResources()">+ Aggiungi
+                        risorsa esterna
+                    </button>
                 </div>
             </div>
 
@@ -122,12 +184,20 @@
                     <input type="text" disabled required [formControlName]="'coordAltitude'">
                 </div>
             </div>
+            <div class="row errors" *ngIf="validationErrors.length > 0">
+                <div class="col-12 top-margin-x2">
+                    <ul>
+                        <li *ngFor="let error of validationErrors">{{error}}</li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="row top-margin-x2">
                 <div class="col-12">
                     <button class="btn btn-primary">Salva POI</button>
                 </div>
                 <div class="col-12">
-                    <button routerLink="/admin/poi-management/view"
+                    <button routerLink="/admin/poi-management"
                             class="btn btn-outline-warning full-width top-margin">
                         Torna a gestione POI
                     </button>

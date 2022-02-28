@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { components } from 'src/binding/Binding';
-import {PoiResponse} from "./poi-service.service";
-import {PoiDto} from "../admin/poi-management/poi-management.component";
+import { catchError, tap } from 'rxjs/operators';
+import {PoiDto, PoiResponse} from "./poi-service.service";
 
 
 @Injectable({
@@ -33,6 +31,14 @@ export class AdminPoiService {
         .pipe(
             tap(_ => console.log(_)),
             catchError(this.handleError<PoiResponse>('Creating poi', null))
+        );
+  }
+
+  delete(id: string) {
+    return this.httpClient.delete<PoiResponse>(this.baseUrl + "/" + id)
+        .pipe(
+            tap(_ => console.log(_)),
+            catchError(this.handleError<PoiResponse>('Delete POI', null))
         );
   }
 
