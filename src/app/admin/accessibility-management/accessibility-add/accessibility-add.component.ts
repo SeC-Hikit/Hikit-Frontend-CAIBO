@@ -1,92 +1,122 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 import * as moment from 'moment';
-import { AccessibilityNotification, NotificationService } from 'src/app/service/notification-service.service';
-import { Status } from 'src/app/Status';
-import { TrailPreviewResponse, TrailPreviewService } from 'src/app/service/trail-preview-service.service';
-import { TrailCoordinatesDto, TrailResponse, TrailService } from 'src/app/service/trail-service.service';
+import {
+    AccessibilityNotification,
+    NotificationService
+} from 'src/app/service/notification-service.service';
+import {TrailPreviewService} from 'src/app/service/trail-preview-service.service';
+import {TrailDto, TrailMappingDto, TrailService} from 'src/app/service/trail-service.service';
+import {Coordinates2D} from "../../../service/geo-trail-service";
+import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
+import {Marker} from "../../../map-preview/map-preview.component";
+import {GeoToolsService} from "../../../service/geotools.service";
+import {AuthService} from "../../../service/auth.service";
+import {environment} from "../../../../environments/environment.prod";
 
 @Component({
-  selector: 'app-accessibility-add',
-  templateUrl: './accessibility-add.component.html',
-  styleUrls: ['./accessibility-add.component.scss']
+    selector: 'app-accessibility-add',
+    templateUrl: './accessibility-add.component.html',
+    styleUrls: ['./accessibility-add.component.scss']
 })
 export class AccessibilityAddComponent implements OnInit {
 
-  formGroup: FormGroup;
-
-  trailIds: string[];
-  trailResponse: TrailPreviewResponse
-  previewCoords: TrailCoordinatesDto[];
-
-  constructor(
-    private trailPreviewService: TrailPreviewService,
-    private trailService: TrailService,
-    private accessibility: NotificationService,
-    private router: Router) { }
-
-  ngOnInit(): void {
-    this.formGroup = new FormGroup({
-      code: new FormControl("", Validators.required),
-      reportDate: new FormControl("", Validators.required),
-      isMinor: new FormControl(true, Validators.required),
-      description: new FormControl("", Validators.required),
-      location: new FormGroup({
-        "name": new FormControl(""),
-        "tags": new FormControl(""),
-        "latitude": new FormControl("", Validators.required),
-        "longitude": new FormControl("", Validators.required),
-        "altitude": new FormControl("", Validators.required),
-        "distanceFromTrailStart": new FormControl("", Validators.required)
-      })
+    formGroup: FormGroup = new FormGroup({
+        trailId: new FormControl("", Validators.required),
+        reportDate: new FormControl("", Validators.required),
+        isMinor: new FormControl(true, Validators.required),
+        description: new FormControl("", Validators.required),
+        coordLongitude: new FormControl("", Validators.required),
+        coordLatitude: new FormControl("", Validators.required),
+        coordAltitude: new FormControl("", Validators.required)
     });
-    this.trailPreviewService.getPreviews(0, 10).subscribe(x => { this.onLoad(x) })
-  }
 
-  onLoad(x: TrailPreviewResponse) {
-    this.trailResponse = x;
-    this.trailIds = x.content.map(tp => tp.code);
-    this.selectTrailControl.valueChanges.subscribe(changes => this.onChanges(changes))
-  }
+    markers: Marker[];
+    trailMappings: TrailMappingDto[];
+    selectedTrails: TrailDto[] = [];
+    hasFormBeenInitialized: boolean = false;
 
-  onChanges(changes: any): void {
-    let trailId = changes;
-    this.trailService.getTrailById(trailId).subscribe(x => this.onLoadedTrail(x))
-  }
+    validationErrors: string[] = [];
 
-  onLoadedTrail(x: TrailResponse) {
-    let trail = x.content[0];
-    this.previewCoords = trail.coordinates;
-  }
-
-  onSaveNotification() {
-    if (this.formGroup.valid) {
-      const objValue = this.formGroup.value; 
-      let reportedDate = objValue.reportDate;
-      let notification = objValue as AccessibilityNotification;
-      let date = moment(reportedDate.year +
-        "-" + reportedDate.month +
-        "-" + reportedDate.day).toDate()
-      notification.reportDate = date.toDateString();
-      notification.coordinates = { latitude: objValue.location.latitude, longitude:  objValue.location.longitude, altitude: objValue.location.altitude };
-      this.accessibility.createNotification(notification).subscribe(x => { if (x.status == Status.OK) this.onSaveSuccess(notification) });
-    } else {
-      alert("Il modulo contiene ancora alcuni elementi vuoti/errati. Ricontrolla per procedere");
+    constructor(
+        private trailPreviewService: TrailPreviewService,
+        private trailService: TrailService,
+        private accessibility: NotificationService,
+        private geoToolService: GeoToolsService,
+        private authService: AuthService,
+        private router: Router) {
     }
-  }
 
-  onSaveSuccess(notification: AccessibilityNotification): void {
-    this.router.navigate(['/admin/accessibility', { success: notification.id }]);
-  }
+    ngOnInit(): void {
+        const realm = this.authService.getRealm();
+        this.hasFormBeenInitialized = true;
+        this.trailPreviewService.getMappings(realm)
+            .subscribe(resp => {
+                this.trailMappings = resp.content;
+            })
+    }
 
-  get selectTrailControl(): FormControl {
-    return this.formGroup.controls["code"] as FormControl;
-  }
+    onChanges($event: any): void {
+        const id = $event.target.value;
+        this.trailService.getTrailById(id).subscribe(resp =>
+            this.selectedTrails = [...resp.content]
+        );
+    }
 
-  get locationGroup(): FormControl {
-    return this.formGroup.controls["location"] as FormControl;
-  }
+    onSaveNotification() {
+        if (this.formGroup.valid) {
+            const objValue = this.formGroup.value;
+            let reportedDate = objValue.reportDate;
+            let trailId = this.formGroup.get("trailId").value;
+            let isMinor = this.formGroup.get("isMinor").value;
+            let date = moment(reportedDate.year +
+                "-" + reportedDate.month +
+                "-" + reportedDate.day).toDate()
 
+            this.authService.getUsername().then((name) => {
+                const not: AccessibilityNotification = {
+                    id: null,
+                    reportDate: date.toISOString(),
+                    trailId: trailId,
+                    coordinates: {
+                        altitude: this.formGroup.get("coordAltitude").value,
+                        latitude: this.formGroup.get("coordLatitude").value,
+                        longitude: this.formGroup.get("coordLongitude").value,
+                    },
+                    description: this.formGroup.get("description").value,
+                    minor: isMinor,
+                    resolution: "",
+                    resolutionDate: date.toISOString(),
+                    recordDetails: {
+                        uploadedOn: moment().toDate().toISOString(),
+                        uploadedBy: name,
+                        realm: this.authService.getRealm(),
+                        onInstance: environment.instance
+                    }
+                };
+
+                // TODO save
+
+            });
+        }
+    }
+
+    onSaveSuccess(notification: AccessibilityNotification): void {
+        this.router.navigate(['/admin/accessibility', {success: notification.id}]);
+    }
+
+    onMapClick(coords: Coordinates2D) {
+        this.markers = [{
+            icon: MapPinIconType.PIN,
+            coords: coords,
+            color: "#1D9566"
+        }];
+        this.geoToolService.getAltitude(coords).subscribe((resp) => {
+            this.formGroup.get("coordLongitude").setValue(resp.longitude);
+            this.formGroup.get("coordLatitude").setValue(resp.latitude);
+            this.formGroup.get("coordAltitude").setValue(resp.altitude);
+        })
+    }
 
 }

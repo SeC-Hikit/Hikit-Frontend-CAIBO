@@ -37,6 +37,14 @@
 }
 
 form {
+
+  .description {
+    height: 220px;
+    display: inline-block;
+    width: 100%;
+    margin: 10px 0 0 0;
+  }
+
   .errors {
     color: $error-color;
   }

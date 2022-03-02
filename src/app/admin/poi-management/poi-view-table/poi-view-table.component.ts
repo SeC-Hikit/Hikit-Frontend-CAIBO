@@ -10,6 +10,7 @@ import {TrailService} from "src/app/service/trail-service.service";
 import {components} from "src/binding/Binding";
 import {AdminPoiService} from "../../../service/admin-poi-service.service";
 import {PoiIconHelper} from "../../../../assets/icons/PoiIconHelper";
+import {DateUtils} from "../../../utils/DateUtils";
 
 export type PoiDto = components["schemas"]["PoiDto"];
 
@@ -81,6 +82,10 @@ export class PoiViewTableComponent implements OnInit {
             .then((_) => {
                 this.loadPois(this.page);
             });
+    }
+
+    formatStringDateToDashes(uploadedOn: string) {
+        return DateUtils.formatDateToDay(uploadedOn);
     }
 
     getPoiIcon(poi: PoiDto) {

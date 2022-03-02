@@ -1,15 +1,18 @@
 <ul ngbNav #nav="ngbNav" class="nav-tabs space-up">
     <li ngbNavItem>
-      <a ngbNavLink>Avvisi di percorrenza</a>
-      <ng-template ngbNavContent
-        ><app-accessibility-notification-view></app-accessibility-notification-view
-      ></ng-template>
+        <a ngbNavLink>Avvisi di percorrenza</a>
+        <ng-template ngbNavContent
+        >
+            <app-accessibility-notification-view></app-accessibility-notification-view
+            >
+        </ng-template>
     </li>
     <li ngbNavItem>
-      <a ngbNavLink>Segnalazioni utenti</a>
-      <ng-template ngbNavContent
-        ><app-accessibility-report-view></app-accessibility-report-view
-      ></ng-template>
+        <a ngbNavLink>Segnalazioni utenti</a>
+        <ng-template ngbNavContent>
+            <app-accessibility-report-view></app-accessibility-report-view
+            >
+        </ng-template>
     </li>
-  </ul>
-  <div [ngbNavOutlet]="nav"></div>
+</ul>
+<div [ngbNavOutlet]="nav"></div>

@@ -9,6 +9,7 @@ import { components } from 'src/binding/Binding';
 export type AccessibilityNotificationResponse = components["schemas"]["AccessibilityResponse"]
 export type AccessibilityNotificationResolution = components["schemas"]["AccessibilityNotificationResolutionDto"]
 export type AccessibilityNotification = components["schemas"]["AccessibilityNotificationDto"]
+export type AccessibilityReport = components["schemas"]["AccessibilityReportDto"]
 export type AccessibilityNotificationCreation = components["schemas"]["AccessibilityNotificationDto"]
 
 @Injectable({

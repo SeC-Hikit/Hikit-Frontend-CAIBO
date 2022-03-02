@@ -1,10 +1,7 @@
-.calendar { 
-    background-image: url(/assets/icons/calendar.png);
-    width: 2.75rem;
-    background-repeat: no-repeat;
-    background-size: 23px;
-    background-position: 50%;
-    border: 1px solid gray;
+.AccessibilityAdd {
+    button {
+        width: 100%;
+    }
 }
 
 input[name='dp'] {

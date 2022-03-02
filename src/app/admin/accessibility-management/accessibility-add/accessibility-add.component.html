@@ -1,103 +1,132 @@
-<div class="container my-4">
-  <app-menu-management></app-menu-management>
-  <h2>Aggiungi notifica di percorribilità legata a un sentiero</h2>
-  <p>
-    Compila i seguenti campi per aggiungere una notifica di percorribilità.
-    Questa sarà mostrata quando l'utente visualizza il sentiero a cui essa è
-    legata.
-  </p>
-  <div class="table-wrapper space-up">
-    <form
-      [formGroup]="formGroup"
-      class="needs-validation"
-      (ngSubmit)="onSaveNotification()"
-    >
-      <div class="form-row">
-        <div class="form-group col-md-4 mb-3">
-          <p>Sentiero interessato</p>
-          <div class="bootstrap-select-wrapper">
-            <select
-              title="Scegli una opzione"
-              formControlName="code"
-              data-live-search="true"
-              data-live-search-placeholder="Cerca opzioni"
-              class="form-control"
-              id="trailId_select"
-            >
-              <option *ngFor="let tId of trailIds" value="{{ tId }}">
-                {{ tId }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group col-md-4 mb-3">
-          <p>Data segnalazione</p>
-          <div class="input-group">
-            <input
-              class="form-control"
-              placeholder="dd/mm/yyyy"
-              formControlName="reportDate"
-              name="dp"
-              ngbDatepicker
-              #d="ngbDatepicker"
-            />
-            <div class="input-group-append">
-              <button
-                class="btn btn-outline-secondary calendar"
-                (click)="d.toggle()"
-                type="button"
-              ></button>
-            </div>
-          </div>
-        </div>
-        <div class="form-group col-md-10 mb-3">
-          <div>
-            <div class="form-check">
-              <input
-                id="checkbox1"
-                type="checkbox"
-                formControlName="isMinor"
-                checked
-              />
-              <label for="checkbox1">Aggirabile</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6 mb-3">
-          <p>Descrizione</p>
-          <input
-            type="text"
-            class="form-control"
-            formControlName="description"
-            placeholder="Descrizione"
-          />
-          <div class="invalid-feedback">
-            Per favore inserisci una descrizione
-          </div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div *ngIf="previewCoords">
-          <app-location-entry
-            [inputForm]="locationGroup"
-            [trailCoordinates]="previewCoords"
-            [isEditableLocation]="false"
-            [i]="0"
-          >
-          </app-location-entry>
-        </div>
-      </div>
+<div class="AccessibilityAdd">
+    <app-menu-management></app-menu-management>
+    <h2>Aggiungi notifica di percorribilità legata a un sentiero</h2>
 
-      <span class="form-group col-md-3 mb-3">
-        <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
-      </span>
-      <span class="form-group col-md-3 mb-3">
-        <a routerLink="/admin/accessibility">
-          <button class="btn btn-light mt-3" type="button">Cancella</button>
-        </a>
-      </span>
-    </form>
-  </div>
+    <div class="table-wrapper space-up">
+        <form
+                [formGroup]="formGroup"
+                class="needs-validation"
+                (ngSubmit)="onSaveNotification()"
+        >
+            <div class="row">
+                <div class="col-12 top-margin">
+                    <p>Sentiero interessato</p>
+                </div>
+                <select
+                        title="Scegli una opzione"
+                        formControlName="trailId"
+                        data-live-search="true"
+                        data-live-search-placeholder="Cerca opzioni"
+                        class="form-control"
+                        (change)="onChanges($event)"
+                        id="trailId_select"
+                >
+                    <option *ngFor="let trailMapping of trailMappings"
+                            [value]="trailMapping.id">
+                        {{ trailMapping.code }}
+                    </option>
+                </select>
+            </div>
+            <div class="row top-margin">
+                <div class="col-12">
+                    <p>Data segnalazione</p>
+                </div>
+                <div class="input-group">
+                    <input
+                            class="form-control"
+                            placeholder="dd/mm/yyyy"
+                            formControlName="reportDate"
+                            name="dp"
+                            ngbDatepicker
+                            #d="ngbDatepicker"
+                    />
+                    <div class="input-group-append">
+                        <button
+                                class="btn btn-outline-secondary calendar"
+                                (click)="d.toggle()"
+                                type="button"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <div class="form-check">
+                        <input
+                                id="checkbox1"
+                                type="checkbox"
+                                formControlName="isMinor"
+                                checked
+                        />
+                        <label for="checkbox1">Aggirabile</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <label>Descrizione</label>
+                    <quill-editor
+                            [formControlName]="'description'"
+                            [className]="'description'"
+                            [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"
+                    ></quill-editor>
+                </div>
+            </div>
+            <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
+                <div class="col-md-12 col-lg-12">
+                    <p>Seleziona un punto sulla mappa, nei pressi del sentiero <span
+                            class="mandatory-field-asterisk">*</span></p>
+                    <span class="target">
+                    <app-map-preview
+                            [trailPreview]="this.selectedTrails[0]"
+                            [classPrefix]="'selector'"
+                            [isShowOtherBtnEnabled]="false"
+                            [isShowFitToShapeBtnEnabled]="false"
+                            [markersCoordinates]="markers"
+                            [showOtherTrails]="true"
+                            (onClick)="onMapClick($event)"
+                    ></app-map-preview>
+                    </span>
+                </div>
+            </div>
+            <div class="row top-margin" *ngIf="hasFormBeenInitialized">
+                <div class="col-md-12 col-lg-6">
+                    <label>Latitude</label>
+                    <input type="text" disabled required [formControlName]="'coordLatitude'">
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <label>Longitude</label>
+                    <input type="text" disabled required [formControlName]="'coordLongitude'">
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <label>Altitude</label>
+                    <input type="text" disabled required [formControlName]="'coordAltitude'">
+                </div>
+            </div>
+            <div class="row errors" *ngIf="validationErrors.length > 0">
+                <div class="col-12 top-margin-x2">
+                    <ul>
+                        <li *ngFor="let error of validationErrors">{{error}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row top-margin-x2">
+                <div class="col-12">
+                    <button class="btn btn-primary">Salva notifica di percorribilità</button>
+                </div>
+                <div class="col-12">
+                    <button routerLink="/admin/accessibility-management"
+                            class="btn btn-outline-warning full-width top-margin">
+                        Torna alla gestione notifiche
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

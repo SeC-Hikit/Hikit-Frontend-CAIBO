@@ -7,7 +7,7 @@
     ></app-trail-floating-preview>
     <div class="row">
         <div class="col-12">
-            <a routerLink="../add">
+            <a routerLink="./add">
                 <button class="btn btn-primary">+ Aggiungi località</button>
             </a>
         </div>
@@ -24,10 +24,10 @@
                     <th scope="col">Nome località</th>
                     <th scope="col">Numero sentieri attr.</th>
                     <th scope="col">Numero media attr.</th>
-                    <th scope="col">Modifica</th>
-                    <th scope="col">Cancella</th>
                     <th scope="col">Caricato il</th>
                     <th scope="col">Caricato da</th>
+                    <th scope="col">Modifica</th>
+                    <th scope="col">Cancella</th>
                 </tr>
                 </thead>
                 <tbody class="short-list">
@@ -50,6 +50,8 @@
                         </svg>
                         {{ tr.crossingTrailIds.length }}</td>
                     <td>{{ tr.mediaIds.length }}</td>
+                    <td>{{ formatStringDateToDashes(tr.recordDetails.uploadedOn) }}</td>
+                    <td>{{ tr.recordDetails.uploadedBy }}</td>
                     <td class="clickable">
                         <svg class="bi" width="24" *ngIf="tr.recordDetails.realm == realm"
                              height="24" fill="currentColor" (click)="onEdit(tr.id)">
@@ -67,8 +69,6 @@
                             />
                         </svg>
                     </td>
-                    <td>{{ formatStringDateToDashes(tr.recordDetails.uploadedOn) }}</td>
-                    <td>{{ tr.recordDetails.uploadedBy }}</td>
                 </tr>
                 </tbody>
             </table>

@@ -13,7 +13,8 @@
           <th scope="col">Nome</th>
           <th scope="col">Sentiero/i</th>
           <th scope="col">Tipo</th>
-          <th scope="col">Sotto tipo/i</th>
+          <th scope="col">Caricato il</th>
+          <th scope="col">Caricato da</th>
           <th scope="col">Modifica</th>
           <th scope="col">Cancella</th>
         </tr>
@@ -32,7 +33,12 @@
             </span>
           </td>
           <td [innerHTML]="this.getPoiIcon(poi)"></td>
-          <td>{{ poi.microType.toString().replace(",", ", ") }}</td>
+          <td>
+            {{ formatStringDateToDashes(poi.recordDetails.uploadedOn) }}
+          </td>
+          <td>
+            {{ poi.recordDetails.uploadedBy }}
+          </td>
           <td class="clickable" routerLink="/admin/poi-management/edit/{{ poi.id }}">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use
@@ -47,6 +53,7 @@
               />
             </svg>
           </td>
+
         </tr>
       </tbody>
     </table>

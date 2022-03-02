@@ -1,109 +1,114 @@
 <div class="AccessibilityNotificationView">
-  <div class="col-12 col-md-12 space-up">
-    <h2>Avviso di percorrenza</h2>
-  </div>
+    <div class="col-12 col-md-12 space-up">
+        <h2>Avviso di percorrenza</h2>
+    </div>
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" routerLink="./add">
+            + Crea avviso di percorrenza
+        </button>
+    </div>
 
-  <div *ngIf="!isLoading && selectedTrail != null">
-    <app-trail-floating-preview
-            [trails]="selectedTrail"
-      [isVisible]="isPreviewVisible"
-      (onClose)="togglePreview()"
-    ></app-trail-floating-preview>
-  </div>
+    <div *ngIf="!isLoading && selectedTrail != null">
+        <app-trail-floating-preview
+                [trails]="selectedTrail"
+                [isVisible]="isPreviewVisible"
+                (onClose)="togglePreview()"
+        ></app-trail-floating-preview>
+    </div>
 
-  <div *ngIf="unresolvedNotifications.length > 0; else notShow">
-    <table class="table table-striped interactive-table">
-      <thead>
-        <tr>
-          <th scope="col">Codice notifica</th>
-          <th scope="col">Data Segnalazione</th>
-          <th scope="col">Sentiero</th>
-          <th scope="col">Descrizione Problema</th>
-          <th scope="col">Aggirabile?</th>
-          <th scope="col">Risolvi</th>
-          <th scope="col">Cancella</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="hasLoaded">
-        <tr *ngFor="let notification of unresolvedNotifications" class="t-row">
-          <th
-            scope="row"
-            class="ellipsis small-column"
-            title="{{ notification.id }}"
-          >
-            {{ notification.id }}
-          </th>
-          <td>{{ formatDate(notification.reportDate) }}</td>
-          <td (click)="showPreview(notification.trailId)">
+    <div *ngIf="unresolvedNotifications.length > 0; else notShow">
+        <table class="table table-striped interactive-table">
+            <thead>
+            <tr>
+                <th scope="col">Codice notifica</th>
+                <th scope="col">Data Segnalazione</th>
+                <th scope="col">Sentiero</th>
+                <th scope="col">Descrizione Problema</th>
+                <th scope="col">Aggirabile?</th>
+                <th scope="col">Risolvi</th>
+                <th scope="col">Cancella</th>
+            </tr>
+            </thead>
+            <tbody *ngIf="hasLoaded">
+            <tr *ngFor="let notification of unresolvedNotifications" class="t-row">
+                <th
+                        scope="row"
+                        class="ellipsis small-column"
+                        title="{{ notification.id }}"
+                >
+                    {{ notification.id }}
+                </th>
+                <td>{{ formatDate(notification.reportDate) }}</td>
+                <td (click)="showPreview(notification.trailId)">
             <span class="trailCodeColumn">
               {{ getTrailCode(notification.trailId) }}
             </span>
-          </td>
-          <td class="ellipsis small-column">{{ notification.description }}</td>
-          <td>{{ notification.minor === true ? "si" : "no" }}</td>
-          <td class="clickable" (click)="onResolveClick(notification)">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-              <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square"
-              />
-            </svg>
-          </td>
-          <td class="clickable" (click)="onDeleteClick(notification)">
-            <svg class="bi" width="32" height="32" fill="currentColor">
-              <use
-                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
-              />
-            </svg>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="pagination-position">
-      <ngb-pagination
-        [pageSize]="entryPerPage"
-        [collectionSize]="totalNotification"
-        [(page)]="page"
-        aria-label="Default pagination"
-        (pageChange)="loadNotification(page)"
-      ></ngb-pagination>
-    </div>
-  </div>
-  <ng-template #notShow>
-    <app-items-not-found></app-items-not-found>
-  </ng-template>
-
-  <div class="col-12 col-md-12 space-up">
-    <div class="col-12 col-md-12 space-up">
-      <h2>Problemi risolti</h2>
-    </div>
-    <div *ngIf="unresolvedNotifications.length > 0; else notShow">
-      <table
-        *ngIf="solvedNotifications.length > 0"
-        class="table table-striped interactive-table"
-      >
-        <thead>
-          <tr>
-            <th scope="col">Codice sentiero</th>
-            <th scope="col">Data segnalazione</th>
-            <th scope="col">Descrizione Problema</th>
-            <th scope="col">Data risoluzione</th>
-            <th scope="col">Risoluzione</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of solvedNotifications">
-            <th scope="row">{{ item.id }}</th>
-            <td>{{ formatDate(item.reportDate) }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ formatDate(item.resolutionDate) }}</td>
-            <td>{{ item.resolution }}</td>
-          </tr>
-        </tbody>
-      </table>
+                </td>
+                <td class="ellipsis small-column">{{ notification.description }}</td>
+                <td>{{ notification.minor === true ? "si" : "no" }}</td>
+                <td class="clickable" (click)="onResolveClick(notification)">
+                    <svg class="bi" width="32" height="32" fill="currentColor">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square"
+                        />
+                    </svg>
+                </td>
+                <td class="clickable" (click)="onDeleteClick(notification)">
+                    <svg class="bi" width="32" height="32" fill="currentColor">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                        />
+                    </svg>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination-position">
+            <ngb-pagination
+                    [pageSize]="entryPerPage"
+                    [collectionSize]="totalNotification"
+                    [(page)]="page"
+                    aria-label="Default pagination"
+                    (pageChange)="loadNotification(page)"
+            ></ngb-pagination>
+        </div>
     </div>
     <ng-template #notShow>
-      <app-items-not-found></app-items-not-found>
+        <app-items-not-found></app-items-not-found>
     </ng-template>
-  </div>
+
+    <div class="col-12 col-md-12 space-up">
+        <div class="col-12 col-md-12 space-up">
+            <h2>Problemi risolti</h2>
+        </div>
+        <div *ngIf="unresolvedNotifications.length > 0; else notShow">
+            <table
+                    *ngIf="solvedNotifications.length > 0"
+                    class="table table-striped interactive-table"
+            >
+                <thead>
+                <tr>
+                    <th scope="col">Codice sentiero</th>
+                    <th scope="col">Data segnalazione</th>
+                    <th scope="col">Descrizione Problema</th>
+                    <th scope="col">Data risoluzione</th>
+                    <th scope="col">Risoluzione</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of solvedNotifications">
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ formatDate(item.reportDate) }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ formatDate(item.resolutionDate) }}</td>
+                    <td>{{ item.resolution }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <ng-template #notShow>
+            <app-items-not-found></app-items-not-found>
+        </ng-template>
+    </div>
 </div>
 
