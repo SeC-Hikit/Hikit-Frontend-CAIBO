@@ -1,5 +1,6 @@
 <div class="PoiAddComponent">
-    <app-loading-spinner *ngIf="!this.isTrailListLoaded || !this.isTrailLoaded || this.isLoading "></app-loading-spinner>
+    <app-loading-spinner
+            *ngIf="!this.isTrailListLoaded || !this.isTrailLoaded || this.isLoading "></app-loading-spinner>
     <div class="space-up">
         <div class="row">
             <div class="col-sm-12">
@@ -16,11 +17,11 @@
                 </div>
             </div>
             <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
-                <div class="col-md-12 col-lg-6">
+                <div class="col-md-12 col-lg-6 top-margin">
                     <label>Nome <span class="mandatory-field-asterisk">*</span></label>
                     <input type="text" formControlName="name"/>
                 </div>
-                <div class="col-md-12 col-lg-6">
+                <div class="col-md-12 col-lg-6 top-margin">
                     <label>Toponimi alternativi (separati da una virgola)</label>
                     <input type="text" formControlName="tags"/>
                 </div>
@@ -49,7 +50,8 @@
                 <select
                         title="Scegli un'opzione"
                         class="form-control col-11"
-                        [formControl]="this.getMicroType(i)">
+                        [formControl]="this.getMicroType(i)"
+                        (change)="this.setMicroType($event, i)">
                     <option *ngFor="let microChoice of microChoices"
                             [value]="microChoice.value">{{microChoice.name}}</option>
                 </select>
@@ -87,10 +89,15 @@
             <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
                 <div class="col-12">
                     <label>Tags (coppie di chiave valore)</label>
-                    <div class="row" *ngFor="let tag of tags.controls; index as i">
-                        <input type="text" class="col-5" placeholder="es: anno" (change)="onChangeKey($event, i)"/>
+                    <div class="row" *ngFor="let tag of keyVals.controls; index as i">
+                        <input type="text" class="col-5" placeholder="es: anno"
+                               [value]="getKeyByIndex(i)"
+                               (change)="onChangeKey($event, i)"/>
                         <div class="col-1 text-center align-bottom">=</div>
-                        <input type="text" class="col-5" placeholder="es: 1650" (change)="onChangeValue($event, i)"/>
+                        <input type="text"
+                               class="col-5" placeholder="es: 1650"
+                               [value]="getValueByIndex(i)"
+                               (change)="onChangeValue($event, i)"/>
                         <div class="col-1">
                             <svg class="bi clickable align-bottom text-center delete" width="24"
                                  ngbTooltip="Cancella" (click)="onDeleteTags(i)"

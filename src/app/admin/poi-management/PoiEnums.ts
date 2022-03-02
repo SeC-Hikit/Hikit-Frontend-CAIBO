@@ -21,7 +21,7 @@ export class PoiEnums {
             micro: [{name: "Rifugio", value: "shallet"}, {name: "Fonte", value: "fountain"}]
         }, {
             name: "Belvedere",
-            value: "LANDSCAPE",
+            value: "BELVEDERE",
             micro: []
         }]
 }

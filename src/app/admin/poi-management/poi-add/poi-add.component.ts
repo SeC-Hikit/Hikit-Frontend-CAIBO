@@ -15,7 +15,6 @@ import {KeyValueDto, PoiDto, PoiService} from "../../../service/poi-service.serv
 import {Status} from "../../../Status";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {TrailRawDto} from "../../../service/import.service";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 
 @Component({
@@ -43,7 +42,8 @@ export class PoiAddComponent implements OnInit {
         id: new FormControl(""),
         name: new FormControl("", Validators.required),
         trailIds: new FormArray([]),
-        tags: new FormArray([]),
+        tags: new FormControl(""),
+        keyVals: new FormArray([]),
         description: new FormControl(""),
         macroType: new FormControl("CULTURAL"),
         microTypes: new FormArray([]),
@@ -140,10 +140,10 @@ export class PoiAddComponent implements OnInit {
 
         const id = this.formGroup.get("id").value;
         const macroType = this.formGroup.get("macroType").value;
-        const microType = this.formGroup.get("microTypes").value;
-        const tagsFormValue = this.formGroup.get("tags").value;
+        const microTypesValue = this.microTypes.controls.map(it => it.value).filter(it => it != "");
+        const keyValsFormValue: string[] = this.formGroup.get("keyVals").value;
         const externalResources = this.formGroup.get("externalResources").value;
-        const keyVals: KeyValueDto[] = tagsFormValue
+        const keyVals: KeyValueDto[] = keyValsFormValue
             .map(it => {
                 let splitValue = it.split(",");
                 let key = splitValue[0];
@@ -152,23 +152,24 @@ export class PoiAddComponent implements OnInit {
                     key: key,
                     value: value
                 };
-            });
+            }).filter(it => it.key && it.value);
         const trailIds = this.selectedTrails.map(it => it.id);
+        const tags: string[] = this.formGroup.get("tags").value
+            .split(",").map(it => it.trim().toLowerCase());
 
         this.authService.getUsername().then((name) => {
             const poi: PoiDto = {
                 id: id == "" ? null : id,
                 description: this.formGroup.get("description").value,
                 name: this.formGroup.get("name").value,
-                tags: tagsFormValue,
+                tags: tags,
                 coordinates: {
                     longitude: this.formGroup.get("coordLongitude").value,
                     latitude: this.formGroup.get("coordLatitude").value,
                     altitude: this.formGroup.get("coordAltitude").value
                 },
                 macroType: macroType,
-                microType: microType,
-                createdOn: new Date().toISOString(),
+                microType: microTypesValue,
                 keyVal: keyVals,
                 trailIds: trailIds,
                 mediaList: [],
@@ -235,8 +236,16 @@ export class PoiAddComponent implements OnInit {
         return this.formGroup.get("microTypes") as FormArray;
     }
 
-    get tags(): FormArray {
-        return this.formGroup.get("tags") as FormArray;
+    get keyVals(): FormArray {
+        return this.formGroup.get("keyVals") as FormArray;
+    }
+
+    getKeyByIndex(index: number): string {
+        return this.keyVals.controls[index].value.split(",")[0];
+    }
+
+    getValueByIndex(index: number): string {
+        return this.keyVals.controls[index].value.split(",")[1];
     }
 
     get externalResources(): FormArray {
@@ -264,7 +273,7 @@ export class PoiAddComponent implements OnInit {
     }
 
     addTags() {
-        this.tags.push(new FormControl(","))
+        this.keyVals.push(new FormControl(","))
         return false;
     }
 
@@ -282,29 +291,29 @@ export class PoiAddComponent implements OnInit {
     }
 
     onDeleteMicroType(i: number) {
-        this.microTypes.controls.splice(i, 1)
+        this.microTypes.removeAt(i);
     }
 
     onDeleteTags(i: number) {
-        this.tags.controls.splice(i, 1)
+        this.keyVals.removeAt(i);
     }
 
     onDeleteExternalResource(i: number) {
-        this.externalResources.controls.splice(i, 1)
+        this.externalResources.removeAt(i)
     }
 
     onChangeKey($event: any, i: number) {
         let inputValue = $event.target.value.toLowerCase();
-        let splitValue = this.tags.controls[i].value.split(",");
+        let splitValue = this.keyVals.controls[i].value.split(",");
         const value = inputValue + "," + splitValue[1];
-        this.tags.controls[i].setValue(value);
+        this.keyVals.controls[i].setValue(value);
     }
 
     onChangeValue($event: any, i: number) {
         let inputValue = $event.target.value.toLowerCase();
-        let splitValue = this.tags.controls[i].value.split(",");
+        let splitValue = this.keyVals.controls[i].value.split(",");
         const value = splitValue[0] + "," + inputValue;
-        this.tags.controls[i].setValue(value);
+        this.keyVals.controls[i].setValue(value);
     }
 
     private validateErrors(poi: PoiDto) {
@@ -330,7 +339,7 @@ export class PoiAddComponent implements OnInit {
                 this.formGroup.get("macroType").setValue(poiDto.macroType);
 
                 let microTypesFA = this.formGroup.get("microTypes") as FormArray;
-                let tagsFA = this.formGroup.get("tags") as FormArray;
+                let keyValsFA = this.formGroup.get("keyVals") as FormArray;
                 let externalResourcesFA = this.formGroup.get("externalResources") as FormArray;
                 let trailIdsFA = this.formGroup.get("trailIds") as FormArray;
 
@@ -338,8 +347,8 @@ export class PoiAddComponent implements OnInit {
                     microTypesFA.push(new FormControl(it))
                 })
 
-                poiDto.tags.forEach((it) => {
-                    tagsFA.push(new FormControl(it));
+                poiDto.keyVal.forEach((it) => {
+                    keyValsFA.push(new FormControl(it.key + "," + it.value));
                 });
 
                 poiDto.externalResources.forEach((it) => {
@@ -356,6 +365,7 @@ export class PoiAddComponent implements OnInit {
                 this.formGroup.get("coordLongitude").setValue(poiDto.coordinates.longitude);
                 this.formGroup.get("coordLatitude").setValue(poiDto.coordinates.latitude);
                 this.formGroup.get("coordAltitude").setValue(poiDto.coordinates.altitude);
+                this.formGroup.get("tags").setValue(poiDto.tags.join(", "));
 
                 this.isTrailLoaded = true;
 
@@ -380,6 +390,11 @@ export class PoiAddComponent implements OnInit {
     onDeleteTrail(i: number) {
         this.selectedTrails.splice(i, 1);
         this.selectedTrails = [...this.selectedTrails];
-        this.trailIds.controls.splice(i, 1);
+        this.trailIds.removeAt(i);
+    }
+
+    setMicroType($event: any, i: number) {
+        let microType = this.microTypes.controls[i];
+        microType.setValue($event.target.value)
     }
 }

@@ -12,17 +12,17 @@ export interface paths {
   };
   "/admin/report": {
     put: operations["update"];
-    post: operations["create_5"];
+    post: operations["create_4"];
   };
   "/admin/report/upgrade/{id}": {
     put: operations["upgradeReport"];
   };
   "/admin/poi": {
-    put: operations["create"];
-    post: operations["update_1"];
+    put: operations["update_1"];
+    post: operations["create_5"];
   };
   "/admin/place": {
-    put: operations["create_1"];
+    put: operations["create"];
     post: operations["update_2"];
   };
   "/admin/place/unlink/trail": {
@@ -36,19 +36,22 @@ export interface paths {
     put: operations["linkTrailToPlace"];
   };
   "/admin/maintenance": {
-    put: operations["create_2"];
+    put: operations["create_1"];
   };
   "/admin/accessibility": {
-    put: operations["create_3"];
+    put: operations["create_2"];
   };
   "/report": {
-    post: operations["create_4"];
+    post: operations["create_3"];
   };
   "/place/geolocate": {
     post: operations["geolocatePlace"];
   };
   "/geo-trail/locate": {
     post: operations["geoLocateTrail"];
+  };
+  "/geo-trail/locate-id": {
+    post: operations["geoLocateTrail_1"];
   };
   "/geo-trail/intersect": {
     post: operations["findTrailIntersection"];
@@ -201,7 +204,7 @@ export interface paths {
     get: operations["getAltitudeTrail"];
   };
   "/geo-tool/altitude": {
-    get: operations["geoLocateTrail_1"];
+    get: operations["geoLocateTrail_2"];
   };
   "/dataset": {
     get: operations["getTrailDatasetV"];
@@ -402,8 +405,6 @@ export interface components {
       mediaList?: components["schemas"]["LinkedMediaDto"][];
       trailIds?: string[];
       coordinates?: components["schemas"]["CoordinatesDto"];
-      createdOn?: string;
-      lastUpdatedOn?: string;
       externalResources?: string[];
       keyVal?: components["schemas"]["KeyValueDto"][];
       recordDetails?: components["schemas"]["RecordDetailsDto"];
@@ -491,6 +492,20 @@ export interface components {
       bottomLeft?: components["schemas"]["Coordinates2D"];
       topRight?: components["schemas"]["Coordinates2D"];
     };
+    TrailMappingDto: {
+      id?: string;
+      code?: string;
+      name?: string;
+    };
+    TrailMappingResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["TrailMappingDto"][];
+    };
     GeoLineDto: {
       coordinates?: components["schemas"]["Coordinates2D"][];
     };
@@ -554,20 +569,6 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["TrailRawDto"][];
-    };
-    TrailMappingDto: {
-      id?: string;
-      code?: string;
-      name?: string;
-    };
-    TrailMappingResponse: {
-      currentPage?: number;
-      totalPages?: number;
-      size?: number;
-      totalCount?: number;
-      status?: "OK" | "ERROR";
-      messages?: string[];
-      content?: components["schemas"]["TrailMappingDto"][];
     };
     AccessibilityNotificationResolutionDto: {
       id?: string;
@@ -661,7 +662,7 @@ export interface operations {
       };
     };
   };
-  create_5: {
+  create_4: {
     responses: {
       /** OK */
       200: {
@@ -693,21 +694,6 @@ export interface operations {
       };
     };
   };
-  create: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["PoiResponse"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PoiDto"];
-      };
-    };
-  };
   update_1: {
     responses: {
       /** OK */
@@ -723,7 +709,22 @@ export interface operations {
       };
     };
   };
-  create_1: {
+  create_5: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PoiResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PoiDto"];
+      };
+    };
+  };
+  create: {
     responses: {
       /** OK */
       200: {
@@ -823,7 +824,7 @@ export interface operations {
       };
     };
   };
-  create_2: {
+  create_1: {
     responses: {
       /** OK */
       200: {
@@ -838,7 +839,7 @@ export interface operations {
       };
     };
   };
-  create_3: {
+  create_2: {
     responses: {
       /** OK */
       200: {
@@ -855,7 +856,7 @@ export interface operations {
       };
     };
   };
-  create_4: {
+  create_3: {
     responses: {
       /** OK */
       200: {
@@ -904,6 +905,21 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["TrailResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RectangleDto"];
+      };
+    };
+  };
+  geoLocateTrail_1: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailMappingResponse"];
         };
       };
     };
@@ -1759,7 +1775,7 @@ export interface operations {
       };
     };
   };
-  geoLocateTrail_1: {
+  geoLocateTrail_2: {
     parameters: {
       query: {
         latitude: number;

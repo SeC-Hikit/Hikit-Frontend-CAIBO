@@ -31,7 +31,7 @@
               <span class="trailCodeColumn">{{ getTrailCode(trailId) }}</span>
             </span>
           </td>
-          <td>{{ poi.macroType }}</td>
+          <td [innerHTML]="this.getPoiIcon(poi)"></td>
           <td>{{ poi.microType.toString().replace(",", ", ") }}</td>
           <td class="clickable" routerLink="/admin/poi-management/edit/{{ poi.id }}">
             <svg class="bi" width="24" height="24" fill="currentColor">

@@ -9,6 +9,7 @@ import {
 import {TrailService} from "src/app/service/trail-service.service";
 import {components} from "src/binding/Binding";
 import {AdminPoiService} from "../../../service/admin-poi-service.service";
+import {PoiIconHelper} from "../../../../assets/icons/PoiIconHelper";
 
 export type PoiDto = components["schemas"]["PoiDto"];
 
@@ -49,7 +50,6 @@ export class PoiViewTableComponent implements OnInit {
     }
 
     getTrailCode(id: string): string {
-        console.log(this.cachedTrail.filter((ct) => ct.id == id));
         if (this.cachedTrail.length == 0) return "";
         return this.cachedTrail.filter((ct) => ct.id == id)[0].code;
     }
@@ -77,10 +77,13 @@ export class PoiViewTableComponent implements OnInit {
     }
 
     onDelete(id: string) {
-        console.log(id);
         this.poiAdminService.delete(id).toPromise()
             .then((_) => {
                 this.loadPois(this.page);
             });
+    }
+
+    getPoiIcon(poi: PoiDto) {
+        return PoiIconHelper.get(poi);
     }
 }
