@@ -130,6 +130,12 @@ export class MapPreviewComponent implements OnInit {
         this.map.invalidateSize();
         for (const propName in changes) {
             console.log(changes);
+
+            if (propName == "otherTrails") {
+                console.log("Other Trails")
+                this.showSecondaryTrails();
+            }
+
             if (propName == "focusPoint") {
                 this.changeView(this.focusPoint)
             }
@@ -210,6 +216,7 @@ export class MapPreviewComponent implements OnInit {
 
     private showSecondaryTrails() {
         if(!this.otherTrails) return;
+        this.otherTrailPolys.forEach(it=> this.map.removeLayer(it));
         this.otherTrails.forEach((trail) => {
             let invertedCoords = MapUtils.getCoordinatesInverted(trail.coordinates);
             let polyline = L.polyline(invertedCoords, {color: "#d000ff"});

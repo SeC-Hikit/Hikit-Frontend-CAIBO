@@ -1,4 +1,13 @@
 .PoiAddComponent{
+
+  .hidden {
+    display: none;
+  }
+
+  .form-control {
+    width: 100%;
+  }
+
   select {
     width: 100%;
   }

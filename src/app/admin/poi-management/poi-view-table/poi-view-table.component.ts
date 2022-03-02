@@ -63,9 +63,11 @@ export class PoiViewTableComponent implements OnInit {
             .subscribe((preview: PoiResponse) => {
                 preview.content.forEach((poi) =>
                     poi.trailIds.forEach((trailId) =>
-                        this.trailPreviewService.getPreview(trailId).subscribe((resp) => {
-                            resp.content.forEach((it) => this.cachedTrail.push(it));
-                        })
+                        this.trailPreviewService.getPreview(trailId)
+                            .subscribe((resp) => {
+                                resp.content.forEach((it) =>
+                                    this.cachedTrail.push(it));
+                            })
                     )
                 );
                 this.poiResponse = preview;
