@@ -20,12 +20,14 @@
         <table class="table table-striped interactive-table">
             <thead>
             <tr>
-                <th scope="col">Codice notifica</th>
+                <th scope="col">ID</th>
                 <th scope="col">Data Segnalazione</th>
                 <th scope="col">Sentiero</th>
                 <th scope="col">Descrizione Problema</th>
                 <th scope="col">Aggirabile?</th>
+                <th scope="col">Segnalato da</th>
                 <th scope="col">Risolvi</th>
+                <th scope="col">Modifica</th>
                 <th scope="col">Cancella</th>
             </tr>
             </thead>
@@ -44,17 +46,29 @@
               {{ getTrailCode(notification.trailId) }}
             </span>
                 </td>
-                <td class="ellipsis small-column">{{ notification.description }}</td>
+                <td class="ellipsis small-column" [innerHTML]="notification.description"></td>
                 <td>{{ notification.minor === true ? "si" : "no" }}</td>
+                <td>
+                    {{ notification.recordDetails.uploadedBy }}
+                </td>
                 <td class="clickable" (click)="onResolveClick(notification)">
-                    <svg class="bi" width="32" height="32" fill="currentColor">
+                    <svg class="bi" width="24" height="24" fill="currentColor">
                         <use
                                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square"
                         />
                     </svg>
                 </td>
+                <td class="clickable">
+                    <a routerLink="./edit/{{notification.id}}">
+                        <svg class="bi" width="24" height="24" fill="currentColor">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
+                            />
+                        </svg>
+                    </a>
+                </td>
                 <td class="clickable" (click)="onDeleteClick(notification)">
-                    <svg class="bi" width="32" height="32" fill="currentColor">
+                    <svg class="bi" width="24" height="24" fill="currentColor">
                         <use
                                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
                         />

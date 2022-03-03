@@ -380,7 +380,6 @@ export class PoiAddComponent implements OnInit {
         modal.componentInstance.body = `<ul>I seguenti errori imepdiscono il salvataggio: <br/>${errorsString}</ul>`;
     }
 
-
     addTrail() {
         this.trailIds.push(new FormControl(this.trailPreviewResponseContent[0].id));
         this.loadFirstTrailInMappingLoadedList(this.trailPreviewResponseContent);

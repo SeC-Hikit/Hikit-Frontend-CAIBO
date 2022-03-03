@@ -10,7 +10,7 @@
         >
             <div class="row">
                 <div class="col-12 top-margin">
-                    <p>Sentiero interessato</p>
+                    <p>Sentiero interessato <span class="mandatory-field-asterisk">*</span></p>
                 </div>
                 <select
                         title="Scegli una opzione"
@@ -29,7 +29,7 @@
             </div>
             <div class="row top-margin">
                 <div class="col-12">
-                    <p>Data segnalazione</p>
+                    <p>Data segnalazione <span class="mandatory-field-asterisk">*</span></p>
                 </div>
                 <div class="input-group">
                     <input
@@ -45,7 +45,11 @@
                                 class="btn btn-outline-secondary calendar"
                                 (click)="d.toggle()"
                                 type="button"
-                        ></button>
+                        >
+                            <svg width="24" height="24" fill="white" class="inner">
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -64,7 +68,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-lg-12">
-                    <label>Descrizione</label>
+                    <label>Descrizione <span class="mandatory-field-asterisk">*</span></label>
                     <quill-editor
                             [formControlName]="'description'"
                             [className]="'description'"

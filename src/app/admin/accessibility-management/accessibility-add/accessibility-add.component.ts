@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
 import {
     AccessibilityNotification,
@@ -14,6 +14,9 @@ import {Marker} from "../../../map-preview/map-preview.component";
 import {GeoToolsService} from "../../../service/geotools.service";
 import {AuthService} from "../../../service/auth.service";
 import {environment} from "../../../../environments/environment.prod";
+import {AdminNotificationService} from "../../../service/admin-notification-service.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 
 @Component({
     selector: 'app-accessibility-add',
@@ -41,10 +44,13 @@ export class AccessibilityAddComponent implements OnInit {
 
     constructor(
         private trailPreviewService: TrailPreviewService,
+        private adminNotificationService: AdminNotificationService,
         private trailService: TrailService,
         private accessibility: NotificationService,
         private geoToolService: GeoToolsService,
         private authService: AuthService,
+        private activatedRoute: ActivatedRoute,
+        private modalService: NgbModal,
         private router: Router) {
     }
 
@@ -65,6 +71,7 @@ export class AccessibilityAddComponent implements OnInit {
     }
 
     onSaveNotification() {
+        this.validationErrors = [];
         if (this.formGroup.valid) {
             const objValue = this.formGroup.value;
             let reportedDate = objValue.reportDate;
@@ -96,9 +103,18 @@ export class AccessibilityAddComponent implements OnInit {
                     }
                 };
 
-                // TODO save
+                this.adminNotificationService.createNotification(not)
+                    .subscribe((resp) => {
+                        if(resp.status == "OK") {
+                            this.router.navigate(["/admin/accessibility-management"]);
+                        } else {
+                            this.noticeErrorModal(resp.messages);
+                        }
+                    });
 
             });
+        } else {
+            this.validationErrors = ["Il form contiene alcuni errori."];
         }
     }
 
@@ -117,6 +133,13 @@ export class AccessibilityAddComponent implements OnInit {
             this.formGroup.get("coordLatitude").setValue(resp.latitude);
             this.formGroup.get("coordAltitude").setValue(resp.altitude);
         })
+    }
+
+    private noticeErrorModal(errors: string[]) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Errore nel salvataggio della notifica`;
+        const errorsString = errors.join("<br>")
+        modal.componentInstance.body = `<ul>I seguenti errori imepdiscono il salvataggio: <br/>${errorsString}</ul>`;
     }
 
 }

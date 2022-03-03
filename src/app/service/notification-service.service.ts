@@ -9,8 +9,6 @@ import { components } from 'src/binding/Binding';
 export type AccessibilityNotificationResponse = components["schemas"]["AccessibilityResponse"]
 export type AccessibilityNotificationResolution = components["schemas"]["AccessibilityNotificationResolutionDto"]
 export type AccessibilityNotification = components["schemas"]["AccessibilityNotificationDto"]
-export type AccessibilityReport = components["schemas"]["AccessibilityReportDto"]
-export type AccessibilityNotificationCreation = components["schemas"]["AccessibilityNotificationDto"]
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +21,6 @@ export class NotificationService {
   };
 
   constructor(private httpClient: HttpClient) { }
-
-  createNotification(notification : AccessibilityNotification) {
-    return this.httpClient.put<RestResponse>(this.baseUrl, notification)
-      .pipe(
-        tap(),
-        catchError(this.handleError<AccessibilityNotificationResponse>('create trail', null))
-      );
-  }
 
   getUnresolvedByTrailByCode(code: String): Observable<AccessibilityNotificationResponse> {
     return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved/" + code)
@@ -55,22 +45,6 @@ export class NotificationService {
         tap(),
         catchError(this.handleError<AccessibilityNotificationResponse>('get all resolved', null))
       );
-  }
-
-  deleteById(_id: string): Observable<RestResponse> {
-    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
-      .pipe(
-        tap(),
-        catchError(this.handleError<RestResponse>('delete by id', null))
-      );
-  }
-
-  resolveNotification(resolution: AccessibilityNotificationResolution): Observable<RestResponse> {
-    return this.httpClient.post<RestResponse>(this.baseUrl + "/resolve", resolution)
-    .pipe(
-      tap(),
-      catchError(this.handleError<RestResponse>('', null))
-    );
   }
 
   /**
