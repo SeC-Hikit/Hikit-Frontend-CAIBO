@@ -13,6 +13,9 @@ import {TrailDto, TrailMappingDto, TrailService} from "src/app/service/trail-ser
 import {Status} from "src/app/Status";
 import {AuthService} from "../../../service/auth.service";
 import {AdminNotificationService} from "../../../service/admin-notification-service.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {PromptModalComponent} from "../../../modal/prompt-modal/prompt-modal.component";
 
 @Component({
     selector: "app-accessibility-notification-view",
@@ -41,6 +44,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         private adminNotificationService: AdminNotificationService,
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
+        private modalService: NgbModal,
         private authService: AuthService,
     ) {
         this.unresolvedNotifications = [];
@@ -108,8 +112,20 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     }
 
     onResolveClick(unresolvedNotification: AccessibilityNotification) {
-        let resDesc =
-            "Scrivi una breve risoluzione per la segnalazione " +
+        const modal = this.modalService.open(PromptModalComponent);
+        modal.componentInstance.title = `Risolvi notifica il per sentiero ${this.getTrailCode(unresolvedNotification.trailId)}`;
+        modal.componentInstance.body = `Inserisci un messaggio risolutivo della notifica`;
+        modal.componentInstance.onPromptOk.subscribe((value: string)=>  {
+            alert("message: " + value);
+        });
+        modal.componentInstance.onPromptCancel.subscribe(()=>{
+           alert("nothing");
+        })
+
+    }
+
+    onResolve(unresolvedNotification: AccessibilityNotification) {
+        let resDesc = "Scrivi una breve risoluzione per la segnalazione " +
             unresolvedNotification.id +
             " riportata in data '" +
             this.formatDate(unresolvedNotification.reportDate.toString()) +

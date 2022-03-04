@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+</div>
+<div class="modal-body">
+    <p [innerHTML]="body"></p>
+    <input type="text" [value]="content" (change)="onChange($event)">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="onOk()">Ok</button>
+    <button type="button" class="btn" (click)="onCancel()">Cancella</button>
+</div>

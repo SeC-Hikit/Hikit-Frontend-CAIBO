@@ -68,6 +68,8 @@ import { InfoModalComponent } from './modal/info-modal/info-modal.component';
 import { TrailRawViewTableComponent } from './admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component';
 import { PlaceEditComponent } from './admin/place-management/place-edit/place-edit.component';
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
+import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
+import { PromptModalComponent } from './modal/prompt-modal/prompt-modal.component';
 
 @NgModule({
   declarations: [
@@ -129,6 +131,8 @@ import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
     InfoModalComponent,
     TrailRawViewTableComponent,
     PlaceEditComponent,
+    ConfirmModalComponent,
+    PromptModalComponent,
   ],
   imports: [
     BrowserModule,

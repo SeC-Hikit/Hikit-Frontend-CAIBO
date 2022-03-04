@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PlaceDto} from "../../../../service/place.service";
 import {CoordinatesDto, TrailDto} from "../../../../service/trail-service.service";
 import {Marker} from "../../../../map-preview/map-preview.component";
