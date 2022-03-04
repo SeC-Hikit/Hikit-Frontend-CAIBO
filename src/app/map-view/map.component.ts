@@ -157,7 +157,7 @@ export class MapComponent implements OnInit {
 
     loadNotificationsForTrail(id: string): void {
         if(!id) { return; }
-        this.accessibilityService.getUnresolvedByTrailByCode(id).subscribe(notificationResponse => {
+        this.accessibilityService.getUnresolvedById(id).subscribe(notificationResponse => {
             this.selectedTrailNotifications = notificationResponse.content
         });
     }

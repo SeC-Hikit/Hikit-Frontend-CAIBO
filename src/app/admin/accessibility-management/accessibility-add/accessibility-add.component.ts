@@ -26,6 +26,7 @@ import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component
 export class AccessibilityAddComponent implements OnInit {
 
     formGroup: FormGroup = new FormGroup({
+        id: new FormControl("", Validators.required),
         trailId: new FormControl("", Validators.required),
         reportDate: new FormControl("", Validators.required),
         isMinor: new FormControl(true, Validators.required),
@@ -35,7 +36,7 @@ export class AccessibilityAddComponent implements OnInit {
         coordAltitude: new FormControl("", Validators.required)
     });
 
-    markers: Marker[];
+    markers: Marker[] = [];
     trailMappings: TrailMappingDto[];
     selectedTrails: TrailDto[] = [];
     hasFormBeenInitialized: boolean = false;
@@ -45,8 +46,8 @@ export class AccessibilityAddComponent implements OnInit {
     constructor(
         private trailPreviewService: TrailPreviewService,
         private adminNotificationService: AdminNotificationService,
+        private notificationService: NotificationService,
         private trailService: TrailService,
-        private accessibility: NotificationService,
         private geoToolService: GeoToolsService,
         private authService: AuthService,
         private activatedRoute: ActivatedRoute,
@@ -55,16 +56,25 @@ export class AccessibilityAddComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        const idFromPath: string = this.activatedRoute.snapshot.paramMap.get("id");
+        if (idFromPath != null && idFromPath.length > 0) {
+            this.load(idFromPath);
+        }
+
         const realm = this.authService.getRealm();
-        this.hasFormBeenInitialized = true;
         this.trailPreviewService.getMappings(realm)
             .subscribe(resp => {
                 this.trailMappings = resp.content;
+                this.hasFormBeenInitialized = true;
             })
     }
 
-    onChanges($event: any): void {
+    onSelectedTrail($event: any): void {
         const id = $event.target.value;
+        this.loadTrail(id);
+    }
+
+    private loadTrail(id) {
         this.trailService.getTrailById(id).subscribe(resp =>
             this.selectedTrails = [...resp.content]
         );
@@ -75,6 +85,7 @@ export class AccessibilityAddComponent implements OnInit {
         if (this.formGroup.valid) {
             const objValue = this.formGroup.value;
             let reportedDate = objValue.reportDate;
+            let id = this.formGroup.get("id").value;
             let trailId = this.formGroup.get("trailId").value;
             let isMinor = this.formGroup.get("isMinor").value;
             let date = moment(reportedDate.year +
@@ -83,7 +94,7 @@ export class AccessibilityAddComponent implements OnInit {
 
             this.authService.getUsername().then((name) => {
                 const not: AccessibilityNotification = {
-                    id: null,
+                    id: !id ? null : id,
                     reportDate: date.toISOString(),
                     trailId: trailId,
                     coordinates: {
@@ -105,7 +116,7 @@ export class AccessibilityAddComponent implements OnInit {
 
                 this.adminNotificationService.createNotification(not)
                     .subscribe((resp) => {
-                        if(resp.status == "OK") {
+                        if (resp.status == "OK") {
                             this.router.navigate(["/admin/accessibility-management"]);
                         } else {
                             this.noticeErrorModal(resp.messages);
@@ -123,16 +134,20 @@ export class AccessibilityAddComponent implements OnInit {
     }
 
     onMapClick(coords: Coordinates2D) {
-        this.markers = [{
-            icon: MapPinIconType.PIN,
-            coords: coords,
-            color: "#1D9566"
-        }];
+        this.drawMarker(coords);
         this.geoToolService.getAltitude(coords).subscribe((resp) => {
             this.formGroup.get("coordLongitude").setValue(resp.longitude);
             this.formGroup.get("coordLatitude").setValue(resp.latitude);
             this.formGroup.get("coordAltitude").setValue(resp.altitude);
         })
+    }
+
+    private drawMarker(coords: Coordinates2D) {
+        this.markers = [{
+            icon: MapPinIconType.PIN,
+            coords: coords,
+            color: "#1D9566"
+        }];
     }
 
     private noticeErrorModal(errors: string[]) {
@@ -142,4 +157,33 @@ export class AccessibilityAddComponent implements OnInit {
         modal.componentInstance.body = `<ul>I seguenti errori imepdiscono il salvataggio: <br/>${errorsString}</ul>`;
     }
 
+    private load(idFromPath: string) {
+        this.notificationService
+            .getUnresolvedById(idFromPath)
+            .subscribe((resp) => {
+                let loaded = resp.content[0];
+                this.formGroup.get("id").setValue(loaded.id);
+                this.formGroup.get("trailId").setValue(loaded.trailId);
+                this.formGroup.get("reportDate").setValue(this.getDate(loaded.reportDate));
+                this.formGroup.get("isMinor").setValue(loaded.minor);
+                this.formGroup.get("description").setValue(loaded.description);
+                this.formGroup.get("coordLongitude").setValue(loaded.coordinates.longitude);
+                this.formGroup.get("coordLatitude").setValue(loaded.coordinates.latitude);
+                this.formGroup.get("coordAltitude").setValue(loaded.coordinates.latitude);
+                this.loadTrail(loaded.trailId);
+                this.drawMarker({latitude: loaded.coordinates.latitude,
+                    longitude: loaded.coordinates.latitude});
+                this.hasFormBeenInitialized = true;
+            });
+    }
+
+    private getDate(dateString) {
+        const momentDate = moment(dateString);
+        const date = {
+            year: momentDate.year(),
+            month: momentDate.month() + 1,
+            day: momentDate.date()
+        };
+        return date;
+    }
 }

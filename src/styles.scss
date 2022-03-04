@@ -150,6 +150,10 @@ table td {
   font-size: 14px;
 }
 
+.table td, .table th {
+  padding: 0.6em !important;
+}
+
 .trailCodeColumn {
   background: black;
   padding: 2px;

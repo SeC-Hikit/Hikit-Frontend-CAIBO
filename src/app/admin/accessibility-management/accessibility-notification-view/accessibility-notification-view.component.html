@@ -16,7 +16,7 @@
         ></app-trail-floating-preview>
     </div>
 
-    <div *ngIf="unresolvedNotifications.length > 0; else notShow">
+    <div *ngIf="unresolvedNotifications.length > 0; else notShow" class="top-margin-x2">
         <table class="table table-striped interactive-table">
             <thead>
             <tr>
@@ -80,10 +80,10 @@
         <div class="pagination-position">
             <ngb-pagination
                     [pageSize]="entryPerPage"
-                    [collectionSize]="totalNotification"
-                    [(page)]="page"
+                    [collectionSize]="totalUnresolvedNotification"
+                    [(page)]="unresolvedPage"
                     aria-label="Default pagination"
-                    (pageChange)="loadNotification(page)"
+                    (pageChange)="loadNotification(unresolvedPage)"
             ></ngb-pagination>
         </div>
     </div>
@@ -102,23 +102,44 @@
             >
                 <thead>
                 <tr>
+                    <th scope="col">ID</th>
                     <th scope="col">Codice sentiero</th>
                     <th scope="col">Data segnalazione</th>
-                    <th scope="col">Descrizione Problema</th>
                     <th scope="col">Data risoluzione</th>
+                    <th scope="col">Descrizione Problema</th>
                     <th scope="col">Risoluzione</th>
+                    <th scope="col">Segnalato da</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let item of solvedNotifications">
-                    <th scope="row">{{ item.id }}</th>
+                    <td
+                            scope="row"
+                            class="ellipsis small-column"
+                            title="{{ item.id }}"
+                    >
+                        {{ item.id }}
+                    </td>
+                    <td><span class="trailCodeColumn">
+                        {{ getTrailCode(item.trailId) }}</span>
+                    </td>
                     <td>{{ formatDate(item.reportDate) }}</td>
-                    <td>{{ item.description }}</td>
                     <td>{{ formatDate(item.resolutionDate) }}</td>
+                    <td [innerHTML]="item.description"></td>
                     <td>{{ item.resolution }}</td>
+                    <td>{{ item.recordDetails.uploadedBy }}</td>
                 </tr>
                 </tbody>
             </table>
+            <div class="pagination-position">
+                <ngb-pagination
+                        [pageSize]="entryPerPage"
+                        [collectionSize]="totalSolvedNotification"
+                        [(page)]="solvedPage"
+                        aria-label="Default pagination"
+                        (pageChange)="loadSolvedNotification(solvedPage)"
+                ></ngb-pagination>
+            </div>
         </div>
         <ng-template #notShow>
             <app-items-not-found></app-items-not-found>

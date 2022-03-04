@@ -6,7 +6,6 @@ import {
     NotificationService,
 } from "src/app/service/notification-service.service";
 import {
-    TrailPreview,
     TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
 import {TrailDto, TrailMappingDto, TrailService} from "src/app/service/trail-service.service";
@@ -14,8 +13,8 @@ import {Status} from "src/app/Status";
 import {AuthService} from "../../../service/auth.service";
 import {AdminNotificationService} from "../../../service/admin-notification-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 import {PromptModalComponent} from "../../../modal/prompt-modal/prompt-modal.component";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: "app-accessibility-notification-view",
@@ -24,9 +23,12 @@ import {PromptModalComponent} from "../../../modal/prompt-modal/prompt-modal.com
 })
 export class AccessibilityNotificationViewComponent implements OnInit {
     entryPerPage = 10;
-    page = 1;
+    unresolvedPage = 1;
+    solvedPage = 1;
     isLoading = false;
-    totalNotification: number;
+
+    totalUnresolvedNotification: number;
+    totalSolvedNotification: number;
 
     private destroy$ = new Subject();
 
@@ -52,11 +54,13 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     }
 
     ngOnInit(): void {
+
         let realm = this.authService.getRealm();
         this.trailPreviewService.getMappings(realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
                 this.loadNotification(1);
+                this.loadSolvedNotification(1);
             })
     }
 
@@ -65,25 +69,37 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     }
 
     loadNotification(page: number) {
-        this.page = page;
+        this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadSolved(lowerBound, this.entryPerPage * page);
+        this.loadUnresolved(lowerBound, this.entryPerPage * page);
     }
 
-    private loadSolved(skip: number, limit: number) {
+    loadSolvedNotification(page: number) {
+        this.unresolvedPage = page;
+        const lowerBound = this.entryPerPage * (page - 1);
+        this.loadResolved(lowerBound, this.entryPerPage * page);
+    }
+
+    loadUnresolved(skip: number, limit: number) {
+        this.hasLoaded = false;
         this.notificationService.getUnresolved(skip, limit).subscribe(
             (resp) => {
                 this.unresolvedNotifications = resp.content;
-                this.unresolvedNotifications.forEach((ur) => {
-                    this.trailPreviewService
-                        .getPreview(ur.trailId)
-                        .subscribe((p) => this.trailMapping.push(p.content[0]));
-                });
-
-                this.totalNotification = resp.totalPages;
+                this.totalUnresolvedNotification = resp.totalPages;
                 this.hasLoaded = true;
             });
     }
+
+    private loadResolved(skip: number, limit: number) {
+        this.hasLoaded = false;
+        this.notificationService.getResolved(skip, limit).subscribe(
+            (resp) => {
+                this.solvedNotifications = resp.content;
+                this.totalSolvedNotification = resp.totalPages;
+                this.hasLoaded = true;
+            });
+    }
+
 
     formatDate(dateString: string): string {
         return moment(dateString).format("DD/MM/YYYY");
@@ -101,12 +117,12 @@ export class AccessibilityNotificationViewComponent implements OnInit {
             this.adminNotificationService
                 .deleteById(unresolvedNotification.id)
                 .subscribe((d) => {
-                    if (d.status == Status.OK) this.onDeleted(unresolvedNotification);
+                    if (d.status == Status.OK) this.onDelete(unresolvedNotification);
                 });
         }
     }
 
-    onDeleted(unresolvedNotification: AccessibilityNotification): void {
+    onDelete(unresolvedNotification: AccessibilityNotification): void {
         let i = this.unresolvedNotifications.indexOf(unresolvedNotification);
         this.unresolvedNotifications.splice(i, 1);
     }
@@ -115,43 +131,32 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         const modal = this.modalService.open(PromptModalComponent);
         modal.componentInstance.title = `Risolvi notifica il per sentiero ${this.getTrailCode(unresolvedNotification.trailId)}`;
         modal.componentInstance.body = `Inserisci un messaggio risolutivo della notifica`;
-        modal.componentInstance.onPromptOk.subscribe((value: string)=>  {
-            alert("message: " + value);
+        modal.componentInstance.onPromptOk.subscribe((valueResolution: string) => {
+            if (valueResolution != null && valueResolution.length > 0) {
+                unresolvedNotification.resolution = valueResolution;
+                this.onResolve(unresolvedNotification);
+            }
         });
-        modal.componentInstance.onPromptCancel.subscribe(()=>{
-           alert("nothing");
-        })
-
+        modal.componentInstance.onPromptCancel.subscribe(() => {})
     }
 
     onResolve(unresolvedNotification: AccessibilityNotification) {
-        let resDesc = "Scrivi una breve risoluzione per la segnalazione " +
-            unresolvedNotification.id +
-            " riportata in data '" +
-            this.formatDate(unresolvedNotification.reportDate.toString()) +
-            "' con descrizione: '" +
-            unresolvedNotification.description +
-            "'";
-        let resolution = prompt(resDesc);
-
-        if (resolution != null && resolution.length > 0) {
-            let resolutionDate = new Date();
-            this.adminNotificationService
-                .resolveNotification({
-                    id: unresolvedNotification.id,
-                    resolution: resolution,
-                    resolutionDate: resolutionDate.toDateString(),
-                })
-                .subscribe((response) => {
-                    if (response.status == Status.OK) {
-                        this.onResolvedSuccess(
-                            unresolvedNotification,
-                            resolution,
-                            resolutionDate
-                        );
-                    }
-                });
-        }
+        let resolutionDate = new Date();
+        this.adminNotificationService
+            .resolveNotification({
+                id: unresolvedNotification.id,
+                resolution: unresolvedNotification.resolution,
+                resolutionDate: resolutionDate.toISOString(),
+            })
+            .subscribe((response) => {
+                if (response.status == Status.OK) {
+                    this.onResolvedSuccess(
+                        unresolvedNotification,
+                        unresolvedNotification.resolution,
+                        resolutionDate
+                    );
+                }
+            });
     }
 
     getTrailCode(trailId) {
@@ -181,7 +186,6 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         resolution: string,
         resolutionDate: Date
     ): void {
-        this.onDeleted(resolvedNotification);
-        this.solvedNotifications.push(resolvedNotification);
+        this.onDelete(resolvedNotification);
     }
 }
