@@ -146,12 +146,20 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 if (it.content.length > 0) {
                     const modal = this.modalService.open(InfoModalComponent);
                     modal.componentInstance.title = `Il sentiero ${trailRawDto.fileDetails.originalFilename} sembra essere un duplicato`;
-                    const matchingTrail = it.content.map(it=> `<a href="/admin/trail-management/edit/${it.id}" target="_blank"><span>${it.code}</span></a>`).join(", ");
+                    const matchingTrail = it.content.map(it => `<a href="/admin/trail-management/edit/${it.id}" target="_blank"><span>${it.code}</span></a>`).join(", ");
                     modal.componentInstance.body = `Il sentiero caricato dal file ${trailRawDto.fileDetails.originalFilename} riscontra un match con il/i sentiero/i: ${matchingTrail}. <br/>
                     Verifica il/i sentiero/i prima di procedere alla compilazione della traccia`;
                 }
             })
     }
+
+    private openModalToShowErrors(errors: string[]) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Errore nel caricamento del sentiero`;
+        const matchingTrail = errors.map(it => `<div>${it}</div>`).join("<br/>");
+        modal.componentInstance.body = `Errori imprevista in risposta dal server: ${matchingTrail}`;
+    }
+
 
     onSetPlace(): void {
 
@@ -306,7 +314,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 );
 
 
-            await this.trailSaveProcessHelper.startProcessing(
+            await this.trailSaveProcessHelper.importTrail(
                 trailData,
                 intersectionPlacesDto,
                 locationPlacesDto,
@@ -315,7 +323,11 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                         .toPromise().then((result) => {
                         this.onSaveRequest(trailData)
                     })
-                })
+                },
+                (trailErrors) => {
+                    this.openModalToShowErrors(trailErrors);
+                }
+            )
         }
     }
 

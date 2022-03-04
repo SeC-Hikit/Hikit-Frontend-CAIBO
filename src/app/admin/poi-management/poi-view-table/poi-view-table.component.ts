@@ -6,11 +6,11 @@ import {
     TrailPreview,
     TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
-import {TrailService} from "src/app/service/trail-service.service";
 import {components} from "src/binding/Binding";
 import {AdminPoiService} from "../../../service/admin-poi-service.service";
 import {PoiIconHelper} from "../../../../assets/icons/PoiIconHelper";
 import {DateUtils} from "../../../utils/DateUtils";
+import {PoiEnums} from "../PoiEnums";
 
 export type PoiDto = components["schemas"]["PoiDto"];
 
@@ -32,6 +32,8 @@ export class PoiViewTableComponent implements OnInit {
 
     savedTrailCode: string;
     selected: PoiDto;
+
+    macroMap: Map<string, string> = PoiEnums.macroMap();
 
     constructor(
         private poiService: PoiService,

@@ -32,7 +32,7 @@
               <span class="trailCodeColumn">{{ getTrailCode(trailId) }}</span>
             </span>
           </td>
-          <td [innerHTML]="this.getPoiIcon(poi)"></td>
+          <td><span [innerHTML]="this.getPoiIcon(poi)"></span> {{ macroMap.get(poi.macroType) }}</td>
           <td>
             {{ formatStringDateToDashes(poi.recordDetails.uploadedOn) }}
           </td>
