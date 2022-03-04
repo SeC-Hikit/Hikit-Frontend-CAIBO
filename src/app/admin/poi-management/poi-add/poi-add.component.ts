@@ -124,16 +124,20 @@ export class PoiAddComponent implements OnInit {
     }
 
     onMapClick(coords: Coordinates2D) {
-        this.markers = [{
-            icon: MapPinIconType.PIN,
-            coords: coords,
-            color: "#1D9566"
-        }];
+        this.positionMarker(coords);
         this.geoToolService.getAltitude(coords).subscribe((resp) => {
             this.formGroup.get("coordLongitude").setValue(resp.longitude);
             this.formGroup.get("coordLatitude").setValue(resp.latitude);
             this.formGroup.get("coordAltitude").setValue(resp.altitude);
         })
+    }
+
+    private positionMarker(coords: Coordinates2D) {
+        this.markers = [{
+            icon: MapPinIconType.PIN,
+            coords: coords,
+            color: "#1D9566"
+        }];
     }
 
     processModule() {
@@ -326,17 +330,22 @@ export class PoiAddComponent implements OnInit {
     private load(idFromPath: string) {
         this.poiService.getById(idFromPath).subscribe((resp) => {
 
-            let mapOfPromises = resp.content[0].trailIds.map(it => this.trailService.getTrailById(it).toPromise());
+            let firstResult = resp.content[0];
+
+            let mapOfPromises = firstResult.trailIds.map(it => this.trailService.getTrailById(it).toPromise());
             Promise.all(mapOfPromises).then((trailResp) => {
 
                 this.selectedTrails = trailResp.flatMap(it => it.content);
 
-                const poiDto = resp.content[0];
+                const poiDto = firstResult;
                 if (resp.size == 0) {
                     alert("Error");
                 }
 
-                this.formGroup.get("macroType").setValue(poiDto.macroType);
+                let macroType = poiDto.macroType;
+                this.formGroup.get("macroType").setValue(macroType);
+
+                this.populateMicroChoices(macroType);
 
                 let microTypesFA = this.formGroup.get("microTypes") as FormArray;
                 let keyValsFA = this.formGroup.get("keyVals") as FormArray;
@@ -366,6 +375,8 @@ export class PoiAddComponent implements OnInit {
                 this.formGroup.get("coordLatitude").setValue(poiDto.coordinates.latitude);
                 this.formGroup.get("coordAltitude").setValue(poiDto.coordinates.altitude);
                 this.formGroup.get("tags").setValue(poiDto.tags.join(", "));
+
+                this.positionMarker({latitude: poiDto.coordinates.latitude, longitude: poiDto.coordinates.longitude});
 
                 this.isTrailLoaded = true;
 

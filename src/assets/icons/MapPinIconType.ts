@@ -37,7 +37,7 @@ export class PinIcon {
       `,
       className: "",
       iconSize: [26, 32],
-      iconAnchor: [16, 16],
+      iconAnchor: [16, 32],
     });
   }
 }
