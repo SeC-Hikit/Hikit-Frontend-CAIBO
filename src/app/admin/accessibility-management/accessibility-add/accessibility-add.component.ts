@@ -169,10 +169,10 @@ export class AccessibilityAddComponent implements OnInit {
                 this.formGroup.get("description").setValue(loaded.description);
                 this.formGroup.get("coordLongitude").setValue(loaded.coordinates.longitude);
                 this.formGroup.get("coordLatitude").setValue(loaded.coordinates.latitude);
-                this.formGroup.get("coordAltitude").setValue(loaded.coordinates.latitude);
+                this.formGroup.get("coordAltitude").setValue(loaded.coordinates.altitude);
                 this.loadTrail(loaded.trailId);
                 this.drawMarker({latitude: loaded.coordinates.latitude,
-                    longitude: loaded.coordinates.latitude});
+                    longitude: loaded.coordinates.longitude});
                 this.hasFormBeenInitialized = true;
             });
     }

@@ -53,20 +53,20 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row top-margin">
                 <div>
                     <div class="form-check">
                         <input
                                 id="checkbox1"
                                 type="checkbox"
                                 formControlName="isMinor"
-                                checked
                         />
-                        <label for="checkbox1">Aggirabile</label>
+                        <label ngbTooltip="Indica se il percorso è comunque percorribile"
+                               for="checkbox1">{{ this.formGroup.get("isMinor").value ? "Aggirabile" : "Non aggirabile"}}</label>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row top-margin">
                 <div class="col-md-12 col-lg-12">
                     <label>Descrizione <span class="mandatory-field-asterisk">*</span></label>
                     <quill-editor
