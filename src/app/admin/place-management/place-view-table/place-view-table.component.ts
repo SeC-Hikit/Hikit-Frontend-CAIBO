@@ -95,10 +95,20 @@ export class PlaceViewTableComponent implements OnInit {
         this.isPlacePreviewVisible = !this.isPlacePreviewVisible;
     }
 
-    onDelete(id: string) {
-        this.adminPlaceService.deleteById(id).subscribe(() => {
-            this.onPlaceLoad(this.selectedPage)
-        });
+    onDeleteClick(id: string, name: string) {
+        this.trailService.getTrailByPlaceId(id).subscribe((resp)=> {
+            if(resp.size == 0) {
+                this.adminPlaceService.deleteById(id).subscribe(() => {
+                    this.onPlaceLoad(this.selectedPage)
+                });
+            } else {
+
+                const trailNames = resp.content.map(it=> { return {code: it.code, id: it.id}})
+                this.openError(`Non è possibile cancellare la località '${name}'`,
+                    `La località è attualmente utilizzata da uno o più sentieri in stato BOZZA.` +
+                    `<br> Vedi: ` + trailNames.map(t=> t.code + ` (con id=${t.id})`).join("<br/>"));
+            }
+        })
     }
 
     showTrailCode(crossingTrailIds: string[]) {

@@ -42,6 +42,14 @@ export class TrailService {
             );
     }
 
+    getTrailByPlaceId(placeId: String): Observable<TrailResponse> {
+        return this.httpClient.get<TrailResponse>(this.baseUrl + "/place/" + placeId)
+            .pipe(
+                tap(),
+                catchError(this.handleError<TrailResponse>('get trail by place id', null))
+            );
+    }
+
     downloadGpx(code: string): any {
         return this.httpClient.get(this.baseUrl + "/file/gpx/" + code + ".gpx", {responseType: 'blob'})
             .pipe(tap(),

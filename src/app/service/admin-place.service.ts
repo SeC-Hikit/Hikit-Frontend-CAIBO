@@ -79,7 +79,7 @@ export class AdminPlaceService {
             );
     }
 
-    deleteById(_id: any): Observable<PlaceResponse> {
+    deleteById(_id: string): Observable<PlaceResponse> {
         return this.httpClient.delete<PlaceResponse>(this.baseUrl + "/" + _id).pipe(
             tap((_) => console.log("")),
             catchError(this.handleError<PlaceResponse>("", null))

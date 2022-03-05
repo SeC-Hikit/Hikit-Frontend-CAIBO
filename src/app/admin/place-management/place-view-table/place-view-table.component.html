@@ -63,7 +63,7 @@
                     <td class="clickable">
                         <svg class="bi" width="24"
                              *ngIf="tr.recordDetails.realm == realm && tr.crossingTrailIds.length == 0"
-                             height="24" fill="currentColor" (click)="onDelete(tr.id)">
+                             height="24" fill="currentColor" (click)="onDeleteClick(tr.id, tr.name)">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
                             />
