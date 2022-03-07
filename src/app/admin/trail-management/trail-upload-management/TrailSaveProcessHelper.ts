@@ -51,7 +51,7 @@ export class TrailSaveProcessHelper {
             description: trailData.description,
             country: trailData.country,
             maintainingSection: trailData.maintainingSection,
-            code: trailData.code,
+            id: trailData.code,
             classification: trailData.classification
         };
 

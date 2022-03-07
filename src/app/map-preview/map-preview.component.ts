@@ -41,6 +41,7 @@ export class MapPreviewComponent implements OnInit {
     private map: L.Map;
     private polyline: L.Polyline;
     private polylineBorder: L.Polyline;
+    private polyLines: L.Polyline[] = [];
     private lastPointMarker: L.Marker;
     private startPointMarker: L.Marker;
     private markers: L.Marker[];
@@ -158,11 +159,13 @@ export class MapPreviewComponent implements OnInit {
         console.log("Rendering point at index " + elementAt);
         if (this.selectionCircle) this.map.removeLayer(this.selectionCircle);
         const trailCoords = this.trailPreview.coordinates;
+        let selectedCoord = trailCoords[elementAt];
         this.selectionCircle = L.circle(
-            [trailCoords[elementAt].latitude, trailCoords[elementAt].longitude],
+            [selectedCoord.latitude, selectedCoord.longitude],
             {radius: 20, color: "red"}
         ).addTo(this.map);
         this.map.addLayer(this.selectionCircle);
+        this.changeView(selectedCoord);
         this.map.flyTo(this.selectionCircle.getLatLng());
     }
 
@@ -215,8 +218,8 @@ export class MapPreviewComponent implements OnInit {
     }
 
     private showSecondaryTrails() {
-        if(!this.otherTrails) return;
-        this.otherTrailPolys.forEach(it=> this.map.removeLayer(it));
+        if (!this.otherTrails) return;
+        this.otherTrailPolys.forEach(it => this.map.removeLayer(it));
         this.otherTrails.forEach((trail) => {
             let invertedCoords = MapUtils.getCoordinatesInverted(trail.coordinates);
             let polyline = L.polyline(invertedCoords, {color: "#d000ff"});
@@ -258,9 +261,16 @@ export class MapPreviewComponent implements OnInit {
 
     // Change view
     private changeView(focusPoint: Coordinates2D) {
+        if(!focusPoint) return;
+        this.polyLines.forEach(polyLine => this.map.removeLayer(polyLine));
+        this.polyLines = [
+            L.polyline([[-90, focusPoint.longitude], [90, focusPoint.longitude]], {color: "#f00", weight: 2, opacity: 0.5}),
+            L.polyline([[focusPoint.latitude, -180], [focusPoint.latitude, 180]], {color: "#f00", weight: 2, opacity: 0.5})];
+        this.polyLines.forEach(polyLine => this.map.addLayer(polyLine))
         this.map.flyTo([focusPoint.latitude, focusPoint.longitude],
             16);
     }
+
 
     private drawDistanceLine(markers: Marker[]) {
         this.distancePoly = L.polyline(markers.map(t => [t.coords.latitude, t.coords.longitude]), {color: "#000"});

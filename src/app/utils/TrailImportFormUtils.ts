@@ -66,7 +66,7 @@ export class TrailImportFormUtils {
                                         coordinates: Coordinates2D[],
                                         fileDetailsDto: FileDetailsDto): TrailDataForSaving {
         return {
-            code: tfv.code,
+            id: tfv.code,
             classification: tfv.classification,
             country: "Italy",
             description: tfv.description,
