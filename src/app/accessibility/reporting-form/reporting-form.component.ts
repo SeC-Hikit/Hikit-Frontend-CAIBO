@@ -9,6 +9,9 @@ import {InfoModalComponent} from "../../modal/info-modal/info-modal.component";
 import {Marker} from "../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../assets/icons/MapPinIconType";
 import {TrailImportFormUtils} from "../../utils/TrailImportFormUtils";
+import {AccessibilityReportDto} from "../../service/accessibility-service.service";
+import {GeoToolsService} from "../../service/geotools.service";
+import {NotificationReportService} from "../../service/notification-report-service.service";
 
 @Component({
     selector: "app-reporting-form",
@@ -20,30 +23,41 @@ export class ReportingFormComponent implements OnInit {
     hasBeenGeolocalised = false;
     trail: TrailDto;
     specifiedPosition: CoordinatesDto;
+    errors: string[] = [];
 
     mapMarkers: Marker[] = [];
     trailPreviews: TrailPreview[];
 
-    foundIssues: string[] = ["Schianto d'albero su sentiero",
+    foundIssues: string[] = [
+        "Schianto d'albero su sentiero",
         "Sentiero smottato",
         "Sentiero invaso da piante",
-        "Sentiero non visibile"]
+        "Sentiero non visibile"
+    ];
 
-    formGroup: FormGroup = new FormGroup({
-        id: new FormControl("", Validators.required),
-        cause: new FormControl(this.foundIssues[0], Validators.required),
-        email: new FormControl("", Validators.required),
-        telephone: new FormControl(""),
+    // TODO: remove form param from the map component
+    formGroupz: FormGroup = new FormGroup({
         position: TrailImportFormUtils.getLocationForGroup(),
     });
+    formGroup: FormGroup = new FormGroup({
+        trailId: new FormControl("", Validators.required),
+        cause: new FormControl(this.foundIssues[0], Validators.required),
+        email: new FormControl("", [Validators.email, Validators.required]),
+        telephone: new FormControl(""),
+        coordLatitude: new FormControl("", Validators.required),
+        coordLongitude: new FormControl("", Validators.required),
+        coordAltitude: new FormControl("", Validators.required)
+    });
 
-    isLoadingPosition: boolean = false;
+    isLoading: boolean = false;
 
     constructor(
         private trailService: TrailService,
         private trailPreviewService: TrailPreviewService,
         private geoTrailService: GeoTrailService,
+        private geoToolsService: GeoToolsService,
         private modalService: NgbModal,
+        private notificationReportService: NotificationReportService,
         private authService: AuthService
     ) {
         this.loadPreviews();
@@ -60,7 +74,7 @@ export class ReportingFormComponent implements OnInit {
                 if (resp.content.length != 0) {
                     let firstValue = resp.content[0].id;
                     this.loadTrailById(firstValue);
-                    this.formGroup.get("id").setValue(firstValue);
+                    this.formGroup.get("trailId").setValue(firstValue);
                 }
             });
     }
@@ -72,8 +86,47 @@ export class ReportingFormComponent implements OnInit {
         });
     }
 
+    onSubmit() {
+        this.isLoading = true;
+        this.errors = [];
+        if (this.formGroup.valid) {
+            const uploadedOn = new Date().toISOString();
+            const reportDto: AccessibilityReportDto = {
+                id: null,
+                reportDate: uploadedOn,
+                email: this.formGroup.get("email").value,
+                coordinates: {
+                    altitude: this.formGroup.get("coordAltitude").value,
+                    latitude: this.formGroup.get("coordLatitude").value,
+                    longitude: this.formGroup.get("coordLongitude").value,
+                },
+                description: this.formGroup.get("cause").value,
+                issueId: "",
+                telephone: this.formGroup.get("telephone").value,
+                trailId: this.formGroup.get("trailId").value,
+                recordDetails: {
+                    uploadedOn: uploadedOn,
+                    uploadedBy: "",
+                    realm: this.authService.getRealm(),
+                    onInstance: ""
+                }
+            }
+
+            this.notificationReportService.report(reportDto)
+                .subscribe((resp)=>{
+                if(resp.status == "OK"){
+                    alert()
+                }
+            });
+
+        } else {
+            this.isLoading = false;
+            this.errors = ["Alcuni campi sono vuoti o errati"];
+        }
+    }
+
     get position() {
-        return this.formGroup.controls["position"] as FormGroup;
+        return this.formGroupz.controls["position"] as FormGroup;
     }
 
     selectTrail(trailSelection: any) {
@@ -87,26 +140,35 @@ export class ReportingFormComponent implements OnInit {
         }
     }
 
-    onRegisteringUserPosition() {
+    onGeolocatingPosition() {
         if (navigator.geolocation) {
-            this.isLoadingPosition = true;
+            this.isLoading = true;
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     console.log(position);
                     const longitude = position.coords.longitude;
                     const latitude = position.coords.latitude;
-                    this.specifiedPosition = {
-                        longitude: longitude,
-                        latitude: latitude,
-                        altitude: 0
-                    }
-                    this.position.get("latitude").setValue(latitude);
-                    this.position.get("longitude").setValue(longitude);
-                    this.hasBeenGeolocalised = true;
-                    this.isLoadingPosition = false;
-                    this.mapMarkers = [{coords: this.specifiedPosition, icon: MapPinIconType.ALERT_PIN, color: "red"}]
+
+                    // TODO: make this call with a certain delay
+                    this.geoToolsService.getAltitude({latitude, longitude})
+                        .subscribe((resp) => {
+                            const altitude = resp.altitude;
+                            this.specifiedPosition = {
+                                longitude: longitude,
+                                latitude: latitude,
+                                altitude: altitude
+                            }
+                            this.setPosInForm(latitude, longitude, altitude);
+                            this.hasBeenGeolocalised = true;
+                            this.isLoading = false;
+                            this.mapMarkers = [{
+                                coords: this.specifiedPosition,
+                                icon: MapPinIconType.ALERT_PIN,
+                                color: "red"
+                            }]
+                        });
                 }, (error) => {
-                    this.isLoadingPosition = false;
+                    this.isLoading = false;
                     this.noticeErrorModal("Errore nel geolocalizzare l'utente",
                         `Non è stato possibile registrare la sua posizione. " +
                         "Usi le frecce a lato della mappa per segnalare il problema (errore='${error}')`)
@@ -115,6 +177,7 @@ export class ReportingFormComponent implements OnInit {
             this.noticeErrorModal("Errore nel geolocalizzare l'utente", "Il suo dispositivo non supporta la" +
                 " geolocalizzazione e/o non ha dato il consenso per condividere la sua posizione")
         }
+        return false;
     }
 
     private noticeErrorModal(title: string, body: string) {
@@ -129,10 +192,22 @@ export class ReportingFormComponent implements OnInit {
             icon: MapPinIconType.ALERT_PIN,
             color: "red"
         }];
-        this.specifiedPosition = {
-            longitude: $event.longitude,
-            latitude: $event.latitude,
-            altitude: 0
-        }
+        this.geoToolsService.getAltitude($event).subscribe((resp) => {
+            const longitude = $event.longitude;
+            const latitude = $event.latitude;
+            const altitude = resp.altitude;
+            this.specifiedPosition = {
+                longitude: longitude,
+                latitude: latitude,
+                altitude: altitude,
+            }
+            this.setPosInForm(latitude, longitude, altitude);
+        })
+    }
+
+    private setPosInForm(latitude: number, longitude: number, altitude: number) {
+        this.formGroup.get("coordLatitude").setValue(latitude);
+        this.formGroup.get("coordLongitude").setValue(longitude);
+        this.formGroup.get("coordAltitude").setValue(altitude);
     }
 }

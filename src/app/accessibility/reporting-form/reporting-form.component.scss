@@ -1,8 +1,19 @@
+@import "/src/app/style/const.scss";
+
 .ReportingForm {
+
+  .red-text {
+    color: $primary-bg-color;
+  }
 
   .btn-primary {
     width: 100%;
   }
+
+  .btn-complete {
+    margin-bottom: 20px;
+  }
+
   .row {
     margin: 0;
   }

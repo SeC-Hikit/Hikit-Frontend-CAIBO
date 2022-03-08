@@ -268,7 +268,7 @@ export class MapPreviewComponent implements OnInit {
             L.polyline([[focusPoint.latitude, -180], [focusPoint.latitude, 180]], {color: "#f00", weight: 2, opacity: 0.5})];
         this.polyLines.forEach(polyLine => this.map.addLayer(polyLine))
         this.map.flyTo([focusPoint.latitude, focusPoint.longitude],
-            16);
+            15);
     }
 
 

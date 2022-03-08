@@ -1,6 +1,6 @@
-<app-loading-spinner *ngIf="!hasLoaded || isLoadingPosition"></app-loading-spinner>
+<app-loading-spinner *ngIf="!hasLoaded || isLoading"></app-loading-spinner>
 <div class="container ReportingForm">
-    <form [formGroup]="formGroup">
+    <form [formGroup]="formGroup" (ngSubmit)="this.onSubmit()">
         <div class="row">
             <div class="col-12 col-md-12 top-margin-x2">
                 <h1>Segnala un problema</h1>
@@ -15,7 +15,7 @@
                         <div>
                             <select (change)="selectTrail($event)"
                                     class="form-control"
-                                    formControlName="id"
+                                    formControlName="trailId"
                                     title="Scegli una opzione">
                                 <option
                                         *ngFor="let trailPreview of trailPreviews"
@@ -45,19 +45,31 @@
                         <h3>Località</h3>
                     </div>
                     <div class="col-md-12 top-margin">
-                        <label>Usa le frecce ai lati della mappa per selezionare il punto del problema di percorrenza,
-                            oppure condividi la tua posizione.</label>
+                        <label>Geolocalizza la tua posizione, oppure usa le frecce ai lati della mappa
+                            per selezionare il punto per evidenziare la posizione del problema di percorrenza.</label>
                     </div>
                     <div class="col-md-12 top-margin">
-                        <button class="btn btn-primary top-margin-x2 col-12" (click)="onRegisteringUserPosition()">
+                        <button class="btn btn-primary top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                                *ngIf="!hasBeenGeolocalised">
                             Condividi posizione
                         </button>
+                        <button class="btn btn-outline-warning top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                                *ngIf="hasBeenGeolocalised">
+                            Ripeti geolocalizazzione
+                        </button>
                     </div>
-                    <div class="col-md-12 top-margin">
-                        <label *ngIf="hasBeenGeolocalised">Se la geolocalizzazione non è accurata,
-                            seleziona un punto usando le frecce sottostanti.</label>
+                    <div class="col-md-12 top-margin-x2">
+                        <label *ngIf="hasBeenGeolocalised" class="red-text">
+                            <svg class="bi right-fix" width="24"
+                                 height="24" fill="currentColor">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#wrench"
+                                />
+                            </svg>
+                            Se la geolocalizzazione non fosse accurata,
+                            procedi a selezionare un punto usando le frecce sottostanti, ai lati della mappa.</label>
                     </div>
-                    <div class="col-md-12 top-margin">
+                    <div class="col-md-12">
                         <div *ngIf="hasLoaded">
                             <div *ngIf="trail">
                                 <app-report-location-entry
@@ -99,9 +111,18 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row errors" *ngIf="errors.length > 0">
+                    <div class="col-12 top-margin-x2">
+                        <ul>
+                            <li *ngFor="let error of errors">{{error}}</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-12 col-md-12 top-margin-x2">
-                        <button type="button" class="btn btn-primary">Invia segnalazione</button>
+                        <button type="button" class="btn btn-primary btn-complete" (click)="onSubmit()">Invia segnalazione</button>
                     </div>
                 </div>
             </div>

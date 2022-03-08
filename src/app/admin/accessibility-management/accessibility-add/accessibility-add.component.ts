@@ -153,7 +153,7 @@ export class AccessibilityAddComponent implements OnInit {
 
     private drawMarker(coords: Coordinates2D) {
         this.markers = [{
-            icon: MapPinIconType.PIN,
+            icon: MapPinIconType.ALERT_PIN,
             coords: coords,
             color: "#1D9566"
         }];
