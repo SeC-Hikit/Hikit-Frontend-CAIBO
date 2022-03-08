@@ -1,6 +1,9 @@
 @import "../../../style/const.scss";
 
 .entry {
+  .hidden {
+    display: none;
+  }
 }
 
 .arrow-control {

@@ -45,7 +45,7 @@ export class PinIcon {
 export class AlertPinIcon {
   public static get() {
     return L.divIcon({
-      html: `<svg xmlns="http://www.w3.org/2000/svg" width="52" height="64" viewBox="0 0 52 64">
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="32" viewBox="0 0 52 64">
         <g fill="none" fill-rule="evenodd">
           <g fill-rule="nonzero">
             <path fill="#ECC333" d="M26.7090909,0 C26.4727273,0 26.2363636,0 26,0 C11.5818182,0 0,11.6148148 0,26.0740741 C0,45.2740741 20.8,60.9185185 24.3454545,63.2888889 C24.5818182,63.5259259 24.8181818,63.762963 25.0545455,63.762963 C25.2909091,64 25.7636364,64 26.2363636,64 C26.7090909,64 27.1818182,63.762963 27.6545455,63.5259259 C28.3636364,63.0518519 52,46.4592593 52,26.0740741 C52,11.8518519 40.6545455,0.474074074 26.7090909,0 Z"/>
@@ -56,7 +56,7 @@ export class AlertPinIcon {
       </svg>
       `,
       className: "",
-      iconSize: [32, 32],
+      iconSize: [26, 32],
       iconAnchor: [16, 32],
     });
   }

@@ -19,6 +19,7 @@
         [elementAt]="selectedCoordinateIndex"
         [isShowOtherBtnEnabled]="true"
         [markersCoordinates]="markers"
+        [focusPoint]="this.focusPoint"
       ></app-map-preview>
       <div
         class="arrow-right arrow-control btn actionable white-fill"
@@ -45,7 +46,7 @@
       />
     </div>
   </div>
-  <div class="row">
+  <div class="row" [ngClass]="isShowPositionCoords ? '' : 'hidden'">
     <div class="form-row">
       <div class="form-group col-md-3 mb-3">
         <p>Latitudine</p>

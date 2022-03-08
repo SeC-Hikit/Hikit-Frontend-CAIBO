@@ -1,32 +1,37 @@
-<div class="container my-4 ReportingForm">
-    <div class="row">
-        <div class="col-12 col-md-12">
-            <h1>Segnala un problema</h1>
+<app-loading-spinner *ngIf="!hasLoaded || isLoading"></app-loading-spinner>
+<div class="container ReportingForm">
+    <form [formGroup]="formGroup" (ngSubmit)="this.onSubmit()">
+        <div class="row">
+            <div class="col-12 col-md-12 top-margin-x2">
+                <h1>Segnala un problema</h1>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-8 col-md-8">
-            <p>Seleziona un sentiero oppure rileva sentieri dalla tua posizione</p>
-
-            <div class="row">
-                <div class="col-12 col-md-12">
-                    <label>Lista Sentieri</label>
-                    <div class="bootstrap-select-wrapper">
-                        <select (change)="selectTrail($event.target)" class="form-select" title="Scegli una opzione">
-                            <option
-                                    *ngFor="let trailPreview of trailPreviews"
-                                    value="{{ trailPreview.id }}"
-                            >
-                                {{ trailPreview.code }}
-                            </option>
-                        </select>
+        <div class="row">
+            <div class="col-12">
+                <label>Seleziona il sentiero per il quale vuoi effettuare una segnalazione</label>
+                <div class="row">
+                    <div class="col-12 col-md-12">
+                        <label>Lista Sentieri <span class="mandatory-field-asterisk">*</span></label>
+                        <div>
+                            <select (change)="selectTrail($event)"
+                                    class="form-control"
+                                    formControlName="trailId"
+                                    title="Scegli una opzione">
+                                <option
+                                        *ngFor="let trailPreview of trailPreviews"
+                                        [value]="trailPreview.id"
+                                >
+                                    {{ trailPreview.code }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div *ngIf="hasLoaded">
-                    <div class="col-12 col-md-12 top-margin">
-                        <label>Problema riscontrato</label>
-                        <div class="bootstrap-select-wrapper">
-                            <select title="Scegli una opzione" class="form-select">
+                    <div *ngIf="hasLoaded" class="col-12 top-margin">
+                        <label>Problema riscontrato <span class="mandatory-field-asterisk">*</span></label>
+                        <div class="col-12">
+                            <select title="Scegli un'opzione"
+                                    formControlName="cause"
+                                    class="form-control">
                                 <option
                                         *ngFor="let foundIssue of foundIssues"
                                         value="{{ foundIssue }}"
@@ -36,60 +41,91 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-12 top-margin top-margin-x2">
+                    <div class="col-md-12 top-margin-x2">
+                        <h3>Località</h3>
+                    </div>
+                    <div class="col-md-12 top-margin">
+                        <label>Geolocalizza la tua posizione, oppure usa le frecce ai lati della mappa
+                            per selezionare il punto per evidenziare la posizione del problema di percorrenza.</label>
+                    </div>
+                    <div class="col-md-12 top-margin">
+                        <button class="btn btn-primary top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                                *ngIf="!hasBeenGeolocalised">
+                            Condividi posizione
+                        </button>
+                        <button class="btn btn-outline-warning top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                                *ngIf="hasBeenGeolocalised">
+                            Ripeti geolocalizazzione
+                        </button>
+                    </div>
+                    <div class="col-md-12 top-margin-x2">
+                        <label *ngIf="hasBeenGeolocalised" class="red-text">
+                            <svg class="bi right-fix" width="24"
+                                 height="24" fill="currentColor">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#wrench"
+                                />
+                            </svg>
+                            Se la geolocalizzazione non fosse accurata,
+                            procedi a selezionare un punto usando le frecce sottostanti, ai lati della mappa.</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div *ngIf="hasLoaded">
+                            <div *ngIf="trail">
+                                <app-report-location-entry
+                                        (onChangePosition)="onSlidingPositionChange($event)"
+                                        [focusPoint]="specifiedPosition"
+                                        [classPrefix]="'choice'"
+                                        [isEditableLocation]="true"
+                                        [trail]="trail"
+                                        [inputForm]="position"
+                                        [markers]="mapMarkers"
+                                        [i]="0"
+                                        [title]="''"
+                                        [isShowPositionCoords]="false"
+                                ></app-report-location-entry>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row top-margin-x2">
+                    <div class="col-12 col-md-12">
                         <div>
                             <h2>Le tue info</h2>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6 offset-0 col-md-6">
-                            <div>
-                                <label for="exampleFormControlInput1">Indirizzo email *</label>
-                                <input type="email" class="form-control" id="exampleFormControlInput1"
-                                       placeholder="email@esempio.com">
-                            </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div>
+                            <label>Indirizzo email <span class="mandatory-field-asterisk">*</span></label>
+                            <input type="email" class="form-control"
+                                   formControlName="email"
+                                   placeholder="email@esempio.com">
                         </div>
-                        <div class="col-6 col-md-6">
-                            <div>
-                                <label for="exampleFormControlInput1">Telefono</label>
-                                <input type="tel" class="form-control" id="exampleFormControlInput1">
-                            </div>
-                        </div>
-
                     </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div>
+                            <label for="exampleFormControlInput1">Telefono</label>
+                            <input type="tel" class="form-control"
+                                   formControlName="telephone"
+                                   id="exampleFormControlInput1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row errors" *ngIf="errors.length > 0">
+                    <div class="col-12 top-margin-x2">
+                        <ul>
+                            <li *ngFor="let error of errors">{{error}}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-12 col-md-12 top-margin-x2">
-                        <button type="button" class="btn btn-primary">Invia segnalazione</button>
+                        <button type="button" class="btn btn-primary btn-complete" (click)="onSubmit()">Invia segnalazione</button>
                     </div>
-                    <!--       id?: string;
-                  description?: string;
-                  trailId?: string;
-                  email?: string;
-                  telephone?: string;
-                  issueId?: string;
-                  reportDate?: string;
-                  valid?: boolean;
-                  coordinates?: components["schemas"]["CoordinatesDto"];
-                  recordDetails?: components["schemas"]["RecordDetailsDto"]; -->
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div *ngIf="hasLoaded">
-                <div *ngIf="trail">
-                    <app-report-location-entry
-                            [classPrefix]="'choice'"
-                            [isEditableLocation]="true"
-                            [trail]="trail"
-                            [inputForm]="position"
-                            [markers]="[crossPoint]"
-                            [i]="0"
-                    ></app-report-location-entry>
-                </div>
-            </div>
-            <!-- <button type="button" class="btn btn-primary" >
-                  Trova la mia posizione
-                </button> -->
-        </div>
-
-    </div>
+    </form>
 </div>

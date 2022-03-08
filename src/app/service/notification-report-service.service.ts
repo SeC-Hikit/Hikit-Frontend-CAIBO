@@ -3,37 +3,31 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { components } from 'src/binding/Binding';
+import { RestResponse } from '../RestResponse';
+import {
+  AccessibilityNotification,
+  AccessibilityNotificationResolution,
+  AccessibilityNotificationResponse
+} from "./notification-service.service";
+import {AccessibilityReportDto} from "./accessibility-service.service";
 
-export type AccessibilityNotificationResponse = components["schemas"]["AccessibilityResponse"]
-export type AccessibilityReportDto = components["schemas"]["AccessibilityReportDto"]
 @Injectable({
   providedIn: 'root'
 })
-export class AccessibilityNotificationService {
+export class NotificationReportService {
   
-  baseUrl = "api/accessibility";
-  baseAdminUrl = "api/admin/accessibility";
-
+  baseUrl = "api/report";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private httpClient: HttpClient) { }
 
-  getUnresolved() {
-    return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved")
+  report(report : AccessibilityReportDto) {
+    return this.httpClient.post<RestResponse>(this.baseUrl, report)
       .pipe(
         tap(),
-        catchError(this.handleError<AccessibilityNotificationResponse>('get unresolved notification', null))
-      );
-  }
-
-  getUnresolvedByTrailId(id: string): Observable<AccessibilityNotificationResponse> {
-    return this.httpClient.delete<AccessibilityNotificationResponse>(this.baseUrl + "/" + id)
-      .pipe(
-        tap(),
-        catchError(this.handleError<AccessibilityNotificationResponse>('delete by id', null))
+        catchError(this.handleError<AccessibilityNotificationResponse>('create report', null))
       );
   }
 

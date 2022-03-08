@@ -1,7 +1,17 @@
+@import "/src/app/style/const.scss";
+
 .ReportingForm {
 
-  select {
-    width: 80%;
+  .red-text {
+    color: $primary-bg-color;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+
+  .btn-complete {
+    margin-bottom: 20px;
   }
 
   .row {

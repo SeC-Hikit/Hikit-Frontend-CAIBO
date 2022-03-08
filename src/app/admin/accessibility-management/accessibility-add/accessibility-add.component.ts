@@ -26,7 +26,7 @@ import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component
 export class AccessibilityAddComponent implements OnInit {
 
     formGroup: FormGroup = new FormGroup({
-        id: new FormControl("", Validators.required),
+        id: new FormControl(""),
         trailId: new FormControl("", Validators.required),
         reportDate: new FormControl("", Validators.required),
         isMinor: new FormControl(true, Validators.required),
@@ -57,7 +57,7 @@ export class AccessibilityAddComponent implements OnInit {
 
     ngOnInit(): void {
         const idFromPath: string = this.activatedRoute.snapshot.paramMap.get("id");
-        if (idFromPath != null && idFromPath.length > 0) {
+        if (this.isNotificationLoad(idFromPath)) {
             this.load(idFromPath);
         }
 
@@ -66,7 +66,16 @@ export class AccessibilityAddComponent implements OnInit {
             .subscribe(resp => {
                 this.trailMappings = resp.content;
                 this.hasFormBeenInitialized = true;
+                if(!this.isNotificationLoad(idFromPath)) {
+                    const firstValueInMappings = resp.content[0].id;
+                    this.formGroup.get("trailId").setValue(firstValueInMappings);
+                    this.loadTrail(firstValueInMappings);
+                }
             })
+    }
+
+    private isNotificationLoad(idFromPath: string) {
+        return idFromPath != null && idFromPath.length > 0;
     }
 
     onSelectedTrail($event: any): void {
@@ -144,7 +153,7 @@ export class AccessibilityAddComponent implements OnInit {
 
     private drawMarker(coords: Coordinates2D) {
         this.markers = [{
-            icon: MapPinIconType.PIN,
+            icon: MapPinIconType.ALERT_PIN,
             coords: coords,
             color: "#1D9566"
         }];
