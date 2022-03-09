@@ -30,6 +30,7 @@ import {TrailModifyManagementComponent} from "./admin/trail-management/trail-mod
 import {TrailViewTableComponent} from "./admin/trail-management/trail-view-table/trail-view-table.component";
 import {TrailRawViewTableComponent} from "./admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component";
 import {PlaceEditComponent} from "./admin/place-management/place-edit/place-edit.component";
+import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -53,7 +54,6 @@ const routes: Routes = [
                 component: CycloComponent
             }]
     },
-
     {path: "trekking", component: TrekkingComponent},
     {
         path: "accessibility",
@@ -63,7 +63,21 @@ const routes: Routes = [
                 component: AccessibilityComponent,
             },
             {
+                path: "success",
+                component: LandingPageSuccessComponent
+            },
+            {
                 path: "reporting-form",
+                children: [
+                    {
+                      path: "",
+                      component: ReportingFormComponent,
+                    },
+                    {
+                        path: ":id",
+                        component: ReportingFormComponent,
+                    }
+                ],
                 component: ReportingFormComponent,
             },
         ],
@@ -84,7 +98,7 @@ const routes: Routes = [
                 path: "raw-trail-management",
                 children: [
                     {path: "", component: TrailRawViewTableComponent},
-                    { path: "view", component: TrailRawViewTableComponent},
+                    {path: "view", component: TrailRawViewTableComponent},
                     {path: "init/:id", component: TrailUploadManagementComponent}
                 ],
                 component: TrailRawManagementComponent,

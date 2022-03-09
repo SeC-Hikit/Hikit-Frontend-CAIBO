@@ -12,6 +12,7 @@ import {TrailImportFormUtils} from "../../utils/TrailImportFormUtils";
 import {AccessibilityReportDto} from "../../service/accessibility-service.service";
 import {GeoToolsService} from "../../service/geotools.service";
 import {NotificationReportService} from "../../service/notification-report-service.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: "app-reporting-form",
@@ -58,7 +59,8 @@ export class ReportingFormComponent implements OnInit {
         private geoToolsService: GeoToolsService,
         private modalService: NgbModal,
         private notificationReportService: NotificationReportService,
-        private authService: AuthService
+        private authService: AuthService,
+        private router: Router
     ) {
         this.loadPreviews();
     }
@@ -113,11 +115,14 @@ export class ReportingFormComponent implements OnInit {
             }
 
             this.notificationReportService.report(reportDto)
-                .subscribe((resp)=>{
-                if(resp.status == "OK"){
-                    alert()
-                }
-            });
+                .subscribe((resp) => {
+                    if (resp.status == "OK") {
+                        this.router.navigate(["/accessibility/success"])
+                    } else {
+                        this.noticeErrorsModal(resp.messages);
+                        this.isLoading = false;
+                    }
+                });
 
         } else {
             this.isLoading = false;
@@ -180,12 +185,6 @@ export class ReportingFormComponent implements OnInit {
         return false;
     }
 
-    private noticeErrorModal(title: string, body: string) {
-        const modal = this.modalService.open(InfoModalComponent);
-        modal.componentInstance.title = title;
-        modal.componentInstance.body = body;
-    }
-
     onSlidingPositionChange($event: CoordinatesDto) {
         this.mapMarkers = [{
             coords: {longitude: $event.longitude, latitude: $event.latitude},
@@ -210,4 +209,18 @@ export class ReportingFormComponent implements OnInit {
         this.formGroup.get("coordLongitude").setValue(longitude);
         this.formGroup.get("coordAltitude").setValue(altitude);
     }
+
+    private noticeErrorModal(title: string, body: string) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = title;
+        modal.componentInstance.body = body;
+    }
+
+    private noticeErrorsModal(errors: string[]) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Errore nel salvataggio della notifica`;
+        const errorsString = errors.join("<br>")
+        modal.componentInstance.body = `<ul>I seguenti errori imepdiscono il salvataggio: <br/>${errorsString}</ul>`;
+    }
+
 }
