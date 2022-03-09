@@ -30,6 +30,7 @@ import {TrailModifyManagementComponent} from "./admin/trail-management/trail-mod
 import {TrailViewTableComponent} from "./admin/trail-management/trail-view-table/trail-view-table.component";
 import {TrailRawViewTableComponent} from "./admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component";
 import {PlaceEditComponent} from "./admin/place-management/place-edit/place-edit.component";
+import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -61,6 +62,10 @@ const routes: Routes = [
             {
                 path: "",
                 component: AccessibilityComponent,
+            },
+            {
+                path: "success",
+                component: LandingPageSuccessComponent,
             },
             {
                 path: "reporting-form",

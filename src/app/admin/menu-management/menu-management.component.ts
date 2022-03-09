@@ -13,15 +13,15 @@ interface Tab {
 
 export const tabsList: Tab[] = [
   {
-    id: "trails",
+    code: "trails",
     label: "Sentieri",
   },
   {
-    id: "tracks",
+    code: "tracks",
     label: "tracce",
   },
   {
-    id: "maintenance",
+    code: "maintenance",
     label: "Calendario manuntenzioni",
   },
 ];
