@@ -12,6 +12,7 @@ import {TrailImportFormUtils} from "../../utils/TrailImportFormUtils";
 import {AccessibilityReportDto} from "../../service/accessibility-service.service";
 import {GeoToolsService} from "../../service/geotools.service";
 import {NotificationReportService} from "../../service/notification-report-service.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: "app-reporting-form",
@@ -58,6 +59,7 @@ export class ReportingFormComponent implements OnInit {
         private geoToolsService: GeoToolsService,
         private modalService: NgbModal,
         private notificationReportService: NotificationReportService,
+        private router: Router,
         private authService: AuthService
     ) {
         this.loadPreviews();
@@ -115,7 +117,10 @@ export class ReportingFormComponent implements OnInit {
             this.notificationReportService.report(reportDto)
                 .subscribe((resp)=>{
                 if(resp.status == "OK"){
-                    alert()
+                    scroll(0,0);
+                    this.router.navigate(["/accessibility/success"]);
+                } else {
+                    this.noticeErrorsModal(resp.messages);
                 }
             });
 
@@ -185,6 +190,14 @@ export class ReportingFormComponent implements OnInit {
         modal.componentInstance.title = title;
         modal.componentInstance.body = body;
     }
+
+    private noticeErrorsModal(errors: string[]) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Errore nel salvataggio della notifica`;
+        const errorsString = errors.join("<br>")
+        modal.componentInstance.body = `<ul>I seguenti errori imepdiscono il salvataggio: <br/>${errorsString}</ul>`;
+    }
+
 
     onSlidingPositionChange($event: CoordinatesDto) {
         this.mapMarkers = [{

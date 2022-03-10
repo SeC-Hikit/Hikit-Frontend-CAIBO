@@ -70,6 +70,7 @@ import { PlaceEditComponent } from './admin/place-management/place-edit/place-ed
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
 import { PromptModalComponent } from './modal/prompt-modal/prompt-modal.component';
+import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
 
 @NgModule({
   declarations: [
@@ -133,6 +134,7 @@ import { PromptModalComponent } from './modal/prompt-modal/prompt-modal.componen
     PlaceEditComponent,
     ConfirmModalComponent,
     PromptModalComponent,
+    LandingPageSuccessComponent
   ],
   imports: [
     BrowserModule,

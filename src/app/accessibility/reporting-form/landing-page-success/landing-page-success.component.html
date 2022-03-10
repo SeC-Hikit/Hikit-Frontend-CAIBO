@@ -1,6 +1,11 @@
 <div class="container LandingPage">
     <div class="row">
         <div class="col-12 top-margin-x2">
+            <h1>Attivazione notifica di percorribilità</h1>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-12 top-margin-x2">
             <svg class="bi right-fix clickable align-bottom delete" width="56"
                  height="56" fill="currentColor">
                 <use
@@ -9,11 +14,22 @@
             </svg>
         </div>
 
-        <div class="col-12 top-margin-x2">
-            Grazie per il tuo aiuto!
+        <div class="row text-center" *ngIf="!isActivation">
+            <div class="col-12 top-margin-x2">
+                Grazie per il tuo aiuto!
+            </div>
+            <div class="col-12 top-margin">
+                Ti abbiamo <b>inviato una mail</b>, all'indirizzo fornito, <b>con un link per confermare la tua
+                segnalazione</b>.
+            </div>
         </div>
-        <div class="col-12 top-margin">
-            Ti abbiamo <b>inviato una mail</b>, all'indirizzo fornito, <b>con un link per confermare la tua segnalazione</b>.
+        <div class="row text-center" *ngIf="isActivation">
+            <div class="col-12 top-margin-x2" *ngIf="isActivationValid">
+                ✔️ La tua segnalazione è stata attivata e verrà sottoposta ai manutentori. Grazie.
+            </div>
+            <div class="col-12 top-margin-x2" *ngIf="!isActivationValid">
+                ❌ Il codice non è (più) valido.
+            </div>
         </div>
     </div>
 </div>

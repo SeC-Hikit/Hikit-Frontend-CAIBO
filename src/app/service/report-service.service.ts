@@ -39,6 +39,14 @@ export class ReportService {
       );
   }
 
+  activate(code: string): Observable<AccessibilityReportResponse> {
+    return this.httpClient.put<AccessibilityReportResponse>(this.baseUrl + "/validate/" + code, null)
+        .pipe(
+            tap(),
+            catchError(this.handleError<AccessibilityReportResponse>('validate report', null))
+        );
+  }
+
   upgrade(report : AccessibilityReport) {
     return this.httpClient.post<AccessibilityReportResponse>(this.baseAdminUrl + "/upgrade", report)
       .pipe(
