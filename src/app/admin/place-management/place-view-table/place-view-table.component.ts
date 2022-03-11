@@ -97,7 +97,7 @@ export class PlaceViewTableComponent implements OnInit {
 
     onDeleteClick(id: string, name: string) {
         this.trailService.getTrailByPlaceId(id).subscribe((resp)=> {
-            if(resp.size == 0) {
+            if(resp.content.length == 0) {
                 this.adminPlaceService.deleteById(id).subscribe(() => {
                     this.onPlaceLoad(this.selectedPage)
                 });
