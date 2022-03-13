@@ -62,7 +62,8 @@ export class TrailPreviewService {
     }
 
     getRawPreviews(skip: number, limit: number): Observable<TrailPreviewResponse> {
-        let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString()).append("realm", "*");
+        let params = new HttpParams().set("skip", skip.toString())
+            .append("limit", limit.toString()).append("realm", "*");
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/raw", {params: params})
             .pipe(
                 tap(_ => console.log(_)),
@@ -72,6 +73,7 @@ export class TrailPreviewService {
 
     getMappings(realm: string): Observable<TrailMappingResponse> {
         let params = new HttpParams().set("realm", realm)
+            .append("isDraftTrailVisible", String(true));
         return this.httpClient.get<TrailMappingResponse>(this.baseUrl + "/map", {params: params})
             .pipe(
                 tap(_ => console.log(_)),

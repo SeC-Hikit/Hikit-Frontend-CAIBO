@@ -165,6 +165,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         if (filtered.length > 0) {
             return filtered[0].code;
         }
+        console.warn(`Could not find trail mapping for id: ${trailId}`)
         return "";
     }
 

@@ -19,14 +19,13 @@
           <th scope="col">Data Segnalazione</th>
           <th scope="col">Sentiero</th>
           <th scope="col">Descrizione Problema</th>
-          <th scope="col">Aggirabile?</th>
           <th scope="col">Email</th>
           <th scope="col">Promuovi</th>
           <th scope="col">Cancella</th>
         </tr>
       </thead>
       <tbody *ngIf="hasLoaded">
-        <tr *ngFor="let notification of unresolvedNotifications" class="t-row">
+        <tr *ngFor="let notification of unresolvedNotifications">
           <th
             scope="row"
             class="ellipsis small-column"
@@ -41,11 +40,10 @@
             </span>
           </td>
           <td class="ellipsis small-column">{{ notification.description }}</td>
-          <td>{{ notification.minor === true ? "si" : "no" }}</td>
           <td class="ellipsis small-column" title="{{ notification.email }}">
             {{ notification.email }}
           </td>
-          <td class="clickable" (click)="onResolveClick(notification)">
+          <td class="clickable" *ngIf="notification.issueId == ''" (click)="onUpgradeClick(notification)">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use
                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#hand-thumbs-up"

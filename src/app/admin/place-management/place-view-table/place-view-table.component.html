@@ -30,8 +30,8 @@
                     <th scope="col">Cancella</th>
                 </tr>
                 </thead>
-                <tbody class="short-list">
-                <tr *ngFor="let tr of placeList" class="place-preview clickable">
+                <tbody>
+                <tr *ngFor="let tr of placeList" class="place-preview">
                     <td (click)="onPreview(tr)">
                         {{ tr.name }}
                     </td>

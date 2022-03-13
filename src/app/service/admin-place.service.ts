@@ -4,10 +4,7 @@ import {Observable, of} from "rxjs";
 import {tap, catchError} from "rxjs/operators";
 import {components} from "src/binding/Binding";
 import {RestResponse} from "../RestResponse";
-import {CoordinatesDto, TrailDto, TrailResponse} from "./trail-service.service";
-import {TrailImportRequest} from "./import.service";
 import {LinkedMedia, PlaceDto, PlaceRefDto, PlaceResponse, UnlinkMedia} from "./place.service";
-import {RecordDetailsDto} from "./auth.service";
 
 export type LinkedPlaceDto = components['schemas']['LinkedPlaceDto'];
 

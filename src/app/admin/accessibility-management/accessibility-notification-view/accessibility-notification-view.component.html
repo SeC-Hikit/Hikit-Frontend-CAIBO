@@ -1,10 +1,10 @@
 <div class="AccessibilityNotificationView">
     <div class="col-12 col-md-12 space-up">
-        <h2>Avviso di percorrenza</h2>
+        <h2>Segnalazione di percorrenza</h2>
     </div>
     <div class="col-12">
         <button type="button" class="btn btn-primary" routerLink="./add">
-            + Crea avviso di percorrenza
+            + Crea segnalazione di percorrenza
         </button>
     </div>
 
@@ -26,13 +26,14 @@
                 <th scope="col">Descrizione Problema</th>
                 <th scope="col">Aggirabile?</th>
                 <th scope="col">Segnalato da</th>
+                <th scope="col">Da report?</th>
                 <th scope="col">Risolvi</th>
                 <th scope="col">Modifica</th>
                 <th scope="col">Cancella</th>
             </tr>
             </thead>
             <tbody *ngIf="hasLoaded">
-            <tr *ngFor="let notification of unresolvedNotifications" class="t-row">
+            <tr *ngFor="let notification of unresolvedNotifications">
                 <th
                         scope="row"
                         class="ellipsis small-column"
@@ -51,6 +52,7 @@
                 <td>
                     {{ notification.recordDetails.uploadedBy }}
                 </td>
+                <td></td>
                 <td class="clickable" (click)="onResolveClick(notification)">
                     <svg class="bi" width="24" height="24" fill="currentColor">
                         <use
@@ -93,7 +95,7 @@
 
     <div class="col-12 col-md-12 space-up">
         <div class="col-12 col-md-12 space-up">
-            <h2>Problemi risolti</h2>
+            <h2>Segnalazioni risolte</h2>
         </div>
         <div *ngIf="solvedNotifications.length > 0; else notShow">
             <table
@@ -113,13 +115,12 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let item of solvedNotifications">
-                    <td
-                            scope="row"
+                    <th
                             class="ellipsis small-column"
                             title="{{ item.id }}"
                     >
                         {{ item.id }}
-                    </td>
+                    </th>
                     <td><span class="trailCodeColumn">
                         {{ getTrailCode(item.trailId) }}</span>
                     </td>

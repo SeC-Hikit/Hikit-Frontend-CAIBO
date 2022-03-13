@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -11,17 +11,22 @@ export class ConfirmModalComponent implements OnInit {
   @Input() title: string = "";
   @Input() body: string = "";
 
+  @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
+  @Output() onOk: EventEmitter<void> = new EventEmitter<void>();
+
   constructor(private modalService: NgbActiveModal) {}
 
   ngOnInit(): void {
   }
 
-  onOk(){
-
+  onOkClick(){
+    this.onOk.emit();
+    this.close();
   }
 
-  onCancel() {
-
+  onCancelClick() {
+    this.onCancel.emit();
+    this.dismiss();
   }
 
   dismiss() {

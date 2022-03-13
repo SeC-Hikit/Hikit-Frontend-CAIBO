@@ -1,90 +1,129 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import * as moment from "moment";
-import { AuthService } from "src/app/service/auth.service";
+import {AuthService} from "src/app/service/auth.service";
 import {
-  AccessibilityReport,
-  ReportService,
+    AccessibilityReport,
+    ReportService,
 } from "src/app/service/report-service.service";
-import { TrailPreview, TrailPreviewService } from "src/app/service/trail-preview-service.service";
-import { TrailDto, TrailService } from "src/app/service/trail-service.service";
+import {TrailPreviewService} from "src/app/service/trail-preview-service.service";
+import {TrailDto, TrailMappingDto, TrailService} from "src/app/service/trail-service.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ConfirmModalComponent} from "../../../modal/confirm-modal/confirm-modal.component";
+import {AdminReportService} from "../../../service/admin-report.service";
 
 @Component({
-  selector: "app-accessibility-report-view",
-  templateUrl: "./accessibility-report-view.component.html",
-  styleUrls: ["./accessibility-report-view.component.scss"],
+    selector: "app-accessibility-report-view",
+    templateUrl: "./accessibility-report-view.component.html",
+    styleUrls: ["./accessibility-report-view.component.scss"],
 })
 export class AccessibilityReportViewComponent implements OnInit {
-  
-  hasLoaded = false;
-  entryPerPage = 10;
-  page = 1;
-  isLoading = false;
-  isPreviewVisible: boolean = false;
 
-  totalNotification: number;
+    hasLoaded = false;
+    entryPerPage = 10;
+    page = 1;
+    isLoading = false;
+    isPreviewVisible: boolean = false;
 
-  selectedTrail: TrailDto;
-  trailPreviews: TrailPreview[];
-  unresolvedNotifications: AccessibilityReport[];
+    totalNotification: number;
 
-  constructor(
-    private authService: AuthService,
-    private reportService: ReportService,
-    private trailPreviewService: TrailPreviewService,
-    private trailService: TrailService
-  ) {
-    this.unresolvedNotifications = [];
-    this.trailPreviews = [];
-  }
+    selectedTrail: TrailDto;
+    trailMapping: TrailMappingDto[] = [];
 
-  ngOnInit(): void {
-    this.loadNotification(1);
-  }
+    unresolvedNotifications: AccessibilityReport[];
 
-  loadNotification(page: number) {
-    this.page = page;
-    const lowerBound = this.entryPerPage * (page - 1);
-    this.loadSolved(lowerBound, this.entryPerPage * page);
-  }
-
-  private loadSolved(skip: number, limit: number) {
-    this.reportService
-      .getUnapgradedByRealm(skip, limit, this.authService.getRealm())
-      .subscribe((x) => {
-        this.unresolvedNotifications = x.content;
-        this.unresolvedNotifications.forEach((ur) => {
-          this.trailPreviewService
-            .getPreview(ur.trailId)
-            .subscribe((p) => this.trailPreviews.push(p.content[0]));
-        });
-        this.totalNotification = x.totalPages;
-        this.hasLoaded = true;
-      });
-  }
-
-  getTrailCode(trailId) {
-    if (this.trailPreviews) {
-      const filtered = this.trailPreviews.filter((tp) => tp.id == trailId);
-      if (filtered.length == 1)
-        return this.trailPreviews.filter((tp) => tp.id == trailId)[0].code;
+    constructor(
+        private authService: AuthService,
+        private reportService: ReportService,
+        private trailPreviewService: TrailPreviewService,
+        private trailService: TrailService,
+        private adminReportService: AdminReportService,
+        private modalService: NgbModal
+    ) {
+        this.unresolvedNotifications = [];
     }
-    return "";
-  }
 
-  formatDate(dateString: string): string {
-    return moment(dateString).format("DD/MM/YYYY");
-  }
+    ngOnInit(): void {
+        let realm = this.authService.getRealm();
+        this.trailPreviewService.getMappings(realm)
+            .subscribe((resp) => {
+                this.trailMapping = resp.content;
+                this.loadNotification(1);
+            })
+    }
 
-  showPreview(trailId) {
-    this.trailService.getTrailById(trailId).subscribe(
-      trailResp => {
-        this.selectedTrail = trailResp.content[0]; 
-        this.togglePreview();
-      }
-    );
-  }
+    loadNotification(page: number) {
+        this.page = page;
+        const lowerBound = this.entryPerPage * (page - 1);
+        this.loadSolved(lowerBound, this.entryPerPage * page);
+    }
 
-  togglePreview(){
-    this.isPreviewVisible = !this.isPreviewVisible;
-  }
+    private loadSolved(skip: number, limit: number) {
+        this.reportService
+            .getUnapgradedByRealm(skip, limit, this.authService.getRealm())
+            .subscribe((x) => {
+                this.unresolvedNotifications = x.content;
+                this.totalNotification = x.totalPages;
+                this.hasLoaded = true;
+            });
+    }
+
+    getTrailCode(trailId) {
+        const filtered = this.trailMapping
+            .filter((tp) => tp.id == trailId);
+        if (filtered.length > 0) {
+            return filtered[0].code;
+        }
+        console.warn(`Could not find trail mapping for id: ${trailId}`)
+        return "";
+    }
+
+    formatDate(dateString: string): string {
+        return moment(dateString).format("DD/MM/YYYY");
+    }
+
+    showPreview(trailId) {
+        this.trailService.getTrailById(trailId).subscribe(
+            trailResp => {
+                this.selectedTrail = trailResp.content[0];
+                this.togglePreview();
+            }
+        );
+    }
+
+    togglePreview() {
+        this.isPreviewVisible = !this.isPreviewVisible;
+    }
+
+    onUpgradeClick(unresolvedNotification: AccessibilityReport) {
+        const modal = this.modalService.open(ConfirmModalComponent);
+        modal.componentInstance.title = `Sei sicuro di volere promuovere la notifica?`;
+        modal.componentInstance.body = this.getUpgradeModalBody(unresolvedNotification);
+        modal.componentInstance.onOk.subscribe(() => {
+            this.adminReportService.upgrade(unresolvedNotification.id).subscribe((resp)=>{
+                if(resp.status == "OK"){
+                    this.loadNotification(this.page);
+                } else {
+
+                }
+            });
+        })
+
+        modal.componentInstance.onCancel.subscribe(() => {})
+    }
+
+    onDeleteClick(notification: AccessibilityReport) {
+        this.adminReportService.delete(notification.id).subscribe((resp)=>{
+            if(resp.status == "OK"){
+                this.loadNotification(this.page);
+            } else {
+
+            }
+        })
+    }
+
+    private getUpgradeModalBody(unresolvedNotification: AccessibilityReport) {
+        return `Promuovere la segnalazione '<b>${unresolvedNotification.description}</b>' su sentiero '<b>${this.getTrailCode(unresolvedNotification.trailId)}</b>',<br/>` +
+            `riportata dall'utente pubblico con email <b>${unresolvedNotification.email}</b>?`;
+    }
+
 }

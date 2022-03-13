@@ -13,46 +13,32 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class AdminNotificationService {
+export class AdminReportService {
   
-  baseUrl = "api/admin/accessibility";
+  baseUrl = "api/admin/report";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private httpClient: HttpClient) { }
 
-  createNotification(notification : AccessibilityNotification) {
-    return this.httpClient.put<RestResponse>(this.baseUrl, notification)
+  upgrade(id: string) {
+    return this.httpClient.put<RestResponse>(this.baseUrl + "/upgrade/" + id, null)
       .pipe(
         tap(),
-        catchError(this.handleError<AccessibilityNotificationResponse>('create trail', null))
+        catchError(this.handleError<AccessibilityNotificationResponse>('upgrade report', null))
       );
   }
 
-  deleteById(_id: string): Observable<RestResponse> {
-    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
-      .pipe(
-        tap(),
-        catchError(this.handleError<RestResponse>('delete by id', null))
-      );
-  }
+  delete(id: string) {
 
-  resolveNotification(resolution: AccessibilityNotificationResolution): Observable<RestResponse> {
-    return this.httpClient.post<RestResponse>(this.baseUrl + "/resolve", resolution)
-    .pipe(
-      tap(),
-      catchError(this.handleError<RestResponse>('', null))
-    );
-  }
-
-  upgradeReport(resolution: AccessibilityNotificationResolution): Observable<RestResponse> {
-    return this.httpClient.post<RestResponse>(this.baseUrl + "/resolve", resolution)
+    return this.httpClient.delete<RestResponse>(this.baseUrl + "/upgrade/" + id)
         .pipe(
             tap(),
-            catchError(this.handleError<RestResponse>('', null))
+            catchError(this.handleError<AccessibilityNotificationResponse>('delete report', null))
         );
   }
+
 
 
   /**
