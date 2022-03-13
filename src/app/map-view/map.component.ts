@@ -92,7 +92,7 @@ export class MapComponent implements OnInit {
             distinctUntilChanged(),
             switchMap((data: string,) => {
                 this.searchTermString = data;
-                return this.getTrailPreviewResponseObservable(data, 0)
+                return this.getTrailPreviewResponseObservable(data, 0, false)
             }));
 
         observable.subscribe(
@@ -103,9 +103,11 @@ export class MapComponent implements OnInit {
             });
     }
 
-    private getTrailPreviewResponseObservable(code: string, page: number): Observable<TrailPreviewResponse> {
+    private getTrailPreviewResponseObservable(code: string, page: number,
+                                              areDraftVisible: boolean): Observable<TrailPreviewResponse> {
         return this.trailPreviewService.findByCode(code, page * this.maxTrailEntriesPerPage,
-            this.maxTrailEntriesPerPage * this.getNextPageNumber(page), environment.realm);
+            this.maxTrailEntriesPerPage * this.getNextPageNumber(page),
+            environment.realm, areDraftVisible);
     }
 
     private getNextPageNumber(page: number) {
@@ -126,7 +128,9 @@ export class MapComponent implements OnInit {
     }
 
     onSelectTrail(id: string) {
-        if(!id) { return; }
+        if (!id) {
+            return;
+        }
         this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: {trail: id},
@@ -135,8 +139,10 @@ export class MapComponent implements OnInit {
         this.selectTrail(id, true);
     }
 
-    selectTrail(id: string, refresh? : boolean): void {
-        if(!id) { return; }
+    selectTrail(id: string, refresh?: boolean): void {
+        if (!id) {
+            return;
+        }
         let singletonTrail = this.trailList.filter(t => t.id == id);
 
         if (singletonTrail.length > 0) {
@@ -144,8 +150,8 @@ export class MapComponent implements OnInit {
             this.selectedTrail = singletonTrail[0];
         }
 
-        if(refresh || singletonTrail.length == 0) {
-            this.trailService.getTrailById(id).subscribe((resp)=> {
+        if (refresh || singletonTrail.length == 0) {
+            this.trailService.getTrailById(id).subscribe((resp) => {
                 this.sideView = ViewState.TRAIL;
                 this.selectedTrail = resp.content[0];
 
@@ -156,7 +162,9 @@ export class MapComponent implements OnInit {
     }
 
     loadNotificationsForTrail(id: string): void {
-        if(!id) { return; }
+        if (!id) {
+            return;
+        }
         this.accessibilityService.getUnresolvedById(id).subscribe(notificationResponse => {
             this.selectedTrailNotifications = notificationResponse.content
         });
@@ -228,7 +236,7 @@ export class MapComponent implements OnInit {
         let level = this.electTrailSimplifierLevel(this.zoomLevel);
         if (level == TrailSimplifierLevel.NONE) return;
         this.geoTrailService
-            .locate($event, level.toUpperCase())
+            .locate($event, level.toUpperCase(), false)
             .subscribe((e) => {
                 this.trailList = e.content;
                 this.showTrailCodeMarkers = this.electShowTrailCodes(this.zoomLevel);
@@ -253,7 +261,7 @@ export class MapComponent implements OnInit {
     }
 
     showTrailList() {
-        this.loadTrailPreview(0 );
+        this.loadTrailPreview(0);
         this.showListOnSide();
     }
 
@@ -276,7 +284,7 @@ export class MapComponent implements OnInit {
         this.selectedTrailIndex = index;
     }
 
-    onSearchKeyPress($event : string) {
+    onSearchKeyPress($event: string) {
         this.searchTerms.next($event);
     }
 
@@ -292,10 +300,11 @@ export class MapComponent implements OnInit {
         let electedValue = page ? page : 1;
         this.trailPreviewPage = electedValue;
         this.getTrailPreviewResponseObservable(
-            this.searchTermString, electedValue - 1).subscribe((resp)=> {
+            this.searchTermString, electedValue - 1, false)
+            .subscribe((resp) => {
                 this.trailPreviewCount = resp.totalCount;
                 this.trailPreviewList = resp.content;
-        })
+            })
     }
 
     private electShowTrailCodes(zoomLevel: number) {

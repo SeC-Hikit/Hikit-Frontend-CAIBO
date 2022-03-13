@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {PlaceDto, PlaceService} from "../../../service/place.service";
-import {environment} from "../../../../environments/environment.prod";
 import {DateUtils} from "../../../utils/DateUtils";
 import {TrailDto, TrailService} from "../../../service/trail-service.service";
 import {Marker} from "../../../map-preview/map-preview.component";

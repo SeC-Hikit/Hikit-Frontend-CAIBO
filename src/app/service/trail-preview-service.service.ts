@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import {components} from 'src/binding/Binding';
 import {TrailMappingResponse} from "./trail-service.service";
 
@@ -21,10 +21,11 @@ export class TrailPreviewService {
     constructor(private httpClient: HttpClient) {
     }
 
-    findByCode(code: string, skip: number, limit: number, realm?: string): Observable<TrailPreviewResponse> {
+    findByCode(code: string, skip: number, limit: number, realm?: string, areDraftsVisible: boolean = true): Observable<TrailPreviewResponse> {
         let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+            .append("isDraftTrailVisible", String(areDraftsVisible))
         if (code == "") {
-            return this.getPreviews(skip, limit, realm);
+            return this.getPreviews(skip, limit, realm, areDraftsVisible);
         }
         if (realm) {
             params.append("realm", realm);
@@ -45,8 +46,10 @@ export class TrailPreviewService {
             );
     }
 
-    getPreviews(skip: number, limit: number, realm?: string): Observable<TrailPreviewResponse> {
-        let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString()).append("realm", "*");
+    getPreviews(skip: number, limit: number, realm?: string, areDraftsVisible: boolean = true): Observable<TrailPreviewResponse> {
+        let params = new HttpParams().set("skip", skip.toString())
+            .append("limit", limit.toString()).append("realm", "*")
+            .append("isDraftTrailVisible", String(areDraftsVisible));
         if (realm) {
             params.append("realm", realm);
         }
