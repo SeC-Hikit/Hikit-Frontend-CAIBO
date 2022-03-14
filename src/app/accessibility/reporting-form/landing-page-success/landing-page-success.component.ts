@@ -21,7 +21,6 @@ export class LandingPageSuccessComponent implements OnInit {
     }
 
 
-
     ngOnInit(): void {
         this.activatedRouterService.queryParamMap.subscribe((params) => {
             if (params.has(this.ACTIVATION_PARAM)) {

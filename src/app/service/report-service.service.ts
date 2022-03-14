@@ -31,14 +31,6 @@ export class ReportService {
       );
   }
 
-  delete(id : string) {
-    return this.httpClient.delete<AccessibilityReportResponse>(this.baseAdminUrl + "/" + id)
-      .pipe(
-        tap(),
-        catchError(this.handleError<AccessibilityReportResponse>('delete report', null))
-      );
-  }
-
   activate(code: string): Observable<AccessibilityReportResponse> {
     return this.httpClient.put<AccessibilityReportResponse>(this.baseUrl + "/validate/" + code, null)
         .pipe(
@@ -52,15 +44,6 @@ export class ReportService {
       .pipe(
         tap(),
         catchError(this.handleError<AccessibilityReportResponse>('create report', null))
-      );
-  }
-
-
-  update(report : AccessibilityReport) {
-    return this.httpClient.put<AccessibilityReportResponse>(this.baseAdminUrl, report)
-      .pipe(
-        tap(),
-        catchError(this.handleError<AccessibilityReportResponse>('update report', null))
       );
   }
 
@@ -80,6 +63,16 @@ export class ReportService {
         catchError(this.handleError<AccessibilityReportResponse>('get not upgraded report', null))
       );
   }
+
+  getUpgradedByRealm(skip: number, limit: number, realm: string): Observable<AccessibilityReportResponse> {
+    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    return this.httpClient.get<AccessibilityReportResponse>(this.baseUrl + "/upgraded/" + realm, {params: params})
+        .pipe(
+            tap(),
+            catchError(this.handleError<AccessibilityReportResponse>('get upgraded report', null))
+        );
+  }
+
 
   getByTrailId(skip: number, limit: number, trailId: string): Observable<AccessibilityReportResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())

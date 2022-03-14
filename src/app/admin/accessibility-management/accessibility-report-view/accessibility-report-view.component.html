@@ -1,12 +1,13 @@
 <div class="AccessibilityReportView">
   <div class="col-12 col-md-12 space-up">
-    <h2>Segnalazioni Aperte</h2>
+    <h2>Segnalazioni utente Aperte</h2>
   </div>
 
   <div *ngIf="!isLoading && selectedTrail != null">
     <app-trail-floating-preview
             [trails]="[selectedTrail]"
       [isVisible]="isPreviewVisible"
+            [markers]="markers"
       (onClose)="togglePreview()"
     ></app-trail-floating-preview>
   </div>
@@ -34,16 +35,16 @@
             {{ notification.id }}
           </th>
           <td>{{ formatDate(notification.reportDate) }}</td>
-          <td (click)="showPreview(notification.trailId)">
-            <span class="trailCodeColumn">
+          <td>
+            <span class="trailCodeColumn" (click)="showPreview(notification.trailId, notification.coordinates)">
               {{ getTrailCode(notification.trailId) }}
             </span>
           </td>
           <td class="ellipsis small-column">{{ notification.description }}</td>
-          <td class="ellipsis small-column" title="{{ notification.email }}">
+          <td title="{{ notification.email }}">
             {{ notification.email }}
           </td>
-          <td class="clickable" *ngIf="notification.issueId == ''" (click)="onUpgradeClick(notification)">
+          <td class="clickable" (click)="onUpgradeClick(notification)">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use
                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#hand-thumbs-up"
@@ -63,14 +64,84 @@
     <div class="pagination-position">
       <ngb-pagination
         [pageSize]="entryPerPage"
-        [collectionSize]="totalNotification"
-        [(page)]="page"
+        [collectionSize]="totalUnresolvedNotifications"
+        [(page)]="unapgradedPage"
         aria-label="Default pagination"
-        (pageChange)="loadNotification(page)"
+        (pageChange)="loadUnapgraded(unapgradedPage)"
       ></ngb-pagination>
     </div>
   </div>
   <ng-template #notShow>
     <app-items-not-found></app-items-not-found>
   </ng-template>
+
+
+  <div class="col-12 col-md-12 space-up">
+    <h2>Segnalazioni utenti approvate</h2>
+  </div>
+
+  <div *ngIf="upgradedNotifications.length > 0; else notShow">
+    <table class="table table-striped interactive-table">
+      <thead>
+      <tr>
+        <th scope="col">Codice segnalazione</th>
+        <th scope="col">Data Segnalazione</th>
+        <th scope="col">Sentiero</th>
+        <th scope="col">Descrizione Problema</th>
+        <th scope="col">Email</th>
+        <th scope="col">Visualizza segnalazione</th>
+        <th scope="col">Cancella</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="hasLoaded">
+      <tr *ngFor="let notification of upgradedNotifications">
+        <th
+                scope="row"
+                class="ellipsis small-column"
+                title="{{ notification.id }}"
+        >
+          {{ notification.id }}
+        </th>
+        <td>{{ formatDate(notification.reportDate) }}</td>
+        <td>
+            <span class="trailCodeColumn"
+                  (click)="showPreview(notification.trailId, notification.coordinates)">
+              {{ getTrailCode(notification.trailId) }}
+            </span>
+        </td>
+        <td class="ellipsis small-column">{{ notification.description }}</td>
+        <td title="{{ notification.email }}">
+          {{ notification.email }}
+        </td>
+        <td class="clickable" (click)="onViewNotificationClick(notification)">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use
+                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#folder-symlink"
+            />
+          </svg>
+        </td>
+        <td class="clickable" (click)="onDeleteClick(notification)">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use
+                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+            />
+          </svg>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="pagination-position">
+      <ngb-pagination
+              [pageSize]="entryPerPage"
+              [collectionSize]="totalUnresolvedNotifications"
+              [(page)]="unapgradedPage"
+              aria-label="Default pagination"
+              (pageChange)="loadUnapgraded(unapgradedPage)"
+      ></ngb-pagination>
+    </div>
+  </div>
+  <ng-template #notShow>
+    <app-items-not-found></app-items-not-found>
+  </ng-template>
+
 </div>

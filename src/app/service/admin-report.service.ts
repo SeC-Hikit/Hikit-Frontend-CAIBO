@@ -31,7 +31,6 @@ export class AdminReportService {
   }
 
   delete(id: string) {
-
     return this.httpClient.delete<RestResponse>(this.baseUrl + "/upgrade/" + id)
         .pipe(
             tap(),

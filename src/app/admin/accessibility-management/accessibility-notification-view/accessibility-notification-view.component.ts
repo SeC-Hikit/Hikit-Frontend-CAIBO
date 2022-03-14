@@ -1,20 +1,17 @@
 import {Component, OnInit} from "@angular/core";
 import * as moment from "moment";
 import {Subject} from "rxjs";
-import {
-    AccessibilityNotification,
-    NotificationService,
-} from "src/app/service/notification-service.service";
-import {
-    TrailPreviewService,
-} from "src/app/service/trail-preview-service.service";
+import {AccessibilityNotification, NotificationService,} from "src/app/service/notification-service.service";
+import {TrailPreviewService,} from "src/app/service/trail-preview-service.service";
 import {TrailDto, TrailMappingDto, TrailService} from "src/app/service/trail-service.service";
 import {Status} from "src/app/Status";
 import {AuthService} from "../../../service/auth.service";
 import {AdminNotificationService} from "../../../service/admin-notification-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PromptModalComponent} from "../../../modal/prompt-modal/prompt-modal.component";
-import {ActivatedRoute} from "@angular/router";
+import {Marker} from "../../../map-preview/map-preview.component";
+import {Coordinates2D} from "../../../service/geo-trail-service";
+import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 
 @Component({
     selector: "app-accessibility-notification-view",
@@ -40,6 +37,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     unresolvedNotifications: AccessibilityNotification[];
     solvedNotifications: AccessibilityNotification[];
     notificationSaved: string;
+    markers: Marker[] = [];
 
     constructor(
         private notificationService: NotificationService,
@@ -169,10 +167,15 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         return "";
     }
 
-    showPreview(trailId) {
+    showPreview(trailId : string, coordinates: Coordinates2D) {
         this.trailService.getTrailById(trailId).subscribe(
             trailResp => {
                 this.selectedTrail = trailResp.content[0];
+                this.markers = [{
+                    coords: coordinates,
+                    icon: MapPinIconType.ALERT_PIN,
+                    color: "yellow"
+                }]
                 this.togglePreview();
             }
         );

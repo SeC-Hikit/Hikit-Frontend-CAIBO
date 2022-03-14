@@ -10,8 +10,9 @@
 
     <div *ngIf="!isLoading && selectedTrail != null">
         <app-trail-floating-preview
-                [trails]="selectedTrail"
+                [trails]="[selectedTrail]"
                 [isVisible]="isPreviewVisible"
+                [markers]="markers"
                 (onClose)="togglePreview()"
         ></app-trail-floating-preview>
     </div>
@@ -42,7 +43,7 @@
                     {{ notification.id }}
                 </th>
                 <td>{{ formatDate(notification.reportDate) }}</td>
-                <td (click)="showPreview(notification.trailId)">
+                <td (click)="showPreview(notification.trailId, notification.coordinates)">
             <span class="trailCodeColumn">
               {{ getTrailCode(notification.trailId) }}
             </span>
@@ -121,7 +122,8 @@
                     >
                         {{ item.id }}
                     </th>
-                    <td><span class="trailCodeColumn">
+                    <td><span class="trailCodeColumn"
+                              (click)="showPreview(item.trailId, item.coordinates)">
                         {{ getTrailCode(item.trailId) }}</span>
                     </td>
                     <td>{{ formatDate(item.reportDate) }}</td>
