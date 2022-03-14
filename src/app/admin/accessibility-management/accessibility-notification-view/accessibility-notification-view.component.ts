@@ -115,12 +115,12 @@ export class AccessibilityNotificationViewComponent implements OnInit {
             this.adminNotificationService
                 .deleteById(unresolvedNotification.id)
                 .subscribe((d) => {
-                    if (d.status == Status.OK) this.onDelete(unresolvedNotification);
+                    if (d.status == Status.OK) this.removeFromList(unresolvedNotification);
                 });
         }
     }
 
-    onDelete(unresolvedNotification: AccessibilityNotification): void {
+    removeFromList(unresolvedNotification: AccessibilityNotification): void {
         let i = this.unresolvedNotifications.indexOf(unresolvedNotification);
         this.unresolvedNotifications.splice(i, 1);
     }
@@ -190,6 +190,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         resolution: string,
         resolutionDate: Date
     ): void {
-        this.onDelete(resolvedNotification);
+        this.loadSolvedNotification(this.solvedPage);
+        this.loadNotification(this.unresolvedPage);
     }
 }
