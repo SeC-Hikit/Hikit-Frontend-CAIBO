@@ -116,7 +116,7 @@
         <td class="clickable" (click)="onViewNotificationClick(notification)">
           <svg class="bi" width="24" height="24" fill="currentColor">
             <use
-                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#folder-symlink"
+                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle"
             />
           </svg>
         </td>
@@ -133,10 +133,10 @@
     <div class="pagination-position">
       <ngb-pagination
               [pageSize]="entryPerPage"
-              [collectionSize]="totalUnresolvedNotifications"
-              [(page)]="unapgradedPage"
+              [collectionSize]="totalUpgradedNotifications"
+              [(page)]="upgradedPage"
               aria-label="Default pagination"
-              (pageChange)="loadUnapgraded(unapgradedPage)"
+              (pageChange)="loadUpgraded(upgradedPage)"
       ></ngb-pagination>
     </div>
   </div>

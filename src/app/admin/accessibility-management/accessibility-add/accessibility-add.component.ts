@@ -168,7 +168,7 @@ export class AccessibilityAddComponent implements OnInit {
 
     private load(idFromPath: string) {
         this.notificationService
-            .getUnresolvedById(idFromPath)
+            .getById(idFromPath)
             .subscribe((resp) => {
                 let loaded = resp.content[0];
                 this.formGroup.get("id").setValue(loaded.id);

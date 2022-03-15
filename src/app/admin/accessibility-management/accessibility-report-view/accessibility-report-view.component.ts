@@ -12,6 +12,7 @@ import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component
 import {Marker} from "../../../map-preview/map-preview.component";
 import {Coordinates2D} from "../../../service/geo-trail-service";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
+import {NotificationService} from "../../../service/notification-service.service";
 
 @Component({
     selector: "app-accessibility-report-view",
@@ -44,9 +45,11 @@ export class AccessibilityReportViewComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private adminReportService: AdminReportService,
+        private notificationService: NotificationService,
         private modalService: NgbModal,
         private route: Router
-    ) {}
+    ) {
+    }
 
     ngOnInit(): void {
         let realm = this.authService.getRealm();
@@ -131,8 +134,8 @@ export class AccessibilityReportViewComponent implements OnInit {
         modal.componentInstance.title = `Sei sicuro di volere promuovere la notifica?`;
         modal.componentInstance.body = this.getUpgradeModalBody(unresolvedNotification);
         modal.componentInstance.onOk.subscribe(() => {
-            this.adminReportService.upgrade(unresolvedNotification.id).subscribe((resp)=>{
-                if(resp.status == "OK"){
+            this.adminReportService.upgrade(unresolvedNotification.id).subscribe((resp) => {
+                if (resp.status == "OK") {
                     this.loadUnapgraded(this.unapgradedPage);
                 } else {
 
@@ -140,12 +143,13 @@ export class AccessibilityReportViewComponent implements OnInit {
             });
         })
 
-        modal.componentInstance.onCancel.subscribe(() => {})
+        modal.componentInstance.onCancel.subscribe(() => {
+        })
     }
 
     onDeleteClick(notification: AccessibilityReport) {
-        this.adminReportService.delete(notification.id).subscribe((resp)=>{
-            if(resp.status == "OK"){
+        this.adminReportService.delete(notification.id).subscribe((resp) => {
+            if (resp.status == "OK") {
                 this.loadUnapgraded(this.unapgradedPage);
             } else {
 
@@ -161,8 +165,19 @@ export class AccessibilityReportViewComponent implements OnInit {
     onViewNotificationClick(notification: AccessibilityReport) {
         this.isLoading = true;
         const modal = this.modalService.open(InfoModalComponent);
-        modal.componentInstance.title = `Dettagli per la notifica riguardo sentiero '${this.getTrailCode(notification.trailId)}'`;
-        modal.componentInstance.body = `La notifica con id '<b>${notification.id}</b>' è stata promossa a notifica di accessibilità.<br/>` +
-        ``;
+        this.notificationService.getById(notification.issueId).subscribe((resp) => {
+            if (resp.status == "OK" && resp.content.length > 0) {
+                const sutNotification = resp.content[0];
+                const resolution = sutNotification.resolution;
+                const isClosed = resolution != "";
+                modal.componentInstance.title = `Dettagli per la segnalazione riguardo sentiero '${this.getTrailCode(sutNotification.trailId)}'`;
+                modal.componentInstance.body = `La notifica con id '<b>${sutNotification.id}</b>' è stata promossa a notifica di accessibilità.<br/>` +
+                    `La notifica risulta <b>${isClosed ? "chiusa" : "aperta"}</b>, approvata/modificata da ${sutNotification.recordDetails.uploadedBy}<br/>` +
+                    `${isClosed ? ("La risoluzione è: <b>" + resolution) : "</b>"}`;
+            } else {
+                modal.componentInstance.title = `La segnalazione risolutiva non è stata trovata.`;
+                modal.componentInstance.body = `La segnalazione con id '<b>${notification.issueId}</b> non è disponibile`;
+            }
+        });
     }
 }

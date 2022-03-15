@@ -24,7 +24,7 @@ export class NotificationService {
     constructor(private httpClient: HttpClient) {
     }
 
-    getUnresolvedById(id: String): Observable<AccessibilityNotificationResponse> {
+    getById(id: String): Observable<AccessibilityNotificationResponse> {
         return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/" + id)
             .pipe(
                 tap(),
