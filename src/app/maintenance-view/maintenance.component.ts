@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { Maintenance, MaintenanceService as MaintenanceService } from '../service/maintenance.service';
+import { MaintenanceDto, MaintenanceService as MaintenanceService } from '../service/maintenance.service';
 
 
 @Component({
@@ -10,9 +10,10 @@ import { Maintenance, MaintenanceService as MaintenanceService } from '../servic
 })
 export class MaintenanceComponent implements OnInit {
 
+  realm : string;
 
-  maintenanceListFuture : Maintenance[];
-  maintenanceListPast : Maintenance[];
+  maintenanceListFuture : MaintenanceDto[];
+  maintenanceListPast : MaintenanceDto[];
 
   constructor(private maintenanceService : MaintenanceService) { 
     this.maintenanceListFuture = [];
@@ -21,7 +22,7 @@ export class MaintenanceComponent implements OnInit {
 
   ngOnInit(): void {
     const maintenanceResponseFuture = this.maintenanceService.getFuture().subscribe(x=> { this.maintenanceListFuture = x.content; console.log(this.maintenanceListFuture )});
-    const maintenanceResponsePast = this.maintenanceService.getPast().subscribe(x=> { this.maintenanceListPast = x.content}); 
+    const maintenanceResponsePast = this.maintenanceService.getPast().subscribe(x=> { this.maintenanceListPast = x.content});
   }
 
   formatDate(dateString: string) : string {

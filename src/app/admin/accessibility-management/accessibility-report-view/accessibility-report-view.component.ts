@@ -13,6 +13,7 @@ import {Marker} from "../../../map-preview/map-preview.component";
 import {Coordinates2D} from "../../../service/geo-trail-service";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {NotificationService} from "../../../service/notification-service.service";
+import {DateUtils} from "../../../utils/DateUtils";
 
 @Component({
     selector: "app-accessibility-report-view",
@@ -108,7 +109,7 @@ export class AccessibilityReportViewComponent implements OnInit {
     }
 
     formatDate(dateString: string): string {
-        return moment(dateString).format("DD/MM/YYYY");
+        return DateUtils.formatDateToIta(dateString);
     }
 
     showPreview(trailId: string, coordinates: Coordinates2D) {
@@ -133,13 +134,17 @@ export class AccessibilityReportViewComponent implements OnInit {
         const modal = this.modalService.open(ConfirmModalComponent);
         modal.componentInstance.title = `Sei sicuro di volere promuovere la notifica?`;
         modal.componentInstance.body = this.getUpgradeModalBody(unresolvedNotification);
+        this.isLoading = true;
         modal.componentInstance.onOk.subscribe(() => {
             this.adminReportService.upgrade(unresolvedNotification.id).subscribe((resp) => {
                 if (resp.status == "OK") {
                     this.loadUnapgraded(this.unapgradedPage);
                 } else {
-
+                    const modal = this.modalService.open(InfoModalComponent)
+                    modal.componentInstance.title = `Errore nella promozione della notifica.`;
+                    modal.componentInstance.body = ``;
                 }
+                this.isLoading = false;
             });
         })
 
@@ -148,12 +153,15 @@ export class AccessibilityReportViewComponent implements OnInit {
     }
 
     onDeleteClick(notification: AccessibilityReport) {
+        this.isLoading = true;
         this.adminReportService.delete(notification.id).subscribe((resp) => {
             if (resp.status == "OK") {
                 this.loadUnapgraded(this.unapgradedPage);
             } else {
 
             }
+
+            this.isLoading = false;
         })
     }
 
@@ -178,6 +186,7 @@ export class AccessibilityReportViewComponent implements OnInit {
                 modal.componentInstance.title = `La segnalazione risolutiva non è stata trovata.`;
                 modal.componentInstance.body = `La segnalazione con id '<b>${notification.issueId}</b> non è disponibile`;
             }
+            this.isLoading = false;
         });
     }
 }

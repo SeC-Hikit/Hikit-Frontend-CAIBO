@@ -1,25 +1,29 @@
-.calendar { 
-    background-image: url(/assets/icons/calendar.png);
-    width: 2.75rem;
-    background-repeat: no-repeat;
-    background-size: 23px;
-    background-position: 50%;
-    border: 1px solid gray;
-}
+.MaintenanceAddComponent {
+    input[name='dp'] {
+        border-bottom: 1px solid gray;
+    }
 
-input[name='dp'] {
-    border-bottom: 1px solid gray;
-}
+    .calendar {
+        width: 2.75rem;
+        background-size: 23px;
+        background: url('/src/assets/icons/admin/png/calendar.png') no-repeat 50%;
+        border: 1px solid gray;
 
-#trailId_select {
-    background: white;
-    white-space: nowrap;
-    font-size: 1rem;
-    line-height: 1.5;
-    border: 0px;
-    border-top-right-radius: 0;
-border-bottom-right-radius: 0;
-    border-bottom: 1px solid gray;
+        .inner{
+            margin-left: -10px;
+        }
+    }
+
+    .description {
+        height: 180px;
+        display: inline-block;
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+
+    .btn {
+        width: 100%;
+    }
 }
 
 

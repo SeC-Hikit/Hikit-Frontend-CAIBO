@@ -31,6 +31,8 @@ import {TrailViewTableComponent} from "./admin/trail-management/trail-view-table
 import {TrailRawViewTableComponent} from "./admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component";
 import {PlaceEditComponent} from "./admin/place-management/place-edit/place-edit.component";
 import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
+import {MaintenanceAddComponent} from "./admin/maintenance-management/maintenance-add/maintenance-add.component";
+import {MaintenanceViewComponent} from "./admin/maintenance-management/maintenance-view/maintenance-view.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -136,8 +138,9 @@ const routes: Routes = [
             {
                 path: "maintenance-management",
                 children: [
-                    {path: "add", component: AccessibilityAddComponent},
-                    {path: "edit/:id", component: AccessibilityAddComponent},
+                    {path: "", component: MaintenanceViewComponent},
+                    {path: "add", component: MaintenanceAddComponent},
+                    {path: "edit/:id", component: MaintenanceAddComponent},
                 ],
                 component: MaintenanceManagementComponent,
             },

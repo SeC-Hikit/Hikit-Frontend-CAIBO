@@ -71,6 +71,9 @@ import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
 import { PromptModalComponent } from './modal/prompt-modal/prompt-modal.component';
 import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
+import { MaintenanceFutureViewComponent } from './admin/maintenance-management/maintenance-future-view/maintenance-future-view.component';
+import { MaintenancePastViewComponent } from './admin/maintenance-management/maintenance-past-view/maintenance-past-view.component';
+import { MaintenanceViewComponent } from './admin/maintenance-management/maintenance-view/maintenance-view.component';
 
 @NgModule({
   declarations: [
@@ -134,7 +137,10 @@ import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landin
     PlaceEditComponent,
     ConfirmModalComponent,
     PromptModalComponent,
-    LandingPageSuccessComponent
+    LandingPageSuccessComponent,
+    MaintenanceFutureViewComponent,
+    MaintenancePastViewComponent,
+    MaintenanceViewComponent
   ],
   imports: [
     BrowserModule,

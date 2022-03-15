@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { AccessibilityNotification, NotificationService } from '../service/notification-service.service';
+import {DateUtils} from "../utils/DateUtils";
 
 @Component({
   selector: 'app-accessibility',
@@ -12,7 +13,7 @@ export class AccessibilityComponent implements OnInit {
   unresolvedNotifications : AccessibilityNotification[]
   solvedNotifications : AccessibilityNotification[]
 
-  constructor(private notificationService : NotificationService) { 
+  constructor() {
     this.unresolvedNotifications = [];
     this.solvedNotifications = [];
   }
@@ -21,6 +22,6 @@ export class AccessibilityComponent implements OnInit {
   }
 
   formatDate(dateString: string) : string {
-    return moment(dateString).format("DD/MM/YYYY");
+    return DateUtils.formatDateToIta(dateString);
   }
 }

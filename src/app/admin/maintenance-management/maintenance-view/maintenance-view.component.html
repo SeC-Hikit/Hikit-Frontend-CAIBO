@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-12">
+        <ul ngbNav #nav="ngbNav" class="nav-tabs space-up">
+            <li ngbNavItem>
+                <a ngbNavLink>Manutenzioni future</a>
+                <ng-template ngbNavContent
+                >
+                    <app-maintenance-future-view></app-maintenance-future-view
+                    >
+                </ng-template>
+            </li>
+            <li ngbNavItem>
+                <a ngbNavLink>Manutenzioni passate</a>
+                <ng-template ngbNavContent>
+                    <app-maintenance-past-view></app-maintenance-past-view>
+                </ng-template>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+    </div>
+</div>

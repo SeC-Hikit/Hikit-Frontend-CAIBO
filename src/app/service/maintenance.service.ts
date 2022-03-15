@@ -6,7 +6,7 @@ import { components } from 'src/binding/Binding';
 import { RestResponse } from '../RestResponse';
 
 
-export type Maintenance = components["schemas"]["MaintenanceDto"]
+export type MaintenanceDto = components["schemas"]["MaintenanceDto"]
 export type MaintenanceResponse = components["schemas"]["MaintenanceResponse"]
 export type MaintenanceCreation = components["schemas"]["MaintenanceDto"]
 
@@ -46,7 +46,7 @@ export class MaintenanceService {
       );
   }
 
-  save(maintenance: Maintenance): Observable<RestResponse> {
+  save(maintenance: MaintenanceDto): Observable<RestResponse> {
     return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
       .pipe(
         tap(_ => console.log("")),

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
-import { Maintenance } from 'src/app/service/maintenance.service';
+import { MaintenanceDto } from 'src/app/service/maintenance.service';
 import { AccessibilityNotification } from 'src/app/service/notification-service.service';
 import { TrailDto, TrailCoordinatesDto } from 'src/app/service/trail-service.service';
 import {ChartUtils} from "../ChartUtils";
@@ -21,7 +21,7 @@ export class TrailDetailsComponent implements OnInit {
 
   @Input() selectedTrail: TrailDto;
   @Input() trailNotifications: AccessibilityNotification[];
-  @Input() lastMaintenance: Maintenance;
+  @Input() lastMaintenance: MaintenanceDto;
   @Input() isCycloSwitchOn: boolean;
 
   @Output() toggleFullTrailPageEvent = new EventEmitter<void>();

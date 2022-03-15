@@ -1,0 +1,57 @@
+<div *ngIf="selectedTrail != null">
+    <app-trail-floating-preview
+            [trails]="[selectedTrail]"
+            [isVisible]="isPreviewVisible"
+            (onClose)="togglePreview()"
+    ></app-trail-floating-preview>
+</div>
+<div class="MaintenanceFutureView">
+    <div class="row">
+        <div class="col-12 col-md-12 space-up">
+            <h2>Manutenzioni Passate</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-12 col-s-6">
+            <div *ngIf="hasPastLoaded; else notShow">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Data</th>
+                        <th scope="col">Codice Sentiero</th>
+                        <th scope="col">Posto di Ritrovo</th>
+                        <th scope="col">Descrizione</th>
+                        <th scope="col">Contatto</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let maintenance of maintenanceListPast">
+                        <td>{{ formatDate(maintenance.date) }}</td>
+                        <td>
+              <span class="trailCodeColumn">{{
+                  getTrailCode(maintenance.trailId)
+                  }}</span>
+                        </td>
+                        <td>{{ maintenance.meetingPlace }}</td>
+                        <td>{{ maintenance.description }}</td>
+                        <td>{{ maintenance.contact }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination-position">
+                    <ngb-pagination
+                            [pageSize]="entryPerPage"
+                            [collectionSize]="totalEntries"
+                            [(page)]="page"
+                            aria-label="Default pagination"
+                            (pageChange)="loadMaintenancePast(page)"
+                    ></ngb-pagination>
+                </div>
+            </div>
+            <ng-template #notShow>
+                <app-items-not-found class="top-margin-x2"
+                                     text="Nessuna manutenzione passata trovata."></app-items-not-found>
+            </ng-template>
+        </div>
+    </div>
+</div>

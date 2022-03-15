@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Maintenance, MaintenanceService} from '../service/maintenance.service';
+import {MaintenanceDto, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../service/trail-preview-service.service';
 import {TrailCoordinatesDto, TrailDto, TrailService} from '../service/trail-service.service';
@@ -54,7 +54,7 @@ export class MapComponent implements OnInit {
     selectedTileLayer: string;
     selectedTrailBinaryPath: string;
     selectedTrailNotifications: AccessibilityNotification[];
-    lastMaintenance: Maintenance;
+    lastMaintenance: MaintenanceDto;
     userPosition: UserCoordinates;
     highlightedLocation: TrailCoordinatesDto;
 

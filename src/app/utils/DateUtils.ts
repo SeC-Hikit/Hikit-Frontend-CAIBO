@@ -8,6 +8,10 @@ export class DateUtils {
         return day + "-" + month + "-" + year;
     }
 
+    public static formatDateToIta(dateString: string) : string {
+        return moment(dateString).format("DD/MM/YYYY");
+    }
+
     public static formatDateToDay(dateString: string): string {
         return moment(dateString).format("DD/MM/YYYY h:mm a");
     }
