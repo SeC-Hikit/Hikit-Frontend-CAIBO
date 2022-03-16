@@ -1,5 +1,5 @@
 <div class="row MaintenanceAddComponent">
-    <app-loading-spinner *ngIf="hasFormBeenInitialized"></app-loading-spinner>
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     <div class="col-12">
         <div class="row">
             <div class="col-12">
@@ -68,16 +68,16 @@
                             />
                         </div>
                         <div class="col-md-12 top-margin">
-                            <label>Data manutenzione <span class="mandatory-field-asterisk">*</span></label>
+                            <label>Data e ora manutenzione <span class="mandatory-field-asterisk">*</span></label>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group">
                                 <input
                                         class="form-control"
-                                        formControlName="lastUpdate"
+                                        formControlName="date"
                                         placeholder="gg/mm/aaaa"
                                         name="dp"
-                                        [maxDate]="maxDate"
+                                        [minDate]="minDate"
                                         ngbDatepicker
                                         [(ngModel)]="date"
                                         #d="ngbDatepicker"
@@ -95,6 +95,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <ngb-timepicker formControlName="time" [spinners]="false"></ngb-timepicker>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="row top-margin">
                         <div class="col-12">
@@ -126,13 +132,19 @@
                             ></quill-editor>
                         </div>
                     </div>
+                    <div class="row errors" *ngIf="validationErrors.length > 0">
+                        <div class="col-12 top-margin-x2">
+                            <ul>
+                                <li *ngFor="let error of validationErrors">{{error}}</li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
+                            <button class="btn btn-primary mt-3" type="submit">Programma manutenzione</button>
                         </div>
                         <div class="col-md-12">
                             <button class="btn mt-3 btn-outline-warning" type="button" (click)="onCancel()">Cancella</button>
-
                         </div>
                     </div>
                 </form>

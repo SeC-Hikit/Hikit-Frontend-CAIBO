@@ -8,7 +8,10 @@ import {TrailPreviewResponse, TrailPreviewService} from 'src/app/service/trail-p
 import {Marker} from "../../../map-preview/map-preview.component";
 import {TrailDto, TrailMappingDto, TrailService} from "../../../service/trail-service.service";
 import {AuthService} from "../../../service/auth.service";
-import {NgbDateStruct, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDateStruct, NgbModal, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
+import {environment} from "../../../../environments/environment.prod";
+import {AdminMaintenanceService} from "../../../service/admin-maintenance.service";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 
 @Component({
     selector: 'app-maintenance-add',
@@ -17,30 +20,49 @@ import {NgbDateStruct, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class MaintenanceAddComponent implements OnInit {
 
-    formGroup: FormGroup;
+    formGroup: FormGroup = new FormGroup({
+        'trailId': new FormControl('', Validators.required),
+        'time': new FormControl('', Validators.required),
+        'description': new FormControl(''),
+        'contact': new FormControl('', Validators.required),
+        'meetingPlace': new FormControl('', Validators.required),
+        'date': new FormControl('', Validators.required),
+    });
 
     trail: TrailDto;
     markers: Marker[] = [];
 
     trailMappings: TrailMappingDto[] = [];
     selectedTrails: TrailDto[] = [];
-    hasFormBeenInitialized: boolean = false;
+    isLoading: boolean = false;
 
     trailIds: string[];
     realm: string;
 
-    date: NgbDateStruct;
 
     today = moment()
-    maxDate: NgbDateStruct = {
+    date: NgbDateStruct = {
+        year: this.today.year(),
+        day: this.today.date() + 1,
+        month: this.today.month() + 1
+    };
+    time: NgbTimeStruct = {
+        hour: 12,
+        minute: 0,
+        second: 0
+    }
+    minDate: NgbDateStruct = {
         year: this.today.year(),
         month: this.today.month() + 1,
         day: this.today.date()
     };
 
+    validationErrors: string[] = [];
+
     constructor(
         private trailPreviewService: TrailPreviewService,
         private maintenanceService: MaintenanceService,
+        private adminMaintenanceService: AdminMaintenanceService,
         private authService: AuthService,
         private modalService: NgbModal,
         private trailService: TrailService,
@@ -48,24 +70,14 @@ export class MaintenanceAddComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.date = {
-            year: this.today.year(),
-            day: this.today.date(),
-            month: this.today.month() + 1
-        };
+        this.isLoading = true;
         this.realm = this.authService.getRealm();
         this.trailPreviewService.getMappings(this.realm).subscribe(
             (resp) => {
                 this.trailMappings = resp.content;
+                this.isLoading = false;
             });
 
-        this.formGroup = new FormGroup({
-            'trailId': new FormControl('', Validators.required),
-            'description': new FormControl('', Validators.required),
-            'contact': new FormControl('', Validators.required),
-            'meetingPlace': new FormControl(''),
-            'date': new FormControl('', Validators.required),
-        });
     }
 
     onLoad(x: TrailPreviewResponse) {
@@ -73,25 +85,58 @@ export class MaintenanceAddComponent implements OnInit {
     }
 
     onSubmit() {
-        if (this.formGroup.valid) {
-
-            let maintenance: MaintenanceDto = this.formGroup.value as MaintenanceDto;
-            let formDate = this.formGroup.value.date;
-            maintenance.date = moment(formDate.year +
-                "-" + formDate.month +
-                "-" + formDate.day).toISOString();
-
-            this.maintenanceService.save(maintenance).subscribe(resp => {
-                if (resp.status == Status.OK) {
-                    this.onSaveSuccess(maintenance)
+        const formGroup = this.formGroup;
+        if (formGroup.valid) {
+            this.isLoading = true;
+            const maintenance: MaintenanceDto = {
+                date: "",
+                contact: formGroup.get("contact").value,
+                description: formGroup.get("description").value,
+                meetingPlace: formGroup.get("meetingPlace").value,
+                trailId: formGroup.get("trailId").value,
+                id: null,
+                recordDetails: {
+                    uploadedOn: moment().toDate().toISOString(),
+                    uploadedBy: name,
+                    realm: this.authService.getRealm(),
+                    onInstance: environment.instance
                 }
-            });
+            };
+            const formDate = formGroup.value.date;
+            const formTime = formGroup.value.time;
+
+
+            const dateTime = moment(formDate.year +
+                "-" + formDate.month +
+                "-" + formDate.day);
+            dateTime.set("minute", formTime.minute);
+            dateTime.set("hour", formTime.hour);
+            maintenance.date = dateTime.toISOString();
+
+            this.adminMaintenanceService.save(maintenance)
+                .subscribe(resp => {
+                    if (resp.status == Status.OK) {
+                        this.onSaveSuccess(maintenance)
+                    } else {
+                        this.openModalToShowErrors(resp.messages);
+                    }
+                    this.isLoading = false;
+                });
         } else {
-            alert("Alcuni campi sono ancora da completare")
+            this.validationErrors = ["Alcuni campi sono vuoti/incompleti"]
         }
     }
 
+    private openModalToShowErrors(errors: string[]) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Errore nel caricamento del sentiero`;
+        const matchingTrail = errors.map(it => `<div>${it}</div>`).join("<br/>");
+        modal.componentInstance.body = `Errori imprevista in risposta dal server: ${matchingTrail}`;
+    }
+
+
     onSaveSuccess(maintenance: MaintenanceDto) {
+        scroll(0, 0);
         this.router.navigate(['/admin/maintenance-management', {success: maintenance.id}]);
     }
 
@@ -107,7 +152,8 @@ export class MaintenanceAddComponent implements OnInit {
     }
 
     onCancel() {
-        scroll(0,0);
+        scroll(0, 0);
         this.router.navigate(["/admin/maintenance-management"])
+        return false;
     }
 }

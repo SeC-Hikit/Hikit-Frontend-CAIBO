@@ -9,36 +9,35 @@ import {
   AccessibilityNotificationResolution,
   AccessibilityNotificationResponse
 } from "./notification-service.service";
+import {MaintenanceDto} from "./maintenance.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminReportService {
+export class AdminMaintenanceService {
   
-  baseUrl = "api/admin/report";
+  baseUrl = "api/admin/maintenance";
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private httpClient: HttpClient) { }
 
-  upgrade(id: string) {
-    return this.httpClient.put<RestResponse>(this.baseUrl + "/upgrade/" + id, null)
-      .pipe(
-        tap(),
-        catchError(this.handleError<AccessibilityNotificationResponse>('upgrade report', null))
-      );
-  }
-
-  delete(id: string) {
-    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + id)
+  save(maintenance: MaintenanceDto): Observable<RestResponse> {
+    return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
         .pipe(
-            tap(),
-            catchError(this.handleError<AccessibilityNotificationResponse>('delete report', null))
+            tap(_ => console.log("")),
+            catchError(this.handleError<RestResponse>('Save maintenance', null))
         );
   }
 
-
+  deleteById(_id: any): Observable<RestResponse> {
+    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
+        .pipe(
+            tap(_ => console.log("")),
+            catchError(this.handleError<RestResponse>('Delete maintenance', null))
+        );
+  }
 
   /**
   * Handle Http operation that failed.

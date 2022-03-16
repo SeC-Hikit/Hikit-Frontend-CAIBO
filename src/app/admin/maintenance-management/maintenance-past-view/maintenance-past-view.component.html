@@ -1,11 +1,11 @@
-<div *ngIf="selectedTrail != null">
-    <app-trail-floating-preview
-            [trails]="[selectedTrail]"
-            [isVisible]="isPreviewVisible"
-            (onClose)="togglePreview()"
-    ></app-trail-floating-preview>
-</div>
 <div class="MaintenanceFutureView">
+    <div *ngIf="selectedTrail != null">
+        <app-trail-floating-preview
+                [trails]="[selectedTrail]"
+                [isVisible]="isPreviewVisible"
+                (onClose)="togglePreview()"
+        ></app-trail-floating-preview>
+    </div>
     <div class="row">
         <div class="col-12 col-md-12 space-up">
             <h2>Manutenzioni Passate</h2>
@@ -28,7 +28,7 @@
                     <tr *ngFor="let maintenance of maintenanceListPast">
                         <td>{{ formatDate(maintenance.date) }}</td>
                         <td>
-              <span class="trailCodeColumn">{{
+              <span class="trailCodeColumn clickable">{{
                   getTrailCode(maintenance.trailId)
                   }}</span>
                         </td>

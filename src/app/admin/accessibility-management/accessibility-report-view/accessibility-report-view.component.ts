@@ -137,6 +137,7 @@ export class AccessibilityReportViewComponent implements OnInit {
         this.isLoading = true;
         modal.componentInstance.onOk.subscribe(() => {
             this.adminReportService.upgrade(unresolvedNotification.id).subscribe((resp) => {
+                this.isLoading = false;
                 if (resp.status == "OK") {
                     this.loadUnapgraded(this.unapgradedPage);
                 } else {
@@ -144,11 +145,11 @@ export class AccessibilityReportViewComponent implements OnInit {
                     modal.componentInstance.title = `Errore nella promozione della notifica.`;
                     modal.componentInstance.body = ``;
                 }
-                this.isLoading = false;
             });
         })
 
         modal.componentInstance.onCancel.subscribe(() => {
+            this.isLoading = false;
         })
     }
 
@@ -158,9 +159,10 @@ export class AccessibilityReportViewComponent implements OnInit {
             if (resp.status == "OK") {
                 this.loadUnapgraded(this.unapgradedPage);
             } else {
-
+                const modal = this.modalService.open(InfoModalComponent);
+                modal.componentInstance.title = `Non è stato possibile cancellare il sentiero`;
+                modal.componentInstance.body = ``;
             }
-
             this.isLoading = false;
         })
     }

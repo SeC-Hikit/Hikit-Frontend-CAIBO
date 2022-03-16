@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
@@ -22,16 +22,18 @@ export class MaintenanceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getFuture(): Observable<MaintenanceResponse> {
-    return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/future")
+  getFuture(skip: number, limit: number): Observable<MaintenanceResponse> {
+    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/future", {params: params})
       .pipe(
         tap(_ => console.log("")),
         catchError(this.handleError<MaintenanceResponse>('Future maintenance', null))
       );
   }
 
-  getPast(): Observable<MaintenanceResponse> {
-    return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past")
+  getPast(skip: number, limit: number): Observable<MaintenanceResponse> {
+    let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past", {params: params})
       .pipe(
         tap(_ => console.log("")),
         catchError(this.handleError<MaintenanceResponse>('Past maintenance', null))
@@ -43,22 +45,6 @@ export class MaintenanceService {
       .pipe(
         tap(_ => console.log("")),
         catchError(this.handleError<MaintenanceResponse>('Past maintenance by code', null))
-      );
-  }
-
-  save(maintenance: MaintenanceDto): Observable<RestResponse> {
-    return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
-      .pipe(
-        tap(_ => console.log("")),
-        catchError(this.handleError<RestResponse>('Save maintenance', null))
-      );
-  }
-
-  deleteById(_id: any): Observable<RestResponse> {
-    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
-      .pipe(
-        tap(_ => console.log("")),
-        catchError(this.handleError<RestResponse>('Delete maintenance', null))
       );
   }
 

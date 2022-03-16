@@ -1,9 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {MaintenanceDto} from "../../../service/maintenance.service";
+import {MaintenanceDto, MaintenanceService} from "../../../service/maintenance.service";
 import {DateUtils} from "../../../utils/DateUtils";
 import {TrailDto, TrailMappingDto, TrailService} from "../../../service/trail-service.service";
 import {AuthService} from "../../../service/auth.service";
 import {TrailPreviewService} from "../../../service/trail-preview-service.service";
+import {AdminMaintenanceService} from "../../../service/admin-maintenance.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 
 @Component({
     selector: 'app-maintenance-future-view',
@@ -27,8 +30,11 @@ export class MaintenanceFutureViewComponent implements OnInit {
 
 
     constructor(private trailService: TrailService,
-                private authService: AuthService,
-                private trailPreviewService: TrailPreviewService) {
+                private adminMaintenanceService: AdminMaintenanceService,
+                private maintenanceService: MaintenanceService,
+                private trailPreviewService: TrailPreviewService,
+                private modalService: NgbModal,
+                private authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -36,16 +42,28 @@ export class MaintenanceFutureViewComponent implements OnInit {
         this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
-                this.loadMaintenanceFuture(1);
+                this.onLoadMaintenance(1);
+                this.isLoaded = true;
             })
     }
 
-    loadMaintenanceFuture(number: number) {
+    onLoadMaintenance(page: number){
+        this.page = page;
+        const lowerBound = this.entryPerPage * (page - 1);
+        this.loadMaintenanceFuture(lowerBound, this.entryPerPage * page);
+    }
 
+    loadMaintenanceFuture(skip: number, limit: number) {
+        this.maintenanceService.getFuture(skip, limit)
+            .subscribe(
+                (resp) => {
+                    this.maintenanceListFuture = resp.content;
+                    this.totalEntries = resp.totalCount;
+                })
     }
 
     formatDate(dateString: string) {
-        return DateUtils.formatDateToIta(dateString);
+        return DateUtils.formatDateToDay(dateString);
     }
 
     togglePreview() {
@@ -70,4 +88,26 @@ export class MaintenanceFutureViewComponent implements OnInit {
         console.warn(`Could not find trail mapping for id: ${trailId}`)
         return "";
     }
+
+    onDeleteClick(maintenance: MaintenanceDto) {
+        this.isLoaded = false;
+        this.adminMaintenanceService.deleteById(maintenance.id).subscribe(
+            (resp) => {
+                if (resp.status == "OK") {
+                    this.onLoadMaintenance(this.page);
+                } else {
+                    this.openModalToShowErrors(resp.messages);
+                }
+                this.isLoaded = true;
+            })
+    }
+
+    private openModalToShowErrors(errors: string[]) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Errore nel caricamento del sentiero`;
+        const matchingTrail = errors.map(it => `<div>${it}</div>`).join("<br/>");
+        modal.componentInstance.body = `Errori imprevisti in risposta dal server: ${matchingTrail}`;
+    }
+
+
 }
