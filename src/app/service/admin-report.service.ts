@@ -31,7 +31,7 @@ export class AdminReportService {
   }
 
   delete(id: string) {
-    return this.httpClient.delete<RestResponse>(this.baseUrl + "/upgrade/" + id)
+    return this.httpClient.delete<RestResponse>(this.baseUrl + id)
         .pipe(
             tap(),
             catchError(this.handleError<AccessibilityNotificationResponse>('delete report', null))
