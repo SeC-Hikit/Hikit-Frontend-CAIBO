@@ -289,6 +289,7 @@ export class MapComponent implements OnInit {
     }
 
     navigateToTrailReportIssue(trailId: string) {
+        scroll(0,0);
         this.router.navigate(["accessibility", "reporting-form"],
             {
                 queryParams: {trail: trailId},

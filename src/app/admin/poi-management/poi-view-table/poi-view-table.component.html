@@ -1,3 +1,11 @@
+<div *ngIf="selectedTrail != null">
+  <app-trail-floating-preview
+          [trails]="[selectedTrail]"
+          [markers]="[marker]"
+          [isVisible]="isPreviewVisible"
+          (onClose)="togglePreview()"
+  ></app-trail-floating-preview>
+</div>
 <button type="button" class="btn btn-primary" routerLink="./add">
   + Aggiungi POI
 </button>
@@ -29,7 +37,7 @@
           </td>
           <td>
             <span *ngFor="let trailId of poi.trailIds">
-              <span class="trailCodeColumn">{{ getTrailCode(trailId) }}</span>
+              <span class="trailCodeColumn" (click)="showPreview(poi.coordinates, trailId)">{{ getTrailCode(trailId) }}</span>
             </span>
           </td>
           <td><span [innerHTML]="this.getPoiIcon(poi)"></span> {{ macroMap.get(poi.macroType) }}</td>

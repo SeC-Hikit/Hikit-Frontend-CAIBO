@@ -1,16 +1,17 @@
 import {Component, OnInit} from "@angular/core";
 import {Subject} from "rxjs";
-import {tap, takeUntil} from "rxjs/operators";
+import {takeUntil} from "rxjs/operators";
 import {PoiResponse, PoiService} from "src/app/service/poi-service.service";
-import {
-    TrailPreview,
-    TrailPreviewService,
-} from "src/app/service/trail-preview-service.service";
+import {TrailPreview, TrailPreviewService,} from "src/app/service/trail-preview-service.service";
 import {components} from "src/binding/Binding";
 import {AdminPoiService} from "../../../service/admin-poi-service.service";
 import {PoiIconHelper} from "../../../../assets/icons/PoiIconHelper";
 import {DateUtils} from "../../../utils/DateUtils";
 import {PoiEnums} from "../PoiEnums";
+import {TrailDto, TrailService} from "../../../service/trail-service.service";
+import {Marker} from "../../../map-preview/map-preview.component";
+import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
+import {Coordinates2D} from "../../../service/geo-trail-service";
 
 export type PoiDto = components["schemas"]["PoiDto"];
 
@@ -33,12 +34,18 @@ export class PoiViewTableComponent implements OnInit {
     savedTrailCode: string;
     selected: PoiDto;
 
+    selectedTrail : TrailDto;
+    marker: Marker;
+
     macroMap: Map<string, string> = PoiEnums.macroMap();
+
+    isPreviewVisible: boolean = false;
 
     constructor(
         private poiService: PoiService,
         private poiAdminService: AdminPoiService,
-        private trailPreviewService: TrailPreviewService
+        private trailPreviewService: TrailPreviewService,
+        private trailService: TrailService
     ) {
     }
 
@@ -92,5 +99,19 @@ export class PoiViewTableComponent implements OnInit {
 
     getPoiIcon(poi: PoiDto) {
         return PoiIconHelper.get(poi);
+    }
+
+    showPreview(coords: Coordinates2D, trailId: string) {
+        this.trailService.getTrailById(trailId).subscribe(
+            trailResp => {
+                this.marker = {color: "#1D9566", icon: MapPinIconType.PIN, coords: coords};
+                this.selectedTrail = trailResp.content[0];
+                this.togglePreview();
+            }
+        );
+    }
+
+    private togglePreview() {
+        this.isPreviewVisible = !this.isPreviewVisible;
     }
 }

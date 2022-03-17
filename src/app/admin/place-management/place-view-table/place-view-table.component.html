@@ -21,6 +21,7 @@
             >
                 <thead class="">
                 <tr>
+                    <th scope="col">ID</th>
                     <th scope="col">Nome località</th>
                     <th scope="col">Numero sentieri attr.</th>
                     <th scope="col">Numero media attr.</th>
@@ -31,30 +32,31 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let tr of placeList" class="place-preview">
-                    <td (click)="onPreview(tr)">
-                        {{ tr.name }}
+                <tr *ngFor="let place of placeList" class="place-preview">
+                    <th class="small-column ellipsis" [title]="place.id">{{place.id}}</th>
+                    <td (click)="onPreview(place)">
+                        {{ place.name }}
                     </td>
                     <td>
-                        <svg class="bi" width="24" *ngIf="tr.crossingTrailIds.length == 0"
+                        <svg class="bi" width="24" *ngIf="place.crossingTrailIds.length == 0"
                              height="24" fill="currentColor">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-fill"
                             />
                         </svg>
-                        <svg class="bi clickable" width="24" *ngIf="tr.crossingTrailIds.length > 0"
-                             height="24" fill="currentColor" (click)="showTrailCode(tr.crossingTrailIds)">
+                        <svg class="bi clickable" width="24" *ngIf="place.crossingTrailIds.length > 0"
+                             height="24" fill="currentColor" (click)="showTrailCode(place.crossingTrailIds)">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost"
                             />
                         </svg>
-                        {{ tr.crossingTrailIds.length }}</td>
-                    <td>{{ tr.mediaIds.length }}</td>
-                    <td>{{ formatStringDateToDashes(tr.recordDetails.uploadedOn) }}</td>
-                    <td>{{ tr.recordDetails.uploadedBy }}</td>
+                        {{ place.crossingTrailIds.length }}</td>
+                    <td>{{ place.mediaIds.length }}</td>
+                    <td>{{ formatStringDateToDashes(place.recordDetails.uploadedOn) }}</td>
+                    <td>{{ place.recordDetails.uploadedBy }}</td>
                     <td class="clickable">
-                        <svg class="bi" width="24" *ngIf="tr.recordDetails.realm == realm"
-                             height="24" fill="currentColor" (click)="onEdit(tr.id)">
+                        <svg class="bi" width="24" *ngIf="place.recordDetails.realm == realm"
+                             height="24" fill="currentColor" (click)="onEdit(place.id)">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
                             />
@@ -62,8 +64,8 @@
                     </td>
                     <td class="clickable">
                         <svg class="bi" width="24"
-                             *ngIf="tr.recordDetails.realm == realm && tr.crossingTrailIds.length == 0"
-                             height="24" fill="currentColor" (click)="onDeleteClick(tr.id, tr.name)">
+                             *ngIf="place.recordDetails.realm == realm && place.crossingTrailIds.length == 0"
+                             height="24" fill="currentColor" (click)="onDeleteClick(place.id, place.name)">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
                             />
