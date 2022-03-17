@@ -8,15 +8,16 @@
     </div>
     <div class="row">
         <div class="col-12 col-md-12 space-up">
-            <h2>Manutenzioni Passate</h2>
+            <h2>Manutenzioni di oggi e passate</h2>
         </div>
     </div>
     <div class="row">
         <div class="col-12 col-md-12 col-s-6">
-            <div *ngIf="hasPastLoaded; else notShow">
+            <div *ngIf="isLoaded; else notShow">
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th scope="col">ID</th>
                         <th scope="col">Data</th>
                         <th scope="col">Codice Sentiero</th>
                         <th scope="col">Posto di Ritrovo</th>
@@ -26,14 +27,16 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let maintenance of maintenanceListPast">
+                        <th class="small-column ellipsis">{{maintenance.id}}</th>
                         <td>{{ formatDate(maintenance.date) }}</td>
                         <td>
-              <span class="trailCodeColumn clickable">{{
-                  getTrailCode(maintenance.trailId)
-                  }}</span>
+                          <span class="trailCodeColumn clickable"
+                                (click)="showPreview(maintenance.trailId)">
+                              {{getTrailCode(maintenance.trailId)}}
+                          </span>
                         </td>
                         <td>{{ maintenance.meetingPlace }}</td>
-                        <td>{{ maintenance.description }}</td>
+                        <td><span [innerHTML]="maintenance.description"></span></td>
                         <td>{{ maintenance.contact }}</td>
                     </tr>
                     </tbody>

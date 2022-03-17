@@ -17,7 +17,7 @@ export class MaintenancePastViewComponent implements OnInit {
     trailMapping: TrailMappingDto[] = [];
 
     hasFutureLoaded = false;
-    hasPastLoaded = false;
+    isLoaded = false;
     isPreviewVisible = false;
 
     selectedTrail: TrailDto;
@@ -47,7 +47,7 @@ export class MaintenancePastViewComponent implements OnInit {
         this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
-                this.loadMaintenancePast(1);
+                this.onLoadMaintenancePast(1);
             })
     }
 
@@ -98,12 +98,22 @@ export class MaintenancePastViewComponent implements OnInit {
     }
 
     formatDate(dateString: string): string {
-        return DateUtils.formatDateToIta(dateString);
+        return DateUtils.formatDateToDay(dateString);
     }
 
-    loadMaintenancePast(page: number) {
-        this.maintenanceService.getPast(0, 10).subscribe((resp) => {
+    onLoadMaintenancePast(page: number) {
+        this.page = page;
+        const lowerBound = this.entryPerPage * (page - 1);
+        this.loadMaintenancePast(lowerBound, this.entryPerPage * page);
+    }
+
+    loadMaintenancePast(skip: number, limit: number) {
+        this.isLoaded = false;
+        this.maintenanceService.getPast(skip, limit)
+            .subscribe((resp) => {
             this.maintenanceListPast = resp.content;
+            this.totalEntries = resp.totalCount;
+            this.isLoaded = true;
         });
     }
 }
