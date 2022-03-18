@@ -1,38 +1,73 @@
 <div class="container my-4">
+    <div *ngIf="!isLoading && selectedTrail != null">
+        <app-trail-floating-preview
+                [trails]="[selectedTrail]"
+                [isVisible]="isPreviewVisible"
+                [markers]="markers"
+                (onClose)="togglePreview()"
+        ></app-trail-floating-preview>
+    </div>
     <div class="row">
         <div class="col-12 col-md-12">
             <h1>
                 Percorribilità dei sentieri
             </h1>
-            <p>Hai notato un problema che blocca un sentiero? <a routerLink="./reporting-form">Segnalalo.</a></p>
+            <p>Hai notato un problema che blocca un sentiero? <a routerLink="./reporting-form">Aiutaci segnalandolo</a>
+            </p>.
         </div>
     </div>
     <div class="row">
-
         <div class="col-12">
-            <table *ngIf="unresolvedNotifications.length > 0; else notShow"
-                   class="table table-striped interactive-table">
-                <thead>
-                <tr>
-                    <th scope="col">Codice sentiero</th>
-                    <th scope="col">Data Segnalazione</th>
-                    <th scope="col">Descrizione Problema</th>
-                    <th scope="col">Aggirabile?</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let notification of unresolvedNotifications">
-                    <th class="clickable" routerLink='/map/{{notification.trailId}}'
-                        scope="row">{{ notification.trailId }}</th>
-                    <td>{{ (notification.reportDate) }}</td>
-                    <td>{{ notification.description }}</td>
-                    <td>{{ notification.minor ? 'si' : 'no' }}</td>
-                </tr>
-                </tbody>
-            </table>
+            <div *ngIf="unresolvedNotifications.length > 0; else notShow" class="top-margin-x2">
+                <table class="table table-striped interactive-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Data Segnalazione</th>
+                        <th scope="col">Sentiero</th>
+                        <th scope="col">Descrizione Problema</th>
+                        <th scope="col">Aggirabile?</th>
+                        <th scope="col">Segnalazione approvata da</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="hasLoaded">
+                    <tr class="clickable" *ngFor="let notification of unresolvedNotifications"
+                        (click)="showPreview(notification.trailId, notification.coordinates)">
+                        <th
+                                scope="row"
+                                class="ellipsis small-column"
+                                title="{{ notification.id }}"
+                        >
+                            {{ notification.id }}
+                        </th>
+                        <td>{{ formatDate(notification.reportDate) }}</td>
+                        <td>
+                            <span class="trailCodeColumn">
+                              {{ getTrailCode(notification.trailId) }}
+                            </span>
+                        </td>
+                        <td class="ellipsis small-column" [innerHTML]="notification.description"></td>
+                        <td>{{ notification.minor === true ? "si" : "no" }}</td>
+                        <td>
+                            {{ notification.recordDetails.uploadedBy }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination-position">
+                    <ngb-pagination
+                            [pageSize]="entryPerPage"
+                            [collectionSize]="totalUnresolvedNotification"
+                            [(page)]="unresolvedPage"
+                            aria-label="Default pagination"
+                            (pageChange)="loadNotification(unresolvedPage)"
+                    ></ngb-pagination>
+                </div>
+            </div>
+
             <ng-template #notShow>
                 <app-items-not-found class="top-margin-x2"
-                        text="✔️ Nessun problema di percorrenza trovato."></app-items-not-found>
+                                     text="✔️ Nessun problema di percorrenza trovato."></app-items-not-found>
             </ng-template>
         </div>
     </div>

@@ -43,7 +43,7 @@ export class TrailViewTableComponent implements OnInit {
 
     getAllPreviews() {
         this.isLoading = true;
-        this.getTrailPreviews(0, this.entryPerPage);
+        this.loadTrails(1);
     }
 
     onFileSave(codeTrailSaved: string) {
@@ -79,6 +79,7 @@ export class TrailViewTableComponent implements OnInit {
 
     loadTrails(page: number): void {
         this.page = page;
+
         const lowerBound = this.entryPerPage * (page - 1);
         this.getTrailPreviews(lowerBound, this.entryPerPage * page);
     }

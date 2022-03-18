@@ -13,8 +13,12 @@ export class TrailFloatingPreviewComponent implements OnInit {
   @Input() markers: Marker[];
   @Output() onClose = new EventEmitter<void>();
 
+  otherTrails: TrailDto[] = [];
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
 
 }

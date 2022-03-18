@@ -1,6 +1,8 @@
 import * as L from 'leaflet';
 import {TrailCoordinatesDto} from "../service/trail-service.service";
 import {TrailClassification} from "../TrailClassification";
+import {LatLngBounds} from "leaflet";
+import {RectangleDto} from "../service/geo-trail-service";
 
 export class MapUtils {
 
@@ -24,6 +26,13 @@ export class MapUtils {
             empty += " ";
         }
         return empty;
+    }
+
+    static getTrailPolyline(trailCode: string, coordinates: TrailCoordinatesDto[], color: string = "#000") {
+        const invertedCoords = MapUtils.getCoordinatesInverted(coordinates);
+        const polyline = L.polyline(invertedCoords, {color: color});
+        polyline.bindPopup(trailCode).openPopup();
+        return polyline;
     }
 
     static getLineStyle(isSelectedLine: boolean, trailClassification: String) {
@@ -74,6 +83,20 @@ export class MapUtils {
             attributes: {fill: this.getLineColor(isSelectedLine), below: true},
             center: true,
         };
+    }
+
+    static getRectangleDtoFromLatLng(bounds: LatLngBounds): RectangleDto {
+        let bottomLeft = bounds.getSouthWest();
+        let topRight = bounds.getNorthEast();
+        return {
+            bottomLeft: {
+                latitude: bottomLeft.lat,
+                longitude: bottomLeft.lng
+            }, topRight: {
+                latitude: topRight.lat,
+                longitude: topRight.lng,
+            }
+        }
     }
 
     static getERShape(): any {

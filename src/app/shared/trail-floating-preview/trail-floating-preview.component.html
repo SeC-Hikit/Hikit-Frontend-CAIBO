@@ -9,10 +9,11 @@
     <div class="form-group col-md-12 mb-12">
     <span *ngIf="this.trails.length > 0; else noTrail">
     <app-map-preview
-            [trailPreview]="this.trails[0]"
-            [otherTrails]="[]"
+            [trailPreview]="trails[0]"
+            [otherTrails]=""
             [index]="'0'"
             [markersCoordinates]="markers"
+            [showSegmentsInArea]="true"
     ></app-map-preview>
     </span>
         <ng-template #noTrail>

@@ -62,10 +62,6 @@ export class AccessibilityNotificationViewComponent implements OnInit {
             })
     }
 
-    onFileSave(notification: string) {
-        this.notificationSaved = notification;
-    }
-
     loadNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
@@ -148,11 +144,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
             })
             .subscribe((response) => {
                 if (response.status == Status.OK) {
-                    this.onResolvedSuccess(
-                        unresolvedNotification,
-                        unresolvedNotification.resolution,
-                        resolutionDate
-                    );
+                    this.onResolvedSuccess();
                 }
             });
     }
@@ -186,9 +178,6 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     }
 
     onResolvedSuccess(
-        resolvedNotification: AccessibilityNotification,
-        resolution: string,
-        resolutionDate: Date
     ): void {
         this.loadSolvedNotification(this.solvedPage);
         this.loadNotification(this.unresolvedPage);

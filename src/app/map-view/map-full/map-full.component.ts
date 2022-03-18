@@ -105,23 +105,9 @@ export class MapFullComponent implements OnInit {
 
     private emitBounds() {
         let bounds = this.map.getBounds();
-        let rectangleDtoFromLatLng = this.getRectangleDtoFromLatLng(bounds);
+        let rectangleDtoFromLatLng = MapUtils.getRectangleDtoFromLatLng(bounds);
         console.log(rectangleDtoFromLatLng)
         this.onViewChange.emit(rectangleDtoFromLatLng)
-    }
-
-    private getRectangleDtoFromLatLng(bounds: LatLngBounds): RectangleDto {
-        let bottomLeft = bounds.getSouthWest();
-        let topRight = bounds.getNorthEast();
-        return {
-            bottomLeft: {
-                latitude: bottomLeft.lat,
-                longitude: bottomLeft.lng
-            }, topRight: {
-                latitude: topRight.lat,
-                longitude: topRight.lng,
-            }
-        }
     }
 
     ngAfterViewInit(): void {
