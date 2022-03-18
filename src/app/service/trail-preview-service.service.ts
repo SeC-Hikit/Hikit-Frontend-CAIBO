@@ -48,7 +48,8 @@ export class TrailPreviewService {
 
     getPreviews(skip: number, limit: number, realm?: string, areDraftsVisible: boolean = true): Observable<TrailPreviewResponse> {
         let params = new HttpParams().set("skip", skip.toString())
-            .append("limit", limit.toString()).append("realm", "*")
+            .append("limit", limit.toString())
+            .append("realm", realm ? realm : "*")
             .append("isDraftTrailVisible", String(areDraftsVisible));
         if (realm) {
             params.append("realm", realm);

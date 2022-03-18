@@ -28,7 +28,6 @@
                 <th scope="col">Descrizione Problema</th>
                 <th scope="col">Aggirabile?</th>
                 <th scope="col">Segnalato da</th>
-                <th scope="col">Da report?</th>
                 <th scope="col">Risolvi</th>
                 <th scope="col">Modifica</th>
                 <th scope="col">Cancella</th>
@@ -54,7 +53,6 @@
                 <td>
                     {{ notification.recordDetails.uploadedBy }}
                 </td>
-                <td></td>
                 <td class="clickable" (click)="onResolveClick(notification)">
                     <svg class="bi" width="24" height="24" fill="currentColor">
                         <use

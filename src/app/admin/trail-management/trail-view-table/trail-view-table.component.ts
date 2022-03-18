@@ -37,8 +37,8 @@ export class TrailViewTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getAllPreviews();
         this.realm = this.authService.getRealm();
+        this.getAllPreviews();
     }
 
     getAllPreviews() {
@@ -86,7 +86,7 @@ export class TrailViewTableComponent implements OnInit {
 
     getTrailPreviews(skip: number, limit: number) {
         this.isLoading = true;
-        this.trailPreviewService.getPreviews(skip, limit)
+        this.trailPreviewService.getPreviews(skip, limit, this.realm)
             .pipe(
                 takeUntil(this.destroy$),
                 tap(_ => this.isLoading = false)

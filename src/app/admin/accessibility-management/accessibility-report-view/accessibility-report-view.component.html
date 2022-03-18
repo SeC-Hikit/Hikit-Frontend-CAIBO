@@ -22,6 +22,7 @@
           <th scope="col">Sentiero</th>
           <th scope="col">Descrizione Problema</th>
           <th scope="col">Email</th>
+          <th scope="col">Telefono</th>
           <th scope="col">Promuovi</th>
           <th scope="col">Cancella</th>
         </tr>
@@ -44,6 +45,9 @@
           <td class="ellipsis small-column">{{ notification.description }}</td>
           <td title="{{ notification.email }}">
             {{ notification.email }}
+          </td>
+          <td title="{{ notification.telephone }}">
+            {{ notification.telephone }}
           </td>
           <td class="clickable" (click)="onUpgradeClick(notification)">
             <svg class="bi" width="24" height="24" fill="currentColor">
