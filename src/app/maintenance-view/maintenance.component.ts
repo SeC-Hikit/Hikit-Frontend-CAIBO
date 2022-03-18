@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { MaintenanceDto, MaintenanceService as MaintenanceService } from '../service/maintenance.service';
+import {TrailDto, TrailMappingDto, TrailService} from "../service/trail-service.service";
+import {DateUtils} from "../utils/DateUtils";
+import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {TrailPreviewService} from "../service/trail-preview-service.service";
+import {AuthService} from "../service/auth.service";
 
 
 @Component({
@@ -10,23 +16,95 @@ import { MaintenanceDto, MaintenanceService as MaintenanceService } from '../ser
 })
 export class MaintenanceComponent implements OnInit {
 
-  realm : string;
 
-  maintenanceListFuture : MaintenanceDto[];
-  maintenanceListPast : MaintenanceDto[];
+  isPreviewVisible: boolean = false;
+  isLoaded: boolean = false;
 
-  constructor(private maintenanceService : MaintenanceService) { 
+  trailMapping: TrailMappingDto[] = [];
+  maintenanceListFuture: MaintenanceDto[] = [];
+  maintenanceListPast : MaintenanceDto[] = [];
+
+  selectedTrail: TrailDto;
+  private realm: string;
+
+  entryPerPage = 10;
+  totalFutureEntries = 0;
+  totalPastEntries = 0;
+  page = 1;
+
+
+  constructor(private maintenanceService : MaintenanceService,
+              private modalService: NgbModal,
+              private trailPreviewService: TrailPreviewService,
+              private trailService: TrailService,
+              private authService: AuthService
+  ) {
     this.maintenanceListFuture = [];
     this.maintenanceListPast = [];
   }
 
   ngOnInit(): void {
-    const maintenanceResponseFuture = this.maintenanceService.getFuture(0, 1).subscribe(x=> { this.maintenanceListFuture = x.content; console.log(this.maintenanceListFuture )});
-    const maintenanceResponsePast = this.maintenanceService.getPast(0, 1).subscribe(x=> { this.maintenanceListPast = x.content});
+    this.realm = this.authService.getRealm();
+    this.trailPreviewService.getMappings(this.realm)
+        .subscribe((resp) => {
+          this.trailMapping = resp.content;
+          this.loadMaintenanceFuture(0, 10);
+          this.loadMaintenancePast(0, 10);
+          this.isLoaded = true;
+        })
   }
 
-  formatDate(dateString: string) : string {
-    return moment(dateString).format("DD/MM/YYYY");
+  loadMaintenanceFuture(skip: number, limit: number) {
+    this.maintenanceService.getFuture(skip, limit)
+        .subscribe(
+            (resp) => {
+              this.maintenanceListFuture = resp.content;
+              this.totalFutureEntries = resp.totalCount;
+            })
+  }
+
+  loadMaintenancePast(skip: number, limit: number) {
+    this.maintenanceService.getPast(skip, limit)
+        .subscribe(
+            (resp) => {
+              this.maintenanceListPast = resp.content;
+              this.totalPastEntries = resp.totalCount;
+            })
+  }
+
+
+  formatDate(dateString: string) {
+    return DateUtils.formatDateToDay(dateString);
+  }
+
+  togglePreview() {
+    this.isPreviewVisible = !this.isPreviewVisible;
+  }
+
+  showPreview(trailId) {
+    this.trailService.getTrailById(trailId).subscribe(
+        trailResp => {
+          this.selectedTrail = trailResp.content[0];
+          this.togglePreview();
+        }
+    );
+  }
+
+  getTrailCode(trailId: string) {
+    const filtered = this.trailMapping
+        .filter((tp) => tp.id == trailId);
+    if (filtered.length > 0) {
+      return filtered[0].code;
+    }
+    console.warn(`Could not find trail mapping for id: ${trailId}`)
+    return "";
+  }
+
+  private openModalToShowErrors(errors: string[]) {
+    const modal = this.modalService.open(InfoModalComponent);
+    modal.componentInstance.title = `Errore nel caricamento del sentiero`;
+    const matchingTrail = errors.map(it => `<div>${it}</div>`).join("<br/>");
+    modal.componentInstance.body = `Errori imprevisti in risposta dal server: ${matchingTrail}`;
   }
 
 }

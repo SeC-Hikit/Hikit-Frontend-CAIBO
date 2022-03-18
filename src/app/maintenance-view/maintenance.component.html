@@ -1,57 +1,74 @@
+<div *ngIf="selectedTrail != null">
+    <app-trail-floating-preview
+            [trails]="[selectedTrail]"
+            [isVisible]="isPreviewVisible"
+            (onClose)="togglePreview()"
+    ></app-trail-floating-preview>
+</div>
 <div class="container my-4">
     <div class="row">
         <div class="col-12 col-md-12 col-s-6">
             <h1>Calendario Manutenzioni</h1>
-            <h2>Prossimi incontri</h2>
-            <table *ngIf="maintenanceListFuture.length > 0; else notShow" class="table table-striped">
+            <h2>Prossimo/e {{totalFutureEntries}} manutenzioni</h2>
+            <table *ngIf="maintenanceListFuture.length > 0; else notShowFuture" class="table table-striped">
                 <thead>
-                    <tr>
-                        <th scope="col">Data</th>
-                        <th scope="col">Codice Sentiero</th>
-                        <th scope="col">Posto di Ritrovo</th>
-                        <th scope="col">Descrizione</th>
-                        <th scope="col">Contatto</th>
-                    </tr>
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Codice Sentiero</th>
+                    <th scope="col">Posto di Ritrovo</th>
+                    <th scope="col">Descrizione</th>
+                    <th scope="col">Contatto</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let maintenance of maintenanceListFuture">
-                        <td scope="row">{{ formatDate(maintenance.date) }}</td>
-                        <td scope="row">{{ maintenance.id }}</td>
-                        <td>{{ maintenance.meetingPlace }}</td>
-                        <td>{{ maintenance.description }}</td>
-                        <td>{{ maintenance.contact }}</td>
-                    </tr>
+                <tr *ngFor="let maintenance of maintenanceListFuture">
+                    <td>{{ formatDate(maintenance.date) }}</td>
+                    <td><span class="trailCodeColumn clickable"
+                              (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId) }}</span>
+                    </td>
+                    <td class="small-column">{{ maintenance.meetingPlace }}</td>
+                    <td>
+                        <span [innerHTML]="maintenance.description"></span>
+                    </td>
+                    <td>{{ maintenance.contact }}</td>
+                </tr>
                 </tbody>
             </table>
-            <ng-template #notShow>
-                <p>Non ci sono manutenzioni programmate al momento</p>
+            <ng-template #notShowFuture>
+                <p>Non ci sono manutenzioni future programmate</p>
             </ng-template>
         </div>
     </div>
     <div class="row">
         <div class="col-12 col-md-12 col-s-6">
-            <h2>Incontri Passati</h2>
-            <table *ngIf="maintenanceListPast.length > 0; else notShow" class="table table-striped">
+            <h2>Manutenzioni oggi e passate</h2>
+        </div>
+        <div class="col-12 col-md-12 col-s-6">
+            <table *ngIf="maintenanceListPast.length > 0; else notShowPast" class="table table-striped">
                 <thead>
-                    <tr>
-                        <th scope="col">Data</th>
-                        <th scope="col">Codice Sentiero</th>
-                        <th scope="col">Posto di Ritrovo</th>
-                        <th scope="col">Descrizione</th>
-                        <th scope="col">Contatto</th>
-                    </tr>
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Codice Sentiero</th>
+                    <th scope="col">Posto di Ritrovo</th>
+                    <th scope="col">Descrizione</th>
+                    <th scope="col">Contatto</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let maintenance of maintenanceListPast">
-                        <td scope="row">{{ formatDate(maintenance.date) }}</td>
-                        <td scope="row">{{ maintenance.id }}</td>
-                        <td>{{ maintenance.meetingPlace }}</td>
-                        <td>{{ maintenance.description }}</td>
-                        <td>{{ maintenance.contact }}</td>
-                    </tr>
+                <tr *ngFor="let maintenance of maintenanceListPast">
+                    <td>{{ formatDate(maintenance.date) }}</td>
+                    <td><span class="trailCodeColumn clickable"
+                              (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId) }}</span>
+                    </td>
+                    <td class="small-column">{{ maintenance.meetingPlace }}</td>
+                    <td>
+                        <span [innerHTML]="maintenance.description"></span>
+                    </td>
+                    <td>{{ maintenance.contact }}</td>
+                </tr>
                 </tbody>
             </table>
-            <ng-template #notShow>
+            <ng-template #notShowPast>
                 <p>Non ci sono altre manutenzioni passate</p>
             </ng-template>
         </div>
