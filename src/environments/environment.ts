@@ -6,9 +6,9 @@ export const environment = {
   production: false,
 
   // S&C Env vars
-  realm: "cai-bologna",
-  instance: "sec_bologna_1",
-  publicName: "CAI Bologna"
+  realm: "cai-cavriago",
+  instance: "sec_cavriago_1",
+  publicName: "CAI Cavriago Canisciolti"
 };
 
 /*
