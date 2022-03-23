@@ -10,7 +10,8 @@ export class MapTrailListComponent implements OnInit {
 
   @Input() trailsPreviewList: TrailPreview[]
   @Output() selectCodeEvent = new EventEmitter<string>();
-  selectedTrail: TrailPreview
+
+  selectedTrail: TrailPreview;
 
   constructor() { }
 

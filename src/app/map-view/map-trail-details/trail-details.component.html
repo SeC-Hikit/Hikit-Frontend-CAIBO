@@ -1,8 +1,21 @@
 <div class="MapTrailDetails row">
     <div *ngIf="selectedTrail" class="top-margin col-12" [ngClass]="{ 'hide' : selectedTrail }">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-10">
                 <h1 class="trailCodeColumn">{{ selectedTrail.code }}</h1>
+            </div>
+
+            <div class="col-md-2 clickable" (click)="onToggleMode()">
+                <svg class="bi" width="32" height="32" fill="currentColor" *ngIf="isCycloSwitchOn">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
+                    />
+                </svg>
+                <svg class="bi" width="29" height="29" fill="currentColor" *ngIf="!isCycloSwitchOn">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#people"
+                    />
+                </svg>
             </div>
         </div>
     </div>
@@ -18,10 +31,8 @@
                         <h4>Lunghezza</h4>
                     </div>
                     <div class="col-6">
-                        <span>{{ selectedTrail.classification }}</span>
-                        <span *ngIf="isCycloSwitchOn"> / </span>
-                        <span>{{ selectedTrail.cycloDetails.cycloClassification == "UNCLASSIFIED" ?
-                            "ND" : selectedTrail.cycloDetails.cycloClassification }}</span>
+                        <span *ngIf="!isCycloSwitchOn">{{ selectedTrail.classification }}</span>
+                        <span *ngIf="isCycloSwitchOn">{{getMappedCycloClassification(selectedTrail.cycloDetails.cycloClassification)}}</span>
                     </div>
                     <div class="col-6">
                         <div>{{ getDistance() }}m</div>
@@ -32,14 +43,14 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-6">
-                        <h4>Tempo di percorrenza</h4>
+                        <h4>T. di percorrenza</h4>
                     </div>
                     <div class="col-6">
                         <h4>Dislivello</h4>
                     </div>
                     <div class="col-6">
-                        <span>Circa {{ selectedTrail.statsTrailMetadata.eta | eta }}</span>
-                        <span *ngIf="isCycloSwitchOn && selectedTrail.cycloDetails.officialEta">/ {{ selectedTrail.cycloDetails.officialEta | eta }}</span>
+                        <span *ngIf="!isCycloSwitchOn">Circa {{ selectedTrail.officialEta != 0 ? (selectedTrail.officialEta | eta) : (selectedTrail.statsTrailMetadata.eta | eta) }}</span>
+                        <span *ngIf="isCycloSwitchOn">{{ selectedTrail.cycloDetails.officialEta | eta }}</span>
                     </div>
                     <div class="col-6">
                         <div>
@@ -80,15 +91,17 @@
             <div class="col-12" *ngIf="isCycloSwitchOn && selectedTrail.cycloDetails.description != ''">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Dettagli ciclistici</h4>
+                        <h4>Descrizione ciclistica</h4>
                     </div>
                     <div class="col-12">
                         <div [innerHTML]="selectedTrail.cycloDetails.description"></div>
                     </div>
                 </div>
+            </div>
+            <div class="col-12" *ngIf="isCycloSwitchOn">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Percorribilità</h4>
+                        <h4>Percorribilità ciclistica</h4>
                     </div>
                     <div class="col-12">
                         <span (click)="moveTo(selectedTrail.startLocation.coordinates)" class="clickable"><span
@@ -110,8 +123,12 @@
                                     <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill"/>
                                 </svg>
                             </span>
+                            <div>
+                                Portage: <span>{{selectedTrail.cycloDetails.wayForward.portage}}</span> min.
+                            </div>
                         </span>
                     </div>
+                    <hr/>
                     <div class="col-12">
                         <span (click)="moveTo(selectedTrail.endLocation.coordinates)" class="clickable"><span
                                 class="arrow down"></span>{{
@@ -133,8 +150,24 @@
                                     <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill"/>
                                 </svg>
                             </span>
+                            <div>
+                                Portage: <span>{{selectedTrail.cycloDetails.wayBack.portage}}</span> min.
+                            </div>
                         </span>
 
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="connectedTrails.length > 0">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Sentieri collegati</h4>
+                    </div>
+                    <div class="col-12">
+                        <span *ngFor="let connected of connectedTrails" class="clickable white-font trailCodeColumn"
+                              (click)="onRelatedTrailClick(connected.id)">
+                            {{connected.code}}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -143,40 +176,52 @@
                     <div class="col-12">
                         <h4>Percorribilita'</h4>
                     </div>
+                    <div class="col-12" *ngIf="selectedTrailMaintenances.length > 0">
+                        <div class="col-12">
+                            Ultima <span class="clickable" (click)="onLastMaintenanceWordClick()">
+                            manutenzione</span> eseguita il {{formatDate(selectedTrailMaintenances[0].date)}}
+                        </div>
+                    </div>
                     <div class="col-12">
                         <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow"
-                             class="clickable">
-                            <div>
-                                <div>
-                                    <ul>
-                                        <svg class="bi pulse" width="24" height="24" fill="red">
-                                            <use
-                                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-triangle-fill"/>
-                                        </svg>
-                                        <li *ngFor="let notification of trailNotifications" class="clickable"
-                                            (click)="moveTo(notification.coordinates)">{{notification.description}}</li>
-                                    </ul>
-                                </div>
-                            </div>
+                             class="clickable row">
+
+                            <table id="trailTable" class="table table-striped interactive-table">
+                                <thead class="">
+                                <tr>
+                                    <th scope="col">Problemi verificati</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="col-12 clickable" *ngFor="let notification of trailNotifications"
+                                    (click)="
+                                    onNotificationClick(notification.id)">
+                                    <td>
+                                        <span [innerHTML]="notification.description"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <ng-template #notShow>
                             <div>
                                 <svg class="bi" width="24" height="24">
                                     <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
                                 </svg>
-                                Non ci sono problemi di percorribilita
+                                Non ci sono problemi di percorribilità
                             </div>
                         </ng-template>
                     </div>
                 </div>
             </div>
-            <div class="col-12" *ngIf="lastMaintenance">
+            <div class="col-12">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Ultima manuntenzione</h4>
+                        <h4>Profilo altimetrico</h4>
                     </div>
-                    <div class="col-12">
-                        <span>Eseguita il {{formatDate(lastMaintenance.date)}}</span>
+                    <div class="col-11">
+                        <canvas id="hikeChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -235,30 +280,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <h4>Profilo altimetrico</h4>
-                    </div>
-                    <div class="col-11">
-                        <canvas id="hikeChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!--            <div class="col-12">-->
-            <!--                <div class="row">-->
-            <!--                    <div class="col-12">-->
-            <!--                        <h4>Sentieri collegati</h4>-->
-            <!--                    </div>-->
-            <!--                    <div class="col-12">-->
-            <!--                        <ul>-->
-            <!--                            <li class="trailCodeColumn">BO123</li>-->
-            <!--                        </ul>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <div class="col-11">
+            <div class="col-12 bottom-margin">
                 <button type="button" class="btn btn-outline-warning" (click)="onReportIssueToTrailClick()">Riporta un
                     problema di percorrenza
                 </button>

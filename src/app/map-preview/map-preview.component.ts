@@ -3,13 +3,10 @@ import {Component, Input, OnInit} from "@angular/core";
 import * as L from "leaflet";
 import {Coordinates2D, GeoTrailService} from "../service/geo-trail-service";
 import {MapUtils} from "../map-view/MapUtils";
-import {TrailDto, TrailCoordinatesDto, CoordinatesDto, TrailService} from "../service/trail-service.service";
+import {TrailDto, TrailCoordinatesDto, CoordinatesDto} from "../service/trail-service.service";
 import {StartIcon} from "../../assets/icons/MapPinIconType";
 import {EndIcon} from "../../assets/icons/MapPinIconType";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
-import {AlertPinIcon} from "../../assets/icons/MapPinIconType";
-import {CrossWayIcon} from "../../assets/icons/MapPinIconType";
-import {PinIcon} from "../../assets/icons/MapPinIconType";
 
 export interface Marker {
     coords: Coordinates2D;
@@ -128,7 +125,7 @@ export class MapPreviewComponent implements OnInit {
             if (marker) {
                 return L.marker(
                     {lng: marker.coords.longitude, lat: marker.coords.latitude},
-                    {icon: this.determineIcon(marker)}
+                    {icon: MapUtils.determineIcon(marker)}
                 );
             }
         });
@@ -261,17 +258,6 @@ export class MapPreviewComponent implements OnInit {
         this.map.fitBounds(this.polyline.getBounds());
     }
 
-    private determineIcon(marker: Marker) {
-        switch (marker.icon) {
-            case MapPinIconType.ALERT_PIN:
-                return AlertPinIcon.get();
-            case MapPinIconType.CROSSWAY_ICON:
-                return CrossWayIcon.get();
-            case MapPinIconType.PIN:
-                if (marker.color) return PinIcon.get(marker.color);
-                return PinIcon.get();
-        }
-    }
 
     // Change view
     private changeView(focusPoint: Coordinates2D) {

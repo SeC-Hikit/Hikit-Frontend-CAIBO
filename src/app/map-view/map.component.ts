@@ -3,14 +3,17 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MaintenanceDto, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../service/trail-preview-service.service';
-import {TrailCoordinatesDto, TrailDto, TrailService} from '../service/trail-service.service';
+import {TrailCoordinatesDto, TrailDto, TrailResponse, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
-import {GeoTrailService, RectangleDto} from "../service/geo-trail-service";
+import {Coordinates2D, GeoTrailService, RectangleDto} from "../service/geo-trail-service";
 import {environment} from "../../environments/environment.prod";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {Observable, ObservedValueOf, Subject} from "rxjs";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
+import {DateUtils} from "../utils/DateUtils";
 
 export enum ViewState {
     NONE = "NONE", TRAIL = "TRAIL", PLACE_IN_TRAIL = "PLACE_IN_TRAIL", TRAIL_LIST = "TRAIL_LIST"
@@ -41,7 +44,7 @@ export class MapComponent implements OnInit {
 
     private searchTerms = new Subject<string>();
 
-    isCycloToggled = true;
+    isCycloToggled = false;
     // Bound elements
     searchTermString: string = "";
     trailPreviewList: TrailPreview[];
@@ -50,13 +53,14 @@ export class MapComponent implements OnInit {
 
     selectedTrail: TrailDto;
     trailList: TrailDto[];
-
+    connectedTrails: TrailDto[] = [];
     selectedTileLayer: string;
     selectedTrailBinaryPath: string;
     selectedTrailNotifications: AccessibilityNotification[];
-    lastMaintenance: MaintenanceDto;
+    selectedTrailMaintenances: MaintenanceDto[];
+
     userPosition: UserCoordinates;
-    highlightedLocation: TrailCoordinatesDto;
+    highlightedLocation: Coordinates2D;
 
     isTrailSelectedVisible: boolean = false;
     isTrailFullScreenVisible: boolean = false;
@@ -71,6 +75,8 @@ export class MapComponent implements OnInit {
     selectedTrailIndex: number = 0;
     showTrailCodeMarkers: boolean;
 
+    private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
+
     constructor(
         private trailService: TrailService,
         private geoTrailService: GeoTrailService,
@@ -78,7 +84,8 @@ export class MapComponent implements OnInit {
         private accessibilityService: NotificationService,
         private maintenanceService: MaintenanceService,
         private activatedRoute: ActivatedRoute,
-        private router: Router) {
+        private router: Router,
+        private modalService: NgbModal) {
     }
 
     ngOnInit(): void {
@@ -143,36 +150,61 @@ export class MapComponent implements OnInit {
         if (!id) {
             return;
         }
-        let singletonTrail = this.trailList.filter(t => t.id == id);
+        let electedTrail = this.trailList.filter(t => t.id == id);
 
-        if (singletonTrail.length > 0) {
+        if (electedTrail.length > 0) {
             this.sideView = ViewState.TRAIL;
-            this.selectedTrail = singletonTrail[0];
+            this.selectedTrail = electedTrail[0];
+            this.loadRelatedForTrailId(id);
         }
 
-        if (refresh || singletonTrail.length == 0) {
+        if (refresh || electedTrail.length == 0) {
             this.trailService.getTrailById(id).subscribe((resp) => {
                 this.sideView = ViewState.TRAIL;
                 this.selectedTrail = resp.content[0];
-
+                this.loadRelatedForTrailId(id);
             })
         }
 
         this.loadNotificationsForTrail(id);
+        this.loadLastMaintenanceForTrail(id);
+    }
+
+    private loadRelatedForTrailId(id: string) {
+        const relatedTrailIds = this.selectedTrail.locations
+            .flatMap((it) => {
+                return it.encounteredTrailIds
+            }).filter(it => it != id);
+        const relatedTrailsSet = new Set(relatedTrailIds);
+        this.loadRelatedTrailsByIdForSelectedTrail(Array.from(relatedTrailsSet.values()));
     }
 
     loadNotificationsForTrail(id: string): void {
         if (!id) {
             return;
         }
-        this.accessibilityService.getById(id).subscribe(notificationResponse => {
+        this.accessibilityService.getUnresolvedForTrailId(id)
+            .subscribe(notificationResponse => {
             this.selectedTrailNotifications = notificationResponse.content
         });
     }
 
-    loadLastMaintenaceForTrail(code: string): void {
-        this.maintenanceService.getPastForTrail(code).subscribe(maintenanceResponse => {
-            this.lastMaintenance = maintenanceResponse.content[0]
+    loadRelatedTrailsByIdForSelectedTrail(trailIds: string[]) {
+        const trailDtoFromCache: TrailDto[] = trailIds
+            .filter((trailId) => this.trailMap.has(trailId))
+            .map((it) => this.trailMap.get(it))
+        const trailIdsNotInCache = trailIds.filter((trailId) => !this.trailMap.has(trailId))
+        const map: Promise<TrailResponse>[] = trailIdsNotInCache.map(it=> this.trailService.getTrailById(it).toPromise());
+        Promise.all(map).then((resps) => {
+          const loadedTrails: TrailDto[] = resps.flatMap(it=> it.content);
+          loadedTrails.forEach(it=> this.trailMap.set(it.id, it));
+          this.connectedTrails = Array.from(trailDtoFromCache.concat(loadedTrails));
+        });
+    }
+
+    loadLastMaintenanceForTrail(trailId: string): void {
+        this.maintenanceService.getPastForTrail(trailId).subscribe(maintenanceResponse => {
+                this.selectedTrailMaintenances = maintenanceResponse.content
         });
     }
 
@@ -224,7 +256,7 @@ export class MapComponent implements OnInit {
         }
     }
 
-    navigateToLocation(location: TrailCoordinatesDto) {
+    navigateToLocation(location: Coordinates2D) {
         this.highlightedLocation = location;
     }
 
@@ -239,9 +271,14 @@ export class MapComponent implements OnInit {
             .locate($event, level.toUpperCase(), false)
             .subscribe((e) => {
                 this.trailList = e.content;
+                this.populateTrailMap(e.content);
                 this.showTrailCodeMarkers = this.electShowTrailCodes(this.zoomLevel);
                 this.onDoneLoading();
             });
+    }
+
+    private populateTrailMap(e: TrailDto[]) {
+        e.forEach((it) => this.trailMap.set(it.id, it))
     }
 
     onLoading() {
@@ -308,7 +345,33 @@ export class MapComponent implements OnInit {
             })
     }
 
+    private openInfoModal(title: string, body: string) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = title;
+        modal.componentInstance.body = body;
+    }
+
+    onFocusOnNotification(notificationId: string) {
+        const accessibilityNotification = this.selectedTrailNotifications.filter(it=> it.id == notificationId)[0];
+        this.openInfoModal(`Problema di percorrenza su sentiero ${this.selectedTrail.code}`,
+            `<div>Riportato il: <b>${DateUtils.formatDateToIta(accessibilityNotification.reportDate)}</b></div>` +
+            `<div>Descrizione: <b>${accessibilityNotification.description}</b></div>`)
+    }
+
+    onMaintenanceClick($event: string) {
+        const lastMaintenance = this.selectedTrailMaintenances[0];
+        if(lastMaintenance.id != $event) return;
+        this.openInfoModal(`Ultima manutenzione effettuata su sentiero ${this.selectedTrail.code}`,
+            `<div>Effettuata il: <b>${DateUtils.formatDateToIta(lastMaintenance.date)}</b></div>` +
+            `<div>Descrizione: <b>${lastMaintenance.description}</b></div>`)
+    }
+
+    onToggleMode() {
+        this.isCycloToggled = !this.isCycloToggled;
+    }
+
     private electShowTrailCodes(zoomLevel: number) {
         return zoomLevel > 12;
     }
+
 }

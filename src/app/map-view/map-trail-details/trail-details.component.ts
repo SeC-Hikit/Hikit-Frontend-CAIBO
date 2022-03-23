@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import * as moment from 'moment';
-import { MaintenanceDto } from 'src/app/service/maintenance.service';
-import { AccessibilityNotification } from 'src/app/service/notification-service.service';
-import { TrailDto, TrailCoordinatesDto } from 'src/app/service/trail-service.service';
+import {MaintenanceDto} from 'src/app/service/maintenance.service';
+import {AccessibilityNotification} from 'src/app/service/notification-service.service';
+import {TrailCoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
 import {ChartUtils} from "../ChartUtils";
 import * as Chart from "chart.js";
 import {ChartOptions} from "chart.js";
+import {TrailCycloClassificationMapper} from "../TrailCycloClassificationMapper";
+import {Coordinates2D} from "../../service/geo-trail-service";
 
 @Component({
   selector: 'app-map-trail-details',
@@ -21,7 +23,8 @@ export class TrailDetailsComponent implements OnInit {
 
   @Input() selectedTrail: TrailDto;
   @Input() trailNotifications: AccessibilityNotification[];
-  @Input() lastMaintenance: MaintenanceDto;
+  @Input() connectedTrails: TrailDto[];
+  @Input() selectedTrailMaintenances: MaintenanceDto[];
   @Input() isCycloSwitchOn: boolean;
 
   @Output() toggleFullTrailPageEvent = new EventEmitter<void>();
@@ -29,20 +32,24 @@ export class TrailDetailsComponent implements OnInit {
   @Output() onDownloadGpx = new EventEmitter<void>();
   @Output() onDownloadKml = new EventEmitter<void>();
   @Output() onDownloadPdf = new EventEmitter<void>();
-  @Output() onNavigateToLocation = new EventEmitter<TrailCoordinatesDto>();
+  @Output() onNavigateToLocation = new EventEmitter<Coordinates2D>();
   @Output() onNavigateToSelectedTrailCoordIndex = new EventEmitter<number>();
   @Output() onNavigateToTrailReportIssue = new EventEmitter<string>();
+  @Output() onSelectTrail = new EventEmitter<string>();
+  @Output() onSelectedNotification = new EventEmitter<string>();
+  @Output() onMaintenanceClick = new EventEmitter<string>();
+  @Output() onToggleModeClick = new EventEmitter<void>();
 
 
-
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
     this.chartOptions = ChartUtils.getChartOptions(
-        (number)=> this.onHoverAltiGraph(number));
+        (number) => this.onHoverAltiGraph(number));
     this.chart = new Chart("hikeChart", {
       type: "line",
       options: this.chartOptions,
@@ -62,7 +69,7 @@ export class TrailDetailsComponent implements OnInit {
 
   updateChart(): void {
     if(!this.chart) {
-      setTimeout(()=> this.updateChart(), 150);
+      setTimeout(() => this.updateChart(), 0);
       return; }
     ChartUtils.clearChart(this.chart);
     let altitudeDataPoints = this.selectedTrail.coordinates.map(c => c.altitude);
@@ -107,16 +114,42 @@ export class TrailDetailsComponent implements OnInit {
     return Math.round(s);
   }
 
-  getMinutes(){
+  getMinutes() {
     let s = this.selectedTrail.statsTrailMetadata.eta;
     return Math.round(s);
   }
 
-  formatDate(dateString: string) : string {
+  getMappedCycloClassification(value: string) {
+    return TrailCycloClassificationMapper.map(value);
+  }
+
+  formatDate(dateString: string): string {
     return moment(dateString).format("DD/MM/YYYY");
   }
 
   onReportIssueToTrailClick() {
     this.onNavigateToTrailReportIssue.emit(this.selectedTrail.id);
+  }
+
+  onRelatedTrailClick(id: string) {
+    this.onSelectTrail.emit(id);
+  }
+
+  onNotificationClick(notificationId: string) {
+    const accessibilityNotification = this.trailNotifications.filter(it => it.id == notificationId)[0];
+    this.onNavigateToLocation.emit(
+        {
+          longitude: accessibilityNotification.coordinates.longitude,
+          latitude: accessibilityNotification.coordinates.latitude
+        });
+    this.onSelectedNotification.emit(notificationId);
+  }
+
+  onLastMaintenanceWordClick() {
+    this.onMaintenanceClick.emit(this.selectedTrailMaintenances[0].id);
+  }
+
+  onToggleMode() {
+    this.onToggleModeClick.emit();
   }
 }

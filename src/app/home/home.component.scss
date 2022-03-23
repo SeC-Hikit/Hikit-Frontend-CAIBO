@@ -48,6 +48,10 @@
     margin-left: 30px;
   }
 
+  .fixed-bottom {
+    left: 10%;
+  }
+
   .box:hover {
     background: #1D9566;
   }
@@ -56,27 +60,13 @@
     cursor: pointer;
     background: $primary-bg-color;
     color: $secondary-text-color;
-    position: relative;
-    width: 50%; /* desired width */
-    min-width: 100px;
     padding: 1.5%;
     transition: 0.2s all;
-  }
-
-  .box:before {
-    content: "";
-    float: left;
-    padding-top: 100%; /* initial ratio of 1:1*/
   }
 
   .fixed {
     position: absolute;
     bottom: 2.5em;
-  }
 
-  .bottom-right{
-    position: absolute;
-    right: 10px;
-    bottom: 0;
   }
 }
