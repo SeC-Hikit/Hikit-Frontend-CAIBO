@@ -1,19 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
-import {DateUtils} from "../utils/DateUtils";
 import {TrailDto, TrailMappingDto, TrailService} from "../service/trail-service.service";
-import {MaintenanceDto, MaintenanceService} from "../service/maintenance.service";
-import {AdminMaintenanceService} from "../service/admin-maintenance.service";
 import {TrailPreviewService} from "../service/trail-preview-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../service/auth.service";
-import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {Subject} from "rxjs";
 import {Marker} from "../map-preview/map-preview.component";
 import {AdminNotificationService} from "../service/admin-notification-service.service";
-import {Status} from "../Status";
-import {PromptModalComponent} from "../modal/prompt-modal/prompt-modal.component";
 import {Coordinates2D} from "../service/geo-trail-service";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
 
@@ -36,6 +30,7 @@ export class AccessibilityComponent implements OnInit {
     isPreviewVisible: boolean = false;
     hasLoaded = false;
 
+    realm : string = "";
     trailMapping: TrailMappingDto[] = [];
     selectedTrail: TrailDto;
     unresolvedNotifications: AccessibilityNotification[];
@@ -57,8 +52,8 @@ export class AccessibilityComponent implements OnInit {
 
     ngOnInit(): void {
 
-        let realm = this.authService.getRealm();
-        this.trailPreviewService.getMappings(realm)
+        this.realm = this.authService.getRealm();
+        this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
                 this.loadNotification(1);
@@ -69,18 +64,18 @@ export class AccessibilityComponent implements OnInit {
     loadNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadUnresolved(lowerBound, this.entryPerPage * page);
+        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.realm);
     }
 
     loadSolvedNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadResolved(lowerBound, this.entryPerPage * page);
+        this.loadResolved(lowerBound, this.entryPerPage * page, this.realm);
     }
 
-    loadUnresolved(skip: number, limit: number) {
+    loadUnresolved(skip: number, limit: number, realm: string) {
         this.hasLoaded = false;
-        this.notificationService.getUnresolved(skip, limit).subscribe(
+        this.notificationService.getUnresolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.unresolvedNotifications = resp.content;
                 this.totalUnresolvedNotification = resp.totalPages;
@@ -88,9 +83,9 @@ export class AccessibilityComponent implements OnInit {
             });
     }
 
-    private loadResolved(skip: number, limit: number) {
+    private loadResolved(skip: number, limit: number, realm: string) {
         this.hasLoaded = false;
-        this.notificationService.getResolved(skip, limit).subscribe(
+        this.notificationService.getResolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.solvedNotifications = resp.content;
                 this.totalSolvedNotification = resp.totalPages;
