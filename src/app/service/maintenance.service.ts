@@ -22,6 +22,7 @@ export class MaintenanceService {
 
   getFuture(skip: number, limit: number, realm?: string): Observable<MaintenanceResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    if (realm) { params = params.append("realm", realm); }
     if(realm) params.append("realm", realm);
     return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/future", {params: params})
       .pipe(
@@ -32,7 +33,7 @@ export class MaintenanceService {
 
   getPast(skip: number, limit: number, realm? : string): Observable<MaintenanceResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
-    if(realm) params.append("realm", realm);
+    if (realm) { params = params.append("realm", realm); }
     return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past", {params: params})
       .pipe(
         tap(_ => console.log("")),
