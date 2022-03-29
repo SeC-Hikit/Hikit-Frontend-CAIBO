@@ -40,11 +40,11 @@ export class MaintenanceService {
       );
   }
 
-  getPastForTrail(code: string) {
-    return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past/" + code)
+  getPastForTrail(trailId: string) {
+    return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past/" + trailId)
       .pipe(
         tap(_ => console.log("")),
-        catchError(this.handleError<MaintenanceResponse>('Past maintenance by code', null))
+        catchError(this.handleError<MaintenanceResponse>('Past maintenance by trailId', null))
       );
   }
 

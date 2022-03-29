@@ -60,6 +60,7 @@ export class PoiViewTableComponent implements OnInit {
     }
 
     getTrailCode(id: string): string {
+        if(!id) return "";
         if (this.cachedTrail.length == 0) return "";
         return this.cachedTrail.filter((ct) => ct.id == id)[0].code;
     }

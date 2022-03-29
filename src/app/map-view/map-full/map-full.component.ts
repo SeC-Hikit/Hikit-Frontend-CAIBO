@@ -1,13 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import 'leaflet';
-import {LatLngBounds, LeafletMouseEventHandlerFn} from 'leaflet';
+import {LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
-import {RectangleDto} from 'src/app/service/geo-trail-service';
-import {TrailDto, TrailCoordinatesDto, CoordinatesDto} from 'src/app/service/trail-service.service';
+import {Coordinates2D, RectangleDto} from 'src/app/service/geo-trail-service';
+import {CoordinatesDto, TrailCoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
 import {UserCoordinates} from 'src/app/UserCoordinates';
 import {GraphicUtils} from 'src/app/utils/GraphicUtils';
 import {MapUtils} from '../MapUtils';
 import {TrailToPolyline} from '../TrailToPolyline';
+import {AccessibilityNotification} from "../../service/notification-service.service";
+import {Marker} from 'src/app/map-preview/map-preview.component';
+import {MapPinIconType} from "../../../assets/icons/MapPinIconType";
 
 declare let L; // to be able to use L namespace
 
@@ -31,6 +34,7 @@ export class MapFullComponent implements OnInit {
     selectedTrailLayer: L.Polyline;
     selectedMarkerLayer: L.Marker;
     trailCodeMarkers: L.Marker[] = [];
+    notificationMarkers: L.Marker[] = [];
 
     otherTrailsPolylines: TrailToPolyline[];
 
@@ -38,14 +42,16 @@ export class MapFullComponent implements OnInit {
 
     @Input() userPosition: UserCoordinates;
     @Input() selectedTrail: TrailDto;
+    @Input() selectedTrailNotification: AccessibilityNotification[];
     @Input() trailList: TrailDto[];
     @Input() tileLayerName: string;
-    @Input() highlightedLocation: TrailCoordinatesDto;
+    @Input() highlightedLocation: Coordinates2D;
     @Input() startingZoomLevel: number;
     @Input() showTrailCodeMarkers: boolean;
     @Input() selectedTrailIndex?: number;
 
     @Output() onTrailClick = new EventEmitter<string>();
+    @Output() onNotificationClick = new EventEmitter<string>();
     @Output() onViewChange = new EventEmitter<RectangleDto>();
     @Output() onZoomChange = new EventEmitter<number>();
 
@@ -57,6 +63,8 @@ export class MapFullComponent implements OnInit {
         this.otherTrailsPolylines = [];
     }
 
+    private readonly _minZoom = 11;
+    private readonly _maxZoom = 17;
 
     ngOnInit(): void {
         this.openStreetmapCopy =
@@ -65,9 +73,13 @@ export class MapFullComponent implements OnInit {
         this.selectedLayer.on("load", function () {
             console.log("loaded");
         })
-        this.map = L.map(MapFullComponent.MAP_ID, {layers: [this.selectedLayer], maxZoom: 17})
+        this.map = L.map(MapFullComponent.MAP_ID, {
+            layers: [this.selectedLayer],
+            maxZoom: this._maxZoom,
+            minZoom: this._minZoom
+        })
             .setView(
-                [44.498955, 11.327591],
+                [44.498955, 11.327591], // TODO: remember last visited area
                 this.startingZoomLevel
             );
 
@@ -139,6 +151,9 @@ export class MapFullComponent implements OnInit {
                 if (propName == "selectedTrail") {
                     this.renderTrail(this.selectedTrail)
                 }
+                if (propName == "selectedTrailNotification") {
+                    this.renderNotification(this.selectedTrailNotification)
+                }
                 if (propName == "userPosition") {
                     this.focusOnUser(this.userPosition)
                 }
@@ -150,7 +165,7 @@ export class MapFullComponent implements OnInit {
         this.onDoneLoading.emit();
     }
 
-    flyToLocation(highlightedLocation: TrailCoordinatesDto) {
+    flyToLocation(highlightedLocation: Coordinates2D) {
         this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude});
     }
 
@@ -164,7 +179,7 @@ export class MapFullComponent implements OnInit {
     }
 
     renderTrail(selectedTrail: TrailDto) {
-        // Shall take the polyline from the full list - do not instantiate a new polyline each tim
+        // Shall take the polyline from the full list - do not instantiate a new polyline each time
         // USE restorePathFromList(x);
         if (this.selectionCircle) {
             this.map.removeLayer(this.selectionCircle);
@@ -187,7 +202,9 @@ export class MapFullComponent implements OnInit {
         });
         this.otherTrailsPolylines.forEach(trailToPoly => {
             trailToPoly.getPolyline().addTo(this.map)
-            trailToPoly.getPolyline().on("click", ()=> { this.onSelectTrail(trailToPoly.getId()) });
+            trailToPoly.getPolyline().on("click", () => {
+                this.onSelectTrail(trailToPoly.getId())();
+            });
             trailToPoly.getPolyline().on("mouseover", this.highlightTrail(trailToPoly));
             trailToPoly.getPolyline().on("mouseout", this.dehighlightTrail(trailToPoly));
         });
@@ -213,7 +230,7 @@ export class MapFullComponent implements OnInit {
         }
     }
 
-    onSelectTrail(id: string) {
+    onSelectTrail(id: string): () => void {
         let codeEmitter = this.onTrailClick;
         return function () {
             codeEmitter.emit(id)
@@ -310,8 +327,8 @@ export class MapFullComponent implements OnInit {
         if (this.selectedTrailIndex >= 0 && this.selectedTrailIndex <
             this.selectedTrail.coordinates.length) {
 
-            this.map.setZoom(14, {animate: true});
-            this.flyToLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
+            // this.map.setZoom(14, {animate: true});
+            // this.flyToLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
             this.highlightLocation(this.selectedTrail.coordinates[selectedTrailIndex]);
         }
     }
@@ -329,5 +346,22 @@ export class MapFullComponent implements OnInit {
         }
         console.log("Not showing trail markers")
         this.removeTrailMarkers();
+    }
+
+    private renderNotification(selectedTrailNotification: AccessibilityNotification[]) {
+        this.notificationMarkers.forEach((it) => this.map.removeLayer(it));
+        selectedTrailNotification.forEach((it) => {
+            const marker: Marker = {
+                icon: MapPinIconType.ALERT_PIN, color: "yellow",
+                coords: {latitude: it.coordinates.latitude, longitude: it.coordinates.longitude}
+            };
+            const notificationMarker = L.marker(
+                {lng: it.coordinates.longitude, lat: it.coordinates.latitude},
+                {icon: MapUtils.determineIcon(marker)}
+            );
+            notificationMarker.on("click", ()=> this.onNotificationClick.emit(it.id));
+            this.notificationMarkers.push(notificationMarker);
+            this.map.addLayer(notificationMarker)
+        });
     }
 }

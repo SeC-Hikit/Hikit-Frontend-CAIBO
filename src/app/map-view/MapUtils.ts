@@ -3,6 +3,8 @@ import {TrailCoordinatesDto} from "../service/trail-service.service";
 import {TrailClassification} from "../TrailClassification";
 import {LatLngBounds} from "leaflet";
 import {RectangleDto} from "../service/geo-trail-service";
+import {AlertPinIcon, CrossWayIcon, MapPinIconType, PinIcon} from "../../assets/icons/MapPinIconType";
+import {Marker} from "../map-preview/map-preview.component";
 
 export class MapUtils {
 
@@ -74,6 +76,18 @@ export class MapUtils {
                 '</span></span><span class="red"></span></div>',
             iconAnchor: [20, 5]
         });
+    }
+
+    static determineIcon(marker: Marker) {
+        switch (marker.icon) {
+            case MapPinIconType.ALERT_PIN:
+                return AlertPinIcon.get();
+            case MapPinIconType.CROSSWAY_ICON:
+                return CrossWayIcon.get();
+            case MapPinIconType.PIN:
+                if (marker.color) return PinIcon.get(marker.color);
+                return PinIcon.get();
+        }
     }
 
     static getTextStyle(isSelectedLine: boolean): any {

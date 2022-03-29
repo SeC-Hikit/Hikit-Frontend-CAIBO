@@ -1,9 +1,7 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
-import {RestResponse} from '../RestResponse';
 import {components} from 'src/binding/Binding';
 
 export type AccessibilityNotificationResponse = components["schemas"]["AccessibilityResponse"]
@@ -40,6 +38,15 @@ export class NotificationService {
                 catchError(this.handleError<AccessibilityNotificationResponse>('get unresolved', null))
             );
     }
+
+    getUnresolvedForTrailId(trailId: string): Observable<AccessibilityNotificationResponse> {
+        return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved/" + trailId)
+            .pipe(
+                tap(),
+                catchError(this.handleError<AccessibilityNotificationResponse>('get unresolved', null))
+            );
+    }
+
 
     getResolved(skip: number, limit: number): Observable<AccessibilityNotificationResponse> {
         let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())

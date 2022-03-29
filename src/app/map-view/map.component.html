@@ -31,7 +31,7 @@
                     <div *ngIf="sideView=='NONE'">
                         <div class="row align-middle">
                             <div class="col-md-12">
-                                <p>S&C v0.5</p>
+                                <p>S&C UI v1.0alpha</p>
                                 <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
                                         class="clickable"
                                         (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
@@ -75,7 +75,8 @@
                         <app-map-trail-details
                                 [selectedTrail]="selectedTrail"
                                 [trailNotifications]="selectedTrailNotifications"
-                                [lastMaintenance]="lastMaintenance"
+                                [selectedTrailMaintenances]="selectedTrailMaintenances"
+                                [connectedTrails]="connectedTrails"
                                 [isCycloSwitchOn]="isCycloToggled"
                                 (onDownloadGpx)="onDownloadGpx()"
                                 (onDownloadKml)="onDownloadKml()"
@@ -83,8 +84,12 @@
                                 (toggleFullTrailPageEvent)="toggleFullPageTrail()"
                                 (toggleNotificationListEvent)="toggleNotificationsModal()"
                                 (onNavigateToLocation)="navigateToLocation($event)"
+                                (onSelectTrail)="onSelectTrail($event)"
                                 (onNavigateToSelectedTrailCoordIndex)="navigateToSelectedTrailIndex($event)"
                                 (onNavigateToTrailReportIssue)="navigateToTrailReportIssue($event)"
+                                (onSelectedNotification)="onFocusOnNotification($event)"
+                                (onMaintenanceClick)="onMaintenanceClick($event)"
+                                (onToggleModeClick)="onToggleMode()"
                         >
                         </app-map-trail-details>
                     </div>
@@ -94,10 +99,10 @@
         </div>
 
         <!--  Map Column  -->
-
         <div class="column-map col-lg-8 col-md-8">
             <app-map-full id="map-full-container"
                           [selectedTrail]="selectedTrail"
+                          [selectedTrailNotification]="selectedTrailNotifications"
                           [selectedTrailIndex]="selectedTrailIndex"
                           [tileLayerName]="selectedTileLayer"
                           [trailList]="trailList"
@@ -107,6 +112,7 @@
                           [highlightedLocation]="highlightedLocation"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"
+                          (onNotificationClick)="onFocusOnNotification($event)"
                           (onZoomChange)="onZoomChange($event)"
                           (onLoading)="onLoading()"
                           (onDoneLoading)="onDoneLoading()">

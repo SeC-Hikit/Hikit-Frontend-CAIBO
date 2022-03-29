@@ -11,16 +11,19 @@ export class EtaPipe implements PipeTransform {
 
     let formattedString = "";
 
+    if(value == 0) {
+      return "Non ancora attribuito";
+    }
+
     if(value <= 5) {
       return "5 minuti";
     }
 
     if (h != 0) {
       let hs = h > 1 ? "e" : "a"
-      formattedString += h + " or" + hs;
+      formattedString += h + " or" + hs + " ";
     }
     if (quarters > 0) {
-      formattedString += " e ";
       if (quarters == 2) {
         formattedString += "30";
       } else {

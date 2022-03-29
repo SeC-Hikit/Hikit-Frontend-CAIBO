@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "src/app/service/auth.service";
-import {Coordinates2D, GeoTrailService} from "src/app/service/geo-trail-service";
+import {GeoTrailService} from "src/app/service/geo-trail-service";
 import {TrailPreview, TrailPreviewService,} from "src/app/service/trail-preview-service.service";
 import {CoordinatesDto, TrailDto, TrailService} from "src/app/service/trail-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -36,7 +36,7 @@ export class ReportingFormComponent implements OnInit {
         "Sentiero non visibile"
     ];
 
-    // TODO: remove form param from the map component
+    // TODO: remove form param from the map component.
     formGroupz: FormGroup = new FormGroup({
         position: TrailImportFormUtils.getLocationForGroup(),
     });

@@ -161,7 +161,7 @@
                                     />
                                 </svg>
                             </div>
-                            <div *ngIf="trailPreviewResponseContent.length > 1" class="col-9">
+                            <div *ngIf="trailPreviewResponseContent.length > 0" class="col-9">
                                 <select
                                         title="Scegli un'opzione"
                                         class="form-control"
@@ -188,8 +188,8 @@
             </div>
             <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
                 <div class="col-md-12 col-lg-12">
-                    <p>Seleziona un punto sulla mappa, nei pressi del sentiero <span
-                            class="mandatory-field-asterisk">*</span></p>
+                    <p>Seleziona un punto sulla mappa, nei pressi del sentiero
+                        <span class="mandatory-field-asterisk">*</span></p>
                     <span class="target">
                     <app-map-preview
                             [trailPreview]="this.selectedTrails[0]"
