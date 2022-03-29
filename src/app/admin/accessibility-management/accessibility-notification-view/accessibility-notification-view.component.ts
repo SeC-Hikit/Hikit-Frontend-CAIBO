@@ -65,18 +65,18 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     loadNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadUnresolved(lowerBound, this.entryPerPage * page);
+        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.authService.getRealm());
     }
 
     loadSolvedNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadResolved(lowerBound, this.entryPerPage * page);
+        this.loadResolved(lowerBound, this.entryPerPage * page, this.authService.getRealm());
     }
 
-    loadUnresolved(skip: number, limit: number) {
+    loadUnresolved(skip: number, limit: number, realm: string) {
         this.hasLoaded = false;
-        this.notificationService.getUnresolved(skip, limit).subscribe(
+        this.notificationService.getUnresolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.unresolvedNotifications = resp.content;
                 this.totalUnresolvedNotification = resp.totalPages;
@@ -84,9 +84,9 @@ export class AccessibilityNotificationViewComponent implements OnInit {
             });
     }
 
-    private loadResolved(skip: number, limit: number) {
+    private loadResolved(skip: number, limit: number, realm: string) {
         this.hasLoaded = false;
-        this.notificationService.getResolved(skip, limit).subscribe(
+        this.notificationService.getResolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.solvedNotifications = resp.content;
                 this.totalSolvedNotification = resp.totalPages;
