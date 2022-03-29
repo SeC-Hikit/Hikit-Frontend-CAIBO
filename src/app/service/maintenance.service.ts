@@ -8,8 +8,6 @@ import { RestResponse } from '../RestResponse';
 
 export type MaintenanceDto = components["schemas"]["MaintenanceDto"]
 export type MaintenanceResponse = components["schemas"]["MaintenanceResponse"]
-export type MaintenanceCreation = components["schemas"]["MaintenanceDto"]
-
 @Injectable({
   providedIn: 'root'
 })
@@ -22,8 +20,9 @@ export class MaintenanceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getFuture(skip: number, limit: number): Observable<MaintenanceResponse> {
+  getFuture(skip: number, limit: number, realm?: string): Observable<MaintenanceResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    if(realm) params.append("realm", realm);
     return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/future", {params: params})
       .pipe(
         tap(_ => console.log("")),
@@ -31,8 +30,9 @@ export class MaintenanceService {
       );
   }
 
-  getPast(skip: number, limit: number): Observable<MaintenanceResponse> {
+  getPast(skip: number, limit: number, realm? : string): Observable<MaintenanceResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    if(realm) params.append("realm", realm);
     return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past", {params: params})
       .pipe(
         tap(_ => console.log("")),

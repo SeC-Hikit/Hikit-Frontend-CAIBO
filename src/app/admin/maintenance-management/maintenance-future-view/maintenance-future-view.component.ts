@@ -50,11 +50,11 @@ export class MaintenanceFutureViewComponent implements OnInit {
     onLoadMaintenance(page: number){
         this.page = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadMaintenanceFuture(lowerBound, this.entryPerPage * page);
+        this.loadMaintenanceFuture(lowerBound, this.entryPerPage * page, this.authService.getRealm());
     }
 
-    loadMaintenanceFuture(skip: number, limit: number) {
-        this.maintenanceService.getFuture(skip, limit)
+    loadMaintenanceFuture(skip: number, limit: number, realm: string) {
+        this.maintenanceService.getFuture(skip, limit, realm)
             .subscribe(
                 (resp) => {
                     this.maintenanceListFuture = resp.content;

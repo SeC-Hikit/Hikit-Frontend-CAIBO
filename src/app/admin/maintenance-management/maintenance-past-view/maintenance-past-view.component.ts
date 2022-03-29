@@ -104,12 +104,12 @@ export class MaintenancePastViewComponent implements OnInit {
     onLoadMaintenancePast(page: number) {
         this.page = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadMaintenancePast(lowerBound, this.entryPerPage * page);
+        this.loadMaintenancePast(lowerBound, this.entryPerPage * page, this.authService.getRealm());
     }
 
-    loadMaintenancePast(skip: number, limit: number) {
+    loadMaintenancePast(skip: number, limit: number, realm: string) {
         this.isLoaded = false;
-        this.maintenanceService.getPast(skip, limit)
+        this.maintenanceService.getPast(skip, limit, realm)
             .subscribe((resp) => {
             this.maintenanceListPast = resp.content;
             this.totalEntries = resp.totalCount;

@@ -30,8 +30,9 @@ export class NotificationService {
             );
     }
 
-    getUnresolved(skip: number, limit: number): Observable<AccessibilityNotificationResponse> {
+    getUnresolved(skip: number, limit: number, realm?: string): Observable<AccessibilityNotificationResponse> {
         let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+        if (realm) params.append("realm", realm);
         return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved", {params: params})
             .pipe(
                 tap(),
@@ -48,8 +49,9 @@ export class NotificationService {
     }
 
 
-    getResolved(skip: number, limit: number): Observable<AccessibilityNotificationResponse> {
+    getResolved(skip: number, limit: number, realm?: string): Observable<AccessibilityNotificationResponse> {
         let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+        if (realm) params.append("realm", realm);
         return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/solved", {params: params})
             .pipe(
                 tap(),
