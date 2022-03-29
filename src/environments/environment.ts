@@ -8,7 +8,7 @@ export const environment = {
   // S&C Env vars
   realm: "cai-cavriago",
   instance: "sec_cavriago_1",
-  publicName: "CAI Cavriago Canisciolti"
+  publicName: "CAI R.Emilia - Cavriago Canisciolti"
 };
 
 /*
