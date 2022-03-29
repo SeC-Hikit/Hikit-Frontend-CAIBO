@@ -79,7 +79,7 @@ export class MapFullComponent implements OnInit {
             minZoom: this._minZoom
         })
             .setView(
-                [44.498955, 11.327591], // TODO: remember last visited area
+                [44.695627, 10.619819], // TODO: remember last visited area
                 this.startingZoomLevel
             );
 
