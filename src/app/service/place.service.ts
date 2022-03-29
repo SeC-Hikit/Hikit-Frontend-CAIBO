@@ -3,7 +3,6 @@ import {Injectable} from "@angular/core";
 import {Observable, of} from "rxjs";
 import {tap, catchError} from "rxjs/operators";
 import {components} from "src/binding/Binding";
-import {RestResponse} from "../RestResponse";
 
 export type PlaceDto = components["schemas"]["PlaceDto"];
 export type PlaceRefDto = components["schemas"]["PlaceRefDto"];
@@ -25,8 +24,9 @@ export class PlaceService {
     constructor(private httpClient: HttpClient) {
     }
 
-    get(skip: number, limit: number): Observable<PlaceResponse> {
+    get(skip: number, limit: number, realm: string): Observable<PlaceResponse> {
         let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+        if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<PlaceResponse>(this.baseUrl, {params: params}).pipe(
             tap((_) => console.log("")),
             catchError(this.handleError<PlaceResponse>("", null))
@@ -40,8 +40,9 @@ export class PlaceService {
         );
     }
 
-    getLikeNameOrTags(name: string, skip: number, limit: number) {
+    getLikeNameOrTags(name: string, skip: number, limit: number, realm: string) {
         let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+        if (realm) { params = params.append("realm", realm); }
         return this.httpClient
             .get<PlaceResponse>(this.baseUrl + "/name/" + name, {params: params})
             .pipe(
