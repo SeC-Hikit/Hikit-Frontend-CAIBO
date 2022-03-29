@@ -73,6 +73,9 @@ export class ReportingFormComponent implements OnInit {
             .getPreviews(0, 10000, this.authService.getRealm())
             .subscribe((resp) => {
                 this.trailPreviews = resp.content;
+                if (resp.content.length == 0) {
+                    this.router.navigate(["/accessibility"]);
+                }
                 if (resp.content.length != 0) {
                     let firstValue = resp.content[0].id;
                     this.loadTrailById(firstValue);

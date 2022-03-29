@@ -51,7 +51,8 @@ export class PlaceViewTableComponent implements OnInit {
     private onPlaceLoad(page: number) {
         const electedPage = page - 1;
         this.placeService.get(electedPage * this.entryPerPage,
-            (electedPage + 1) * this.entryPerPage)
+            (electedPage + 1) * this.entryPerPage,
+            this.authService.getRealm())
             .subscribe(resp => {
                 this.placeList = resp.content;
                 this.totalPlaces = resp.totalCount;
