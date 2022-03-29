@@ -21,7 +21,7 @@ export class PoiService {
   constructor(private httpClient: HttpClient) { }
 
 
-  get(skip: number, limit: number, realm: string): Observable<PoiResponse> {
+  get(skip: number, limit: number, realm?: string): Observable<PoiResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
     if (realm) { params = params.append("realm", realm); }
     return this.httpClient.get<PoiResponse>(this.baseUrl, { params: params })

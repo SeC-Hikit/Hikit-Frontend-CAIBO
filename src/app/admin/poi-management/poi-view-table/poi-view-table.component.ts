@@ -12,6 +12,7 @@ import {TrailDto, TrailService} from "../../../service/trail-service.service";
 import {Marker} from "../../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {Coordinates2D} from "../../../service/geo-trail-service";
+import {AuthService} from "../../../service/auth.service";
 
 export type PoiDto = components["schemas"]["PoiDto"];
 
@@ -40,9 +41,11 @@ export class PoiViewTableComponent implements OnInit {
     macroMap: Map<string, string> = PoiEnums.macroMap();
 
     isPreviewVisible: boolean = false;
+    private realm: string = "";
 
     constructor(
         private poiService: PoiService,
+        private authService: AuthService,
         private poiAdminService: AdminPoiService,
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService
@@ -50,6 +53,7 @@ export class PoiViewTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.realm = this.authService.getRealm();
         this.getTrailPreviews(0, this.entryPerPage);
     }
 
@@ -69,7 +73,7 @@ export class PoiViewTableComponent implements OnInit {
         this.cachedTrail = [];
         this.isLoading = true;
         this.poiService
-            .get(skip, limit)
+            .get(skip, limit, this.realm)
             .pipe(takeUntil(this.destroy$))
             .subscribe((preview: PoiResponse) => {
                 preview.content.forEach((poi) =>
