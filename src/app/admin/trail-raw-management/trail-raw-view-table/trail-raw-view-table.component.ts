@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 import {takeUntil, tap} from "rxjs/operators";
 import {DateUtils} from "../../../utils/DateUtils";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {AuthService} from "../../../service/auth.service";
 
 @Component({
   selector: 'app-trail-raw-view-table',
@@ -31,7 +32,8 @@ export class TrailRawViewTableComponent implements OnInit {
       private importService: ImportService,
       private trailPreviewService: TrailPreviewService,
       private modalService: NgbModal,
-      private router: Router
+      private router: Router,
+      private authService: AuthService
   ) {
   }
 
@@ -43,9 +45,9 @@ export class TrailRawViewTableComponent implements OnInit {
     this.loadRawTrails(1);
   }
 
-  getTrailRawPreviews(skip: number, limit: number) {
+  getTrailRawPreviews(skip: number, limit: number, realm?: string) {
     this.trailPreviewService
-        .getRawPreviews(skip, limit)
+        .getRawPreviews(skip, limit, realm)
         .pipe(
             takeUntil(this.destroy$),
             tap((_) => (this.isLoading = false))
@@ -59,7 +61,7 @@ export class TrailRawViewTableComponent implements OnInit {
   loadRawTrails(page: number): void {
     this.page = page;
     const lowerBound = this.entryPerPage * (page - 1);
-    this.getTrailRawPreviews(lowerBound, this.entryPerPage * page);
+    this.getTrailRawPreviews(lowerBound, this.entryPerPage * page, this.authService.getRealm());
   }
 
   uploadFile(file: FileList): void {

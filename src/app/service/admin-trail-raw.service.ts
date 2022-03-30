@@ -17,8 +17,9 @@ export class AdminTrailRawService {
 
   constructor(private httpClient: HttpClient) { }
 
-  get(skip: number, limit: number): Observable<TrailRawResponse> {
+  get(skip: number, limit: number, realm?: string): Observable<TrailRawResponse> {
     let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    if (realm) { params = params.append("realm", realm); }
     return this.httpClient.get(this.baseUrl, {params: params})
       .pipe(
         tap(),

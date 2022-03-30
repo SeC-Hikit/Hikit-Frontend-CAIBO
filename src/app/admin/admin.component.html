@@ -4,12 +4,21 @@
         <app-loading-spinner *ngIf="false"></app-loading-spinner>
         <app-menu-management></app-menu-management>
         <div class="col-12 col-md-12 top-margin">
-            <h1>Benvenuto {{adminName}} amministratore!</h1>
+            <h1>Benvenuto {{userName}} amministratore!</h1>
         </div>
     </div>
     <div class="row section-distance-up">
         <div class="col-12 col-md-12">
-            <p>Sezione: <b>{{section}}</b></p>
+            <p>La tua sezione è: <b>{{userSection}}</b> <span *ngIf="instanceInfo.realm != userRealm"> - dato che il reame a te assegnato non coincide con quello di questa istanza, non potrai apportare modifiche.</span></p>
+        </div>
+        <div class="col-4 col-md-12 col-lg-4">
+            <p>Ti trovi sull'istanza: <b>{{instanceInfo.instance}}</b></p>
+        </div>
+        <div class="col-4 col-md-12 col-lg-4">
+            <p>Reame: <b>{{instanceInfo.realm}}</b></p>
+        </div>
+        <div class="col-4 col-md-12 col-lg-4">
+            <p>S&C v.<b>{{instanceInfo.runningVersion}}</b></p>
         </div>
         <div class="col-12 col-md-12">
             <h2>Lavori in background</h2>
