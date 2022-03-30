@@ -4,6 +4,9 @@
  */
 
 export interface paths {
+  "/report/validate/{validationId}": {
+    put: operations["validate"];
+  };
   "/admin/trail/update": {
     put: operations["updateTrail"];
   };
@@ -113,9 +116,6 @@ export interface paths {
   "/report/{id}": {
     get: operations["getById_1"];
   };
-  "/report/validate/{validationId}": {
-    get: operations["validate"];
-  };
   "/report/upgraded/{realm}": {
     get: operations["getUpgraded"];
   };
@@ -200,6 +200,9 @@ export interface paths {
   "/maintenance/count": {
     get: operations["getCount_3"];
   };
+  "/instance": {
+    get: operations["get_6"];
+  };
   "/geo-tool/polyline_altitude": {
     get: operations["getAltitudeTrail"];
   };
@@ -208,6 +211,9 @@ export interface paths {
   };
   "/dataset": {
     get: operations["getTrailDatasetV"];
+  };
+  "/accessibility/{id}": {
+    get: operations["getById_4"];
   };
   "/accessibility/unresolved": {
     get: operations["getNotSolved"];
@@ -252,10 +258,37 @@ export interface paths {
 
 export interface components {
   schemas: {
+    AccessibilityReportDto: {
+      id?: string;
+      description?: string;
+      trailId?: string;
+      email?: string;
+      telephone?: string;
+      issueId?: string;
+      reportDate?: string;
+      valid?: boolean;
+      coordinates?: components["schemas"]["CoordinatesDto"];
+      recordDetails?: components["schemas"]["RecordDetailsDto"];
+    };
+    AccessibilityReportResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["AccessibilityReportDto"][];
+    };
     CoordinatesDto: {
       longitude?: number;
       latitude?: number;
       altitude?: number;
+    };
+    RecordDetailsDto: {
+      uploadedOn?: string;
+      uploadedBy?: string;
+      onInstance?: string;
+      realm?: string;
     };
     CycloDetailsDto: {
       cycloClassification?:
@@ -367,33 +400,6 @@ export interface components {
       fileDetailsDto?: components["schemas"]["FileDetailsDto"];
       trailStatus?: "DRAFT" | "PUBLIC";
       variant?: boolean;
-    };
-    AccessibilityReportDto: {
-      id?: string;
-      description?: string;
-      trailId?: string;
-      email?: string;
-      telephone?: string;
-      issueId?: string;
-      reportDate?: string;
-      valid?: boolean;
-      coordinates?: components["schemas"]["CoordinatesDto"];
-      recordDetails?: components["schemas"]["RecordDetailsDto"];
-    };
-    RecordDetailsDto: {
-      uploadedOn?: string;
-      uploadedBy?: string;
-      onInstance?: string;
-      realm?: string;
-    };
-    AccessibilityReportResponse: {
-      currentPage?: number;
-      totalPages?: number;
-      size?: number;
-      totalCount?: number;
-      status?: "OK" | "ERROR";
-      messages?: string[];
-      content?: components["schemas"]["AccessibilityReportDto"][];
     };
     PoiDto: {
       id?: string;
@@ -603,6 +609,11 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["TrailPreviewDto"][];
     };
+    InstanceInfoDto: {
+      realm?: string;
+      instance?: string;
+      runningVersion?: string;
+    };
     Coordinates2DDto: {
       longitude?: number;
       latitude?: number;
@@ -615,6 +626,21 @@ export interface components {
 }
 
 export interface operations {
+  validate: {
+    parameters: {
+      path: {
+        validationId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityReportResponse"];
+        };
+      };
+    };
+  };
   updateTrail: {
     responses: {
       /** OK */
@@ -898,6 +924,7 @@ export interface operations {
     parameters: {
       query: {
         level?: "LOW" | "MEDIUM" | "HIGH" | "FULL";
+        isDraftTrailVisible?: boolean;
       };
     };
     responses: {
@@ -1221,6 +1248,7 @@ export interface operations {
         limit?: number;
         realm?: string;
         level?: "LOW" | "MEDIUM" | "HIGH" | "FULL";
+        isDraftTrailVisible?: boolean;
       };
     };
     responses: {
@@ -1284,21 +1312,6 @@ export interface operations {
     parameters: {
       path: {
         id: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["AccessibilityReportResponse"];
-        };
-      };
-    };
-  };
-  validate: {
-    parameters: {
-      path: {
-        validationId: string;
       };
     };
     responses: {
@@ -1387,6 +1400,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1419,6 +1433,7 @@ export interface operations {
         skip?: number;
         limit?: number;
         realm?: string;
+        isDraftTrailVisible?: boolean;
       };
     };
     responses: {
@@ -1467,6 +1482,7 @@ export interface operations {
         skip?: number;
         limit?: number;
         realm?: string;
+        isDraftTrailVisible?: boolean;
       };
     };
     responses: {
@@ -1487,6 +1503,7 @@ export interface operations {
         skip?: number;
         limit?: number;
         realm?: string;
+        isDraftTrailVisible?: boolean;
       };
     };
     responses: {
@@ -1602,6 +1619,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1636,6 +1654,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1684,6 +1703,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1715,6 +1735,11 @@ export interface operations {
     };
   };
   getCountPast: {
+    parameters: {
+      query: {
+        realm?: string;
+      };
+    };
     responses: {
       /** OK */
       200: {
@@ -1729,6 +1754,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1741,6 +1767,11 @@ export interface operations {
     };
   };
   getCountFuture: {
+    parameters: {
+      query: {
+        realm?: string;
+      };
+    };
     responses: {
       /** OK */
       200: {
@@ -1751,11 +1782,26 @@ export interface operations {
     };
   };
   getCount_3: {
+    parameters: {
+      query: {
+        realm?: string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
           "*/*": components["schemas"]["CountResponse"];
+        };
+      };
+    };
+  };
+  get_6: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["InstanceInfoDto"];
         };
       };
     };
@@ -1801,11 +1847,27 @@ export interface operations {
       };
     };
   };
+  getById_4: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AccessibilityResponse"];
+        };
+      };
+    };
+  };
   getNotSolved: {
     parameters: {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1841,6 +1903,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1860,6 +1923,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1872,6 +1936,11 @@ export interface operations {
     };
   };
   getCount_4: {
+    parameters: {
+      query: {
+        realm?: string;
+      };
+    };
     responses: {
       /** OK */
       200: {

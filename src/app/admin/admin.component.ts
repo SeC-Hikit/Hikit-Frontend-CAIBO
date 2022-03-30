@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../service/auth.service";
+import {InstanceInfoDto, InstanceService} from "../service/instance.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-admin',
@@ -7,19 +9,31 @@ import {AuthService} from "../service/auth.service";
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  adminName: string = '';
-  section : string = '';
-  sectionCode : string = '';
 
-  constructor(private authService: AuthService) { }
+  userName: string = '';
+  userRealm: string = '';
+  userSection : string = '';
+  userSectionCode : string = '';
+
+  instanceInfo : InstanceInfoDto;
+
+  constructor(private authService: AuthService,
+              private instanceService: InstanceService,
+              private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.authService.getUsername().then((resp)=> {
-      this.adminName = resp;
+      this.userName = resp;
     })
 
-    this.section = this.authService.getSection().replace("-", " ").toLocaleUpperCase();
-    this.sectionCode = this.authService.getSection();
+    this.instanceService.get().subscribe((resp)=> {
+      this.instanceInfo = resp;
+    })
+
+    this.userRealm = this.authService.getRealm();
+
+    this.userSection = this.authService.getSection().replace("-", " ").toLocaleUpperCase();
+    this.userSectionCode = this.authService.getSection();
   }
 
 }

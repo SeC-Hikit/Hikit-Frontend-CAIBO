@@ -62,9 +62,10 @@ export class TrailPreviewService {
             );
     }
 
-    getRawPreviews(skip: number, limit: number): Observable<TrailPreviewResponse> {
+    getRawPreviews(skip: number, limit: number, realm?: string): Observable<TrailPreviewResponse> {
         let params = new HttpParams().set("skip", skip.toString())
             .append("limit", limit.toString()).append("realm", "*");
+        if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/raw", {params: params})
             .pipe(
                 tap(_ => console.log(_)),
