@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {KeycloakService} from "keycloak-angular";
-import {env} from "process";
 import {environment} from '../../environments/environment';
 import {components} from "../../binding/Binding";
 

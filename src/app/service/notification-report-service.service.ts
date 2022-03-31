@@ -1,12 +1,10 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { RestResponse } from '../RestResponse';
 import {
-  AccessibilityNotification,
-  AccessibilityNotificationResolution,
   AccessibilityNotificationResponse
 } from "./notification-service.service";
 import {AccessibilityReportDto} from "./accessibility-service.service";

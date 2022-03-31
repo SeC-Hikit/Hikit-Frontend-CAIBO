@@ -4,7 +4,7 @@ import { Observable, of } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
 import { components } from "src/binding/Binding";
 import { RestResponse } from "../RestResponse";
-import {TrailDto, TrailMappingResponse, TrailResponse} from "./trail-service.service";
+import {TrailMappingResponse, TrailResponse} from "./trail-service.service";
 
 
 export type TrailRawResponse = components['schemas']['TrailRawResponse'];
