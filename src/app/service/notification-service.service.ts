@@ -5,7 +5,6 @@ import {catchError, tap} from 'rxjs/operators';
 import {components} from 'src/binding/Binding';
 
 export type AccessibilityNotificationResponse = components["schemas"]["AccessibilityResponse"]
-export type AccessibilityReportResponse = components["schemas"]["AccessibilityReportResponse"]
 export type AccessibilityNotificationResolution = components["schemas"]["AccessibilityNotificationResolutionDto"]
 export type AccessibilityNotification = components["schemas"]["AccessibilityNotificationDto"]
 

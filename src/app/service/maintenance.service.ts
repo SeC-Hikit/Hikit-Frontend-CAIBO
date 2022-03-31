@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
-import { RestResponse } from '../RestResponse';
 
 
 export type MaintenanceDto = components["schemas"]["MaintenanceDto"]

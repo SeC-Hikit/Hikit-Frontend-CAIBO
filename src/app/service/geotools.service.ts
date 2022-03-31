@@ -3,17 +3,11 @@ import {Injectable} from "@angular/core";
 import {Observable, of} from "rxjs";
 import {tap, catchError} from "rxjs/operators";
 import {components} from "src/binding/Binding";
-import {RestResponse} from "../RestResponse";
 import {Coordinates2D} from "./geo-trail-service";
 import {CoordinatesDto} from "./trail-service.service";
 
-export type PlaceDto = components["schemas"]["PlaceDto"];
-export type PlaceRefDto = components["schemas"]["PlaceRefDto"];
-export type PlaceResponse = components["schemas"]["PlaceResponse"];
 export type LinkedMedia = components["schemas"]["LinkedMediaDto"];
 export type UnlinkMedia = components["schemas"]["UnLinkeMediaRequestDto"];
-export type PointGeolocationDto = components["schemas"]["PointGeolocationDto"];
-
 @Injectable({
     providedIn: "root",
 })

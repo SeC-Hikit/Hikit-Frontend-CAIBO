@@ -3,7 +3,7 @@ import 'leaflet';
 import {LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
 import {Coordinates2D, RectangleDto} from 'src/app/service/geo-trail-service';
-import {CoordinatesDto, TrailCoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
+import {CoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
 import {UserCoordinates} from 'src/app/UserCoordinates';
 import {GraphicUtils} from 'src/app/utils/GraphicUtils';
 import {MapUtils} from '../MapUtils';
