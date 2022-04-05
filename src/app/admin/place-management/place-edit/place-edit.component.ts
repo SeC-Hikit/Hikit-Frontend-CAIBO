@@ -41,7 +41,7 @@ export class PlaceEditComponent implements OnInit {
             description: new FormControl("")
         });
 
-        this.realm = authService.getRealm();
+        this.realm = authService.getUserRealm();
         this.trailPreviewService.getMappings("")
 
     }

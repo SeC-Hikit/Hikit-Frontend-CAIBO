@@ -41,7 +41,7 @@ export class AccessibilityReportViewComponent implements OnInit {
     markers: Marker[] = [];
 
     constructor(
-        private authService: AuthService,
+        public authService: AuthService,
         private reportService: ReportService,
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
@@ -53,7 +53,7 @@ export class AccessibilityReportViewComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        let realm = this.authService.getRealm();
+        let realm = this.authService.getUserRealm();
         this.trailPreviewService.getMappings(realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
@@ -78,7 +78,7 @@ export class AccessibilityReportViewComponent implements OnInit {
     private getUnapgraded(skip: number, limit: number) {
         this.hasLoaded = false;
         this.reportService
-            .getUnapgradedByRealm(skip, limit, this.authService.getRealm())
+            .getUnapgradedByRealm(skip, limit, this.authService.getUserRealm())
             .subscribe((x) => {
                 this.unresolvedNotifications = x.content;
                 this.totalUnresolvedNotifications = x.totalPages;
@@ -89,14 +89,13 @@ export class AccessibilityReportViewComponent implements OnInit {
     private getUpgraded(skip: number, limit: number) {
         this.hasLoaded = false;
         this.reportService
-            .getUpgradedByRealm(skip, limit, this.authService.getRealm())
+            .getUpgradedByRealm(skip, limit, this.authService.getUserRealm())
             .subscribe((x) => {
                 this.upgradedNotifications = x.content;
                 this.totalUpgradedNotifications = x.totalPages;
                 this.hasLoaded = true;
             });
     }
-
 
     getTrailCode(trailId) {
         const filtered = this.trailMapping

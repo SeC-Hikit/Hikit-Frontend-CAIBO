@@ -41,7 +41,7 @@ export class TrailManagementComponent implements OnInit {
 
     ngOnInit(): void {
         this.getAllPreviews();
-        this.realm = this.authService.getRealm();
+        this.realm = this.authService.getUserRealm();
     }
 
     getAllPreviews() {

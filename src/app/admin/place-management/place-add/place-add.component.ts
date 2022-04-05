@@ -77,7 +77,7 @@ export class PlaceAddComponent implements OnInit {
         recordDetails: {
           uploadedOn: moment().toDate().toISOString(),
           uploadedBy: name,
-          realm: this.authService.getRealm(),
+          realm: this.authService.getUserRealm(),
           onInstance: environment.instance
         }
       }).subscribe((resp)=> {

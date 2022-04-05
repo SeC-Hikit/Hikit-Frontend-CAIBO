@@ -28,12 +28,20 @@ export class AuthService {
         return any.preferred_username;
     }
 
-    getRealm(): string {
+    getUserRealm(): string {
         let userLoggedInToken: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
         if (userLoggedInToken == null) {
-            return environment.realm;
+            return "";
         }
         return userLoggedInToken.realm;
+    }
+
+    getInstanceRealm() : string {
+        return environment.realm;
+    }
+
+    isRealmMatch(): boolean {
+        return this.getUserRealm() == this.getInstanceRealm();
     }
 
     getSection(): string {

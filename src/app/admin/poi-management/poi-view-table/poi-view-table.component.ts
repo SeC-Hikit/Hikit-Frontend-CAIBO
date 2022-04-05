@@ -44,8 +44,8 @@ export class PoiViewTableComponent implements OnInit {
     private realm: string = "";
 
     constructor(
+        public authService: AuthService,
         private poiService: PoiService,
-        private authService: AuthService,
         private poiAdminService: AdminPoiService,
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService
@@ -53,7 +53,7 @@ export class PoiViewTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.realm = this.authService.getRealm();
+        this.realm = this.authService.getInstanceRealm();
         this.getTrailPreviews(0, this.entryPerPage);
     }
 
@@ -116,7 +116,7 @@ export class PoiViewTableComponent implements OnInit {
         );
     }
 
-    private togglePreview() {
+    togglePreview() {
         this.isPreviewVisible = !this.isPreviewVisible;
     }
 }

@@ -272,7 +272,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             // return;
             this.isLoading = true;
 
-            let realm = this.authHelper.getRealm();
+            let realm = this.authHelper.getUserRealm();
             let username = await this.authHelper.getUsername();
 
             // Grab values

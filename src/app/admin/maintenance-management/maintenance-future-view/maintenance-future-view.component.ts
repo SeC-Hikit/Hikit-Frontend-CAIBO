@@ -34,11 +34,11 @@ export class MaintenanceFutureViewComponent implements OnInit {
                 private maintenanceService: MaintenanceService,
                 private trailPreviewService: TrailPreviewService,
                 private modalService: NgbModal,
-                private authService: AuthService) {
+                public authService: AuthService) {
     }
 
     ngOnInit(): void {
-        this.realm = this.authService.getRealm();
+        this.realm = this.authService.getUserRealm();
         this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
@@ -50,7 +50,9 @@ export class MaintenanceFutureViewComponent implements OnInit {
     onLoadMaintenance(page: number){
         this.page = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadMaintenanceFuture(lowerBound, this.entryPerPage * page, this.authService.getRealm());
+        this.loadMaintenanceFuture(
+            lowerBound, this.entryPerPage * page,
+            this.authService.getUserRealm());
     }
 
     loadMaintenanceFuture(skip: number, limit: number, realm: string) {

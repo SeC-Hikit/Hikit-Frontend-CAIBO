@@ -43,7 +43,7 @@ export class MaintenancePastViewComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.realm = this.authService.getRealm();
+        this.realm = this.authService.getUserRealm();
         this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
@@ -95,6 +95,7 @@ export class MaintenancePastViewComponent implements OnInit {
     }
 
     onDeleted(unresolvedNotification: MaintenanceDto): void {
+        this.onLoadMaintenancePast(this.page);
     }
 
     formatDate(dateString: string): string {
@@ -104,7 +105,7 @@ export class MaintenancePastViewComponent implements OnInit {
     onLoadMaintenancePast(page: number) {
         this.page = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadMaintenancePast(lowerBound, this.entryPerPage * page, this.authService.getRealm());
+        this.loadMaintenancePast(lowerBound, this.entryPerPage * page, this.authService.getUserRealm());
     }
 
     loadMaintenancePast(skip: number, limit: number, realm: string) {

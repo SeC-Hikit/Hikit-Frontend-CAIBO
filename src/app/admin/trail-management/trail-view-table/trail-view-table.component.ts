@@ -32,13 +32,15 @@ export class TrailViewTableComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private adminTrailService: AdminTrailService,
-        private authService: AuthService
+        public authService: AuthService
     ) {
     }
 
     ngOnInit(): void {
-        this.realm = this.authService.getRealm();
         this.getAllPreviews();
+        this.realm =
+            this.authService
+                .getInstanceRealm();
     }
 
     getAllPreviews() {

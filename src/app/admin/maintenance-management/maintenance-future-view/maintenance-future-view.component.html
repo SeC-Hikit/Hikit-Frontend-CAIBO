@@ -49,8 +49,10 @@
                             <span [innerHTML]="maintenance.description"></span>
                         </td>
                         <td>{{ maintenance.contact }}</td>
-                        <td class="clickable" (click)="onDeleteClick(maintenance)">
-                            <svg class="bi" width="24" height="24" fill="currentColor">
+                        <td class="clickable">
+                            <svg class="bi" width="24" height="24" fill="currentColor"
+                                 (click)="onDeleteClick(maintenance)"
+                                 *ngIf="authService.isRealmMatch()">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
                                 />

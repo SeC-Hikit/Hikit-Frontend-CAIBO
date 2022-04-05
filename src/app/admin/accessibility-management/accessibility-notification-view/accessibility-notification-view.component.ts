@@ -45,7 +45,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private modalService: NgbModal,
-        private authService: AuthService,
+        public authService: AuthService,
     ) {
         this.unresolvedNotifications = [];
         this.solvedNotifications = [];
@@ -53,7 +53,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
 
     ngOnInit(): void {
 
-        let realm = this.authService.getRealm();
+        let realm = this.authService.getUserRealm();
         this.trailPreviewService.getMappings(realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
@@ -65,13 +65,13 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     loadNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.authService.getRealm());
+        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.authService.getUserRealm());
     }
 
     loadSolvedNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadResolved(lowerBound, this.entryPerPage * page, this.authService.getRealm());
+        this.loadResolved(lowerBound, this.entryPerPage * page, this.authService.getUserRealm());
     }
 
     loadUnresolved(skip: number, limit: number, realm: string) {

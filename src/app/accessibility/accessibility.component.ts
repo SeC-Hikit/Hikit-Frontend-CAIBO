@@ -52,7 +52,7 @@ export class AccessibilityComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.realm = this.authService.getRealm();
+        this.realm = this.authService.getUserRealm();
         this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;

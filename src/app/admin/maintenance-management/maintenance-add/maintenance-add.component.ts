@@ -71,7 +71,7 @@ export class MaintenanceAddComponent implements OnInit {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this.realm = this.authService.getRealm();
+        this.realm = this.authService.getUserRealm();
         this.trailPreviewService.getMappings(this.realm).subscribe(
             (resp) => {
                 this.trailMappings = resp.content;
@@ -98,7 +98,7 @@ export class MaintenanceAddComponent implements OnInit {
                 recordDetails: {
                     uploadedOn: moment().toDate().toISOString(),
                     uploadedBy: name,
-                    realm: this.authService.getRealm(),
+                    realm: this.authService.getUserRealm(),
                     onInstance: environment.instance
                 }
             };
