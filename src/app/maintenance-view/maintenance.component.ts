@@ -44,7 +44,7 @@ export class MaintenanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.realm = this.authService.getUserRealm();
+    this.realm = this.authService.getInstanceRealm();
     this.trailPreviewService.getMappings(this.realm)
         .subscribe((resp) => {
           this.trailMapping = resp.content;

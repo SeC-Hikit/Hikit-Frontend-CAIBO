@@ -71,9 +71,8 @@ export class PoiAddComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         this.hasFormBeenInitialized = false;
-
+        const realm = this.authService.getInstanceRealm();
         const idFromPath: string = this.activatedRoute.snapshot.paramMap.get("id");
-        const realm = this.authService.getUserRealm();
         this.populateMicroChoices(this.macroChoices[0].value);
 
         if (idFromPath == null) {

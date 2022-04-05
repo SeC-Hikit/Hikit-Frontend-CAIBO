@@ -43,7 +43,7 @@ export class MaintenancePastViewComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.realm = this.authService.getUserRealm();
+        this.realm = this.authService.getInstanceRealm();
         this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
@@ -105,7 +105,7 @@ export class MaintenancePastViewComponent implements OnInit {
     onLoadMaintenancePast(page: number) {
         this.page = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadMaintenancePast(lowerBound, this.entryPerPage * page, this.authService.getUserRealm());
+        this.loadMaintenancePast(lowerBound, this.entryPerPage * page, this.authService.getInstanceRealm());
     }
 
     loadMaintenancePast(skip: number, limit: number, realm: string) {

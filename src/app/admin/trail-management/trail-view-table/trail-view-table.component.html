@@ -31,10 +31,10 @@
                         <th scope="col">Localita</th>
                         <th scope="col">Cl.</th>
                         <th scope="col">C. da Utente</th>
-                        <th scope="col">+ Ciclo</th>
-                        <th scope="col">Modifica</th>
-                        <th scope="col">Pubblicato</th>
-                        <th scope="col">Cancella</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">+ Ciclo</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">Pubblicato</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
                     </tr>
                     </thead>
                     <tbody class="short-list">

@@ -24,6 +24,8 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     solvedPage = 1;
     isLoading = false;
 
+    realm: string = "";
+
     totalUnresolvedNotification: number;
     totalSolvedNotification: number;
 
@@ -52,9 +54,8 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
-        let realm = this.authService.getUserRealm();
-        this.trailPreviewService.getMappings(realm)
+        this.realm = this.authService.getInstanceRealm();
+        this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
                 this.loadNotification(1);
@@ -65,13 +66,13 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     loadNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.authService.getUserRealm());
+        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.realm);
     }
 
     loadSolvedNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadResolved(lowerBound, this.entryPerPage * page, this.authService.getUserRealm());
+        this.loadResolved(lowerBound, this.entryPerPage * page, this.authService.getInstanceRealm());
     }
 
     loadUnresolved(skip: number, limit: number, realm: string) {

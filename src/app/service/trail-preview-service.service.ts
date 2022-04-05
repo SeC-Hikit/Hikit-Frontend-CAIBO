@@ -51,10 +51,6 @@ export class TrailPreviewService {
             .append("limit", limit.toString())
             .append("realm", realm ? realm : "*")
             .append("isDraftTrailVisible", String(areDraftsVisible));
-        if (realm) {
-            params.append("realm", realm);
-        }
-
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl, {params: params})
             .pipe(
                 tap(_ => console.log(_)),

@@ -4,7 +4,8 @@
         <h2>Segnalazioni di percorrenza</h2>
     </div>
     <div class="col-12">
-        <button type="button" class="btn btn-primary" routerLink="./add">
+        <button type="button" class="btn btn-primary" routerLink="./add"
+                *ngIf="authService.isRealmMatch()">
             + Crea segnalazione di percorrenza
         </button>
     </div>
