@@ -30,7 +30,7 @@ export class AdminComponent implements OnInit {
       this.instanceInfo = resp;
     })
 
-    this.userRealm = this.authService.getRealm();
+    this.userRealm = this.authService.getUserRealm();
 
     this.userSection = this.authService.getSection().replace("-", " ").toLocaleUpperCase();
     this.userSectionCode = this.authService.getSection();

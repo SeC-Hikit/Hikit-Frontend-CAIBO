@@ -47,15 +47,20 @@
           <td>
             {{ poi.recordDetails.uploadedBy }}
           </td>
-          <td class="clickable" routerLink="/admin/poi-management/edit/{{ poi.id }}">
-            <svg class="bi" width="24" height="24" fill="currentColor">
+          <td class="clickable">
+            <svg class="bi" width="24" height="24" fill="currentColor"
+                 *ngIf="authService.isRealmMatch()"
+                 routerLink="/admin/poi-management/edit/{{ poi.id }}">
               <use
                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
               />
             </svg>
           </td>
-          <td class="clickable" (click)="onDelete(poi.id)">
-            <svg class="bi" width="24" height="24" fill="currentColor">
+          <td class="clickable">
+            <svg class="bi" width="24"
+                 height="24" fill="currentColor"
+                 (click)="onDelete(poi.id)"
+                 *ngIf="authService.isRealmMatch()">
               <use
                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
               />

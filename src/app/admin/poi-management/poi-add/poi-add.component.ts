@@ -73,7 +73,7 @@ export class PoiAddComponent implements OnInit {
         this.hasFormBeenInitialized = false;
 
         const idFromPath: string = this.activatedRoute.snapshot.paramMap.get("id");
-        const realm = this.authService.getRealm();
+        const realm = this.authService.getUserRealm();
         this.populateMicroChoices(this.macroChoices[0].value);
 
         if (idFromPath == null) {
@@ -180,7 +180,7 @@ export class PoiAddComponent implements OnInit {
                 recordDetails: {
                     uploadedOn: moment().toDate().toISOString(),
                     uploadedBy: name,
-                    realm: this.authService.getRealm(),
+                    realm: this.authService.getUserRealm(),
                     onInstance: environment.instance
                 },
                 externalResources: externalResources

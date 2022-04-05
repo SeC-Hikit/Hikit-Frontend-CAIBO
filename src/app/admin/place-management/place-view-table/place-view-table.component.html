@@ -55,7 +55,7 @@
                     <td>{{ formatStringDateToDashes(place.recordDetails.uploadedOn) }}</td>
                     <td>{{ place.recordDetails.uploadedBy }}</td>
                     <td class="clickable">
-                        <svg class="bi" width="24" *ngIf="place.recordDetails.realm == realm"
+                        <svg class="bi" width="24" *ngIf="authService.isRealmMatch()"
                              height="24" fill="currentColor" (click)="onEdit(place.id)">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
@@ -64,7 +64,7 @@
                     </td>
                     <td class="clickable">
                         <svg class="bi" width="24"
-                             *ngIf="place.recordDetails.realm == realm && place.crossingTrailIds.length == 0"
+                             *ngIf="authService.isRealmMatch() && place.crossingTrailIds.length == 0"
                              height="24" fill="currentColor" (click)="onDeleteClick(place.id, place.name)">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"

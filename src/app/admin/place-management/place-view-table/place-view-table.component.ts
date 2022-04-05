@@ -32,19 +32,19 @@ export class PlaceViewTableComponent implements OnInit {
     totalPlaces = 0;
     selectedPage: number = 0;
 
-    constructor(private placeService: PlaceService,
+    constructor(public authService: AuthService,
+                private placeService: PlaceService,
                 private adminPlaceService: AdminPlaceService,
                 private trailService: TrailService,
                 private trailPreviewService: TrailPreviewService,
                 private activatedRoute: ActivatedRoute,
-                private authService: AuthService,
                 private modalService: NgbModal,
                 private router: Router) {
     }
 
     ngOnInit(): void {
         this.onPlaceLoad(1);
-        this.realm = this.authService.getRealm();
+        this.realm = this.authService.getUserRealm();
         this.onLoadTrailMap();
     }
 
@@ -52,7 +52,7 @@ export class PlaceViewTableComponent implements OnInit {
         const electedPage = page - 1;
         this.placeService.get(electedPage * this.entryPerPage,
             (electedPage + 1) * this.entryPerPage,
-            this.authService.getRealm())
+            this.authService.getUserRealm())
             .subscribe(resp => {
                 this.placeList = resp.content;
                 this.totalPlaces = resp.totalCount;

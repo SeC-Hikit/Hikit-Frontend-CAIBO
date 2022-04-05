@@ -26,6 +26,7 @@ export class TrailRawViewTableComponent implements OnInit {
   public isLoading = true;
 
   private destroy$ = new Subject();
+  private realm: string;
 
   constructor(
       private trailRawService: AdminTrailRawService,
@@ -42,6 +43,7 @@ export class TrailRawViewTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.realm = this.authService.getInstanceRealm()
     this.loadRawTrails(1);
   }
 
@@ -61,7 +63,9 @@ export class TrailRawViewTableComponent implements OnInit {
   loadRawTrails(page: number): void {
     this.page = page;
     const lowerBound = this.entryPerPage * (page - 1);
-    this.getTrailRawPreviews(lowerBound, this.entryPerPage * page, this.authService.getRealm());
+    this.getTrailRawPreviews(lowerBound,
+        this.entryPerPage * page,
+        this.realm);
   }
 
   uploadFile(file: FileList): void {
@@ -70,10 +74,16 @@ export class TrailRawViewTableComponent implements OnInit {
     this.importService
         .readTrail(file[0])
         .pipe(takeUntil(this.destroy$))
-        .subscribe((trailRawResponse: TrailRawResponse) => {
+        .subscribe((response: TrailRawResponse) => {
           this.isLoading = false;
-          console.log(trailRawResponse.content[0].id);
-          this.navigateToEdit(trailRawResponse.content[0].id);
+          if (response.status == 'ERROR') {
+            this.openError("Error con upload dei .gpx",
+                "Errore con l'upload dei file(s): " + response.messages);
+            return;
+
+          }
+          console.log(response.content[0].id);
+          this.navigateToEdit(response.content[0].id);
         });
   }
 

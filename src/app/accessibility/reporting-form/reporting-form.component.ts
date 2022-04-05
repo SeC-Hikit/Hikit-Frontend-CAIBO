@@ -70,7 +70,7 @@ export class ReportingFormComponent implements OnInit {
 
     private loadPreviews() {
         this.trailPreviewService
-            .getPreviews(0, 10000, this.authService.getRealm())
+            .getPreviews(0, 10000, this.authService.getUserRealm())
             .subscribe((resp) => {
                 this.trailPreviews = resp.content;
                 if (resp.content.length == 0) {
@@ -112,7 +112,7 @@ export class ReportingFormComponent implements OnInit {
                 recordDetails: {
                     uploadedOn: uploadedOn,
                     uploadedBy: "",
-                    realm: this.authService.getRealm(),
+                    realm: this.authService.getUserRealm(),
                     onInstance: ""
                 }
             }
@@ -124,6 +124,8 @@ export class ReportingFormComponent implements OnInit {
                     this.router.navigate(["/accessibility/success"]);
                 } else {
                     this.noticeErrorsModal(resp.messages);
+                    this.isLoading = false;
+                    this.errors = ["Alcuni campi sono errati"];
                 }
             });
 
@@ -153,7 +155,6 @@ export class ReportingFormComponent implements OnInit {
             this.isLoading = true;
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    console.log(position);
                     const longitude = position.coords.longitude;
                     const latitude = position.coords.latitude;
 
@@ -196,7 +197,8 @@ export class ReportingFormComponent implements OnInit {
 
     private noticeErrorsModal(errors: string[]) {
         const modal = this.modalService.open(InfoModalComponent);
-        modal.componentInstance.title = `Errore nel salvataggio della notifica`;
+        modal.componentInstance.title = `Errore nel salvataggio della notifica:`;
+        errors.map(it=> "<b>" + it + "</b>");
         const errorsString = errors.join("<br>")
         modal.componentInstance.body = `<ul>I seguenti errori imepdiscono il salvataggio: <br/>${errorsString}</ul>`;
     }

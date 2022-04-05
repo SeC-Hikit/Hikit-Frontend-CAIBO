@@ -7,7 +7,7 @@
             <h1>Benvenuto {{userName}} amministratore!</h1>
         </div>
     </div>
-    <div class="row section-distance-up">
+    <div class="row section-distance-up" *ngIf="instanceInfo">
         <div class="col-12 col-md-12">
             <p>La tua sezione è: <b>{{userSection}}</b> <span *ngIf="instanceInfo.realm != userRealm"> - dato che il reame a te assegnato non coincide con quello di questa istanza, non potrai apportare modifiche.</span></p>
         </div>

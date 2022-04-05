@@ -53,15 +53,18 @@
                 <td>
                     {{ notification.recordDetails.uploadedBy }}
                 </td>
-                <td class="clickable" (click)="onResolveClick(notification)">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
+                <td class="clickable">
+                    <svg class="bi" width="24" height="24" fill="currentColor"
+                         *ngIf="authService.isRealmMatch()"
+                         (click)="onResolveClick(notification)">
                         <use
                                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-square"
                         />
                     </svg>
                 </td>
                 <td class="clickable">
-                    <a routerLink="./edit/{{notification.id}}">
+                    <a routerLink="./edit/{{notification.id}}"
+                       *ngIf="authService.isRealmMatch()">
                         <svg class="bi" width="24" height="24" fill="currentColor">
                             <use
                                     xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
@@ -69,8 +72,10 @@
                         </svg>
                     </a>
                 </td>
-                <td class="clickable" (click)="onDeleteClick(notification)">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
+                <td class="clickable">
+                    <svg class="bi" width="24" height="24" fill="currentColor"
+                         (click)="onDeleteClick(notification)"
+                         *ngIf="authService.isRealmMatch()">
                         <use
                                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
                         />

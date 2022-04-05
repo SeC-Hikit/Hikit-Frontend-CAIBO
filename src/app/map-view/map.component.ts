@@ -225,10 +225,12 @@ export class MapComponent implements OnInit {
     }
 
     onDownloadPdf(): void {
-        this.trailService.downloadPdf(this.getFileName(this.selectedTrail)).subscribe(response => {
+        this.trailService.downloadPdf(
+            this.getFileName(this.selectedTrail)
+        ).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
             const url = window.URL.createObjectURL(blob);
-            FileSaver.saveAs(blob, this.selectedTrail.code + ".pdf");
+            FileSaver.saveAs(blob, this.selectedTrail.code + "_" + this.selectedTrail.id + ".pdf");
         });
     }
 
