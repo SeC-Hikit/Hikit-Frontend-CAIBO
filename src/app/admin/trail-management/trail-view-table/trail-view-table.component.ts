@@ -37,13 +37,13 @@ export class TrailViewTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getAllPreviews();
         this.realm =
             this.authService
                 .getInstanceRealm();
+        this.getPreviews();
     }
 
-    getAllPreviews() {
+    getPreviews() {
         this.isLoading = true;
         this.loadTrails(1);
     }
@@ -81,7 +81,6 @@ export class TrailViewTableComponent implements OnInit {
 
     loadTrails(page: number): void {
         this.page = page;
-
         const lowerBound = this.entryPerPage * (page - 1);
         this.getTrailPreviews(lowerBound, this.entryPerPage * page);
     }
