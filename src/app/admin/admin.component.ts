@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../service/auth.service";
 import {InstanceInfoDto, InstanceService} from "../service/instance.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AdminDiagnoseService, DiagnoseResponse} from "../service/diagnose.service";
 
 @Component({
   selector: 'app-admin',
@@ -10,15 +11,18 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class AdminComponent implements OnInit {
 
+  isLoading: boolean = false;
   userName: string = '';
   userRealm: string = '';
   userSection : string = '';
-  userSectionCode : string = '';
+  userSectionCode: string = '';
+  diagnoseAltitudeResponse: DiagnoseResponse = null;
 
   instanceInfo : InstanceInfoDto;
 
   constructor(private authService: AuthService,
               private instanceService: InstanceService,
+              private diagnoseService: AdminDiagnoseService,
               private modalService: NgbModal) { }
 
   ngOnInit(): void {
@@ -26,7 +30,7 @@ export class AdminComponent implements OnInit {
       this.userName = resp;
     })
 
-    this.instanceService.get().subscribe((resp)=> {
+    this.instanceService.get().subscribe((resp) => {
       this.instanceInfo = resp;
     })
 
@@ -36,4 +40,12 @@ export class AdminComponent implements OnInit {
     this.userSectionCode = this.authService.getSection();
   }
 
+  onDiagnoseAltitudeClick() {
+    this.isLoading = true;
+    this.diagnoseService.testAltitude()
+        .subscribe((resp) => {
+          this.isLoading = false;
+          this.diagnoseAltitudeResponse = resp;
+        })
+  }
 }

@@ -1,7 +1,6 @@
 <div class="container my-1">
     <div class="row section-distance-up">
-
-        <app-loading-spinner *ngIf="false"></app-loading-spinner>
+        <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
         <app-menu-management></app-menu-management>
         <div class="col-12 col-md-12 top-margin">
             <h1>Benvenuto {{userName}} amministratore!</h1>
@@ -26,6 +25,26 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-12 col-md-12">
+            <h2>Diagnostica</h2>
+        </div>
+        <div class="col-12 col-md-12">
+            <p>Da questa sezione, potrai verificare manualmente il funzionamento dei servizi collegati a questa istanza di S&C.</p>
+        </div>
+        <div class="col-12 col-md-12">
+            <div class="row">
+                <div class="col-4 col-md-12 col-lg-4">
+                    <button class="btn btn-primary col-12" (click)="onDiagnoseAltitudeClick()">
+                        Test servizio di altitudine
+                    </button>
+                </div>
+                <div class="col-4 col-md-12 col-lg-4" *ngIf="diagnoseAltitudeResponse">
+                    {{ diagnoseAltitudeResponse.success ? "OK" : "Problema riscontrato" }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row top-margin-x2">
         <div class="col-12 col-md-12">
             <h2>S&C, novità</h2>
         </div>

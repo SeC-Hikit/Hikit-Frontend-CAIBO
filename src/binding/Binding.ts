@@ -212,6 +212,12 @@ export interface paths {
   "/dataset": {
     get: operations["getTrailDatasetV"];
   };
+  "/admin/diagnose/weather": {
+    get: operations["testWeather"];
+  };
+  "/admin/diagnose/altitude": {
+    get: operations["testAltitude"];
+  };
   "/accessibility/{id}": {
     get: operations["getById_4"];
   };
@@ -621,6 +627,11 @@ export interface components {
     TrailDatasetVersion: {
       version?: number;
       lastUpdate?: string;
+    };
+    DiagnoseResponse: {
+      service?: string;
+      success?: boolean;
+      time?: string;
     };
   };
 }
@@ -1465,6 +1476,7 @@ export interface operations {
       query: {
         skip?: number;
         limit?: number;
+        realm?: string;
       };
     };
     responses: {
@@ -1843,6 +1855,26 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["TrailDatasetVersion"];
+        };
+      };
+    };
+  };
+  testWeather: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["DiagnoseResponse"];
+        };
+      };
+    };
+  };
+  testAltitude: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["DiagnoseResponse"];
         };
       };
     };
