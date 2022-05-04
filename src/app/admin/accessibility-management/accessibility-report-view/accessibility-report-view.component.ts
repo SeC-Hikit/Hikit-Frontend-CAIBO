@@ -40,6 +40,8 @@ export class AccessibilityReportViewComponent implements OnInit {
     upgradedNotifications: AccessibilityReport[] = [];
     markers: Marker[] = [];
 
+    private realm = "";
+
     constructor(
         public authService: AuthService,
         private reportService: ReportService,
@@ -53,8 +55,8 @@ export class AccessibilityReportViewComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        let realm = this.authService.getUserRealm();
-        this.trailPreviewService.getMappings(realm)
+        this.realm = this.authService.getInstanceRealm();
+        this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
                 this.loadUnapgraded(1);
@@ -78,7 +80,7 @@ export class AccessibilityReportViewComponent implements OnInit {
     private getUnapgraded(skip: number, limit: number) {
         this.hasLoaded = false;
         this.reportService
-            .getUnapgradedByRealm(skip, limit, this.authService.getUserRealm())
+            .getUnapgradedByRealm(skip, limit, this.authService.getInstanceRealm())
             .subscribe((x) => {
                 this.unresolvedNotifications = x.content;
                 this.totalUnresolvedNotifications = x.totalPages;
@@ -89,7 +91,7 @@ export class AccessibilityReportViewComponent implements OnInit {
     private getUpgraded(skip: number, limit: number) {
         this.hasLoaded = false;
         this.reportService
-            .getUpgradedByRealm(skip, limit, this.authService.getUserRealm())
+            .getUpgradedByRealm(skip, limit, this.realm)
             .subscribe((x) => {
                 this.upgradedNotifications = x.content;
                 this.totalUpgradedNotifications = x.totalPages;

@@ -1,6 +1,6 @@
 <div class="my-4">
     <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-    <div class="row">
+    <div class="row" *ngIf="authService.isRealmMatch()">
         <div class="col-6">
             <app-upload-button-management
                     class="trail-upload-management__container-button button"
@@ -30,8 +30,8 @@
                 <th scope="col">Nome file</th>
                 <th scope="col">Caricato il</th>
                 <th scope="col">Caricato da</th>
-                <th scope="col">Compila</th>
-                <th scope="col">Cancella</th>
+                <th scope="col" *ngIf="authService.isRealmMatch()">Compila</th>
+                <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
             </tr>
             </thead>
             <tbody class="short-list">
@@ -41,14 +41,18 @@
                 </td>
                 <td>{{ formatDate(tr.fileDetails.uploadedOn) }}</td>
                 <td>{{ tr.fileDetails.uploadedBy }}</td>
-                <td class="clickable" (click)="navigateToEdit(tr.id)">
+                <td class="clickable"
+                    *ngIf="authService.isRealmMatch()"
+                    (click)="navigateToEdit(tr.id)">
                     <svg class="bi" width="24" height="24" fill="currentColor">
                         <use
                                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
                         />
                     </svg>
                 </td>
-                <td (click)="deleteRawTrail(tr.id)" class="clickable">
+                <td (click)="deleteRawTrail(tr.id)"
+                    class="clickable"
+                    *ngIf="authService.isRealmMatch()">
                     <svg class="bi" width="24" height="24" fill="currentColor">
                         <use
                                 xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
@@ -68,5 +72,9 @@
             ></ngb-pagination>
         </div>
     </div>
-    <div *ngIf="trailRawList.length == 0">Non ci sono ancora tracce caricate</div>
+    <div *ngIf="trailRawList.length == 0">
+        <app-items-not-found class="top-margin-x2"
+                             text="Non ci sono ancora tracce caricate.">
+        </app-items-not-found>
+    </div>
 </div>

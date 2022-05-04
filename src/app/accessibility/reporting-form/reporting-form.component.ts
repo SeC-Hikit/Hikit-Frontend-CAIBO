@@ -70,7 +70,8 @@ export class ReportingFormComponent implements OnInit {
 
     private loadPreviews() {
         this.trailPreviewService
-            .getPreviews(0, 10000, this.authService.getUserRealm())
+            .getPreviews(0, 10000,
+                this.authService.getInstanceRealm())
             .subscribe((resp) => {
                 this.trailPreviews = resp.content;
                 if (resp.content.length == 0) {
@@ -112,7 +113,7 @@ export class ReportingFormComponent implements OnInit {
                 recordDetails: {
                     uploadedOn: uploadedOn,
                     uploadedBy: "",
-                    realm: this.authService.getUserRealm(),
+                    realm: this.authService.getInstanceRealm(),
                     onInstance: ""
                 }
             }

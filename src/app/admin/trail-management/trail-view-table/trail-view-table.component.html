@@ -31,10 +31,10 @@
                         <th scope="col">Localita</th>
                         <th scope="col">Cl.</th>
                         <th scope="col">C. da Utente</th>
-                        <th scope="col">+ Ciclo</th>
-                        <th scope="col">Modifica</th>
-                        <th scope="col">Pubblicato</th>
-                        <th scope="col">Cancella</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">+ Ciclo</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">Pubblicato</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
                     </tr>
                     </thead>
                     <tbody class="short-list">
@@ -66,15 +66,15 @@
                             {{ trailPreview.fileDetails.uploadedBy }}
                         </td>
 
-                        <td
-                                [ngClass]="trailPreview.bikeData ? 'complete' : 'incomplete'"
-                                class="clickable"
-                                routerLink="/admin/trail-management/cyclo/{{ trailPreview.id }}"
+                        <td *ngIf="authService.isRealmMatch()"
+                            [ngClass]="trailPreview.bikeData ? 'complete' : 'incomplete'"
+                            class="clickable"
+                            routerLink="/admin/trail-management/cyclo/{{ trailPreview.id }}"
                         >
-                            <span *ngIf="authService.isRealmMatch()"
-                                  ngbTooltip="{{trailPreview.bikeData ? 'Modifica dati ciclo' : 'Aggiungi dati ciclo'}}"
-                                  [ngClass]="trailPreview.bikeData ? '' : 'iconDataNotPresent'"
-                                  class="icon">
+                            <span
+                                    ngbTooltip="{{trailPreview.bikeData ? 'Modifica dati ciclo' : 'Aggiungi dati ciclo'}}"
+                                    [ngClass]="trailPreview.bikeData ? '' : 'iconDataNotPresent'"
+                                    class="icon">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
@@ -82,19 +82,19 @@
                             </svg>
                             </span>
                         </td>
-                        <td>
-                            <svg *ngIf="authService.isRealmMatch()"
-                                 class="bi clickable" width="24"
-                                 height="24" fill="currentColor"
-                                 routerLink="/admin/trail-management/edit/{{ trailPreview.id }}">
+                        <td *ngIf="authService.isRealmMatch()">
+                            <svg
+                                    class="bi clickable" width="24"
+                                    height="24" fill="currentColor"
+                                    routerLink="/admin/trail-management/edit/{{ trailPreview.id }}">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
                                 />
                             </svg>
                         </td>
-                        <td>
+                        <td *ngIf="authService.isRealmMatch()">
                             <div ngbTooltip="{{trailPreview.trailStatus == 'PUBLIC' ?
-                            'Cambia in BOZZA' : 'Pubblica'}}" *ngIf="authService.isRealmMatch()">
+                            'Cambia in BOZZA' : 'Pubblica'}}">
                                 <svg
                                         *ngIf="trailPreview.trailStatus == 'PUBLIC'"
                                         class="bi clickable" width="24"
@@ -112,9 +112,9 @@
                                 </svg>
                             </div>
                         </td>
-                        <td class="clickable">
+                        <td class="clickable" *ngIf="authService.isRealmMatch()">
                             <svg class="bi" width="24" height="24" fill="currentColor"
-                                 *ngIf="authService.isRealmMatch()" (click)="onDelete($event, trailPreview)">
+                                 (click)="onDelete($event, trailPreview)">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
                                 />
@@ -136,7 +136,7 @@
             <ng-template #notShow>
                 <app-items-not-found
                         text="Nessun sentiero trovato.</br>
-                         Creano uno caricando una traccia"></app-items-not-found>
+                         Creane uno caricando una traccia"></app-items-not-found>
             </ng-template>
         </div>
     </div>

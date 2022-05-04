@@ -61,7 +61,7 @@ export class AccessibilityAddComponent implements OnInit {
             this.load(idFromPath);
         }
 
-        const realm = this.authService.getUserRealm();
+        const realm = this.authService.getInstanceRealm();
         this.trailPreviewService.getMappings(realm)
             .subscribe(resp => {
                 this.trailMappings = resp.content;

@@ -14,7 +14,10 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <button type="button" class="btn btn-primary" routerLink="./add">
+            <button type="button"
+                    class="btn btn-primary"
+                    routerLink="./add"
+                    *ngIf="authService.isRealmMatch()">
                 + Programma manutenzione
             </button>
         </div>
@@ -31,7 +34,7 @@
                         <th scope="col">Posto di Ritrovo</th>
                         <th scope="col">Descrizione</th>
                         <th scope="col">Contatto</th>
-                        <th scope="col">Cancella</th>
+                        <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -49,10 +52,9 @@
                             <span [innerHTML]="maintenance.description"></span>
                         </td>
                         <td>{{ maintenance.contact }}</td>
-                        <td class="clickable">
+                        <td class="clickable" *ngIf="authService.isRealmMatch()">
                             <svg class="bi" width="24" height="24" fill="currentColor"
-                                 (click)="onDeleteClick(maintenance)"
-                                 *ngIf="authService.isRealmMatch()">
+                                 (click)="onDeleteClick(maintenance)">
                                 <use
                                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
                                 />

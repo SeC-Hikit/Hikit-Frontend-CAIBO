@@ -34,7 +34,7 @@ export class TrailRawViewTableComponent implements OnInit {
       private trailPreviewService: TrailPreviewService,
       private modalService: NgbModal,
       private router: Router,
-      private authService: AuthService
+      public authService: AuthService
   ) {
   }
 

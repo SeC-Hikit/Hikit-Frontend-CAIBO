@@ -40,13 +40,13 @@ export class TrailManagementComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.realm = this.authService.getInstanceRealm();
         this.getAllPreviews();
-        this.realm = this.authService.getUserRealm();
     }
 
     getAllPreviews() {
         this.isLoading = true;
-        this.getTrailPreviews(0, this.entryPerPage);
+        this.getTrailPreviews(0, this.entryPerPage, this.realm);
     }
 
     onFileSave(codeTrailSaved: string) {
@@ -83,12 +83,12 @@ export class TrailManagementComponent implements OnInit {
     loadTrails(page: number): void {
         this.page = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.getTrailPreviews(lowerBound, this.entryPerPage * page);
+        this.getTrailPreviews(lowerBound, this.entryPerPage * page, this.realm);
     }
 
-    getTrailPreviews(skip: number, limit: number) {
+    getTrailPreviews(skip: number, limit: number, realm: string) {
         this.isLoading = true;
-        this.trailPreviewService.getPreviews(skip, limit)
+        this.trailPreviewService.getPreviews(skip, limit, realm)
             .pipe(
                 takeUntil(this.destroy$),
                 tap(_ => this.isLoading = false)
