@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {components} from 'src/binding/Binding';
-import {TrailMappingResponse} from "./trail-service.service";
+import {TrailMappingResponse, TrailResponse} from "./trail-service.service";
 
 export type TrailPreviewResponse = components["schemas"]["TrailPreviewResponse"];
 export type TrailPreview = components["schemas"]["TrailPreviewDto"];
@@ -37,6 +37,20 @@ export class TrailPreviewService {
             );
     }
 
+    findTrailByNameOrLocationsNames(name: String, realm: string,
+                                    areDraftsVisible: boolean,
+                                    skip: number, limit: number): Observable<TrailPreviewResponse> {
+        let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+            .append("isDraftTrailVisible", String(areDraftsVisible))
+        if (realm) {
+            params.append("realm", realm);
+        }
+        return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/find/name/" + name)
+            .pipe(
+                tap(),
+                catchError(this.handleError<TrailPreviewResponse>('get trail', null))
+            );
+    }
 
     getPreview(id: string): Observable<TrailPreviewResponse> {
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/" + id)

@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MaintenanceDto, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../service/trail-preview-service.service';
-import {TrailCoordinatesDto, TrailDto, TrailResponse, TrailService} from '../service/trail-service.service';
+import {TrailDto, TrailResponse, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
@@ -112,9 +112,8 @@ export class MapComponent implements OnInit {
 
     private getTrailPreviewResponseObservable(code: string, page: number,
                                               areDraftVisible: boolean): Observable<TrailPreviewResponse> {
-        return this.trailPreviewService.findByCode(code, page * this.maxTrailEntriesPerPage,
-            this.maxTrailEntriesPerPage * this.getNextPageNumber(page),
-            environment.realm, areDraftVisible);
+        return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
+            areDraftVisible, 0, this.maxTrailEntriesPerPage * this.getNextPageNumber(page));
     }
 
     private getNextPageNumber(page: number) {

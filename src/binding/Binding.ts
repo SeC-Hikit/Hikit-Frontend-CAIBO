@@ -146,6 +146,9 @@ export interface paths {
   "/preview/map": {
     get: operations["getTrailMapping"];
   };
+  "/preview/find/name/{name}": {
+    get: operations["findByLocationOrTrailNames"];
+  };
   "/preview/find/code/{code}": {
     get: operations["findByTrailCode"];
   };
@@ -1502,6 +1505,28 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["TrailMappingResponse"];
+        };
+      };
+    };
+  };
+  findByLocationOrTrailNames: {
+    parameters: {
+      path: {
+        name: string;
+      };
+      query: {
+        realm?: string;
+        level?: "LOW" | "MEDIUM" | "HIGH" | "FULL";
+        skip?: number;
+        limit?: number;
+        isDraftTrailVisible?: boolean;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailPreviewResponse"];
         };
       };
     };

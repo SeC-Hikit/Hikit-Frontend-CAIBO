@@ -1,4 +1,4 @@
-import {HttpHeaders, HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpHeaders, HttpClient, HttpResponse, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {tap, catchError} from 'rxjs/operators';

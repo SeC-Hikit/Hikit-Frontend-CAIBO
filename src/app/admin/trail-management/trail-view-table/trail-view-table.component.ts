@@ -113,7 +113,17 @@ export class TrailViewTableComponent implements OnInit {
     }
 
     onSearch($event: string) {
+        if($event.trim() == "") {
+            this.loadTrails(1);
+            return;
+        }
 
+        this.trailPreviewService.findTrailByNameOrLocationsNames
+        ($event, this.realm, true,  0, this.entryPerPage).subscribe((resp)=>
+        {
+            this.trailPreviewList = resp.content;
+            this.totalTrail = resp.size;
+        });
     }
 
     changeStatus(trailPreview: TrailPreview, status : "DRAFT" | "PUBLIC") {
