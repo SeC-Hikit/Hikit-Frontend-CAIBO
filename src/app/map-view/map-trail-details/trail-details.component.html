@@ -1,19 +1,23 @@
 <div class="MapTrailDetails row">
     <div *ngIf="selectedTrail" class="top-margin col-12" [ngClass]="{ 'hide' : selectedTrail }">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <h1 class="trailCodeColumn">{{ selectedTrail.code }}</h1>
             </div>
 
-            <div class="col-md-2 clickable" (click)="onToggleMode()">
-                <svg class="bi" width="32" height="32" fill="currentColor" *ngIf="isCycloSwitchOn">
-                    <use
-                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
-                    />
-                </svg>
-                <svg class="bi" width="29" height="29" fill="currentColor" *ngIf="!isCycloSwitchOn">
+            <div class="col-md-2" (click)="onToggleMode()">
+                <svg class="bi clickable" width="29" height="29" fill="currentColor"
+                     [ngClass]="!isCycloSwitchOn ? '' : 'low-opacity'">
                     <use
                             xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#people"
+                    />
+                </svg>
+            </div>
+            <div class="col-md-2 " (click)="onToggleMode()">
+                <svg class="bi clickable" width="32" height="32" fill="currentColor"
+                     [ngClass]="!isCycloSwitchOn ? 'low-opacity' : ''">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
                     />
                 </svg>
             </div>
