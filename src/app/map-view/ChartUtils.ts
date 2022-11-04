@@ -13,7 +13,7 @@ export class ChartUtils {
         chart.update();
     }
 
-    public static getChartOptions( onHoverCallback: (index: number) => void ): ChartOptions {
+    public static getChartOptions( onHoverCallback: (index: number) => void): ChartOptions {
         return {
             tooltips: {
                 enabled: true,
