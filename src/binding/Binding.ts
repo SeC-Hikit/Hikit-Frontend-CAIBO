@@ -146,9 +146,6 @@ export interface paths {
   "/preview/map": {
     get: operations["getTrailMapping"];
   };
-  "/preview/find/name/{name}": {
-    get: operations["findByLocationOrTrailNames"];
-  };
   "/preview/find/code/{code}": {
     get: operations["findByTrailCode"];
   };
@@ -220,6 +217,9 @@ export interface paths {
   };
   "/admin/diagnose/altitude": {
     get: operations["testAltitude"];
+  };
+  "/accessibility": {
+    get: operations["get_7"];
   };
   "/accessibility/{id}": {
     get: operations["getById_4"];
@@ -344,6 +344,7 @@ export interface components {
       coordinates?: components["schemas"]["CoordinatesDto"];
       placeId?: string;
       encounteredTrailIds?: string[];
+      dynamicCrossway?: boolean;
     };
     StatsTrailMetadataDto: {
       totalRise?: number;
@@ -442,6 +443,7 @@ export interface components {
       coordinates?: components["schemas"]["CoordinatesDto"][];
       crossingTrailIds?: string[];
       recordDetails?: components["schemas"]["RecordDetailsDto"];
+      dynamic?: boolean;
     };
     PlaceResponse: {
       currentPage?: number;
@@ -1509,28 +1511,6 @@ export interface operations {
       };
     };
   };
-  findByLocationOrTrailNames: {
-    parameters: {
-      path: {
-        name: string;
-      };
-      query: {
-        realm?: string;
-        level?: "LOW" | "MEDIUM" | "HIGH" | "FULL";
-        skip?: number;
-        limit?: number;
-        isDraftTrailVisible?: boolean;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["TrailPreviewResponse"];
-        };
-      };
-    };
-  };
   findByTrailCode: {
     parameters: {
       path: {
@@ -1900,6 +1880,23 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["DiagnoseResponse"];
+        };
+      };
+    };
+  };
+  get_7: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
+        realm?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PlaceResponse"];
         };
       };
     };

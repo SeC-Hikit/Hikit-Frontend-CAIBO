@@ -1,0 +1,18 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs space-up">
+    <li ngbNavItem>
+        <a ngbNavLink>Località</a>
+        <ng-template ngbNavContent
+        >
+            <app-place-view-table></app-place-view-table
+            >
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <a ngbNavLink>Crocevia dinamici</a>
+        <ng-template ngbNavContent>
+            <app-auto-crossway-view></app-auto-crossway-view
+            >
+        </ng-template>
+    </li>
+</ul>
+<div [ngbNavOutlet]="nav"></div>

@@ -38,6 +38,7 @@ export class TrailImportFormUtils {
                 Validators.minLength(2),
                 TrailImportFormUtils.nameValidator]),
             "crossingTrailIds": new FormControl(intersection.trail.id),
+            "isDynamic": new FormControl(false),
             "latitude": new FormControl(intersectionCoords.latitude, Validators.required),
             "longitude": new FormControl(intersectionCoords.longitude, Validators.required),
             "altitude": new FormControl(intersectionCoords.altitude, Validators.required),
@@ -96,6 +97,7 @@ export class TrailImportFormUtils {
             placeId: control.get("id").value.trim(),
             name: control.get("name").value,
             coordinates: coords,
+            dynamicCrossway: control.get("isDynamic").value,
             encounteredTrailIds: control.get("crossingTrailIds")
                 .value.split(",").map(t => t.trim()).filter(t => t && t != "")
         }

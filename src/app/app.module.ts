@@ -74,6 +74,8 @@ import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landin
 import { MaintenanceFutureViewComponent } from './admin/maintenance-management/maintenance-future-view/maintenance-future-view.component';
 import { MaintenancePastViewComponent } from './admin/maintenance-management/maintenance-past-view/maintenance-past-view.component';
 import { MaintenanceViewComponent } from './admin/maintenance-management/maintenance-view/maintenance-view.component';
+import { PlaceGeneralViewComponent } from './admin/place-management/place-general-view/place-general-view.component';
+import { AutoCrosswayViewComponent } from './admin/place-management/auto-crossway-view/auto-crossway-view.component';
 
 @NgModule({
   declarations: [
@@ -140,7 +142,9 @@ import { MaintenanceViewComponent } from './admin/maintenance-management/mainten
     LandingPageSuccessComponent,
     MaintenanceFutureViewComponent,
     MaintenancePastViewComponent,
-    MaintenanceViewComponent
+    MaintenanceViewComponent,
+    PlaceGeneralViewComponent,
+    AutoCrosswayViewComponent
   ],
   imports: [
     BrowserModule,

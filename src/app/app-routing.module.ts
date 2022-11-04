@@ -33,6 +33,7 @@ import {PlaceEditComponent} from "./admin/place-management/place-edit/place-edit
 import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
 import {MaintenanceAddComponent} from "./admin/maintenance-management/maintenance-add/maintenance-add.component";
 import {MaintenanceViewComponent} from "./admin/maintenance-management/maintenance-view/maintenance-view.component";
+import {PlaceGeneralViewComponent} from "./admin/place-management/place-general-view/place-general-view.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -109,7 +110,7 @@ const routes: Routes = [
             {
                 path: "place-management",
                 children: [
-                    {path: "", component: PlaceViewTableComponent},
+                    {path: "", component: PlaceGeneralViewComponent},
                     {path: "view", component: PlaceViewTableComponent},
                     {path: "add", component: PlaceAddComponent},
                     {path: "edit/:id", component: PlaceEditComponent},
