@@ -115,10 +115,10 @@ export class MapComponent implements OnInit {
         let limit = this.maxTrailEntriesPerPage * this.getNextPageNumber(page);
 
         if(!code) {
-            return this.trailPreviewService.getPreviews(0, limit, environment.realm, areDraftVisible)
+            return this.trailPreviewService.getPreviews(page, limit, environment.realm, areDraftVisible)
         }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
-            areDraftVisible, 0, limit);
+            areDraftVisible, page, limit);
     }
 
     private getNextPageNumber(page: number) {
