@@ -9,29 +9,28 @@
                 <div class="col-11 offset-1" id="trail-detail-column">
                     <div *ngIf="sideView!='TRAIL'" class="row search-section top-margin-x2">
                         <div class="col-11">
-                            <app-search-input placeholder="Cerca per codice sentiero (e.g: 100)"
+                            <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
                                               (onChange)="onSearchKeyPress($event)">
                             </app-search-input>
                         </div>
                     </div>
 
-                    <div *ngIf="sideView!='TRAIL'" class="row top-margin">
-                        <div class="custom-control custom-switch col-12">
-                            <span class="col-lg-11 offset-lg-1 col-md-10 offset-md-2 col-xs-4 offset-xs-8">
-                                <input type="checkbox"
-                                       class="custom-control-input"
-                                       [defaultChecked]="isCycloToggled"
-                                       (change)="toggleCycloOption()"
-                                       id="customSwitch1">
-                                <label class="custom-control-label" for="customSwitch1">Cicloturismo</label>
-                            </span>
-                        </div>
-                    </div>
+<!--                    <div *ngIf="sideView!='TRAIL'" class="row top-margin">-->
+<!--                        <div class="custom-control custom-switch col-12">-->
+<!--                            <span class="col-lg-11 offset-lg-1 col-md-10 offset-md-2 col-xs-4 offset-xs-8">-->
+<!--                                <input type="checkbox"-->
+<!--                                       class="custom-control-input"-->
+<!--                                       [defaultChecked]="isCycloToggled"-->
+<!--                                       (change)="toggleCycloOption()"-->
+<!--                                       id="customSwitch1">-->
+<!--                                <label class="custom-control-label" for="customSwitch1">Cicloturismo</label>-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <div *ngIf="sideView=='NONE'">
                         <div class="row align-middle">
                             <div class="col-md-12">
-                                <p>S&C UI v1.0alpha</p>
                                 <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
                                         class="clickable"
                                         (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>

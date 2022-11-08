@@ -111,8 +111,13 @@ export class MapComponent implements OnInit {
 
     private getTrailPreviewResponseObservable(code: string, page: number,
                                               areDraftVisible: boolean): Observable<TrailPreviewResponse> {
+        let limit = this.maxTrailEntriesPerPage * this.getNextPageNumber(page);
+
+        if(!code) {
+            return this.trailPreviewService.getPreviews(page, limit, environment.realm, areDraftVisible)
+        }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
-            areDraftVisible, 0, this.maxTrailEntriesPerPage * this.getNextPageNumber(page));
+            areDraftVisible, page, limit);
     }
 
     private getNextPageNumber(page: number) {

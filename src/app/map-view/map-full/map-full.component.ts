@@ -312,9 +312,7 @@ export class MapFullComponent implements OnInit {
     }
 
     private highlightLocation(coordinate: CoordinatesDto) {
-        if (this.selectionCircle) {
-            this.map.removeLayer(this.selectionCircle);
-        }
+        this.removeHighlightCircle();
         this.selectionCircle = L.circle(
             [coordinate.latitude, coordinate.longitude],
             {radius: MapFullComponent.CIRCLE_SIZE, color: "red"})
@@ -322,10 +320,15 @@ export class MapFullComponent implements OnInit {
         this.map.addLayer(this.selectionCircle);
     }
 
+    private removeHighlightCircle() {
+        if (this.selectionCircle) {
+            this.map.removeLayer(this.selectionCircle);
+        }
+    }
+
     private focusOnLocationIndex(selectedTrailIndex: number) {
-        console.log(selectedTrailIndex);
-        if (this.selectedTrailIndex >= 0 && this.selectedTrailIndex <
-            this.selectedTrail.coordinates.length) {
+        if (selectedTrailIndex == 0) { this.removeHighlightCircle(); return; }
+        if (this.selectedTrailIndex >= 0 && this.selectedTrailIndex < this.selectedTrail.coordinates.length) {
 
             // this.map.setZoom(14, {animate: true});
             // this.flyToLocation(this.selectedTrail.coordinates[selectedTrailIndex]);

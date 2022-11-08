@@ -60,6 +60,10 @@ export class TrailDetailsComponent implements OnInit {
     this.onNavigateToSelectedTrailCoordIndex.emit(index);
   }
 
+  onHoverAltiGraphOut() : void {
+    this.onNavigateToSelectedTrailCoordIndex.emit(0);
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (!this.selectedTrail) { return; }
     for (const propName in changes) {
