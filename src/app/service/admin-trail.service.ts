@@ -21,7 +21,7 @@ export class AdminTrailService {
 
   saveTrail(trailImportRequest: TrailImportDto): Observable<TrailResponse> {
     return this.httpClient
-      .post<RestResponse>(this.baseUrl + "/save", trailImportRequest)
+      .put<RestResponse>(this.baseUrl + "/save", trailImportRequest)
       .pipe(
         tap((_) => console.log("")),
         catchError(this.handleError<RestResponse>("get all trail", null))

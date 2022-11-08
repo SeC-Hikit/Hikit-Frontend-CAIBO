@@ -93,7 +93,8 @@ const routes: Routes = [
                 children: [
                     {path: "", component: TrailRawViewTableComponent},
                     { path: "view", component: TrailRawViewTableComponent},
-                    {path: "init/:id", component: TrailUploadManagementComponent}
+                    {path: "init/:id", component: TrailUploadManagementComponent},
+                    {path: "init/:id/:quick", component: TrailUploadManagementComponent}
                 ],
                 component: TrailRawManagementComponent,
             },

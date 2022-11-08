@@ -46,6 +46,24 @@ export class TrailImportFormUtils {
         });
     }
 
+    public static getLocationFormGroupForQuickIntersection(intersection: TrailIntersection,
+                                                           trailCode: String, otherTrailCode: String) {
+        let intersectionCoords = intersection.points[0];
+        return new FormGroup({
+            "id": new FormControl(" "), // one char empty string - Strange issue
+            "name": new FormControl("Crocevia " + trailCode + "/" + otherTrailCode,
+                [Validators.required,
+                Validators.minLength(2),
+                TrailImportFormUtils.nameValidator]),
+            "crossingTrailIds": new FormControl(intersection.trail.id),
+            "isDynamic": new FormControl(true),
+            "latitude": new FormControl(intersectionCoords.latitude, Validators.required),
+            "longitude": new FormControl(intersectionCoords.longitude, Validators.required),
+            "altitude": new FormControl(intersectionCoords.altitude, Validators.required),
+            "distanceFromTrailStart": new FormControl("0"),
+        });
+    }
+
     public static getCycloFormGroup() {
         return new FormGroup({
             "classification": new FormControl(this.DEFAULT_CYCLO, Validators.required),
@@ -97,7 +115,7 @@ export class TrailImportFormUtils {
             placeId: control.get("id").value.trim(),
             name: control.get("name").value,
             coordinates: coords,
-            dynamicCrossway: control.get("isDynamic").value,
+            dynamicCrossway: false,
             encounteredTrailIds: control.get("crossingTrailIds")
                 .value.split(",").map(t => t.trim()).filter(t => t && t != "")
         }

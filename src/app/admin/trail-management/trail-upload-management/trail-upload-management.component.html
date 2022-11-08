@@ -190,6 +190,7 @@
                     </div>
                     <div class="col-md-12 top-margin" *ngFor="let place of intersections.controls; index as i">
                         <app-trail-intersection-entry
+                                *ngIf="!isQuickMode"
                                 [inputForm]="place"
                                 [trail]="trailRawDto"
                                 [otherTrail]="crossings[i].trail"
@@ -198,6 +199,9 @@
                                 (onPlaceFound)="togglePlacePicker()"
                                 (onIntersectionNameChange)="changeCrossingName($event, i)"
                         ></app-trail-intersection-entry>
+                    </div>
+                    <div class="col-md-12 top-margin" *ngIf="isQuickMode">
+                       ℹ️ La compilazione rapida provvede a compilare i crocevia automaticamente.
                     </div>
                     <div class="col-md-12 top-margin" *ngIf="intersections.controls.length == 0">
                       ✔️ Nessun crocevia rilevato
@@ -292,6 +296,7 @@
                     <button
                             type="button"
                             class="btn btn-success mt-3 wide-btn"
+                            *ngif="!isQuickMode"
                             (click)="onAddLocation()"
                     >
                         + località intermedia
