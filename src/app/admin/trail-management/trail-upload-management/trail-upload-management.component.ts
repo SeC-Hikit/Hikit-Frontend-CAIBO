@@ -175,11 +175,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     onAddLocation(): void {
         this.locations.push(TrailImportFormUtils.getLocationForGroup());
     }
-
-    onReload(): void {
-        this.isLoading = false;
-    }
-
     proceed(): boolean {
         if (this.STEP_INDEX == this.GENERAL_INFO_INDEX) {
             this.errors = this.checkGeneralInfoForErrors();
@@ -326,7 +321,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 locationPlacesDto,
                 (trailData) => {
                     this.rawTrailService.deleteById(this.trailRawDto.id)
-                        .toPromise().then((result) => {
+                        .toPromise().then(() => {
                         this.onSaveRequest(trailData)
                     })
                 },

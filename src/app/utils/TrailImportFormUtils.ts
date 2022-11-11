@@ -3,7 +3,7 @@ import {Coordinates2D, TrailIntersection} from "../service/geo-trail-service";
 import {FileDetailsDto} from "../service/trail-service.service";
 import * as moment from "moment";
 import {DateUtils} from "./DateUtils";
-import {PlaceDto, PlaceRefDto} from "../service/place.service";
+import {PlaceRefDto} from "../service/place.service";
 import {TrailDataForSaving} from "../admin/trail-management/trail-upload-management/TrailSaveProcessHelper";
 
 export interface CreatedPlaceRefDto {
@@ -115,7 +115,7 @@ export class TrailImportFormUtils {
             placeId: control.get("id").value.trim(),
             name: control.get("name").value,
             coordinates: coords,
-            dynamicCrossway: false,
+            dynamicCrossway: control.get("isDynamic") ? control.get("isDynamic").value : false,
             encounteredTrailIds: control.get("crossingTrailIds")
                 .value.split(",").map(t => t.trim()).filter(t => t && t != "")
         }
