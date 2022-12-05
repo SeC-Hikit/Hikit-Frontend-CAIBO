@@ -1,5 +1,5 @@
-# SeC - Sentieri e Cartografia UI
-SeC UI is an italian localized app that makes easy to work with the [SeC API](https://github.com/loreV/SeC).  
+# Hikit - Sentieri e Cartografia UI
+Hikit - Sentieri e Cartografia UI is an italian localized app that makes easy to work with the [SeC API](https://github.com/loreV/SeC).  
 It supports trails related data manipulation and visualization and, as it is strongly related to the API, the versioning is tight to the API itself. 
 ## Build
 Run `ng build` to build the project (before you may need to run an `npm install`).  
