@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {CrosswayService} from "../../../service/crossway.service";
 import {PlaceDto, PlaceService} from "../../../service/place.service";
 import {TrailDto, TrailService} from "../../../service/trail-service.service";
 import {Marker} from "../../../map-preview/map-preview.component";
@@ -34,7 +33,7 @@ export class AutoCrosswayViewComponent implements OnInit {
   selectedPage: number = 0;
 
   constructor(public authService: AuthService,
-              private crosswayService: CrosswayService,
+              private placeService: PlaceService,
               private adminPlaceService: AdminPlaceService,
               private trailService: TrailService,
               private trailPreviewService: TrailPreviewService,
@@ -51,9 +50,9 @@ export class AutoCrosswayViewComponent implements OnInit {
 
   private onPlaceLoad(page: number) {
     const electedPage = page - 1;
-    this.crosswayService.get(electedPage * this.entryPerPage,
+    this.placeService.get(electedPage * this.entryPerPage,
         (electedPage + 1) * this.entryPerPage,
-        this.realm)
+        this.realm, true)
         .subscribe(resp => {
           this.placeList = resp.content;
           this.totalPlaces = resp.totalCount;
@@ -94,22 +93,6 @@ export class AutoCrosswayViewComponent implements OnInit {
 
   togglePreview() {
     this.isPlacePreviewVisible = !this.isPlacePreviewVisible;
-  }
-
-  onDeleteClick(id: string, name: string) {
-    this.trailService.getTrailByPlaceId(id).subscribe((resp)=> {
-      if(resp.content.length == 0) {
-        this.adminPlaceService.deleteById(id).subscribe(() => {
-          this.onPlaceLoad(this.selectedPage)
-        });
-      } else {
-
-        const trailNames = resp.content.map(it=> { return {code: it.code, id: it.id}})
-        this.openError(`Non è possibile cancellare la località '${name}'`,
-            `La località è attualmente utilizzata da uno o più sentieri in stato BOZZA.` +
-            `<br> Vedi: ` + trailNames.map(t=> t.code + ` (con id=${t.id})`).join("<br/>"));
-      }
-    })
   }
 
   showTrailCode(crossingTrailIds: string[]) {

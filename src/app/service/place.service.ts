@@ -24,8 +24,11 @@ export class PlaceService {
     constructor(private httpClient: HttpClient) {
     }
 
-    get(skip: number, limit: number, realm: string): Observable<PlaceResponse> {
-        let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+    get(skip: number, limit: number, realm: string, isDynamic: boolean = false): Observable<PlaceResponse> {
+        let params = new HttpParams()
+                    .set("skip", skip.toString())
+                    .append("limit", limit.toString())
+                    .append("isDynamicShowing", isDynamic.toString());
         if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<PlaceResponse>(this.baseUrl, {params: params}).pipe(
             tap((_) => console.log("")),

@@ -17,11 +17,6 @@
                     <th scope="col">ID</th>
                     <th scope="col">Nome località</th>
                     <th scope="col">Numero sentieri attr.</th>
-                    <th scope="col">Numero media attr.</th>
-                    <th scope="col">Caricato il</th>
-                    <th scope="col">Caricato da</th>
-                    <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
-                    <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,25 +39,6 @@
                             />
                         </svg>
                         {{ place.crossingTrailIds.length }}</td>
-                    <td>{{ place.mediaIds.length }}</td>
-                    <td>{{ formatStringDateToDashes(place.recordDetails.uploadedOn) }}</td>
-                    <td>{{ place.recordDetails.uploadedBy }}</td>
-                    <td class="clickable" *ngIf="authService.isRealmMatch()">
-                        <svg class="bi" width="24"
-                             height="24" fill="currentColor" (click)="onEdit(place.id)">
-                            <use
-                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
-                            />
-                        </svg>
-                    </td>
-                    <td class="clickable" *ngIf="authService.isRealmMatch()">
-                        <svg class="bi" width="24" *ngIf="place.crossingTrailIds.length == 0"
-                             height="24" fill="currentColor" (click)="onDeleteClick(place.id, place.name)">
-                            <use
-                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
-                            />
-                        </svg>
-                    </td>
                 </tr>
                 </tbody>
             </table>
