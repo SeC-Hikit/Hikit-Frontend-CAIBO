@@ -15,14 +15,14 @@ export interface paths {
   };
   "/admin/report": {
     put: operations["update"];
-    post: operations["create_4"];
+    post: operations["create_5"];
   };
   "/admin/report/upgrade/{id}": {
     put: operations["upgradeReport"];
   };
   "/admin/poi": {
     put: operations["update_1"];
-    post: operations["create_5"];
+    post: operations["create_6"];
   };
   "/admin/place": {
     put: operations["create"];
@@ -41,11 +41,15 @@ export interface paths {
   "/admin/maintenance": {
     put: operations["create_1"];
   };
-  "/admin/accessibility": {
+  "/admin/announcement": {
     put: operations["create_2"];
+    post: operations["update_3"];
+  };
+  "/admin/accessibility": {
+    put: operations["create_3"];
   };
   "/report": {
-    post: operations["create_3"];
+    post: operations["create_4"];
   };
   "/place/geolocate": {
     post: operations["geolocatePlace"];
@@ -161,14 +165,14 @@ export interface paths {
   "/poi/type/{type}": {
     get: operations["getByMacro"];
   };
+  "/poi/trail/{code}": {
+    get: operations["getByTrail"];
+  };
   "/poi/name/{name}": {
     get: operations["getByNameOrTags"];
   };
   "/poi/count": {
     get: operations["getCount_2"];
-  };
-  "/poi/code/{code}": {
-    get: operations["getByTrail"];
   };
   "/place": {
     get: operations["get_4"];
@@ -212,17 +216,23 @@ export interface paths {
   "/geo-tool/altitude": {
     get: operations["geoLocateTrail_2"];
   };
+  "/ert/localities": {
+    get: operations["get_7"];
+  };
   "/dataset": {
     get: operations["getTrailDatasetV"];
+  };
+  "/announcement": {
+    get: operations["get_8"];
+  };
+  "/announcement/{id}": {
+    get: operations["get_9"];
   };
   "/admin/diagnose/weather": {
     get: operations["testWeather"];
   };
   "/admin/diagnose/altitude": {
     get: operations["testAltitude"];
-  };
-  "/accessibility": {
-    get: operations["get_7"];
   };
   "/accessibility/{id}": {
     get: operations["getById_4"];
@@ -262,6 +272,9 @@ export interface paths {
   };
   "/admin/maintenance/{id}": {
     delete: operations["deleteMaintenance"];
+  };
+  "/admin/announcement/{id}": {
+    delete: operations["delete_1"];
   };
   "/admin/accessibility/{id}": {
     delete: operations["deleteAccessibilityNotification"];
@@ -480,6 +493,39 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["MaintenanceDto"][];
     };
+    AnnouncementDto: {
+      id?: string;
+      name?: string;
+      description?: string;
+      relatedTopic?: components["schemas"]["AnnouncementRelatedTopicDto"];
+      type?: "EVENT" | "INFO" | "WARNING" | "EMERGENCY";
+      valid?: boolean;
+      recordDetails?: components["schemas"]["RecordDetails"];
+    };
+    AnnouncementRelatedTopicDto: {
+      announcementTopicType?:
+        | "TRAIL"
+        | "POI"
+        | "PLACE"
+        | "ACCESSIBILITY_NOTIFICATION"
+        | "MAINTENANCE";
+      id?: string;
+    };
+    RecordDetails: {
+      uploadedOn?: string;
+      uploadedBy?: string;
+      onInstance?: string;
+      realm?: string;
+    };
+    AnnouncementResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["AnnouncementDto"][];
+    };
     AccessibilityNotificationDto: {
       id?: string;
       description?: string;
@@ -632,6 +678,54 @@ export interface components {
       longitude?: number;
       latitude?: number;
     };
+    CityRefDto: {
+      istat?: string;
+      city?: string;
+      province?: string;
+      province_short?: string;
+      iat?: components["schemas"]["IatDto"][];
+    };
+    ContactDto: {
+      label?: string;
+      type?: string;
+      value?: string;
+    };
+    IatDto: {
+      name?: string;
+      address?: string;
+      number?: string;
+      coordinates?: components["schemas"]["CoordinatesDto"];
+      contacts?: components["schemas"]["ContactDto"][];
+    };
+    ImageDto: {
+      url?: string;
+      thumb?: string;
+      title?: string;
+      name?: string;
+      width?: number;
+      height?: number;
+      license?: string;
+      licenseUrl?: string;
+    };
+    LocalityDto: {
+      id?: string;
+      name?: string;
+      description?: string;
+      coordinates?: components["schemas"]["CoordinatesDto"][];
+      image?: components["schemas"]["ImageDto"][];
+      relatingCity?: components["schemas"]["CityRefDto"];
+      recordDetails?: components["schemas"]["RecordDetailsDto"];
+      importedOn?: string;
+    };
+    LocalityResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["LocalityDto"][];
+    };
     TrailDatasetVersion: {
       version?: number;
       lastUpdate?: string;
@@ -707,7 +801,7 @@ export interface operations {
       };
     };
   };
-  create_4: {
+  create_5: {
     responses: {
       /** OK */
       200: {
@@ -754,7 +848,7 @@ export interface operations {
       };
     };
   };
-  create_5: {
+  create_6: {
     responses: {
       /** OK */
       200: {
@@ -889,6 +983,36 @@ export interface operations {
       /** OK */
       200: {
         content: {
+          "*/*": components["schemas"]["AnnouncementResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AnnouncementDto"];
+      };
+    };
+  };
+  update_3: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AnnouncementResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AnnouncementDto"];
+      };
+    };
+  };
+  create_3: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
           "application/json": components["schemas"]["AccessibilityResponse"];
           "application/xml": components["schemas"]["AccessibilityResponse"];
         };
@@ -901,7 +1025,7 @@ export interface operations {
       };
     };
   };
-  create_3: {
+  create_4: {
     responses: {
       /** OK */
       200: {
@@ -1607,6 +1731,25 @@ export interface operations {
       };
     };
   };
+  getByTrail: {
+    parameters: {
+      path: {
+        code: string;
+      };
+      query: {
+        skip?: number;
+        limit?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["PoiResponse"];
+        };
+      };
+    };
+  };
   getByNameOrTags: {
     parameters: {
       path: {
@@ -1636,30 +1779,12 @@ export interface operations {
       };
     };
   };
-  getByTrail: {
-    parameters: {
-      path: {
-        code: string;
-      };
-      query: {
-        skip?: number;
-        limit?: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["PoiResponse"];
-        };
-      };
-    };
-  };
   get_4: {
     parameters: {
       query: {
         skip?: number;
         limit?: number;
+        isDynamicShowing?: boolean;
         realm?: string;
       };
     };
@@ -1878,12 +2003,63 @@ export interface operations {
       };
     };
   };
+  get_7: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
+        latitude: number;
+        longitude: number;
+        distance: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LocalityResponse"];
+        };
+      };
+    };
+  };
   getTrailDatasetV: {
     responses: {
       /** OK */
       200: {
         content: {
           "*/*": components["schemas"]["TrailDatasetVersion"];
+        };
+      };
+    };
+  };
+  get_8: {
+    parameters: {
+      query: {
+        skip?: number;
+        limit?: number;
+        realm?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AnnouncementResponse"];
+        };
+      };
+    };
+  };
+  get_9: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["AnnouncementResponse"];
         };
       };
     };
@@ -1904,23 +2080,6 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["DiagnoseResponse"];
-        };
-      };
-    };
-  };
-  get_7: {
-    parameters: {
-      query: {
-        skip?: number;
-        limit?: number;
-        realm?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["PlaceResponse"];
         };
       };
     };
@@ -2131,6 +2290,17 @@ export interface operations {
           "*/*": components["schemas"]["MaintenanceResponse"];
         };
       };
+    };
+  };
+  delete_1: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: unknown;
     };
   };
   deleteAccessibilityNotification: {
