@@ -65,7 +65,6 @@ export class MapComponent implements OnInit {
     isTrailSelectedVisible: boolean = false;
     isTrailFullScreenVisible: boolean = false;
     isTrailListVisible: boolean = false;
-    isAllTrailVisible: boolean = true;
     isNotificationModalVisible: boolean = false;
     isUserPositionToggled: boolean = false;
     isLoading: boolean = false;

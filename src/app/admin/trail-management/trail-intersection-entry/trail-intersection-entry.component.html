@@ -71,9 +71,25 @@
                     <input type="text" class="form-control"
                            [formControl]="id" [disabled]="true"/>
                 </div>
+                <div class="col-md-12">
+                    <div class="form-check form-check-inline">
+                        <input id="isDynamicCheckbox"
+                               title="Scegli un'opzione"
+                               class="form-control"
+                               name="checkbox"
+                               type="checkbox"
+                               [formControl]="isDynamic"
+                               (change)="onToggleDynamic()"
+                        >
+                        <label for="isDynamicCheckbox">Dinamico<span class="mandatory-field-asterisk">*</span></label>
+                    </div>
+
+
+                </div>
                 <div class="col-md-12 top-margin">
                     <label>Nome <span class="mandatory-field-asterisk">*</span></label>
                     <input type="text" class="form-control"
+                           [disabled]="isInputDisabled"
                            [formControl]="name"
                            (change)="changeCrossWayTitle($event.target.value)"
                            (keyup)="changeCrossWayTitle($event.target.value)" required/>

@@ -57,6 +57,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     isCrossingSectionComplete = false;
     isPlacePicking = false;
     isError: boolean;
+    isQuickMode: boolean;
 
     closeResult: string;
 
@@ -113,13 +114,15 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             description: new FormControl("", Validators.required),
             lastUpdate: new FormControl(""),
             intersections: new FormArray([]),
-            maintainingSection: new FormControl(this.authHelper.getSection(), Validators.required),
+            maintainingSection: new FormControl(this.authHelper.getSection(),
+                Validators.required),
             startPos: TrailImportFormUtils.getLocationForGroup(),
             finalPos: TrailImportFormUtils.getLocationForGroup(),
             locations: new FormArray([]),
         });
 
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
+        this.isQuickMode = this.route.snapshot.paramMap.get("quick") == "quick";
         this.loadRaw(idFromPath);
     }
 
@@ -145,7 +148,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             .subscribe(it => {
                 if (it.content.length > 0) {
                     const modal = this.modalService.open(InfoModalComponent);
-                    modal.componentInstance.title = `Il sentiero ${trailRawDto.fileDetails.originalFilename} sembra essere un duplicato`;
+                    modal.componentInstance.title = `Attenzione: il sentiero ${trailRawDto.fileDetails.originalFilename} sembra essere un duplicato`;
                     const matchingTrail = it.content.map(it => `<a href="/admin/trail-management/edit/${it.id}" target="_blank"><span>${it.code}</span></a>`).join(", ");
                     modal.componentInstance.body = `Il sentiero caricato dal file ${trailRawDto.fileDetails.originalFilename} riscontra un match con il/i sentiero/i: ${matchingTrail}. <br/>
                     Verifica il/i sentiero/i prima di procedere alla compilazione della traccia`;
@@ -172,11 +175,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     onAddLocation(): void {
         this.locations.push(TrailImportFormUtils.getLocationForGroup());
     }
-
-    onReload(): void {
-        this.isLoading = false;
-    }
-
     proceed(): boolean {
         if (this.STEP_INDEX == this.GENERAL_INFO_INDEX) {
             this.errors = this.checkGeneralInfoForErrors();
@@ -208,6 +206,9 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     private checkCrossingsForErrors(): string[] {
         const errors = [];
+        if (this.isQuickMode) {
+            return [];
+        }
         if (!this.intersections.valid)
             errors.push("Uno o più crocevia non sono stati ancora geolocalizzati o completati");
         return errors;
@@ -320,7 +321,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 locationPlacesDto,
                 (trailData) => {
                     this.rawTrailService.deleteById(this.trailRawDto.id)
-                        .toPromise().then((result) => {
+                        .toPromise().then(() => {
                         this.onSaveRequest(trailData)
                     })
                 },
@@ -343,15 +344,18 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 this.crossingGeolocationExecutedChecks = [];
                 this.intersectionResponse = response;
                 response.content.forEach((intersection: TrailIntersection) => {
-                    let locationFormGroupFromIntersection =
+                    let locationFormGroupFromIntersection = this.isQuickMode ?
+                        TrailImportFormUtils.getLocationFormGroupForQuickIntersection(intersection,
+                            this.trailFormGroup.controls["code"].value, intersection.trail.code) :
                         TrailImportFormUtils.getLocationFormGroupForIntersection(intersection);
                     this.intersections.push(locationFormGroupFromIntersection);
                     this.crossingGeolocationExecutedChecks.push(false);
                 })
                 this.crossings = response.content.map(
-                    intersection => {
+                    (intersection, i) => {
                         return {
-                            name: "",
+                            name: !this.isQuickMode ? "" :
+                                this.intersections.controls[i].get("name").value,
                             trail: intersection.trail,
                             coordinate: intersection.points[0]
                         }

@@ -118,6 +118,9 @@ export class TrailRawViewTableComponent implements OnInit {
   navigateToEdit(rawId: string) {
     this.router.navigate(["/admin/raw-trail-management/init/" + rawId]);
   }
+  navigateToEditQuick(rawId: string) {
+    this.router.navigate(["/admin/raw-trail-management/init/" + rawId + "/quick"]);
+  }
 
   formatDate(stringDate: string) {
     return DateUtils.formatDateToDay(stringDate);

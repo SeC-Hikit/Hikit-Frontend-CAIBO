@@ -1,0 +1,57 @@
+<div>
+    <app-trail-floating-preview
+            [trails]="trailsPreview"
+            [isVisible]="isPlacePreviewVisible"
+            [markers]="markersPreview"
+            (onClose)="this.togglePreview()"
+    ></app-trail-floating-preview>
+    <div class="row top-margin-x2">
+        <div class="col-12" *ngIf="placeList && placeList.length > 0">
+            <p>I seguenti, sono i crocevia dinamici, il cui nome è calcolato sulla base dei sentieri che vi passano.</p>
+            <table
+                    id="trailTable"
+                    class="table table-striped interactive-table thin-rows"
+            >
+                <thead class="">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome località</th>
+                    <th scope="col">Numero sentieri attr.</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let place of placeList" class="place-preview">
+                    <th class="small-column ellipsis" [title]="place.id">{{place.id}}</th>
+                    <td (click)="onPreview(place)">
+                        {{ place.name }}
+                    </td>
+                    <td>
+                        <svg class="bi" width="24" *ngIf="place.crossingTrailIds.length == 0"
+                             height="24" fill="currentColor">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-fill"
+                            />
+                        </svg>
+                        <svg class="bi clickable" width="24" *ngIf="place.crossingTrailIds.length > 0"
+                             height="24" fill="currentColor" (click)="showTrailCode(place.crossingTrailIds)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost"
+                            />
+                        </svg>
+                        {{ place.crossingTrailIds.length }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagination-position">
+                <ngb-pagination
+                        [pageSize]="entryPerPage"
+                        [collectionSize]="totalPlaces"
+                        [(page)]="selectedPage"
+                        aria-label="Default pagination"
+                        (pageChange)="onPlaceLoad($event)"
+                ></ngb-pagination>
+            </div>
+        </div>
+        <div *ngIf="placeList.length == 0">Non ci sono ancora località caricate</div>
+    </div>
+</div>

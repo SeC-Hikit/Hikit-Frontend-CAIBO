@@ -99,6 +99,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                         ngbModalRef.componentInstance.onSelection.subscribe((picked: PickedPlace) => {
                             this.inputForm.controls["id"].setValue(picked.place.id);
                             this.inputForm.controls["name"].setValue(picked.place.name);
+                            this.inputForm.controls["isDynamic"].setValue(picked.place.dynamic);
                             this.onPlaceFound.emit([picked.place]);
                             this.changeCrossWayTitle(picked.place.name)
                             this.name.disable();
@@ -109,6 +110,10 @@ export class TrailIntersectionEntryComponent implements OnInit {
                     }
                 }
             });
+    }
+
+    onToggleDynamic() {
+        this.isInputDisabled = this.isDynamic.value;
     }
 
     changeCrossWayTitle(value: string) {
@@ -136,8 +141,11 @@ export class TrailIntersectionEntryComponent implements OnInit {
         return this.inputForm.controls["id"] as FormControl;
     }
 
+    get isDynamic() {
+        return this.inputForm.controls["isDynamic"] as FormControl;
+    }
+
     get name() {
         return this.inputForm.controls["name"] as FormControl;
     }
-
 }
