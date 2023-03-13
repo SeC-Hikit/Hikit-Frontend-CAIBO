@@ -4,7 +4,7 @@
             <h2>N.{{ i + 1 }}: Crocevia che incontra il sentiero <span
                     class="trailCodeColumn">{{ otherTrail.code }}</span></h2>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 align-right">
             <button
                     type="button"
                     class="btn actionable full-width"
@@ -12,6 +12,9 @@
                     *ngIf="!isShowing"
             >
                 <span *ngIf="!isShowing">Mostra e completa</span>
+            </button>
+            <button class="btn btn-error actionable" *ngIf="isShowing">
+                <span>Cancella</span>
             </button>
         </div>
     </div>
@@ -29,6 +32,7 @@
             >
             </app-location-entry>
         </div>
+
 
         <div class="col-md-6 top-margin">
             <div class="row">

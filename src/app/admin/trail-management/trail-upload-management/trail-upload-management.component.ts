@@ -175,6 +175,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
     onAddLocation(): void {
         this.locations.push(TrailImportFormUtils.getLocationForGroup());
     }
+
     proceed(): boolean {
         if (this.STEP_INDEX == this.GENERAL_INFO_INDEX) {
             this.errors = this.checkGeneralInfoForErrors();
@@ -344,21 +345,26 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 this.crossingGeolocationExecutedChecks = [];
                 this.intersectionResponse = response;
                 response.content.forEach((intersection: TrailIntersection) => {
-                    let locationFormGroupFromIntersection = this.isQuickMode ?
+                    intersection.points.forEach((point) => {
+                        let locationFormGroupFromIntersection = this.isQuickMode ?
                         TrailImportFormUtils.getLocationFormGroupForQuickIntersection(intersection,
-                            this.trailFormGroup.controls["code"].value, intersection.trail.code) :
+                            point, this.trailFormGroup.controls["code"].value, intersection.trail.code) :
                         TrailImportFormUtils.getLocationFormGroupForIntersection(intersection);
                     this.intersections.push(locationFormGroupFromIntersection);
                     this.crossingGeolocationExecutedChecks.push(false);
+                    })
                 })
-                this.crossings = response.content.map(
+                response.content.forEach(
                     (intersection, i) => {
-                        return {
-                            name: !this.isQuickMode ? "" :
-                                this.intersections.controls[i].get("name").value,
-                            trail: intersection.trail,
-                            coordinate: intersection.points[0]
-                        }
+                        intersection.points.forEach((point) => {
+                                this.crossings.push ({
+                                name: !this.isQuickMode ? "" :
+                                    this.intersections.controls[i].get("name").value,
+                                trail: intersection.trail,
+                                coordinate: point
+                            })
+    
+                        })
                     });
                 this.isCrossingSectionComplete = true;
                 this.toggleLoading();

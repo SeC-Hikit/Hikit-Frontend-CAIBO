@@ -1,6 +1,6 @@
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Coordinates2D, TrailIntersection} from "../service/geo-trail-service";
-import {FileDetailsDto} from "../service/trail-service.service";
+import {CoordinatesDto, FileDetailsDto} from "../service/trail-service.service";
 import * as moment from "moment";
 import {DateUtils} from "./DateUtils";
 import {PlaceRefDto} from "../service/place.service";
@@ -46,9 +46,11 @@ export class TrailImportFormUtils {
         });
     }
 
-    public static getLocationFormGroupForQuickIntersection(intersection: TrailIntersection,
-                                                           trailCode: String, otherTrailCode: String) {
-        let intersectionCoords = intersection.points[0];
+    public static getLocationFormGroupForQuickIntersection(
+        intersection: TrailIntersection, 
+        point: CoordinatesDto,
+        trailCode: String, 
+        otherTrailCode: String) {
         return new FormGroup({
             "id": new FormControl(" "), // one char empty string - Strange issue
             "name": new FormControl("Crocevia " + trailCode + "/" + otherTrailCode,
@@ -57,9 +59,9 @@ export class TrailImportFormUtils {
                 TrailImportFormUtils.nameValidator]),
             "crossingTrailIds": new FormControl(intersection.trail.id),
             "isDynamic": new FormControl(true),
-            "latitude": new FormControl(intersectionCoords.latitude, Validators.required),
-            "longitude": new FormControl(intersectionCoords.longitude, Validators.required),
-            "altitude": new FormControl(intersectionCoords.altitude, Validators.required),
+            "latitude": new FormControl(point.latitude, Validators.required),
+            "longitude": new FormControl(point.longitude, Validators.required),
+            "altitude": new FormControl(point.altitude, Validators.required),
             "distanceFromTrailStart": new FormControl("0"),
         });
     }
