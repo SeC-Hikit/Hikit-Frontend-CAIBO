@@ -111,9 +111,9 @@ export class TrailIntersectionEntryComponent implements OnInit {
             });
     }
 
-    onToggleDynamic($event) {
+    onToggleDynamic() {
         this.isInputDisabled = this.isDynamic.value;
-        this.isDynamic.setValue($event);
+        this.isCompleted = this.isDynamic.value;
     }
 
     changeCrossWayTitle(value: string) {

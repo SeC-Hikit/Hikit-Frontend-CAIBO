@@ -76,7 +76,6 @@
                            [formControl]="id" [disabled]="true"/>
                 </div>
                 <div class="col-md-12">
-<!--                    <div class="form-check form-check-inline">-->
                         <input
                                class="form-control"
                                name="checkbox"
@@ -84,12 +83,10 @@
                                [formControl]="isDynamic"
                                (change)="onToggleDynamic($event)"
                         >
-<!--                        <label>Dinamico<span class="mandatory-field-asterisk">*</span></label>-->
-                    </div>
+                        <label class="checkbox-label">Dinamico<span class="mandatory-field-asterisk">*</span></label>
+                </div>
 
-
-<!--                </div>-->
-                <div class="col-md-12 top-margin">
+                <div class="col-md-12 top-margin" *ngIf="!isInputDisabled">
                     <label>Nome <span class="mandatory-field-asterisk">*</span></label>
                     <input type="text" class="form-control"
                            [disabled]="isInputDisabled"

@@ -15,6 +15,17 @@
     }
 }
 
+input[name="checkbox"] {
+    width: 20px;
+    float: left;
+    margin: 10px;
+}
+
+.checkbox-label {
+    float: left;
+    margin: 20px;
+}
+
 .accordion-head {
     border-bottom: 1px solid black;
 }
