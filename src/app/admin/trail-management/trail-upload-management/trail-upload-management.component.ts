@@ -22,6 +22,7 @@ import {PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.s
 import {AdminPlaceService} from "../../../service/admin-place.service";
 import {TrailDataForSaving, TrailSaveProcessHelper} from "./TrailSaveProcessHelper";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {PickedPlace} from "./place-picker-selector/place-picker-selector.component";
 
 export interface Crossing {
     name: string,
@@ -371,6 +372,11 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             });
     }
 
+    onDeleteTrailIntersection(i: number) {
+        this.intersections.removeAt(i);
+        this.crossings.splice(i, 1);
+    }
+
     toggleLoading() {
         this.isLoading = !this.isLoading;
     }
@@ -418,5 +424,11 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     changeCrossingName($event: string, i: number) {
         this.crossings[i].name = $event;
+    }
+
+    onSelectedPlace($event: PickedPlace, i: number) {
+        this.intersections[i].controls["id"].setValue($event.place.id);
+        this.intersections[i].controls["name"].setValue($event.place.name);
+        this.intersections[i].controls["isDynamic"].setValue($event.place.dynamic);
     }
 }

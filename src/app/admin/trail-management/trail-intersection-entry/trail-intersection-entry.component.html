@@ -1,7 +1,7 @@
 <div class="container-box" [ngClass]="this.isCompleted ? 'completed' : 'to-complete'">
     <div class="row accordion-head">
         <div class="col-md-8">
-            <h2>N.{{ i + 1 }}: Crocevia che incontra il sentiero <span
+            <h2>Crocevia che incontra il sentiero <span
                     class="trailCodeColumn">{{ otherTrail.code }}</span></h2>
         </div>
         <div class="col-md-4 align-right">
@@ -13,7 +13,7 @@
             >
                 <span *ngIf="!isShowing">Mostra e completa</span>
             </button>
-            <button class="btn btn-error actionable" *ngIf="isShowing">
+            <button class="btn btn-error actionable" *ngIf="isShowing" (click)="onDeleteEvent()">
                 <span>Cancella</span>
             </button>
         </div>
@@ -76,20 +76,19 @@
                            [formControl]="id" [disabled]="true"/>
                 </div>
                 <div class="col-md-12">
-                    <div class="form-check form-check-inline">
-                        <input id="isDynamicCheckbox"
-                               title="Scegli un'opzione"
+<!--                    <div class="form-check form-check-inline">-->
+                        <input
                                class="form-control"
                                name="checkbox"
                                type="checkbox"
                                [formControl]="isDynamic"
-                               (change)="onToggleDynamic()"
+                               (change)="onToggleDynamic($event)"
                         >
-                        <label for="isDynamicCheckbox">Dinamico<span class="mandatory-field-asterisk">*</span></label>
+<!--                        <label>Dinamico<span class="mandatory-field-asterisk">*</span></label>-->
                     </div>
 
 
-                </div>
+<!--                </div>-->
                 <div class="col-md-12 top-margin">
                     <label>Nome <span class="mandatory-field-asterisk">*</span></label>
                     <input type="text" class="form-control"

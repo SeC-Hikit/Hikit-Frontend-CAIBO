@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
 import {FormControl, FormGroup} from "@angular/forms";
 import {Marker} from "src/app/map-preview/map-preview.component";
 import {Coordinates2D} from "src/app/service/geo-trail-service";
@@ -10,7 +10,6 @@ import {
     PickedPlace,
     PlacePickerSelectorComponent
 } from "../trail-upload-management/place-picker-selector/place-picker-selector.component";
-import {GeoToolsService} from "../../../service/geotools.service";
 
 @Component({
     selector: "app-trail-intersection-entry",
@@ -27,6 +26,8 @@ export class TrailIntersectionEntryComponent implements OnInit {
 
     @Output() onPlaceFound: EventEmitter<PlaceDto[]> = new EventEmitter<PlaceDto[]>();
     @Output() onIntersectionNameChange: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onDelete: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDynamicToggle: EventEmitter<void> = new EventEmitter<void>();
 
     crossPointMarker: Marker;
     crossWayTitle: string = "Crocevia";
@@ -42,7 +43,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
     private readonly MAX_GEOLOCATION_M = 50;
 
     constructor(private placeService: PlaceService,
-                private geoToolService: GeoToolsService,
                 private modalService: NgbModal) {
     }
 
@@ -65,7 +65,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
     }
 
     findPlaceCorrespondingTo() {
-        // TODO: add call
         this.placeService
             .geoLocatePlace(
                 {
@@ -112,8 +111,9 @@ export class TrailIntersectionEntryComponent implements OnInit {
             });
     }
 
-    onToggleDynamic() {
+    onToggleDynamic($event) {
         this.isInputDisabled = this.isDynamic.value;
+        this.isDynamic.setValue($event);
     }
 
     changeCrossWayTitle(value: string) {
@@ -133,6 +133,11 @@ export class TrailIntersectionEntryComponent implements OnInit {
         this.isAutoDetected = false;
     }
 
+    onDeleteEvent() {
+        console.log("delete")
+        this.onDelete.emit();
+    }
+
     private isComplete(value: string) {
         return value.length > 2 && this.hasAutoDetectedRun;
     }
@@ -142,7 +147,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     }
 
     get isDynamic() {
-        return this.inputForm.controls["isDynamic"] as FormControl;
+        return this.inputForm.get("isDynamic") as FormControl;
     }
 
     get name() {
