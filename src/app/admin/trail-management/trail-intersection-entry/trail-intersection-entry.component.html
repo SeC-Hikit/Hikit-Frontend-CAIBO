@@ -55,6 +55,11 @@
                     </button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 top-margin">
+                    <p>{{ crossPoint.latitude + ", " + crossPoint.longitude }}</p>
+                </div>
+            </div>
             <div class="row" *ngIf="hasAutoDetectedRun && isAutoDetected">
                 <div class="col-md-12">
                     <button
@@ -75,18 +80,29 @@
                     <input type="text" class="form-control"
                            [formControl]="id" [disabled]="true"/>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-2 top-margin-x2">
+                    <button class="btn btn-outline-secondary"
+                            ngbTooltip="Settando il crocevia come 'dinamico' segnali a sistemi di autogestirne i metadati"
+                            triggers="click:blur">
+                        <svg class="bi" width="24"
+                             height="24" fill="currentColor">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#question-circle"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <div class="col-md-4 top-margin-x2">
                         <input
                                class="form-control"
                                name="checkbox"
                                type="checkbox"
                                [formControl]="isDynamic"
-                               (change)="onToggleDynamic($event)"
+                               (change)="onToggleDynamic()"
                         >
                         <label class="checkbox-label">Dinamico<span class="mandatory-field-asterisk">*</span></label>
                 </div>
-
-                <div class="col-md-12 top-margin" *ngIf="!isInputDisabled">
+                <div class="col-md-12 top-margin">
                     <label>Nome <span class="mandatory-field-asterisk">*</span></label>
                     <input type="text" class="form-control"
                            [disabled]="isInputDisabled"

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {FormControl, FormGroup} from "@angular/forms";
 import {Marker} from "src/app/map-preview/map-preview.component";
 import {Coordinates2D} from "src/app/service/geo-trail-service";
@@ -102,6 +102,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                             this.onPlaceFound.emit([picked.place]);
                             this.changeCrossWayTitle(picked.place.name)
                             this.name.disable();
+                            this.isDynamic.disable();
                             this.isInputDisabled = true;
                             this.isCompleted = true;
                         });
@@ -114,6 +115,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     onToggleDynamic() {
         this.isInputDisabled = this.isDynamic.value;
         this.isCompleted = this.isDynamic.value;
+        this.name.setValue("Crocevia dinamico " + Math.random())
     }
 
     changeCrossWayTitle(value: string) {
@@ -129,6 +131,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
         this.id.setValue(" ");
         this.name.setValue("");
         this.name.enable();
+        this.isDynamic.enable();
         this.isCompleted = false;
         this.isAutoDetected = false;
     }

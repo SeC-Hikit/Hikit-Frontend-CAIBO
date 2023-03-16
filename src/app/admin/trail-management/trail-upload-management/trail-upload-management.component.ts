@@ -350,7 +350,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                         let locationFormGroupFromIntersection = this.isQuickMode ?
                         TrailImportFormUtils.getLocationFormGroupForQuickIntersection(intersection,
                             point, this.trailFormGroup.controls["code"].value, intersection.trail.code) :
-                        TrailImportFormUtils.getLocationFormGroupForIntersection(intersection);
+                        TrailImportFormUtils.getLocationFormGroupForIntersection(intersection, point);
                     this.intersections.push(locationFormGroupFromIntersection);
                     this.crossingGeolocationExecutedChecks.push(false);
                     })
