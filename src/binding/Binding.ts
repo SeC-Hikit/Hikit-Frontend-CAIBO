@@ -362,6 +362,11 @@ export interface components {
       encounteredTrailIds?: string[];
       dynamicCrossway?: boolean;
     };
+    StaticTrailDetailsDto: {
+      pathGpx?: string;
+      pathKml?: string;
+      pathPdf?: string;
+    };
     StatsTrailMetadataDto: {
       totalRise?: number;
       totalFall?: number;
@@ -396,6 +401,7 @@ export interface components {
       maintainingSection?: string;
       status?: "DRAFT" | "PUBLIC";
       fileDetails?: components["schemas"]["FileDetailsDto"];
+      staticTrailDetails?: components["schemas"]["StaticTrailDetailsDto"];
       cycloDetails?: components["schemas"]["CycloDetailsDto"];
     };
     TrailResponse: {

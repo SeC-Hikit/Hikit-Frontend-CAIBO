@@ -1,4 +1,4 @@
-import {PlaceDto, PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.service";
+import {PlaceRefDto, PlaceService} from "../../../service/place.service";
 import {AdminTrailService, TrailImportDto} from "../../../service/admin-trail.service";
 import {FileDetailsDto, TrailCoordinatesDto, TrailResponse} from "../../../service/trail-service.service";
 
@@ -52,7 +52,7 @@ export class TrailSaveProcessHelper {
             country: trailData.country,
             maintainingSection: trailData.maintainingSection,
             code: trailData.code,
-            classification: trailData.classification
+            classification: trailData.classification,
         };
 
         this.adminTrailService.saveTrail(trailImport)

@@ -212,27 +212,24 @@ export class MapComponent implements OnInit {
     }
 
     onDownloadGpx(): void {
-        this.trailService.downloadGpx(this.getFileName(this.selectedTrail)).subscribe(response => {
+        this.trailService.downloadGpx(this.getFileNameGpx(this.selectedTrail)).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
-            const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + ".gpx");
         });
     }
 
     onDownloadKml(): void {
-        this.trailService.downloadKml(this.getFileName(this.selectedTrail)).subscribe(response => {
+        this.trailService.downloadKml(this.getFileNameKml(this.selectedTrail)).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
-            const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + ".kml");
         });
     }
 
     onDownloadPdf(): void {
         this.trailService.downloadPdf(
-            this.getFileName(this.selectedTrail)
+            this.getFileNamePdf(this.selectedTrail)
         ).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
-            const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + "_" + this.selectedTrail.id + ".pdf");
         });
     }
@@ -298,8 +295,20 @@ export class MapComponent implements OnInit {
         this.zoomLevel = zoomLevel;
     }
 
-    getFileName(fileName: TrailDto): string {
-        return fileName.code + "_" + fileName.id;
+    getFileNameGpx(trailDto: TrailDto): string {
+        return this.replaceSpecialCharFromFileName(trailDto.staticTrailDetails.pathGpx ? trailDto.staticTrailDetails.pathGpx : trailDto.code + "_" + trailDto.id)
+    }
+
+    getFileNameKml(trailDto: TrailDto): string {
+        return this.replaceSpecialCharFromFileName(trailDto.staticTrailDetails.pathKml ? trailDto.staticTrailDetails.pathKml : trailDto.code + "_" + trailDto.id)
+    }
+
+    getFileNamePdf(trailDto: TrailDto): string {
+        return this.replaceSpecialCharFromFileName(trailDto.staticTrailDetails.pathPdf ? trailDto.staticTrailDetails.pathPdf : trailDto.code + "_" + trailDto.id)
+    }
+    
+    replaceSpecialCharFromFileName(code) {
+        return code.replace("/", "_")
     }
 
     showTrailList() {
