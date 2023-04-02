@@ -2,6 +2,14 @@
 
 .MapTrailDetails {
 
+  .pois .trailCodeColumn {
+    cursor: pointer;
+  }
+
+  .pois .trailCodeColumn:hover {
+    background: black !important;
+  }
+
   .low-opacity {
     opacity: 0.5;
   }

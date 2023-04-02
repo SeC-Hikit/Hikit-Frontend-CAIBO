@@ -14,9 +14,10 @@ import {Observable, ObservedValueOf, Subject} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {DateUtils} from "../utils/DateUtils";
+import {PoiDto, PoiService} from "../service/poi-service.service";
 
 export enum ViewState {
-    NONE = "NONE", TRAIL = "TRAIL", PLACE_IN_TRAIL = "PLACE_IN_TRAIL", TRAIL_LIST = "TRAIL_LIST"
+    NONE = "NONE", TRAIL = "TRAIL", POI = "POI", TRAIL_LIST = "TRAIL_LIST"
 }
 
 export enum TrailSimplifierLevel {
@@ -45,6 +46,9 @@ export class MapComponent implements OnInit {
     private searchTerms = new Subject<string>();
 
     isCycloToggled = false;
+
+    isPoiLoaded = false;
+
     // Bound elements
     searchTermString: string = "";
     trailPreviewList: TrailPreview[];
@@ -52,6 +56,7 @@ export class MapComponent implements OnInit {
     trailPreviewPage: number = 0;
 
     selectedTrail: TrailDto;
+    selectedTrailPois: PoiDto[] = [];
     trailList: TrailDto[];
     connectedTrails: TrailDto[] = [];
     selectedTileLayer: string;
@@ -73,12 +78,15 @@ export class MapComponent implements OnInit {
     sideView = ViewState.NONE;
     selectedTrailIndex: number = 0;
     showTrailCodeMarkers: boolean;
-
+    poiHovering: PoiDto;
+    selectedPoi: PoiDto;
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
+
 
     constructor(
         private trailService: TrailService,
         private geoTrailService: GeoTrailService,
+        private poiService: PoiService,
         private trailPreviewService: TrailPreviewService,
         private accessibilityService: NotificationService,
         private maintenanceService: MaintenanceService,
@@ -88,6 +96,7 @@ export class MapComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.sideView = ViewState.NONE;
         this.changeTileLayer("topo");
         this.trailPreviewList = [];
         this.trailList = [];
@@ -113,7 +122,7 @@ export class MapComponent implements OnInit {
                                               areDraftVisible: boolean): Observable<TrailPreviewResponse> {
         let limit = this.maxTrailEntriesPerPage * this.getNextPageNumber(page);
 
-        if(!code) {
+        if (!code) {
             return this.trailPreviewService.getPreviews(page, limit, environment.realm, areDraftVisible)
         }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
@@ -171,6 +180,7 @@ export class MapComponent implements OnInit {
 
         this.loadNotificationsForTrail(id);
         this.loadLastMaintenanceForTrail(id);
+        setTimeout(() => this.loadPoiForTrail(id), 2000);
     }
 
     private loadRelatedForTrailId(id: string) {
@@ -188,8 +198,8 @@ export class MapComponent implements OnInit {
         }
         this.accessibilityService.getUnresolvedForTrailId(id)
             .subscribe(notificationResponse => {
-            this.selectedTrailNotifications = notificationResponse.content
-        });
+                this.selectedTrailNotifications = notificationResponse.content
+            });
     }
 
     loadRelatedTrailsByIdForSelectedTrail(trailIds: string[]) {
@@ -197,17 +207,17 @@ export class MapComponent implements OnInit {
             .filter((trailId) => this.trailMap.has(trailId))
             .map((it) => this.trailMap.get(it))
         const trailIdsNotInCache = trailIds.filter((trailId) => !this.trailMap.has(trailId))
-        const map: Promise<TrailResponse>[] = trailIdsNotInCache.map(it=> this.trailService.getTrailById(it).toPromise());
+        const map: Promise<TrailResponse>[] = trailIdsNotInCache.map(it => this.trailService.getTrailById(it).toPromise());
         Promise.all(map).then((resps) => {
-          const loadedTrails: TrailDto[] = resps.flatMap(it=> it.content);
-          loadedTrails.forEach(it=> this.trailMap.set(it.id, it));
-          this.connectedTrails = Array.from(trailDtoFromCache.concat(loadedTrails));
+            const loadedTrails: TrailDto[] = resps.flatMap(it => it.content);
+            loadedTrails.forEach(it => this.trailMap.set(it.id, it));
+            this.connectedTrails = Array.from(trailDtoFromCache.concat(loadedTrails));
         });
     }
 
     loadLastMaintenanceForTrail(trailId: string): void {
         this.maintenanceService.getPastForTrail(trailId).subscribe(maintenanceResponse => {
-                this.selectedTrailMaintenances = maintenanceResponse.content
+            this.selectedTrailMaintenances = maintenanceResponse.content
         });
     }
 
@@ -306,7 +316,7 @@ export class MapComponent implements OnInit {
     getFileNamePdf(trailDto: TrailDto): string {
         return this.replaceSpecialCharFromFileName(trailDto.staticTrailDetails.pathPdf ? trailDto.staticTrailDetails.pathPdf : trailDto.code + "_" + trailDto.id)
     }
-    
+
     replaceSpecialCharFromFileName(code) {
         return code.replace("/", "_")
     }
@@ -340,7 +350,7 @@ export class MapComponent implements OnInit {
     }
 
     navigateToTrailReportIssue(trailId: string) {
-        scroll(0,0);
+        scroll(0, 0);
         this.router.navigate(["accessibility", "reporting-form"],
             {
                 queryParams: {trail: trailId},
@@ -366,7 +376,7 @@ export class MapComponent implements OnInit {
     }
 
     onFocusOnNotification(notificationId: string) {
-        const accessibilityNotification = this.selectedTrailNotifications.filter(it=> it.id == notificationId)[0];
+        const accessibilityNotification = this.selectedTrailNotifications.filter(it => it.id == notificationId)[0];
         this.openInfoModal(`Problema di percorrenza su sentiero ${this.selectedTrail.code}`,
             `<div>Riportato il: <b>${DateUtils.formatDateToIta(accessibilityNotification.reportDate)}</b></div>` +
             `<div>Descrizione: <b>${accessibilityNotification.description}</b></div>`)
@@ -374,7 +384,7 @@ export class MapComponent implements OnInit {
 
     onMaintenanceClick($event: string) {
         const lastMaintenance = this.selectedTrailMaintenances[0];
-        if(lastMaintenance.id != $event) return;
+        if (lastMaintenance.id != $event) return;
         this.openInfoModal(`Ultima manutenzione effettuata su sentiero ${this.selectedTrail.code}`,
             `<div>Effettuata il: <b>${DateUtils.formatDateToIta(lastMaintenance.date)}</b></div>` +
             `<div>Descrizione: <b>${lastMaintenance.description}</b></div>`)
@@ -388,4 +398,28 @@ export class MapComponent implements OnInit {
         return zoomLevel > 12;
     }
 
+    private loadPoiForTrail(id: string) {
+        this.isPoiLoaded = false;
+        this.poiService.getByTrailCode(id)
+            .subscribe((resp) => {
+                this.isPoiLoaded = true;
+                this.selectedTrailPois = resp.content;
+            })
+    }
+
+    onPoiClick($event: PoiDto) {
+        this.navigateToLocation($event.coordinates)
+        this.selectedPoi = $event;
+        this.sideView = ViewState.POI;
+    }
+
+    onPoiHovering($event: PoiDto) {
+        this.poiHovering = $event;
+    }
+
+    onBackToTrailPoiClick() {
+        this.sideView = ViewState.TRAIL;
+        this.selectedPoi = null;
+        this.poiHovering = null;
+    }
 }

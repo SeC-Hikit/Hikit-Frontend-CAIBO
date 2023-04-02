@@ -8,6 +8,7 @@ import * as Chart from "chart.js";
 import {ChartOptions} from "chart.js";
 import {TrailCycloClassificationMapper} from "../TrailCycloClassificationMapper";
 import {Coordinates2D} from "../../service/geo-trail-service";
+import {PoiDto} from "../../service/poi-service.service";
 
 @Component({
   selector: 'app-map-trail-details',
@@ -22,10 +23,12 @@ export class TrailDetailsComponent implements OnInit {
   private showIntermediateLocations: boolean = false;
 
   @Input() selectedTrail: TrailDto;
+  @Input() selectedTrailPois: PoiDto[];
   @Input() trailNotifications: AccessibilityNotification[];
   @Input() connectedTrails: TrailDto[];
   @Input() selectedTrailMaintenances: MaintenanceDto[];
   @Input() isCycloSwitchOn: boolean;
+  @Input() isPoiLoaded: boolean;
 
   @Output() toggleFullTrailPageEvent = new EventEmitter<void>();
   @Output() toggleNotificationListEvent = new EventEmitter<void>();
@@ -39,6 +42,10 @@ export class TrailDetailsComponent implements OnInit {
   @Output() onSelectedNotification = new EventEmitter<string>();
   @Output() onMaintenanceClick = new EventEmitter<string>();
   @Output() onToggleModeClick = new EventEmitter<void>();
+  @Output() onPoiClickEvent = new EventEmitter<PoiDto>();
+
+  @Output() onPoiHoveringEvent = new EventEmitter<PoiDto>();
+
 
 
   constructor() {
@@ -47,7 +54,7 @@ export class TrailDetailsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.chartOptions = ChartUtils.getChartOptions(
         (number) => this.onHoverAltiGraph(number));
     this.chart = new Chart("hikeChart", {
@@ -56,12 +63,16 @@ export class TrailDetailsComponent implements OnInit {
     });
   }
 
-  onHoverAltiGraph(index: number) : void {
+  onHoverAltiGraph(index: number) {
     this.onNavigateToSelectedTrailCoordIndex.emit(index);
   }
 
-  onHoverAltiGraphOut() : void {
+  onHoverAltiGraphOut() {
     this.onNavigateToSelectedTrailCoordIndex.emit(0);
+  }
+
+  onPoiClick(poiDto : PoiDto) {
+    this.onPoiClickEvent.emit(poiDto);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -155,5 +166,9 @@ export class TrailDetailsComponent implements OnInit {
 
   onToggleMode() {
     this.onToggleModeClick.emit();
+  }
+
+  onPoiHover(trailPoi: PoiDto) {
+    this.onPoiHoveringEvent.emit(trailPoi);
   }
 }

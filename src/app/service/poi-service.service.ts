@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { components } from 'src/binding/Binding';
 
 export type PoiResponse = components["schemas"]["PoiResponse"];
@@ -39,7 +39,7 @@ export class PoiService {
   }
 
   getByTrailCode(id: string): Observable<PoiResponse> {
-    return this.httpClient.get<PoiResponse>(this.baseUrl + "/code" + id)
+    return this.httpClient.get<PoiResponse>(this.baseUrl + "/trail/" + id)
       .pipe(
         tap(_ => console.log(_)),
         catchError(this.handleError<PoiResponse>('get by trail ID: ' + id, null))
