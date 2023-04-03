@@ -84,7 +84,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                 this.isAutoDetected = response.content.length != 0;
                 if (this.isAutoDetected) {
                     if (response.content.length > 0) {
-                        let ngbModalRef = this.modalService.open(PlacePickerSelectorComponent);
+                        const ngbModalRef = this.modalService.open(PlacePickerSelectorComponent);
 
                         ngbModalRef.componentInstance.targetPoint = {
                             latitude: this.crossPoint.latitude,

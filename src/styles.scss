@@ -166,6 +166,10 @@ table td {
   margin-right: 1px;
 }
 
+.trailCodeColumn:hover {
+  background: $secondary-bg-color;
+}
+
 table {
   .trailCodeColumn {
     background: black;

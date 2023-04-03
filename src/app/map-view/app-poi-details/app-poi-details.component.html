@@ -1,8 +1,8 @@
-<div class="MapTrailDetails row">
+<div class="MapPoiDetails row">
     <div class="top-margin col-12">
         <div class="row">
             <div class="col-md-8">
-                <h1 class="trailCodeColumn">{{ selectedPoi.name }}</h1>
+                <h1 class="poiCodeColumn">{{ selectedPoi.name }}</h1>
             </div>
         </div>
     </div>
@@ -14,17 +14,60 @@
                         <h4>Descrizione</h4>
                     </div>
                     <div class="col-12">
-                        <div [innerHTML]="selectedPoi.description"></div>
+                        <div *ngIf="selectedPoi.description" [innerHTML]="selectedPoi.description"></div>
+                        <div *ngIf="!selectedPoi.description">Non ci sono info supplementari per questo punto
+                            d'interesse
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="selectedPoi.externalResources">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Risorse esterne</h4>
+                    </div>
+                    <div class="col-12" *ngFor="let externalResource of selectedPoi.externalResources ">
+                        <a [href]="externalResource" target="_blank">{{externalResource}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="selectedPoi.tags">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Toponimi</h4>
+                    </div>
+                    <div class="col-12">
+                        <p>{{ selectedPoi.tags.join(", ") }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="selectedPoi.keyVal">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Attributi</h4>
+                    </div>
+                    <div class="col-12">
+                        <div class="row keyValEntry" *ngFor="let keyVal of selectedPoi.keyVal">
+                            <div class="col-6 key">
+                                <p>{{ keyVal.key }}</p>
+                            </div>
+                            <div class="col-6">
+                                <p>{{ keyVal.value }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Toponimi</h4>
+                        <h4>Sentieri collegati</h4>
                     </div>
-
                 </div>
+                <span *ngFor="let trailId of selectedPoi.trailIds" class="clickable white-font trailCodeColumn"
+                      (click)="navigateToTrail(trailId)">
+                    {{getNameOrCode(trailId)}}
+                </span>
             </div>
         </div>
     </div>

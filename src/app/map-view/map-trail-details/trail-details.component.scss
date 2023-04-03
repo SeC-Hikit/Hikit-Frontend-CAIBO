@@ -6,10 +6,6 @@
     cursor: pointer;
   }
 
-  .pois .trailCodeColumn:hover {
-    background: black !important;
-  }
-
   .low-opacity {
     opacity: 0.5;
   }
@@ -45,9 +41,14 @@
   .trailCodeColumn{
     width: fit-content;
     padding: 0 0.3em;
+    color: white;
   }
 
-  .trailCodeColumn {
+  .trailCodeColumn:hover {
+    background: $secondary-bg-color !important;
+  }
+
+  .trailCodeColumnColor {
     background: $secondary-bg-color !important;
   }
 }

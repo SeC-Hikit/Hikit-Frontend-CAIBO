@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MaintenanceDto, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../service/trail-preview-service.service';
-import {TrailDto, TrailResponse, TrailService} from '../service/trail-service.service';
+import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
@@ -15,6 +15,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {DateUtils} from "../utils/DateUtils";
 import {PoiDto, PoiService} from "../service/poi-service.service";
+import {AuthService} from "../service/auth.service";
 
 export enum ViewState {
     NONE = "NONE", TRAIL = "TRAIL", POI = "POI", TRAIL_LIST = "TRAIL_LIST"
@@ -81,7 +82,7 @@ export class MapComponent implements OnInit {
     poiHovering: PoiDto;
     selectedPoi: PoiDto;
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
-
+    trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
 
     constructor(
         private trailService: TrailService,
@@ -92,7 +93,8 @@ export class MapComponent implements OnInit {
         private maintenanceService: MaintenanceService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -101,6 +103,7 @@ export class MapComponent implements OnInit {
         this.trailPreviewList = [];
         this.trailList = [];
         this.handleQueryParam();
+        this.ensureMapping();
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
             debounceTime(1000),
@@ -139,6 +142,10 @@ export class MapComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
+        this.adaptSize();
+    }
+
+    adaptSize() {
         let fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
         console.log(fullSize);
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
@@ -421,5 +428,21 @@ export class MapComponent implements OnInit {
         this.sideView = ViewState.TRAIL;
         this.selectedPoi = null;
         this.poiHovering = null;
+    }
+
+    onShowHikingClassification() {
+        this.openInfoModal("Classificazioni escursionistiche", "");
+    }
+
+    onShowCyclingClassification() {
+        this.openInfoModal("Classificazioni ciclo-escursionistiche", "");
+    }
+
+    private ensureMapping() {
+        this.trailPreviewService.getMappings(this.authService.getInstanceRealm())
+            .subscribe((resp) => {
+                const mapping: TrailMappingDto[] = resp.content;
+                mapping.forEach(it => this.trailMappings.set(it.id, it))
+            });
     }
 }

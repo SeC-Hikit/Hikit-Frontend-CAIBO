@@ -1,0 +1,20 @@
+@import "/src/app/style/const.scss";
+
+.MapPoiDetails {
+  .poiCodeColumn {
+    width: fit-content;
+    padding: 0 0.3em;
+    background: $secondary-bg-color !important;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .keyValEntry {
+    width: 100%;
+    max-height: 30px;
+
+    .key {
+      text-transform: capitalize;
+    }
+  }
+}

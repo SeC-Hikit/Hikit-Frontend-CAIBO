@@ -8,7 +8,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let trailPreview of trailsPreviewList" class="clickable actionable-row" (click)="onPreview(trailPreview)">
+            <tr *ngFor="let trailPreview of trailsPreviewList" class="clickable actionable-row"
+                (click)="onPreview(trailPreview)">
                 <td scope="row">{{ trailPreview.code }}</td>
                 <td>{{ trailPreview.startPos.name }} - {{ trailPreview.finalPos.name }} </td>
                 <td>{{ trailPreview.classification }}</td>

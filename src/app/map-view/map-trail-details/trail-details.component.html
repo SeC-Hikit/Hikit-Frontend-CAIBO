@@ -2,7 +2,7 @@
     <div *ngIf="selectedTrail" class="top-margin col-12" [ngClass]="{ 'hide' : selectedTrail }">
         <div class="row">
             <div class="col-md-8">
-                <h1 class="trailCodeColumn">{{ selectedTrail.code }}</h1>
+                <h1 class="trailCodeColumn trailCodeColumnColor">{{ selectedTrail.code }}</h1>
             </div>
 
             <div class="col-md-2" (click)="onToggleMode()">
@@ -199,7 +199,7 @@
                     <div class="col-12">
                         <h4>Percorribilita'</h4>
                     </div>
-                    <div class="col-12" *ngIf="selectedTrailMaintenances.length > 0">
+                    <div class="col-12" *ngIf="selectedTrailMaintenances?.length > 0">
                         <div class="col-12">
                             Ultima <span class="clickable" (click)="onLastMaintenanceWordClick()">
                             manutenzione</span> eseguita il {{formatDate(selectedTrailMaintenances[0].date)}}
