@@ -5,6 +5,18 @@
                 <h1 class="poiCodeColumn">{{ selectedPoi.name }}</h1>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="poiCodeColumn black">{{ selectedPoi.coordinates.altitude }}m</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{{ getImage(selectedPoi.macroType, selectedPoi.microType)}}" class="poi-image"/>
+            </div>
+        </div>
     </div>
     <div *ngIf="selectedPoi" id="scrollable-content" class="col-12">
         <div class="row">
@@ -21,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12" *ngIf="selectedPoi.externalResources">
+            <div class="col-12" *ngIf="selectedPoi.externalResources.length > 0">
                 <div class="row">
                     <div class="col-12">
                         <h4>Risorse esterne</h4>
@@ -31,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12" *ngIf="selectedPoi.tags">
+            <div class="col-12 top-margin" *ngIf="selectedPoi.tags.length > 0">
                 <div class="row">
                     <div class="col-12">
                         <h4>Toponimi</h4>
@@ -41,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12" *ngIf="selectedPoi.keyVal">
+            <div class="col-12" *ngIf="selectedPoi.keyVal.length > 0">
                 <div class="row">
                     <div class="col-12">
                         <h4>Attributi</h4>
@@ -58,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
+            <div class="col-12 top-margin">
                 <div class="row">
                     <div class="col-12">
                         <h4>Sentieri collegati</h4>

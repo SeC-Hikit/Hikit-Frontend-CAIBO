@@ -25,6 +25,7 @@ export class MapFullComponent implements OnInit {
     private static MAP_ID: string = "map-full"
 
     private static CIRCLE_SIZE: number = 40;
+    private static HALF_CIRCLE_SIZE: number = 15;
 
     timeIntervalMsBeforeTrigger: number = 600;
     intervalObject: number;
@@ -34,6 +35,7 @@ export class MapFullComponent implements OnInit {
     selectedLayer: L.TileLayer;
     selectedTrailLayer: L.Polyline;
     selectedMarkerLayer: L.Marker;
+    locationsOnTrail: L.Circle[] = [];
     trailCodeMarkers: L.Marker[] = [];
     notificationMarkers: L.Marker[] = [];
     poiMarkers: L.Marker[] = [];
@@ -68,7 +70,7 @@ export class MapFullComponent implements OnInit {
         this.otherTrailsPolylines = [];
     }
 
-    private readonly _minZoom = 11;
+    private readonly _minZoom = 12;
     private readonly _maxZoom = 17;
 
     ngOnInit(): void {
@@ -197,10 +199,13 @@ export class MapFullComponent implements OnInit {
         }
         this.clearPreviouslySelectedLayer();
         this.clearPathFromList(selectedTrail);
-        let polyline = L.polyline(MapUtils.getCoordinatesInverted(selectedTrail.coordinates));
-        polyline.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
-        polyline.addTo(this.map);
-        this.map.fitBounds(polyline.getBounds());
+
+        this.selectedTrailLayer = L.polyline(MapUtils.getCoordinatesInverted(selectedTrail.coordinates));
+        this.selectedTrailLayer.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
+        this.selectedTrailLayer.addTo(this.map);
+
+        this.showLocations(selectedTrail);
+        this.map.fitBounds(this.selectedTrailLayer.getBounds());
     }
 
     private renderPois(pois: PoiDto[], selectedPoi?: PoiDto) {
@@ -211,7 +216,7 @@ export class MapFullComponent implements OnInit {
         this.pois.forEach(
             (it) => {
                 const marker: Marker = {
-                    icon: MapUtils.determinePoiType(it.macroType),
+                    icon: MapUtils.determinePoiType(it.macroType, it.microType),
                     coords: {latitude: it.coordinates.latitude, longitude: it.coordinates.longitude}
                 };
                 if(it == selectedPoi) marker.color = "#1D9566";
@@ -227,7 +232,12 @@ export class MapFullComponent implements OnInit {
     }
 
     renderAllTrail(trailList: TrailDto[]) {
-        this.otherTrailsPolylines = trailList.map(trail => {
+        this.otherTrailsPolylines.forEach(it=> this.map.removeLayer(it.getPolyline()));
+
+        const electedTrailList = this.selectedTrail ?
+            trailList.filter(it=> it.id != this.selectedTrail.id) : trailList;
+        this.otherTrailsPolylines = electedTrailList
+            .map(trail => {
             return new TrailToPolyline(trail.code,
                 trail.id,
                 trail.classification,
@@ -278,7 +288,6 @@ export class MapFullComponent implements OnInit {
     }
 
     clearPreviouslySelectedLayer() {
-        // TODO shall remove previously highlighted line
         if (this.selectedTrailLayer) {
             this.map.removeLayer(this.selectedTrailLayer);
         }
@@ -409,5 +418,18 @@ export class MapFullComponent implements OnInit {
             return;
         }
         this.renderPois(this.pois, this.poiHovering);
+    }
+
+    private showLocations(selectedTrail) {
+        this.locationsOnTrail.forEach(it=> this.map.removeLayer(it));
+        selectedTrail.locations
+            .forEach(it => {
+                const circle = L.circle(
+                    [it.coordinates.latitude, it.coordinates.longitude],
+                    {radius: MapFullComponent.HALF_CIRCLE_SIZE, fill: true, fillColor: "red", color: "red"});
+                circle.addTo(this.map);
+                this.locationsOnTrail.push(circle);
+                this.map.addLayer(circle);
+            })
     }
 }

@@ -22,11 +22,13 @@ export class PoiEnums {
         {
             name: PoiEnums.CULTURAL_READ,
             value: PoiEnums.CULTURAL,
-            micro: [{name: "Pieve", value: "church"}, {name: "Muretto", value: "wall"}]
+            micro: [{name: "Pieve", value: "church"},
+                {name: "Albero Monumentale", value: "tree"},
+                {name: "Muretto", value: "wall"}]
         }, {
             name: PoiEnums.SUPPORT_READ,
             value: "SUPPORT",
-            micro: [{name: "Rifugio", value: "shallet"}, {name: "Fonte", value: "fountain"}]
+            micro: [{name: "Rifugio", value: "shalet"}, {name: "Fonte", value: "fountain"}]
         }, {
             name: PoiEnums.BELVEDERE_READ,
             value: "BELVEDERE",

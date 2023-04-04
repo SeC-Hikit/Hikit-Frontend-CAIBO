@@ -42,6 +42,16 @@
                     {{ diagnoseAltitudeResponse.success ? "OK" : "Problema riscontrato" }}
                 </div>
             </div>
+            <div class="row top-margin-x2">
+                <div class="col-4 col-md-12 col-lg-4">
+                    <button class="btn btn-primary col-12" (click)="onDiagnoseAltitudeClick()">
+                        Test servizio di Emilia Romagna Turismo
+                    </button>
+                </div>
+<!--                <div class="col-4 col-md-12 col-lg-4" *ngIf="diagnoseAltitudeResponse">-->
+<!--                    {{ diagnoseAltitudeResponse.success ? "OK" : "Problema riscontrato" }}-->
+<!--                </div>-->
+            </div>
         </div>
     </div>
     <div class="row top-margin-x2">

@@ -4,9 +4,33 @@
         <div class="progress-bar" role="progressbar"></div>
     </div>
     <div class="row">
+
+        <div *ngIf="sideView=='POI' && selectedPoi"
+             class="navigation-back clickable" (click)="onBackToTrailPoiClick()">
+            <svg class="bi pulse" width="24" height="24" fill="#D04341">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+            </svg>
+            <span class="back">
+                            Torna al sentiero {{selectedTrail.code}}
+                            </span>
+        </div>
+
+        <div *ngIf="sideView=='TRAIL'"
+             class="navigation-back clickable" (click)="showTrailList()">
+            <svg class="bi pulse" width="24" height="24" fill="#D04341">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+            </svg>
+            <span class="back">
+                            Torna alla lista sentieri
+                            </span>
+        </div>
+
         <div class="column-map col-lg-4 col-md-4 white details functional-column" id="side-column">
             <div class="row">
-                <div class="col-11 offset-1" id="trail-detail-column">
+                <div class="col-11 offset-1" id="trail-detail-column"
+                     [class]="sideView == 'TRAIL' || sideView == 'POI' ? 'selection-margin' : ''">
                     <div *ngIf="sideView=='NONE' || sideView=='TRAIL_LIST'" class="row search-section top-margin-x2">
                         <div class="col-11">
                             <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
@@ -16,19 +40,10 @@
                     </div>
 
                     <div *ngIf="sideView=='POI' && selectedPoi" class="row top-margin">
-                        <div class="navigation-back clickable" (click)="onBackToTrailPoiClick()">
-                            <svg class="bi pulse" width="24" height="24" fill="#D04341">
-                                <use
-                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
-                            </svg>
-                            <span class="back">
-                            Torna al sentiero {{selectedTrail.code}}
-                            </span>
-                        </div>
                         <app-poi-details
-                            [selectedPoi]="selectedPoi"
-                            [trailMappings]="trailMappings"
-                            (onSelectTrail)="onSelectTrail($event)"
+                                [selectedPoi]="selectedPoi"
+                                [trailMappings]="trailMappings"
+                                (onSelectTrail)="onSelectTrail($event)"
                         ></app-poi-details>
                     </div>
 
@@ -67,15 +82,6 @@
                         </div>
                     </div>
                     <div *ngIf="sideView=='TRAIL'" class="top-margin">
-                        <div class="navigation-back clickable" (click)="showTrailList()">
-                            <svg class="bi pulse" width="24" height="24" fill="#D04341">
-                                <use
-                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
-                            </svg>
-                            <span class="back">
-                            Vai a lista sentieri
-                            </span>
-                        </div>
                         <app-map-trail-details
                                 [selectedTrail]="selectedTrail"
                                 [selectedTrailPois]="selectedTrailPois"
@@ -98,6 +104,8 @@
                                 (onToggleModeClick)="onToggleMode()"
                                 (onPoiClickEvent)="onPoiClick($event)"
                                 (onPoiHoveringEvent)="onPoiHovering($event)"
+                                (onShowTrailClassificationCycloInfo)="onShowCyclingClassification()"
+                                (onShowTrailClassificationHikingInfo)="onShowHikingClassification()"
                         >
                         </app-map-trail-details>
                     </div>

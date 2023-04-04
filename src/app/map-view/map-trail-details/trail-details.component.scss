@@ -2,6 +2,15 @@
 
 .MapTrailDetails {
 
+  .classification {
+    svg{
+      margin: 0 10px;
+    }
+    svg:hover {
+      color: $secondary-bg-color;
+    }
+  }
+
   .pois .trailCodeColumn {
     cursor: pointer;
   }
