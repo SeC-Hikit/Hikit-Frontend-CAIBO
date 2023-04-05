@@ -6,7 +6,7 @@
           (onClose)="togglePreview()"
   ></app-trail-floating-preview>
 </div>
-<button type="button" class="btn btn-primary" routerLink="./add" *ngIf="authService.isRealmMatch()">
+<button type="button" class="btn btn-primary top-margin" routerLink="./add" *ngIf="authService.isRealmMatch()">
   + Aggiungi POI
 </button>
 <div *ngIf="!isLoading">

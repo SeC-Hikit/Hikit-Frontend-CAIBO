@@ -2,6 +2,19 @@
 
 .MapTrailDetails {
 
+  .classification {
+    svg{
+      margin: 0 10px;
+    }
+    svg:hover {
+      color: $secondary-bg-color;
+    }
+  }
+
+  .pois .trailCodeColumn {
+    cursor: pointer;
+  }
+
   .low-opacity {
     opacity: 0.5;
   }
@@ -37,9 +50,14 @@
   .trailCodeColumn{
     width: fit-content;
     padding: 0 0.3em;
+    color: white;
   }
 
-  .trailCodeColumn {
+  .trailCodeColumn:hover {
+    background: $secondary-bg-color !important;
+  }
+
+  .trailCodeColumnColor {
     background: $secondary-bg-color !important;
   }
 }

@@ -3,7 +3,18 @@
 .MapComponent {
 
   .navigation-back {
-    color : #D04341;
+    width: 100%;
+    position: absolute;
+    margin: 0;
+    z-index: 1;
+    padding: 1%;
+    box-shadow: 0 5px 5px white;
+    background: white;
+    height: 50px;
+  }
+
+  .selection-margin {
+    margin-top: 50px;
   }
 
   .clickable {
@@ -42,6 +53,7 @@
 
   #side-column {
     overflow-y: scroll;
+    position: relative;
 
     .align-middle {
       margin: 10% 0 0 0;

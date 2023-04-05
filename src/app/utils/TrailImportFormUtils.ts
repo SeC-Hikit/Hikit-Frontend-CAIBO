@@ -29,8 +29,8 @@ export class TrailImportFormUtils {
         });
     }
 
-    public static getLocationFormGroupForIntersection(intersection: TrailIntersection) {
-        let intersectionCoords = intersection.points[0];
+    public static getLocationFormGroupForIntersection(intersection: TrailIntersection, point: CoordinatesDto) {
+        let intersectionCoords = point;
         return new FormGroup({
             "id": new FormControl(" "), // one char empty string - Strange issue
             "name": new FormControl("", [

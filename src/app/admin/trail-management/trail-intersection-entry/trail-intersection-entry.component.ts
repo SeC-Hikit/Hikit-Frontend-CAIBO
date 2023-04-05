@@ -10,7 +10,6 @@ import {
     PickedPlace,
     PlacePickerSelectorComponent
 } from "../trail-upload-management/place-picker-selector/place-picker-selector.component";
-import {GeoToolsService} from "../../../service/geotools.service";
 
 @Component({
     selector: "app-trail-intersection-entry",
@@ -27,6 +26,8 @@ export class TrailIntersectionEntryComponent implements OnInit {
 
     @Output() onPlaceFound: EventEmitter<PlaceDto[]> = new EventEmitter<PlaceDto[]>();
     @Output() onIntersectionNameChange: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onDelete: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDynamicToggle: EventEmitter<void> = new EventEmitter<void>();
 
     crossPointMarker: Marker;
     crossWayTitle: string = "Crocevia";
@@ -42,7 +43,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
     private readonly MAX_GEOLOCATION_M = 50;
 
     constructor(private placeService: PlaceService,
-                private geoToolService: GeoToolsService,
                 private modalService: NgbModal) {
     }
 
@@ -65,7 +65,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
     }
 
     findPlaceCorrespondingTo() {
-        // TODO: add call
         this.placeService
             .geoLocatePlace(
                 {
@@ -85,7 +84,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                 this.isAutoDetected = response.content.length != 0;
                 if (this.isAutoDetected) {
                     if (response.content.length > 0) {
-                        let ngbModalRef = this.modalService.open(PlacePickerSelectorComponent);
+                        const ngbModalRef = this.modalService.open(PlacePickerSelectorComponent);
 
                         ngbModalRef.componentInstance.targetPoint = {
                             latitude: this.crossPoint.latitude,
@@ -103,6 +102,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
                             this.onPlaceFound.emit([picked.place]);
                             this.changeCrossWayTitle(picked.place.name)
                             this.name.disable();
+                            this.isDynamic.disable();
                             this.isInputDisabled = true;
                             this.isCompleted = true;
                         });
@@ -114,6 +114,8 @@ export class TrailIntersectionEntryComponent implements OnInit {
 
     onToggleDynamic() {
         this.isInputDisabled = this.isDynamic.value;
+        this.isCompleted = this.isDynamic.value;
+        this.name.setValue("Crocevia dinamico " + Math.random())
     }
 
     changeCrossWayTitle(value: string) {
@@ -129,8 +131,14 @@ export class TrailIntersectionEntryComponent implements OnInit {
         this.id.setValue(" ");
         this.name.setValue("");
         this.name.enable();
+        this.isDynamic.enable();
         this.isCompleted = false;
         this.isAutoDetected = false;
+    }
+
+    onDeleteEvent() {
+        console.log("delete")
+        this.onDelete.emit();
     }
 
     private isComplete(value: string) {
@@ -142,7 +150,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     }
 
     get isDynamic() {
-        return this.inputForm.controls["isDynamic"] as FormControl;
+        return this.inputForm.get("isDynamic") as FormControl;
     }
 
     get name() {

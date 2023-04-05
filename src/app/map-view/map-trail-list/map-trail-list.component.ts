@@ -9,7 +9,7 @@ import { TrailPreview } from 'src/app/service/trail-preview-service.service';
 export class MapTrailListComponent implements OnInit {
 
   @Input() trailsPreviewList: TrailPreview[]
-  @Output() selectCodeEvent = new EventEmitter<string>();
+  @Output() onSelectTrail = new EventEmitter<string>();
 
   selectedTrail: TrailPreview;
 
@@ -19,8 +19,7 @@ export class MapTrailListComponent implements OnInit {
   }
 
   onPreview(selectedTrailPreview: TrailPreview) {
-    console.log("selected" + selectedTrailPreview.id);
-    this.selectCodeEvent.emit(selectedTrailPreview.id);
+    this.onSelectTrail.emit(selectedTrailPreview.id);
   }
 
   

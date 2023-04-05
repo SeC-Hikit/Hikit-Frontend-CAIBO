@@ -1,4 +1,4 @@
-import {HttpHeaders, HttpClient, HttpResponse, HttpParams} from '@angular/common/http';
+import {HttpHeaders, HttpClient, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {tap, catchError} from 'rxjs/operators';
@@ -51,21 +51,21 @@ export class TrailService {
     }
 
     downloadGpx(code: string): any {
-        return this.httpClient.get(this.baseUrl + "/file/gpx/" + code + ".gpx", {responseType: 'blob'})
+        return this.httpClient.get(this.baseUrl + "/file/gpx/" + code, {responseType: 'blob'})
             .pipe(tap(),
                 catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
             );
     }
 
     downloadKml(code: string): any {
-        return this.httpClient.get(this.baseUrl + "/file/kml/" + code + ".kml", {responseType: 'blob'})
+        return this.httpClient.get(this.baseUrl + "/file/kml/" + code, {responseType: 'blob'})
             .pipe(tap(),
                 catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
             );
     }
 
     downloadPdf(code: string): any {
-        return this.httpClient.get(this.baseUrl + "/file/pdf/" + code + ".pdf", {responseType: 'blob'})
+        return this.httpClient.get(this.baseUrl + "/file/pdf/" + code, {responseType: 'blob'})
             .pipe(tap(),
                 catchError(this.handleError<HttpResponse<Blob>>('get trail resource URL', null))
             );

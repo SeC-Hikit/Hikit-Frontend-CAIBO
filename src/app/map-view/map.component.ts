@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MaintenanceDto, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../service/trail-preview-service.service';
-import {TrailDto, TrailResponse, TrailService} from '../service/trail-service.service';
+import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
@@ -14,9 +14,11 @@ import {Observable, ObservedValueOf, Subject} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {DateUtils} from "../utils/DateUtils";
+import {PoiDto, PoiService} from "../service/poi-service.service";
+import {AuthService} from "../service/auth.service";
 
 export enum ViewState {
-    NONE = "NONE", TRAIL = "TRAIL", PLACE_IN_TRAIL = "PLACE_IN_TRAIL", TRAIL_LIST = "TRAIL_LIST"
+    NONE = "NONE", TRAIL = "TRAIL", POI = "POI", TRAIL_LIST = "TRAIL_LIST"
 }
 
 export enum TrailSimplifierLevel {
@@ -45,6 +47,9 @@ export class MapComponent implements OnInit {
     private searchTerms = new Subject<string>();
 
     isCycloToggled = false;
+
+    isPoiLoaded = false;
+
     // Bound elements
     searchTermString: string = "";
     trailPreviewList: TrailPreview[];
@@ -52,6 +57,7 @@ export class MapComponent implements OnInit {
     trailPreviewPage: number = 0;
 
     selectedTrail: TrailDto;
+    selectedTrailPois: PoiDto[] = [];
     trailList: TrailDto[];
     connectedTrails: TrailDto[] = [];
     selectedTileLayer: string;
@@ -73,25 +79,31 @@ export class MapComponent implements OnInit {
     sideView = ViewState.NONE;
     selectedTrailIndex: number = 0;
     showTrailCodeMarkers: boolean;
-
+    poiHovering: PoiDto;
+    selectedPoi: PoiDto;
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
+    trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
 
     constructor(
         private trailService: TrailService,
         private geoTrailService: GeoTrailService,
+        private poiService: PoiService,
         private trailPreviewService: TrailPreviewService,
         private accessibilityService: NotificationService,
         private maintenanceService: MaintenanceService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private authService: AuthService) {
     }
 
     ngOnInit(): void {
+        this.sideView = ViewState.NONE;
         this.changeTileLayer("topo");
         this.trailPreviewList = [];
         this.trailList = [];
         this.handleQueryParam();
+        this.ensureMapping();
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
             debounceTime(1000),
@@ -113,7 +125,7 @@ export class MapComponent implements OnInit {
                                               areDraftVisible: boolean): Observable<TrailPreviewResponse> {
         let limit = this.maxTrailEntriesPerPage * this.getNextPageNumber(page);
 
-        if(!code) {
+        if (!code) {
             return this.trailPreviewService.getPreviews(page, limit, environment.realm, areDraftVisible)
         }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
@@ -130,6 +142,10 @@ export class MapComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
+        this.adaptSize();
+    }
+
+    adaptSize() {
         let fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
         console.log(fullSize);
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
@@ -171,6 +187,7 @@ export class MapComponent implements OnInit {
 
         this.loadNotificationsForTrail(id);
         this.loadLastMaintenanceForTrail(id);
+        setTimeout(() => this.loadPoiForTrail(id), 1200);
     }
 
     private loadRelatedForTrailId(id: string) {
@@ -188,8 +205,8 @@ export class MapComponent implements OnInit {
         }
         this.accessibilityService.getUnresolvedForTrailId(id)
             .subscribe(notificationResponse => {
-            this.selectedTrailNotifications = notificationResponse.content
-        });
+                this.selectedTrailNotifications = notificationResponse.content
+            });
     }
 
     loadRelatedTrailsByIdForSelectedTrail(trailIds: string[]) {
@@ -197,42 +214,39 @@ export class MapComponent implements OnInit {
             .filter((trailId) => this.trailMap.has(trailId))
             .map((it) => this.trailMap.get(it))
         const trailIdsNotInCache = trailIds.filter((trailId) => !this.trailMap.has(trailId))
-        const map: Promise<TrailResponse>[] = trailIdsNotInCache.map(it=> this.trailService.getTrailById(it).toPromise());
+        const map: Promise<TrailResponse>[] = trailIdsNotInCache.map(it => this.trailService.getTrailById(it).toPromise());
         Promise.all(map).then((resps) => {
-          const loadedTrails: TrailDto[] = resps.flatMap(it=> it.content);
-          loadedTrails.forEach(it=> this.trailMap.set(it.id, it));
-          this.connectedTrails = Array.from(trailDtoFromCache.concat(loadedTrails));
+            const loadedTrails: TrailDto[] = resps.flatMap(it => it.content);
+            loadedTrails.forEach(it => this.trailMap.set(it.id, it));
+            this.connectedTrails = Array.from(trailDtoFromCache.concat(loadedTrails));
         });
     }
 
     loadLastMaintenanceForTrail(trailId: string): void {
         this.maintenanceService.getPastForTrail(trailId).subscribe(maintenanceResponse => {
-                this.selectedTrailMaintenances = maintenanceResponse.content
+            this.selectedTrailMaintenances = maintenanceResponse.content
         });
     }
 
     onDownloadGpx(): void {
-        this.trailService.downloadGpx(this.getFileName(this.selectedTrail)).subscribe(response => {
+        this.trailService.downloadGpx(this.getFileNameGpx(this.selectedTrail)).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
-            const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + ".gpx");
         });
     }
 
     onDownloadKml(): void {
-        this.trailService.downloadKml(this.getFileName(this.selectedTrail)).subscribe(response => {
+        this.trailService.downloadKml(this.getFileNameKml(this.selectedTrail)).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
-            const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + ".kml");
         });
     }
 
     onDownloadPdf(): void {
         this.trailService.downloadPdf(
-            this.getFileName(this.selectedTrail)
+            this.getFileNamePdf(this.selectedTrail)
         ).subscribe(response => {
             let blob: any = new Blob([response], {type: 'text/json; charset=utf-8'});
-            const url = window.URL.createObjectURL(blob);
             FileSaver.saveAs(blob, this.selectedTrail.code + "_" + this.selectedTrail.id + ".pdf");
         });
     }
@@ -298,11 +312,24 @@ export class MapComponent implements OnInit {
         this.zoomLevel = zoomLevel;
     }
 
-    getFileName(fileName: TrailDto): string {
-        return fileName.code + "_" + fileName.id;
+    getFileNameGpx(trailDto: TrailDto): string {
+        return this.replaceSpecialCharFromFileName(trailDto.staticTrailDetails.pathGpx ? trailDto.staticTrailDetails.pathGpx : trailDto.code + "_" + trailDto.id)
+    }
+
+    getFileNameKml(trailDto: TrailDto): string {
+        return this.replaceSpecialCharFromFileName(trailDto.staticTrailDetails.pathKml ? trailDto.staticTrailDetails.pathKml : trailDto.code + "_" + trailDto.id)
+    }
+
+    getFileNamePdf(trailDto: TrailDto): string {
+        return this.replaceSpecialCharFromFileName(trailDto.staticTrailDetails.pathPdf ? trailDto.staticTrailDetails.pathPdf : trailDto.code + "_" + trailDto.id)
+    }
+
+    replaceSpecialCharFromFileName(code) {
+        return code.replace("/", "_")
     }
 
     showTrailList() {
+        this.searchTermString = "";
         this.loadTrailPreview(0);
         this.showListOnSide();
     }
@@ -331,7 +358,7 @@ export class MapComponent implements OnInit {
     }
 
     navigateToTrailReportIssue(trailId: string) {
-        scroll(0,0);
+        scroll(0, 0);
         this.router.navigate(["accessibility", "reporting-form"],
             {
                 queryParams: {trail: trailId},
@@ -357,7 +384,7 @@ export class MapComponent implements OnInit {
     }
 
     onFocusOnNotification(notificationId: string) {
-        const accessibilityNotification = this.selectedTrailNotifications.filter(it=> it.id == notificationId)[0];
+        const accessibilityNotification = this.selectedTrailNotifications.filter(it => it.id == notificationId)[0];
         this.openInfoModal(`Problema di percorrenza su sentiero ${this.selectedTrail.code}`,
             `<div>Riportato il: <b>${DateUtils.formatDateToIta(accessibilityNotification.reportDate)}</b></div>` +
             `<div>Descrizione: <b>${accessibilityNotification.description}</b></div>`)
@@ -365,7 +392,7 @@ export class MapComponent implements OnInit {
 
     onMaintenanceClick($event: string) {
         const lastMaintenance = this.selectedTrailMaintenances[0];
-        if(lastMaintenance.id != $event) return;
+        if (lastMaintenance.id != $event) return;
         this.openInfoModal(`Ultima manutenzione effettuata su sentiero ${this.selectedTrail.code}`,
             `<div>Effettuata il: <b>${DateUtils.formatDateToIta(lastMaintenance.date)}</b></div>` +
             `<div>Descrizione: <b>${lastMaintenance.description}</b></div>`)
@@ -379,4 +406,49 @@ export class MapComponent implements OnInit {
         return zoomLevel > 12;
     }
 
+    private loadPoiForTrail(id: string) {
+        this.isPoiLoaded = false;
+        this.poiService.getByTrailCode(id)
+            .subscribe((resp) => {
+                this.isPoiLoaded = true;
+                this.selectedTrailPois = resp.content;
+            })
+    }
+
+    onPoiClick($event: PoiDto) {
+        this.navigateToLocation($event.coordinates)
+        this.selectedPoi = $event;
+        this.sideView = ViewState.POI;
+    }
+
+    onPoiHovering($event: PoiDto) {
+        this.poiHovering = $event;
+    }
+
+    onBackToTrailPoiClick() {
+        this.sideView = ViewState.TRAIL;
+        this.selectedPoi = null;
+        this.poiHovering = null;
+    }
+
+    onShowHikingClassification() {
+        this.openInfoModal("Classificazioni escursionistiche",
+            `<b>T-Turistico</b> : Itinerario di ambito locale su carrarecce, mulattiere o evidenti sentieri. Si sviluppa nelle immediate vicinanze di paesi, zone turistiche, vie di comunicazione e riveste particolare interesse per passeggiate facili di tipo culturale o turistico-ricreativo.<br>
+            <b>E-Escursionistico</b> : Sentiero privo di difficoltà tecniche che corrisponde in gran parte a mulattiere realizzate per scopi agro - silvo - pastorali, militari o a sentieri di accesso a rifugi o di collegamento fra valli.<br>
+            <b>EE-Escursionistico Esperto</b> : Sentiero che si sviluppa in zone impervie con passaggi che richiedono all’escursionista una buona conoscenza della mon-tagna, tecnica di base e un equipaggia-mento adeguato.<br>
+            <b>EEA-Escursionistico Esperto Attrezzato</b> : Itinerario che conduce l’alpinista su pareti rocciose o su aeree creste e cenge, preventivamente attrezzate con funi e/o scale senza le quali il procedere costituirebbe una vera e propria arrampicata. Richiede adeguata preparazione ed attrezzatura quale casco, imbrago e dissipatore.`
+        );
+    }
+
+    onShowCyclingClassification() {
+        this.openInfoModal("Classificazioni ciclo-escursionistiche", "");
+    }
+
+    private ensureMapping() {
+        this.trailPreviewService.getMappings(this.authService.getInstanceRealm())
+            .subscribe((resp) => {
+                const mapping: TrailMappingDto[] = resp.content;
+                mapping.forEach(it => this.trailMappings.set(it.id, it))
+            });
+    }
 }

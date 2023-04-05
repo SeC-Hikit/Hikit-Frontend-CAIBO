@@ -5,18 +5,6 @@
             <div class="col-sm-4">
                 <h2>Compilazione traccia</h2>
             </div>
-            <div class="col-sm-6">
-<!--                <h1 class="steps">-->
-<!--                              <span-->
-<!--                                      class="actionable"-->
-<!--                                      *ngIf="this.STEP_INDEX > 0"-->
-<!--                                      (click)="goBack()"-->
-<!--                              >⬅</span-->
-<!--                              >-->
-<!--                    Step {{ this.STEP_INDEX + 1 }}/{{ this.STEPS.length }} :-->
-<!--                    {{ this.STEPS[STEP_INDEX] }}-->
-<!--                </h1>-->
-            </div>
             <div class="col-sm-2">
                 <div class="features">
                     <div class="btn-group-toggle" data-toggle="buttons">
@@ -180,12 +168,13 @@
                     </div>
                     <div class="col-md-12">
                         <p>
-                            I crocevia sono punti di collegamento tra diversi sentieri. Vengono rilevati in automatico sulla base dei sentieri presenti.
+                            I crocevia sono punti di collegamento tra diversi sentieri. Vengono rilevati in automatico
+                            sulla base dei sentieri presenti.
                         </p>
                     </div>
                     <div class="col-md-12">
                         <p>
-                            Crocevia rilevati
+                            Crocevia da verificare: {{crossings.length}}
                         </p>
                     </div>
                     <div class="col-md-12 top-margin" *ngFor="let place of intersections.controls; index as i">
@@ -196,15 +185,16 @@
                                 [otherTrail]="crossings[i].trail"
                                 [i]="i"
                                 [crossPoint]="crossings[i].coordinate"
+                                (onDelete)="onDeleteTrailIntersection(i)"
                                 (onPlaceFound)="togglePlacePicker()"
                                 (onIntersectionNameChange)="changeCrossingName($event, i)"
                         ></app-trail-intersection-entry>
                     </div>
                     <div class="col-md-12 top-margin" *ngIf="isQuickMode">
-                       ℹ️ La compilazione rapida provvede a compilare i crocevia automaticamente.
+                        ℹ️ La compilazione rapida provvede a compilare i crocevia automaticamente.
                     </div>
                     <div class="col-md-12 top-margin" *ngIf="intersections.controls.length == 0">
-                      ✔️ Nessun crocevia rilevato
+                        ✔️ Nessun crocevia ancora da modificare
                     </div>
                 </div>
             </div>
@@ -252,7 +242,7 @@
                         </app-location-entry>
                     </div>
                 </div>
-                
+
                 <div class="row" *ngIf="this.STEP_INDEX == 2">
                     <div class="space-up col-md-12">
                         <app-location-entry

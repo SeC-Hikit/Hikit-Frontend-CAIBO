@@ -1,7 +1,7 @@
 <div class="container-box" [ngClass]="this.isCompleted ? 'completed' : 'to-complete'">
     <div class="row accordion-head">
         <div class="col-md-8">
-            <h2>N.{{ i + 1 }}: Crocevia che incontra il sentiero <span
+            <h2>Crocevia che incontra il sentiero <span
                     class="trailCodeColumn">{{ otherTrail.code }}</span></h2>
         </div>
         <div class="col-md-4 align-right">
@@ -13,7 +13,7 @@
             >
                 <span *ngIf="!isShowing">Mostra e completa</span>
             </button>
-            <button class="btn btn-error actionable" *ngIf="isShowing">
+            <button class="btn btn-error actionable" *ngIf="isShowing" (click)="onDeleteEvent()">
                 <span>Cancella</span>
             </button>
         </div>
@@ -55,6 +55,11 @@
                     </button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 top-margin">
+                    <p>{{ crossPoint.latitude + ", " + crossPoint.longitude }}</p>
+                </div>
+            </div>
             <div class="row" *ngIf="hasAutoDetectedRun && isAutoDetected">
                 <div class="col-md-12">
                     <button
@@ -75,20 +80,27 @@
                     <input type="text" class="form-control"
                            [formControl]="id" [disabled]="true"/>
                 </div>
-                <div class="col-md-12">
-                    <div class="form-check form-check-inline">
-                        <input id="isDynamicCheckbox"
-                               title="Scegli un'opzione"
+                <div class="col-md-2 top-margin-x2">
+                    <button class="btn btn-outline-secondary"
+                            ngbTooltip="Settando il crocevia come 'dinamico' segnali a sistemi di autogestirne i metadati"
+                            triggers="click:blur">
+                        <svg class="bi" width="24"
+                             height="24" fill="currentColor">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#question-circle"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <div class="col-md-4 top-margin-x2">
+                        <input
                                class="form-control"
                                name="checkbox"
                                type="checkbox"
                                [formControl]="isDynamic"
                                (change)="onToggleDynamic()"
                         >
-                        <label for="isDynamicCheckbox">Dinamico<span class="mandatory-field-asterisk">*</span></label>
-                    </div>
-
-
+                        <label class="checkbox-label">Dinamico<span class="mandatory-field-asterisk">*</span></label>
                 </div>
                 <div class="col-md-12 top-margin">
                     <label>Nome <span class="mandatory-field-asterisk">*</span></label>

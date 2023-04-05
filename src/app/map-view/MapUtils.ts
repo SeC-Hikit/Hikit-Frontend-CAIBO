@@ -1,9 +1,16 @@
 import * as L from 'leaflet';
+import {LatLngBounds} from 'leaflet';
 import {TrailCoordinatesDto} from "../service/trail-service.service";
 import {TrailClassification} from "../TrailClassification";
-import {LatLngBounds} from "leaflet";
 import {RectangleDto} from "../service/geo-trail-service";
-import {AlertPinIcon, CrossWayIcon, MapPinIconType, PinIcon} from "../../assets/icons/MapPinIconType";
+import {
+    AlertPinIcon,
+    CrossWayIcon,
+    MapPinIconType, MonumentalTreeIcon,
+    PinIcon,
+    RuinIcon, ShaletIcon, TentIcon, ViewPinIcon,
+    WaterIcon
+} from "../../assets/icons/MapPinIconType";
 import {Marker} from "../map-preview/map-preview.component";
 
 export class MapUtils {
@@ -64,7 +71,7 @@ export class MapUtils {
     }
 
     static getLineColor(isSelectedLine: boolean): string {
-        return isSelectedLine ? "red" : "#ff5252";
+        return isSelectedLine ? "red" : "#f57777";
     }
 
     static getTrailIcon(code: string) {
@@ -78,6 +85,23 @@ export class MapUtils {
         });
     }
 
+    static determinePoiType(type: String, microType: string[]) {
+        switch (type) {
+            case "CULTURAL":
+                if(microType.indexOf("tree") >= 0) { return MapPinIconType.MONUMENTAL_TREE }
+                return MapPinIconType.RUIN_PIN;
+            case "SUPPORT":
+                if(microType.indexOf("shalet") >= 0) { return MapPinIconType.SHALET }
+                if(microType.indexOf("camping") >= 0) { return MapPinIconType.CAMPING_PIN }
+                if(microType.indexOf("fountain") >= 0) { return MapPinIconType.WATER_PIN }
+                return MapPinIconType.VIEW_PIN;
+            case "BELVEDERE":
+                return MapPinIconType.VIEW_PIN;
+            default:
+                return MapPinIconType.PIN;
+        }
+    }
+
     static determineIcon(marker: Marker) {
         switch (marker.icon) {
             case MapPinIconType.ALERT_PIN:
@@ -86,6 +110,26 @@ export class MapUtils {
                 return CrossWayIcon.get();
             case MapPinIconType.PIN:
                 if (marker.color) return PinIcon.get(marker.color);
+                return PinIcon.get();
+            case MapPinIconType.MONUMENTAL_TREE:
+                if (marker.color) return MonumentalTreeIcon.get(marker.color);
+                return MonumentalTreeIcon.get();
+            case MapPinIconType.WATER_PIN:
+                if (marker.color) return WaterIcon.get(marker.color);
+                return WaterIcon.get();
+            case MapPinIconType.VIEW_PIN:
+                if (marker.color) return ViewPinIcon.get(marker.color);
+                return ViewPinIcon.get();
+            case MapPinIconType.RUIN_PIN:
+                if (marker.color) return RuinIcon.get(marker.color);
+                return RuinIcon.get();
+            case MapPinIconType.CAMPING_PIN:
+                if (marker.color) return TentIcon.get(marker.color);
+                return TentIcon.get();
+            case MapPinIconType.SHALET:
+                if (marker.color) return ShaletIcon.get(marker.color);
+                return ShaletIcon.get();
+            default:
                 return PinIcon.get();
         }
     }

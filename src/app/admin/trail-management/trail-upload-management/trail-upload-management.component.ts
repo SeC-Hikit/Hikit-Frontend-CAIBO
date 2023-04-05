@@ -22,6 +22,7 @@ import {PlaceRefDto, PlaceResponse, PlaceService} from "../../../service/place.s
 import {AdminPlaceService} from "../../../service/admin-place.service";
 import {TrailDataForSaving, TrailSaveProcessHelper} from "./TrailSaveProcessHelper";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {PickedPlace} from "./place-picker-selector/place-picker-selector.component";
 
 export interface Crossing {
     name: string,
@@ -349,7 +350,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                         let locationFormGroupFromIntersection = this.isQuickMode ?
                         TrailImportFormUtils.getLocationFormGroupForQuickIntersection(intersection,
                             point, this.trailFormGroup.controls["code"].value, intersection.trail.code) :
-                        TrailImportFormUtils.getLocationFormGroupForIntersection(intersection);
+                        TrailImportFormUtils.getLocationFormGroupForIntersection(intersection, point);
                     this.intersections.push(locationFormGroupFromIntersection);
                     this.crossingGeolocationExecutedChecks.push(false);
                     })
@@ -369,6 +370,11 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
                 this.isCrossingSectionComplete = true;
                 this.toggleLoading();
             });
+    }
+
+    onDeleteTrailIntersection(i: number) {
+        this.intersections.removeAt(i);
+        this.crossings.splice(i, 1);
     }
 
     toggleLoading() {
@@ -418,5 +424,11 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     changeCrossingName($event: string, i: number) {
         this.crossings[i].name = $event;
+    }
+
+    onSelectedPlace($event: PickedPlace, i: number) {
+        this.intersections[i].controls["id"].setValue($event.place.id);
+        this.intersections[i].controls["name"].setValue($event.place.name);
+        this.intersections[i].controls["isDynamic"].setValue($event.place.dynamic);
     }
 }
