@@ -71,8 +71,8 @@ export class MapPreviewComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        let openStreetmapCopy: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-        let topoLayer = L.tileLayer(
+        const openStreetmapCopy = '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+        const topoLayer = L.tileLayer(
             "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
             {attribution: openStreetmapCopy}
         );
@@ -124,14 +124,14 @@ export class MapPreviewComponent implements OnInit {
         this.markers = markersCoords.map((marker) => {
             if (marker) {
                 return L.marker(
-                    {lng: marker.coords.longitude, lat: marker.coords.latitude},
+                    [marker.coords.latitude, marker.coords.longitude],
                     {icon: MapUtils.determineIcon(marker)}
                 );
             }
         });
 
         this.markers.forEach((m) => {
-            this.map.addLayer(m);
+            m.addTo(this.map);
         });
     }
 
