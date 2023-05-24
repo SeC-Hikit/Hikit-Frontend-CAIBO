@@ -138,8 +138,9 @@
                         >
                             Descrizione <span class="mandatory-field-asterisk">*</span>
                         </label>
-                        <div class="form-group col-md-12 mb-12" *ngIf="!isLoading">
+                        <div class="form-group col-md-12 mb-12 description-field" *ngIf="!isLoading">
                             <quill-editor
+                                    [placeholder]="'Aggiungi una descrizione'"
                                     formControlName="description"
                                     [modules]="{
                 toolbar: [
@@ -286,7 +287,7 @@
                     <button
                             type="button"
                             class="btn btn-success mt-3 wide-btn"
-                            *ngif="!isQuickMode"
+                            *ngIf="!isQuickMode"
                             (click)="onAddLocation()"
                     >
                         + località intermedia

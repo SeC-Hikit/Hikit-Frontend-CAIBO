@@ -165,7 +165,7 @@ export interface paths {
   "/poi/type/{type}": {
     get: operations["getByMacro"];
   };
-  "/poi/trail/{code}": {
+  "/poi/trail/{id}": {
     get: operations["getByTrail"];
   };
   "/poi/name/{name}": {
@@ -1740,7 +1740,7 @@ export interface operations {
   getByTrail: {
     parameters: {
       path: {
-        code: string;
+        id: string;
       };
       query: {
         skip?: number;
