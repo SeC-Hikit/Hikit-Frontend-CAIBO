@@ -124,7 +124,6 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
         this.isQuickMode = this.route.snapshot.paramMap.get("quick") == "quick";
-        alert(this.isQuickMode)
         this.loadRaw(idFromPath);
     }
 
