@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 top-margin" *ngIf="selectedPoi.tags.length > 0">
+            <div class="col-12 top-margin" *ngIf="selectedPoi.tags.join(', ') != ''">
                 <div class="row">
                     <div class="col-12">
                         <h4>Toponimi</h4>

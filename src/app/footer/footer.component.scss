@@ -1,7 +1,7 @@
 @import "../style/const.scss";
 
 .it-footer {
-  .icon {
+  .cai-icon {
     width: 60px;
   }
 }
@@ -16,4 +16,18 @@
 
 .it-footer-small-prints a { 
     color: black;
+}
+
+.footer-list{
+  list-style: none;
+  padding: 0;
+}
+
+.list-item {
+  color: white;
+  text-decoration: none;
+}
+
+.list-item:hover {
+  text-decoration: underline;
 }

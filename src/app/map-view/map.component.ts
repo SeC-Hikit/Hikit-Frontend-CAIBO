@@ -83,6 +83,7 @@ export class MapComponent implements OnInit {
     selectedPoi: PoiDto;
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
     trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
+    highlightedTrail: TrailDto;
 
     constructor(
         private trailService: TrailService,
@@ -122,14 +123,16 @@ export class MapComponent implements OnInit {
     }
 
     private getTrailPreviewResponseObservable(code: string, page: number,
-                                              areDraftVisible: boolean): Observable<TrailPreviewResponse> {
-        let limit = this.maxTrailEntriesPerPage * this.getNextPageNumber(page);
+                                              areDraftVisible: boolean,
+                                              entriesPerPage: number = 10): Observable<TrailPreviewResponse> {
+        const skip = page * entriesPerPage;
+        const limit = this.maxTrailEntriesPerPage * this.getNextPageNumber(page);
 
         if (!code) {
-            return this.trailPreviewService.getPreviews(page, limit, environment.realm, areDraftVisible)
+            return this.trailPreviewService.getPreviews(skip, limit, environment.realm, areDraftVisible)
         }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
-            areDraftVisible, page, limit);
+            areDraftVisible, skip, limit);
     }
 
     private getNextPageNumber(page: number) {
@@ -147,7 +150,6 @@ export class MapComponent implements OnInit {
 
     adaptSize() {
         let fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
-        console.log(fullSize);
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
         document.getElementById(MapComponent.MAP_ID).style.height = fullSize.toString() + "px";
@@ -340,9 +342,9 @@ export class MapComponent implements OnInit {
 
     electTrailSimplifierLevel(zoom: number): TrailSimplifierLevel {
         if (zoom <= 10) return TrailSimplifierLevel.NONE;
-        if (zoom < 12) return TrailSimplifierLevel.LOW;
-        if (zoom <= 15) return TrailSimplifierLevel.MEDIUM;
-        if (zoom >= 16) return TrailSimplifierLevel.HIGH;
+        if (zoom < 15) return TrailSimplifierLevel.LOW;
+        if (zoom <= 17) return TrailSimplifierLevel.MEDIUM;
+        if (zoom >= 18) return TrailSimplifierLevel.HIGH;
     }
 
     toggleCycloOption() {
@@ -450,5 +452,9 @@ export class MapComponent implements OnInit {
                 const mapping: TrailMappingDto[] = resp.content;
                 mapping.forEach(it => this.trailMappings.set(it.id, it))
             });
+    }
+
+    onHighlightTrail(trail_id: string) {
+        this.highlightedTrail = this.trailMappings.get(trail_id)
     }
 }

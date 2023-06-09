@@ -1,37 +1,41 @@
-import { TrailClassification } from "../TrailClassification";
+import {TrailClassification} from "../TrailClassification";
 
 export class TrailToPolyline {
-    
-    constructor(private code : string,
-        private _id: string,
-        private classification: String,
-        private polyline: L.Polyline){
+
+    constructor(private code: string,
+                private _id: string,
+                private classification: String,
+                private polyline: L.Polyline,
+                private background_polyline: L.Polyline) {
     }
 
-    getCode() : string {
+    getCode(): string {
         return this.code;
     }
 
-    getId() : string {
+    getId(): string {
         return this._id;
     }
 
     getClassification(): TrailClassification {
-        if(this.classification == "E"){
+        if (this.classification == "E") {
             return TrailClassification.E
         }
-        if(this.classification == "T"){
+        if (this.classification == "T") {
             return TrailClassification.T
         }
-        if(this.classification == "EE"){
+        if (this.classification == "EE") {
             return TrailClassification.EE
         }
         return TrailClassification.EEA;
     }
 
-    getPolyline() : L.Polyline {
+    getPolyline(): L.Polyline {
         return this.polyline;
     }
 
+    getBackgroundPolyline(): L.Polyline {
+        return this.background_polyline;
+    }
 
 }

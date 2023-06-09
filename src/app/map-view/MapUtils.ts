@@ -44,29 +44,40 @@ export class MapUtils {
         return polyline;
     }
 
-    static getLineStyle(isSelectedLine: boolean, trailClassification: String) {
-        var trailColor = MapUtils.getLineColor(isSelectedLine);
+    static getBackgroundLineStyle(lineWeight = 5, opacity = 0.6) {
+        return this.getLineStyle(false, TrailClassification.T,
+            "white", lineWeight, opacity)
+    }
+
+    static getLineStyle(isSelectedLine: boolean, trailClassification: String,
+                        trailColor: String = null, lineStyleWeight = null, fillOpacity = null): any {
+        const electedTrailColor = !trailColor ? MapUtils.getLineColor(isSelectedLine) : trailColor;
+        const electedLineWeight = !lineStyleWeight ? MapUtils.LINE_WEIGHT : lineStyleWeight;
+        const electedFillOpacity = !fillOpacity ? 1 : fillOpacity;
         switch (trailClassification) {
             case TrailClassification.E:
                 return {
-                    weight: MapUtils.LINE_WEIGHT,
-                    color: trailColor,
+                    weight: electedLineWeight,
+                    color: electedTrailColor,
                     dashArray: "5, 10",
+                    opacity: electedFillOpacity
                 };
             case TrailClassification.EEA:
                 return {
-                    weight: MapUtils.LINE_WEIGHT,
-                    color: trailColor,
+                    weight: electedLineWeight,
+                    color: electedTrailColor,
                     dashArray: "2, 10",
+                    opacity: electedFillOpacity
                 };
             case TrailClassification.EE:
                 return {
-                    weight: MapUtils.LINE_WEIGHT,
-                    color: trailColor,
+                    weight: electedLineWeight,
+                    color: electedTrailColor,
                     dashArray: "3, 10",
+                    opacity: electedFillOpacity
                 };
             default:
-                return {weight: MapUtils.LINE_WEIGHT, color: trailColor};
+                return {weight: electedLineWeight, color: electedTrailColor, opacity: electedFillOpacity};
         }
     }
 
@@ -88,12 +99,20 @@ export class MapUtils {
     static determinePoiType(type: String, microType: string[]) {
         switch (type) {
             case "CULTURAL":
-                if(microType.indexOf("tree") >= 0) { return MapPinIconType.MONUMENTAL_TREE }
+                if (microType.indexOf("tree") >= 0) {
+                    return MapPinIconType.MONUMENTAL_TREE
+                }
                 return MapPinIconType.RUIN_PIN;
             case "SUPPORT":
-                if(microType.indexOf("shalet") >= 0) { return MapPinIconType.SHALET }
-                if(microType.indexOf("camping") >= 0) { return MapPinIconType.CAMPING_PIN }
-                if(microType.indexOf("fountain") >= 0) { return MapPinIconType.WATER_PIN }
+                if (microType.indexOf("shalet") >= 0) {
+                    return MapPinIconType.SHALET
+                }
+                if (microType.indexOf("camping") >= 0) {
+                    return MapPinIconType.CAMPING_PIN
+                }
+                if (microType.indexOf("fountain") >= 0) {
+                    return MapPinIconType.WATER_PIN
+                }
                 return MapPinIconType.VIEW_PIN;
             case "BELVEDERE":
                 return MapPinIconType.VIEW_PIN;
@@ -134,15 +153,6 @@ export class MapUtils {
         }
     }
 
-    static getTextStyle(isSelectedLine: boolean): any {
-        return {
-            repeat: true,
-            offset: -10,
-            attributes: {fill: this.getLineColor(isSelectedLine), below: true},
-            center: true,
-        };
-    }
-
     static getRectangleDtoFromLatLng(bounds: LatLngBounds): RectangleDto {
         let bottomLeft = bounds.getSouthWest();
         let topRight = bounds.getNorthEast();
@@ -157,6 +167,7 @@ export class MapUtils {
         }
     }
 
+    // TODO: delete
     static getERShape(): any {
         return {
             type: "FeatureCollection",

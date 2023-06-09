@@ -9,6 +9,7 @@ import {ChartOptions} from "chart.js";
 import {TrailCycloClassificationMapper} from "../TrailCycloClassificationMapper";
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {PoiDto} from "../../service/poi-service.service";
+import {PlaceDto, PlaceRefDto} from "../../service/place.service";
 
 @Component({
   selector: 'app-map-trail-details',
@@ -46,6 +47,7 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   @Output() onPoiHoveringEvent = new EventEmitter<PoiDto>();
   @Output() onShowTrailClassificationHikingInfo = new EventEmitter<void>();
   @Output() onShowTrailClassificationCycloInfo = new EventEmitter<void>();
+  @Output() onHighlightTrail = new EventEmitter<string>();
 
   constructor() {
   }
@@ -119,7 +121,6 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   }
 
   moveTo(location: TrailCoordinatesDto) {
-    console.log(location);
     this.onNavigateToLocation.emit(location);
   }
 
@@ -177,5 +178,16 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
 
   onShowCyclingClassificationDetails() {
     this.onShowTrailClassificationCycloInfo.emit();
+  }
+
+  onLocationHover(location: PlaceRefDto) {
+  }
+
+  onLocationClick(location: PlaceRefDto) {
+    this.onNavigateToLocation.emit(location.coordinates)
+  }
+
+  onRelatedTrailHover(id: string) {
+    this.onHighlightTrail.emit(id);
   }
 }

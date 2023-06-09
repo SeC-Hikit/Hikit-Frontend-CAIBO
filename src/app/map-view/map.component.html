@@ -1,4 +1,4 @@
-<div class="MapComponent" (resize)="adaptSize()">
+<div class="MapComponent" (window:resize)="adaptSize()">
     <div *ngIf="isLoading" class="progress progress-indeterminate">
         <span class="sr-only">Caricamento...</span>
         <div class="progress-bar" role="progressbar"></div>
@@ -11,9 +11,7 @@
                 <use
                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
             </svg>
-            <span class="back">
-                            Torna al sentiero {{selectedTrail.code}}
-                            </span>
+            <span class="back">Torna al sentiero {{selectedTrail.code}}</span>
         </div>
 
         <div *ngIf="sideView=='TRAIL'"
@@ -22,9 +20,7 @@
                 <use
                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
             </svg>
-            <span class="back">
-                            Torna alla lista sentieri
-                            </span>
+            <span class="back">Torna alla lista sentieri</span>
         </div>
 
         <div class="column-map col-lg-4 col-md-4 white details functional-column" id="side-column">
@@ -106,6 +102,7 @@
                                 (onPoiHoveringEvent)="onPoiHovering($event)"
                                 (onShowTrailClassificationCycloInfo)="onShowCyclingClassification()"
                                 (onShowTrailClassificationHikingInfo)="onShowHikingClassification()"
+                                (onHighlightTrail)="onHighlightTrail($event)"
                         >
                         </app-map-trail-details>
                     </div>
@@ -127,6 +124,7 @@
                           [userPosition]="userPosition"
                           [showTrailCodeMarkers]="showTrailCodeMarkers"
                           [poiHovering]="poiHovering"
+                          [trailHovering]="highlightedTrail"
                           [highlightedLocation]="highlightedLocation"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"

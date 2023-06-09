@@ -180,8 +180,8 @@ export class ReportingFormComponent implements OnInit {
                 }, (error) => {
                     this.isLoading = false;
                     this.noticeErrorModal("Errore nel geolocalizzare l'utente",
-                        `Non è stato possibile registrare la sua posizione. " +
-                        "Usi le frecce a lato della mappa per segnalare il problema (errore='${error}')`)
+                        `Non è stato possibile registrare la sua posizione. \n
+                        Usi le frecce a lato della mappa per segnalare il problema (errore='${error.POSITION_UNAVAILABLE}')`)
                 })
         } else {
             this.noticeErrorModal("Errore nel geolocalizzare l'utente", "Il suo dispositivo non supporta la" +

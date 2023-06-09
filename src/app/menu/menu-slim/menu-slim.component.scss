@@ -12,8 +12,8 @@
 
 .it-header-slim-wrapper-tent,
 .it-header-slim-wrapper {
-  height: 35px;
-  margin-top: 10px;
+  height: 25px;
+  margin-top: 5px;
 }
 
 .it-header-slim-wrapper .it-header-slim-wrapper-content .nav-mobile ul.link-list{
@@ -22,7 +22,11 @@
   padding: 0 0px;
   border-left: 0px solid rgba(255,255,255,.2);
   border-right: 0px solid rgba(255,255,255,.2);
-  height: 48px;
+  height: 20px;
+}
+
+.it-header-slim-wrapper .it-header-slim-wrapper-content {
+  height: 30px;
 }
 
 .it-header-slim-wrapper { 

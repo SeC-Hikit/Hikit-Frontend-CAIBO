@@ -78,7 +78,7 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Località</h4>
+                        <h4>Località Partenza-Arrivo</h4>
                     </div>
                     <div class="col-md-12 ">
                         <span (click)="moveTo(selectedTrail.startLocation.coordinates)" class="clickable"><span
@@ -102,31 +102,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <h4>Punti d'interesse</h4>
-                    </div>
-                    <div class="col-12 pois" *ngIf="isPoiLoaded">
-                        <div *ngFor="let trailPoi of selectedTrailPois">
-                            <span class="trailCodeColumn"
-                                  (mouseenter)="onPoiHover(trailPoi)"
-                                  (mouseout)="onPoiHover(null)"
-                                  (click)="onPoiClick(trailPoi)">{{trailPoi.name}}</span>
-                        </div>
-                    </div>
-                    <div class="col-3" *ngIf="!isPoiLoaded">
-                        <div class="spinner-border relative start-50" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div class="col-12" *ngIf="isPoiLoaded && selectedTrailPois.length <= 0">
-                        <p>Nessun punto d'interesse trovato</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="col-12" *ngIf="isCycloSwitchOn && selectedTrail.cycloDetails.description != ''">
+
+            <!-- Cyclo -->
+
+            <div class="col-12" *ngIf="isCycloSwitchOn">
+                <div class="col-12" *ngIf="selectedTrail.cycloDetails.description != ''">
                     <div class="row">
                         <div class="col-12">
                             <h4>Descrizione ciclistica</h4>
@@ -192,141 +172,193 @@
                                 Portage: <span>{{selectedTrail.cycloDetails.wayBack.portage}}</span> min.
                             </div>
                         </span>
-
                         </div>
                     </div>
                 </div>
             </div>
+
+
             <div class="col-12">
-                <div class="col-12" *ngIf="connectedTrails.length > 0">
-                    <div class="row">
+                <hr>
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Percorribilita'</h4>
+                    </div>
+                    <div class="col-12" *ngIf="selectedTrailMaintenances?.length > 0">
                         <div class="col-12">
-                            <h4>Sentieri collegati</h4>
+                            Ultima <span class="clickable" (click)="onLastMaintenanceWordClick()">
+                            manutenzione</span> eseguita il {{formatDate(selectedTrailMaintenances[0].date)}}
                         </div>
-                        <div class="col-12">
+                    </div>
+                    <div class="col-12">
+                        <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow"
+                             class="clickable row">
+
+                            <table id="trailTable" class="table table-striped interactive-table">
+                                <thead class="">
+                                <tr>
+                                    <th scope="col">Problemi verificati</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="col-12 clickable" *ngFor="let notification of trailNotifications"
+                                    (click)="
+                                    onNotificationClick(notification.id)">
+                                    <td>
+                                        <span [innerHTML]="notification.description"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <ng-template #notShow>
+                            <div>
+                                <svg class="bi" width="24" height="24">
+                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
+                                </svg>
+                                Non ci sono problemi di percorribilità
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <hr />
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Punti d'interesse</h4>
+                    </div>
+                    <div class="col-12 pois" *ngIf="isPoiLoaded">
+                        <div *ngFor="let trailPoi of selectedTrailPois">
+                            <span class="trailCodeColumn"
+                                  (mouseenter)="onPoiHover(trailPoi)"
+                                  (mouseout)="onPoiHover(null)"
+                                  (click)="onPoiClick(trailPoi)">{{trailPoi.name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf="!isPoiLoaded">
+                        <div class="spinner-border relative start-50" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="isPoiLoaded && selectedTrailPois.length <= 0">
+                        <p>Nessun punto d'interesse trovato</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Le località/crocevia sul percorso</h4>
+                    </div>
+                    <div class="col-12 locations clickable">
+                        <div *ngFor="let locality of selectedTrail.locations">
+                            <span class="trailCodeColumn"
+                                  (mouseenter)="onLocationHover(locality)"
+                                  (mouseout)="onLocationHover(null)"
+                                  (click)="onLocationClick(locality)">{{locality.name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 top-margin" *ngIf="connectedTrails.length > 0">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Sentieri collegati</h4>
                         <span *ngFor="let connected of connectedTrails" class="clickable white-font trailCodeColumn"
+                              (mouseenter)="onRelatedTrailHover(connected.id)"
+                              (mouseout)="onRelatedTrailHover(null)"
                               (click)="onRelatedTrailClick(connected.id)">
                             {{connected.code}}
                         </span>
-                        </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4>Percorribilita'</h4>
-                        </div>
-                        <div class="col-12" *ngIf="selectedTrailMaintenances?.length > 0">
-                            <div class="col-12">
-                                Ultima <span class="clickable" (click)="onLastMaintenanceWordClick()">
-                            manutenzione</span> eseguita il {{formatDate(selectedTrailMaintenances[0].date)}}
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div *ngIf="trailNotifications && trailNotifications.length > 0; else notShow"
-                                 class="clickable row">
+            </div>
 
-                                <table id="trailTable" class="table table-striped interactive-table">
-                                    <thead class="">
-                                    <tr>
-                                        <th scope="col">Problemi verificati</th>
+            <div class="col-12">
+                <hr />
+            </div>
 
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class="col-12 clickable" *ngFor="let notification of trailNotifications"
-                                        (click)="
-                                    onNotificationClick(notification.id)">
-                                        <td>
-                                            <span [innerHTML]="notification.description"></span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <ng-template #notShow>
-                                <div>
-                                    <svg class="bi" width="24" height="24">
-                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Download</h4>
+                    </div>
+                    <div class="col-12">
+                        <div class="row clickable">
+                            <div class="col-md-2">
+                                <a (click)="onDownloadGpxClick()" target="_blank">
+                                    <svg class="bi" width="24" height="24" fill="red">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
                                     </svg>
-                                    Non ci sono problemi di percorribilità
-                                </div>
-                            </ng-template>
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <a (click)="onDownloadGpxClick()" target="_blank">
+                                    <span>Traccia .gpx</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4>Download</h4>
-                        </div>
-                        <div class="col-12">
-                            <div class="row clickable">
-                                <div class="col-md-2">
-                                    <a (click)="onDownloadGpxClick()" target="_blank">
-                                        <svg class="bi" width="24" height="24" fill="red">
-                                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div class="col-md-10">
-                                    <a (click)="onDownloadGpxClick()" target="_blank">
-                                        <span>Traccia .gpx</span>
-                                    </a>
-                                </div>
+                    <div class="col-12">
+                        <div class="row clickable">
+                            <div class="col-md-2">
+                                <a (click)="onDownloadKmlClick()" target="_blank">
+                                    <svg class="bi" width="24" height="24" fill="red">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <a (click)="onDownloadKmlClick()" target="_blank">
+                                    <span>Traccia .kml</span>
+                                </a>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="row clickable">
-                                <div class="col-md-2">
-                                    <a (click)="onDownloadKmlClick()" target="_blank">
-                                        <svg class="bi" width="24" height="24" fill="red">
-                                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div class="col-md-10">
-                                    <a (click)="onDownloadKmlClick()" target="_blank">
-                                        <span>Traccia .kml</span>
-                                    </a>
-                                </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row clickable">
+                            <div class="col-md-2">
+                                <a (click)="onDownloadPdfClick()" target="_blank">
+                                    <svg class="bi" width="24" height="24" fill="red">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+                                    </svg>
+                                </a>
                             </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="row clickable">
-                                <div class="col-md-2">
-                                    <a (click)="onDownloadPdfClick()" target="_blank">
-                                        <svg class="bi" width="24" height="24" fill="red">
-                                            <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div class="col-md-10">
-                                    <a (click)="onDownloadPdfClick()" target="_blank">
-                                        <span>Foglio .pdf</span>
-                                    </a>
-                                </div>
+                            <div class="col-md-10">
+                                <a (click)="onDownloadPdfClick()" target="_blank">
+                                    <span>Foglio .pdf</span>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 bottom-margin">
-                    <button type="button" class="btn btn-outline-warning" (click)="onReportIssueToTrailClick()">Riporta
-                        un
-                        problema di percorrenza
-                    </button>
-                </div>
+            </div>
+            <div class="col-12 bottom-margin">
+                <button type="button" class="btn btn-outline-warning" (click)="onReportIssueToTrailClick()">Riporta
+                    un
+                    problema di percorrenza
+                </button>
             </div>
         </div>
     </div>
-    <div class="col-12">
-        <div class="row">
-            <div class="col-12">
-                <h4>Profilo altimetrico</h4>
-            </div>
-            <div class="col-11">
-                <canvas (mouseout)="onHoverAltiGraphOut()" id="hikeChart"></canvas>
-            </div>
+</div>
+<div class="col-12">
+    <div class="row">
+        <div class="col-12">
+            <h4>Profilo altimetrico</h4>
+        </div>
+        <div class="col-11">
+            <canvas (mouseout)="onHoverAltiGraphOut()" id="hikeChart"></canvas>
         </div>
     </div>
 </div>
