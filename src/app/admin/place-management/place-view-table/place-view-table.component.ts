@@ -10,6 +10,7 @@ import {AuthService} from "../../../service/auth.service";
 import {TrailPreviewService} from "../../../service/trail-preview-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {PaginationUtils} from "../../../utils/PaginationUtils";
 
 @Component({
     selector: 'app-place-view-table',
@@ -49,9 +50,9 @@ export class PlaceViewTableComponent implements OnInit {
     }
 
     private onPlaceLoad(page: number) {
-        const electedPage = page - 1;
-        this.placeService.get(electedPage * this.entryPerPage,
-            page * this.entryPerPage,
+        this.placeService.get(
+            PaginationUtils.getLowerBound(page, this.entryPerPage),
+            PaginationUtils.getUpperBound(page, this.entryPerPage),
             this.realm)
             .subscribe(resp => {
                 this.placeList = resp.content;
@@ -96,17 +97,19 @@ export class PlaceViewTableComponent implements OnInit {
     }
 
     onDeleteClick(id: string, name: string) {
-        this.trailService.getTrailByPlaceId(id).subscribe((resp)=> {
-            if(resp.content.length == 0) {
+        this.trailService.getTrailByPlaceId(id).subscribe((resp) => {
+            if (resp.content.length == 0) {
                 this.adminPlaceService.deleteById(id).subscribe(() => {
                     this.onPlaceLoad(this.selectedPage)
                 });
             } else {
 
-                const trailNames = resp.content.map(it=> { return {code: it.code, id: it.id}})
+                const trailNames = resp.content.map(it => {
+                    return {code: it.code, id: it.id}
+                })
                 this.openError(`Non è possibile cancellare la località '${name}'`,
                     `La località è attualmente utilizzata da uno o più sentieri in stato BOZZA.` +
-                    `<br> Vedi: ` + trailNames.map(t=> t.code + ` (con id=${t.id})`).join("<br/>"));
+                    `<br> Vedi: ` + trailNames.map(t => t.code + ` (con id=${t.id})`).join("<br/>"));
             }
         })
     }

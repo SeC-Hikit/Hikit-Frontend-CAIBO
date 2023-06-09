@@ -2,9 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {TrailImportFormUtils} from "../../../utils/TrailImportFormUtils";
 import {ActivatedRoute, Router} from "@angular/router";
-import {CycloDetailsDto, TrailDto, TrailResponse, TrailService} from "../../../service/trail-service.service";
+import {TrailDto, TrailService} from "../../../service/trail-service.service";
 import {AdminTrailService} from "../../../service/admin-trail.service";
-import {Status} from "../../../Status";
 
 @Component({
     selector: 'app-cyclo-management',
@@ -32,7 +31,7 @@ export class CycloManagementComponent implements OnInit {
         const idFromPath: string = this.route.snapshot.paramMap.get("id");
         this.trailService.getTrailById(idFromPath).subscribe((resp) => {
             if (resp.content.length == 0) {
-                alert("")
+                alert("No content")
             }
             let trail = resp.content[0];
             this.trailDto = trail;

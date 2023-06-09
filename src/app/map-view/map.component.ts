@@ -16,6 +16,7 @@ import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {DateUtils} from "../utils/DateUtils";
 import {PoiDto, PoiService} from "../service/poi-service.service";
 import {AuthService} from "../service/auth.service";
+import {PaginationUtils} from "../utils/PaginationUtils";
 
 export enum ViewState {
     NONE = "NONE", TRAIL = "TRAIL", POI = "POI", TRAIL_LIST = "TRAIL_LIST"
@@ -111,7 +112,7 @@ export class MapComponent implements OnInit {
             distinctUntilChanged(),
             switchMap((data: string,) => {
                 this.searchTermString = data;
-                return this.getTrailPreviewResponseObservable(data, 0, false)
+                return this.getTrailPreviewResponseObservable(data, 1, false)
             }));
 
         observable.subscribe(
@@ -125,20 +126,17 @@ export class MapComponent implements OnInit {
     private getTrailPreviewResponseObservable(code: string, page: number,
                                               areDraftVisible: boolean,
                                               entriesPerPage: number = 10): Observable<TrailPreviewResponse> {
-        const skip = page * entriesPerPage;
-        const limit = this.maxTrailEntriesPerPage * this.getNextPageNumber(page);
+        alert(page)
+        const skip = PaginationUtils.getLowerBound(page, entriesPerPage);
+        const limit = PaginationUtils.getUpperBound(page, entriesPerPage);
 
         if (!code) {
-            return this.trailPreviewService.getPreviews(skip, limit, environment.realm, areDraftVisible)
+            return this.trailPreviewService.getPreviews(
+                skip, limit, environment.realm, areDraftVisible)
         }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
             areDraftVisible, skip, limit);
     }
-
-    private getNextPageNumber(page: number) {
-        return page + 1;
-    }
-
     private handleQueryParam() {
         const idFromPath: string = this.activatedRoute.snapshot.queryParamMap.get("id");
         this.selectTrail(idFromPath);
@@ -372,7 +370,7 @@ export class MapComponent implements OnInit {
         let electedValue = page ? page : 1;
         this.trailPreviewPage = electedValue;
         this.getTrailPreviewResponseObservable(
-            this.searchTermString, electedValue - 1, false)
+            this.searchTermString, electedValue, false)
             .subscribe((resp) => {
                 this.trailPreviewCount = resp.totalCount;
                 this.trailPreviewList = resp.content;
