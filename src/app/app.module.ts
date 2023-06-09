@@ -77,6 +77,7 @@ import { MaintenanceViewComponent } from './admin/maintenance-management/mainten
 import { PlaceGeneralViewComponent } from './admin/place-management/place-general-view/place-general-view.component';
 import { AutoCrosswayViewComponent } from './admin/place-management/auto-crossway-view/auto-crossway-view.component';
 import { AppPoiDetailsComponent } from './map-view/app-poi-details/app-poi-details.component';
+import {AppPlaceDetailsComponent} from "./map-view/app-place-details/app-place-details.component";
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { AppPoiDetailsComponent } from './map-view/app-poi-details/app-poi-detai
     MaintenanceViewComponent,
     PlaceGeneralViewComponent,
     AutoCrosswayViewComponent,
-    AppPoiDetailsComponent
+    AppPoiDetailsComponent,
+    AppPlaceDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -199,8 +199,6 @@ export class MapFullComponent implements OnInit {
     }
 
     renderTrail(selectedTrail: TrailDto) {
-        // Shall take the polyline from the full list - do not instantiate a new polyline each time
-        // USE restorePathFromList(x);
         if (this.selectionCircle) {
             this.map.removeLayer(this.selectionCircle);
         }
@@ -327,14 +325,6 @@ export class MapFullComponent implements OnInit {
         }
         if (this.selectedMarkerLayer) this.map.removeLayer(this.selectedMarkerLayer);
     }
-
-    restorePathFromList(unselectedTrail: TrailDto) {
-        const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == unselectedTrail.code);
-        if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
-            this.map.addLayer(trailFromOtherTrails[0].getPolyline());
-        }
-    }
-
     clearPathFromList(selectedTrail: TrailDto) {
         const trailFromOtherTrails = this.otherTrailsPolylines.filter(x => x.getCode() == selectedTrail.code);
         if (trailFromOtherTrails && trailFromOtherTrails.length > 0) {
@@ -465,10 +455,28 @@ export class MapFullComponent implements OnInit {
                     [it.coordinates.latitude, it.coordinates.longitude],
                     {radius: MapFullComponent.HALF_CIRCLE_SIZE, fill: true, fillColor: "red", color: "red"});
                 circle.on("click", ()=> this.onLocationSelection.emit(it))
+                circle.on("mouseover", ()=> this.highlightPlaceLocation(circle, it));
                 circle.addTo(this.map);
                 this.locationsOnTrail.push(circle);
                 this.map.addLayer(circle);
             })
+    }
+
+    private highlightPlaceLocation(location_circle: L.Circle, it: PlaceRefDto) {
+        this.map.removeLayer(location_circle)
+        this.locationsOnTrail.splice(this.locationsOnTrail.indexOf(location_circle), 1);
+        let latLng = location_circle.getLatLng();
+        const circle = L.circle(
+            [latLng.lat, latLng.lng],
+            {radius: MapFullComponent.CIRCLE_SIZE, fill: true, fillColor: "yellow", color: "yellow"});
+        circle.on("click", ()=> this.onLocationSelection.emit(it))
+        circle.on("mouseout", ()=> this.dehighlightPlaceLocation(circle));
+        this.locationsOnTrail.push(circle)
+        this.map.addLayer(circle)
+    }
+
+    private dehighlightPlaceLocation(location: L.Circle){
+        this.showLocations(this.selectedTrail)
     }
 
     onClickGeolocalize() {

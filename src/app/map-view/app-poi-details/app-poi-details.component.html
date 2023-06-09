@@ -77,6 +77,8 @@
                     </div>
                 </div>
                 <span *ngFor="let trailId of selectedPoi.trailIds" class="clickable white-font trailCodeColumn"
+                      (mouseenter)="onRelatedTrailHover(trailId)"
+                      (mouseout)="onRelatedTrailHover(null)"
                       (click)="navigateToTrail(trailId)">
                     {{getNameOrCode(trailId)}}
                 </span>

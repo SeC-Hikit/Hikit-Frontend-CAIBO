@@ -228,7 +228,7 @@
             </div>
 
             <div class="col-12">
-                <hr />
+                <hr/>
             </div>
 
             <div class="col-12">
@@ -259,13 +259,20 @@
                     <div class="col-12">
                         <h4>Le località/crocevia sul percorso</h4>
                     </div>
-                    <div class="col-12 locations clickable">
-                        <div *ngFor="let locality of selectedTrail.locations">
+                    <div class="col-12 locations">
+                        <div *ngFor="let locality of selectedTrail.locations" class="clickable">
+                            <span (click)="onLocationClick(locality)">
+                                <svg class="bi" width="24" height="24" fill="red">
+                                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#binoculars-fill"/>
+                                </svg>
+                            </span>
+
                             <span class="trailCodeColumn"
+                                  (click)="onShowLocationClick(locality)"
                                   (mouseenter)="onLocationHover(locality)"
-                                  (mouseout)="onLocationHover(null)"
-                                  (click)="onLocationClick(locality)">{{locality.name}}</span>
+                                  (mouseout)="onLocationHover(null)">{{locality.name}}</span>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -285,7 +292,7 @@
             </div>
 
             <div class="col-12">
-                <hr />
+                <hr/>
             </div>
 
             <div class="col-12">

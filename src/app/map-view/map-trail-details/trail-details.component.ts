@@ -37,6 +37,7 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   @Output() onDownloadKml = new EventEmitter<void>();
   @Output() onDownloadPdf = new EventEmitter<void>();
   @Output() onNavigateToLocation = new EventEmitter<Coordinates2D>();
+  @Output() onShowLocation = new EventEmitter<PlaceRefDto>();
   @Output() onNavigateToSelectedTrailCoordIndex = new EventEmitter<number>();
   @Output() onNavigateToTrailReportIssue = new EventEmitter<string>();
   @Output() onSelectTrail = new EventEmitter<string>();
@@ -54,6 +55,8 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
   }
+
+
 
   ngAfterViewInit() {
     this.chartOptions = ChartUtils.getChartOptions(
@@ -79,7 +82,10 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!this.selectedTrail) { return; }
     for (const propName in changes) {
-      if (propName == "selectedTrail") { this.updateChart() }
+      if (propName == "selectedTrail") {
+        document.getElementById("side-column").scrollTo(0, 0)
+        this.updateChart();
+      }
     }
   }
 
@@ -185,6 +191,11 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
 
   onLocationClick(location: PlaceRefDto) {
     this.onNavigateToLocation.emit(location.coordinates)
+  }
+
+  onShowLocationClick(location: PlaceRefDto) {
+    this.onNavigateToLocation.emit(location.coordinates)
+    this.onShowLocation.emit(location)
   }
 
   onRelatedTrailHover(id: string) {

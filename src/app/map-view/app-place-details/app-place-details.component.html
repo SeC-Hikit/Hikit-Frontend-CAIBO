@@ -1,0 +1,70 @@
+<div class="MapPlaceDetails row">
+    <div class="top-margin col-12">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="poiCodeColumn">Località <span
+                        *ngIf="selectedPlace.crossingTrailIds.length > 1">e crocevia</span></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="poiCodeColumn">{{ selectedPlace.name }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <span class="poiCodeColumn black">{{ selectedPlace.coordinates[0].altitude }}m</span>
+            </div>
+            <div class="col-md-8">
+                <span class="poiCodeColumn">
+                    {{ selectedPlace.coordinates[0].latitude.toPrecision(6) }},
+                    {{ selectedPlace.coordinates[0].longitude.toPrecision(6) }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{{ getImage()}}" class="place-image"/>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="selectedPlace" id="scrollable-content" class="col-12">
+        <div class="row" *ngIf="selectedPlace.description">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Descrizione</h4>
+                    </div>
+                    <div class="col-12">
+                        <div *ngIf="selectedPlace.description" [innerHTML]="selectedPlace.description"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 top-margin" *ngIf="selectedPlace.tags.join(', ') != ''">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Toponimi</h4>
+                </div>
+                <div class="col-12">
+                    <p>{{ selectedPlace.tags.join(", ") }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 top-margin">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Sentieri collegati</h4>
+                </div>
+            </div>
+            <span *ngFor="let trailId of selectedPlace.crossingTrailIds"
+                  class="clickable white-font trailCodeColumn"
+                  (mouseenter)="onRelatedTrailHover(trailId)"
+                  (mouseout)="onRelatedTrailHover(null)"
+                  (click)="navigateToTrail(trailId)">
+                    {{getNameOrCode(trailId)}}
+                </span>
+        </div>
+    </div>
+</div>

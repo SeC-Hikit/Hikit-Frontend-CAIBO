@@ -17,9 +17,12 @@ import {DateUtils} from "../utils/DateUtils";
 import {PoiDto, PoiService} from "../service/poi-service.service";
 import {AuthService} from "../service/auth.service";
 import {PaginationUtils} from "../utils/PaginationUtils";
+import {PlaceDto, PlaceRefDto, PlaceService} from "../service/place.service";
 
 export enum ViewState {
-    NONE = "NONE", TRAIL = "TRAIL", POI = "POI", TRAIL_LIST = "TRAIL_LIST"
+    NONE = "NONE", TRAIL = "TRAIL",
+    POI = "POI", TRAIL_LIST = "TRAIL_LIST",
+    PLACE = "PLACE"
 }
 
 export enum TrailSimplifierLevel {
@@ -82,6 +85,7 @@ export class MapComponent implements OnInit {
     showTrailCodeMarkers: boolean;
     poiHovering: PoiDto;
     selectedPoi: PoiDto;
+    selectedPlace: PlaceDto;
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
     trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
     highlightedTrail: TrailDto;
@@ -96,7 +100,8 @@ export class MapComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private modalService: NgbModal,
-        private authService: AuthService) {
+        private authService: AuthService,
+        private placeService: PlaceService) {
     }
 
     ngOnInit(): void {
@@ -126,7 +131,6 @@ export class MapComponent implements OnInit {
     private getTrailPreviewResponseObservable(code: string, page: number,
                                               areDraftVisible: boolean,
                                               entriesPerPage: number = 10): Observable<TrailPreviewResponse> {
-        alert(page)
         const skip = PaginationUtils.getLowerBound(page, entriesPerPage);
         const limit = PaginationUtils.getUpperBound(page, entriesPerPage);
 
@@ -137,6 +141,7 @@ export class MapComponent implements OnInit {
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
             areDraftVisible, skip, limit);
     }
+
     private handleQueryParam() {
         const idFromPath: string = this.activatedRoute.snapshot.queryParamMap.get("id");
         this.selectTrail(idFromPath);
@@ -166,6 +171,7 @@ export class MapComponent implements OnInit {
     }
 
     selectTrail(id: string, refresh?: boolean): void {
+        this.isLoading = true;
         if (!id) {
             return;
         }
@@ -182,6 +188,10 @@ export class MapComponent implements OnInit {
                 this.sideView = ViewState.TRAIL;
                 this.selectedTrail = resp.content[0];
                 this.loadRelatedForTrailId(id);
+            }, () => {
+
+            }, ()=> {
+                this.isLoading = false;
             })
         }
 
@@ -454,5 +464,20 @@ export class MapComponent implements OnInit {
 
     onHighlightTrail(trail_id: string) {
         this.highlightedTrail = this.trailMappings.get(trail_id)
+    }
+
+    onLocationSelection(place: PlaceRefDto) {
+        this.isLoading = true;
+        this.placeService.getById(place.placeId).subscribe((it) => {
+            if (it.content.length == 0) {
+                this.openInfoModal("Errore", "La località selezionata non è stata trovata");
+                return;
+            }
+            this.sideView = ViewState.PLACE;
+            this.selectedPlace = it.content[0]
+            this.isLoading = false;
+        }, () => {
+            this.isLoading = false;
+        })
     }
 }
