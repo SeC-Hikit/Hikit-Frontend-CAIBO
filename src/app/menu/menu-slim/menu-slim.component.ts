@@ -27,10 +27,4 @@ export class MenuSlimComponent implements OnInit {
       }
     });
   }
-
-  // private assignNewUsername() {
-  //   this.authService.getUsername().then((name) => {
-  //     this.usernameToShow = name;
-  //   });
-  // }
 }

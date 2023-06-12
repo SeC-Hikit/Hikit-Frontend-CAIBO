@@ -22,13 +22,26 @@ export class PoiEnums {
         {
             name: PoiEnums.CULTURAL_READ,
             value: PoiEnums.CULTURAL,
-            micro: [{name: "Pieve", value: "church"},
+            micro: [
+                {name: "Pieve", value: "church"},
                 {name: "Albero Monumentale", value: "tree"},
-                {name: "Muretto", value: "wall"}]
+                {name: "Muretto", value: "wall"},
+                {name: "Forno", value: "historic_oven"},
+                {name: "Lavatoio", value: "wash_house"},
+                {name: "Cimitero", value: "cemetery"},
+                {name: "Edificio Storico", value: "historical_building"},
+                {name: "Falesia", value: "climbing_crag"},
+            ]
         }, {
             name: PoiEnums.SUPPORT_READ,
             value: "SUPPORT",
-            micro: [{name: "Rifugio", value: "shalet"}, {name: "Fonte", value: "fountain"}]
+            micro: [
+                {name: "Rifugio", value: "shalet"},
+                {name: "Fonte", value: "fountain"},
+                {name: "Bottega", value: "grocery_shop"},
+                {name: "Supermercato", value: "supermarket"},
+                {name: "Ufficio Informazioni", value: "iat"},
+            ]
         }, {
             name: PoiEnums.BELVEDERE_READ,
             value: "BELVEDERE",

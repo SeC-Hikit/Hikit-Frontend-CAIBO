@@ -1,19 +1,17 @@
-<div class="MapComponent" (resize)="adaptSize()">
+<div class="MapComponent" (window:resize)="adaptSize()">
     <div *ngIf="isLoading" class="progress progress-indeterminate">
         <span class="sr-only">Caricamento...</span>
         <div class="progress-bar" role="progressbar"></div>
     </div>
     <div class="row">
 
-        <div *ngIf="sideView=='POI' && selectedPoi"
+        <div *ngIf="sideView=='POI' || sideView=='PLACE' && (selectedPoi || selectedPlace)"
              class="navigation-back clickable" (click)="onBackToTrailPoiClick()">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use
                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
             </svg>
-            <span class="back">
-                            Torna al sentiero {{selectedTrail.code}}
-                            </span>
+            <span class="back">Torna al sentiero {{selectedTrail.code}}</span>
         </div>
 
         <div *ngIf="sideView=='TRAIL'"
@@ -22,15 +20,13 @@
                 <use
                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
             </svg>
-            <span class="back">
-                            Torna alla lista sentieri
-                            </span>
+            <span class="back">Torna alla lista sentieri</span>
         </div>
 
         <div class="column-map col-lg-4 col-md-4 white details functional-column" id="side-column">
             <div class="row">
                 <div class="col-11 offset-1" id="trail-detail-column"
-                     [class]="sideView == 'TRAIL' || sideView == 'POI' ? 'selection-margin' : ''">
+                     [class]="sideView == 'TRAIL' || sideView == 'POI' || sideView == 'PLACE' ? 'selection-margin' : ''">
                     <div *ngIf="sideView=='NONE' || sideView=='TRAIL_LIST'" class="row search-section top-margin-x2">
                         <div class="col-11">
                             <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
@@ -44,7 +40,17 @@
                                 [selectedPoi]="selectedPoi"
                                 [trailMappings]="trailMappings"
                                 (onSelectTrail)="onSelectTrail($event)"
+                                (onHighlightTrail)="onHighlightTrail($event)"
                         ></app-poi-details>
+                    </div>
+
+                    <div *ngIf="sideView=='PLACE' && selectedPlace" class="row top-margin">
+                        <app-place-details
+                                [selectedPlace]="selectedPlace"
+                                [trailMappings]="trailMappings"
+                                (onSelectTrail)="onSelectTrail($event)"
+                                (onHighlightTrail)="onHighlightTrail($event)"
+                        ></app-place-details>
                     </div>
 
                     <div *ngIf="sideView=='NONE'">
@@ -96,6 +102,7 @@
                                 (toggleFullTrailPageEvent)="toggleFullPageTrail()"
                                 (toggleNotificationListEvent)="toggleNotificationsModal()"
                                 (onNavigateToLocation)="navigateToLocation($event)"
+                                (onShowLocation)="onLocationSelection($event)"
                                 (onSelectTrail)="onSelectTrail($event)"
                                 (onNavigateToSelectedTrailCoordIndex)="navigateToSelectedTrailIndex($event)"
                                 (onNavigateToTrailReportIssue)="navigateToTrailReportIssue($event)"
@@ -106,6 +113,7 @@
                                 (onPoiHoveringEvent)="onPoiHovering($event)"
                                 (onShowTrailClassificationCycloInfo)="onShowCyclingClassification()"
                                 (onShowTrailClassificationHikingInfo)="onShowHikingClassification()"
+                                (onHighlightTrail)="onHighlightTrail($event)"
                         >
                         </app-map-trail-details>
                     </div>
@@ -127,6 +135,7 @@
                           [userPosition]="userPosition"
                           [showTrailCodeMarkers]="showTrailCodeMarkers"
                           [poiHovering]="poiHovering"
+                          [trailHovering]="highlightedTrail"
                           [highlightedLocation]="highlightedLocation"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"
@@ -135,6 +144,7 @@
                           (onLoading)="onLoading()"
                           (onDoneLoading)="onDoneLoading()"
                           (onPoiClick)="onPoiClick($event)"
+                          (onLocationSelection)="onLocationSelection($event)"
             >
             </app-map-full>
         </div>

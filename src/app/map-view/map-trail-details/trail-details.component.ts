@@ -9,6 +9,7 @@ import {ChartOptions} from "chart.js";
 import {TrailCycloClassificationMapper} from "../TrailCycloClassificationMapper";
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {PoiDto} from "../../service/poi-service.service";
+import {PlaceDto, PlaceRefDto} from "../../service/place.service";
 
 @Component({
   selector: 'app-map-trail-details',
@@ -36,6 +37,7 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   @Output() onDownloadKml = new EventEmitter<void>();
   @Output() onDownloadPdf = new EventEmitter<void>();
   @Output() onNavigateToLocation = new EventEmitter<Coordinates2D>();
+  @Output() onShowLocation = new EventEmitter<PlaceRefDto>();
   @Output() onNavigateToSelectedTrailCoordIndex = new EventEmitter<number>();
   @Output() onNavigateToTrailReportIssue = new EventEmitter<string>();
   @Output() onSelectTrail = new EventEmitter<string>();
@@ -46,12 +48,15 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   @Output() onPoiHoveringEvent = new EventEmitter<PoiDto>();
   @Output() onShowTrailClassificationHikingInfo = new EventEmitter<void>();
   @Output() onShowTrailClassificationCycloInfo = new EventEmitter<void>();
+  @Output() onHighlightTrail = new EventEmitter<string>();
 
   constructor() {
   }
 
   ngOnInit(): void {
   }
+
+
 
   ngAfterViewInit() {
     this.chartOptions = ChartUtils.getChartOptions(
@@ -77,7 +82,10 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!this.selectedTrail) { return; }
     for (const propName in changes) {
-      if (propName == "selectedTrail") { this.updateChart() }
+      if (propName == "selectedTrail") {
+        document.getElementById("side-column").scrollTo(0, 0)
+        this.updateChart();
+      }
     }
   }
 
@@ -119,7 +127,6 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
   }
 
   moveTo(location: TrailCoordinatesDto) {
-    console.log(location);
     this.onNavigateToLocation.emit(location);
   }
 
@@ -177,5 +184,21 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
 
   onShowCyclingClassificationDetails() {
     this.onShowTrailClassificationCycloInfo.emit();
+  }
+
+  onLocationHover(location: PlaceRefDto) {
+  }
+
+  onLocationClick(location: PlaceRefDto) {
+    this.onNavigateToLocation.emit(location.coordinates)
+  }
+
+  onShowLocationClick(location: PlaceRefDto) {
+    this.onNavigateToLocation.emit(location.coordinates)
+    this.onShowLocation.emit(location)
+  }
+
+  onRelatedTrailHover(id: string) {
+    this.onHighlightTrail.emit(id);
   }
 }

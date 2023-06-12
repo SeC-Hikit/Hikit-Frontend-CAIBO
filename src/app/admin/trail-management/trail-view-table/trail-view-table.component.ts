@@ -6,6 +6,7 @@ import {AdminTrailService} from "../../../service/admin-trail.service";
 import {AuthService} from "../../../service/auth.service";
 import {Status} from "../../../Status";
 import {takeUntil, tap} from "rxjs/operators";
+import {PaginationUtils} from "../../../utils/PaginationUtils";
 
 @Component({
     selector: 'app-trail-view-table',
@@ -81,8 +82,10 @@ export class TrailViewTableComponent implements OnInit {
 
     loadTrails(page: number): void {
         this.page = page;
-        const lowerBound = this.entryPerPage * (page - 1);
-        this.getTrailPreviews(lowerBound, this.entryPerPage * page);
+        this.getTrailPreviews(
+            PaginationUtils.getLowerBound(page, this.entryPerPage),
+            PaginationUtils.getUpperBound(page, this.entryPerPage)
+        );
     }
 
     getTrailPreviews(skip: number, limit: number) {

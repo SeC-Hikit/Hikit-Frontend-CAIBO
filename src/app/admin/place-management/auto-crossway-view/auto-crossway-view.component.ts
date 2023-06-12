@@ -10,6 +10,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {DateUtils} from "../../../utils/DateUtils";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {PaginationUtils} from "../../../utils/PaginationUtils";
 
 @Component({
   selector: 'app-auto-crossway-view',
@@ -49,9 +50,9 @@ export class AutoCrosswayViewComponent implements OnInit {
   }
 
   private onPlaceLoad(page: number) {
-    const electedPage = page - 1;
-    this.placeService.get(electedPage * this.entryPerPage,
-        (electedPage + 1) * this.entryPerPage,
+    this.placeService.get(
+        PaginationUtils.getLowerBound(page, this.entryPerPage),
+        PaginationUtils.getUpperBound(page, this.entryPerPage),
         this.realm, true)
         .subscribe(resp => {
           this.placeList = resp.content;

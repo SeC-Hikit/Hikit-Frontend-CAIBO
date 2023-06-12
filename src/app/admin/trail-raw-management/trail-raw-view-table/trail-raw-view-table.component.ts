@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TrailPreview, TrailPreviewService} from "../../../service/trail-preview-service.service";
 import {Subject} from "rxjs";
 import {AdminTrailRawService} from "../../../service/admin-trail-raw.service";
@@ -9,6 +9,7 @@ import {takeUntil, tap} from "rxjs/operators";
 import {DateUtils} from "../../../utils/DateUtils";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 import {AuthService} from "../../../service/auth.service";
+import {PaginationUtils} from "../../../utils/PaginationUtils";
 
 @Component({
   selector: 'app-trail-raw-view-table',
@@ -62,9 +63,9 @@ export class TrailRawViewTableComponent implements OnInit {
 
   loadRawTrails(page: number): void {
     this.page = page;
-    const lowerBound = this.entryPerPage * (page - 1);
-    this.getTrailRawPreviews(lowerBound,
-        this.entryPerPage * page,
+    this.getTrailRawPreviews(
+        PaginationUtils.getLowerBound(page, this.entryPerPage),
+        PaginationUtils.getUpperBound(page, this.entryPerPage),
         this.realm);
   }
 

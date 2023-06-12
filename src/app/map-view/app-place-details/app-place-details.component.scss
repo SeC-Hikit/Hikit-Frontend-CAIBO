@@ -1,0 +1,32 @@
+@import "/src/app/style/const.scss";
+
+.MapPlaceDetails {
+  .poiCodeColumn {
+    width: fit-content;
+    padding: 0 0.3em;
+    background: $secondary-bg-color !important;
+    color: white;
+    border-radius: 5px;
+  }
+
+  h2 span {
+    font-family: "Bebas Neue", cursive
+  }
+
+  .black {
+    background: black !important;
+  }
+
+  .place-image {
+    width: 75%;
+  }
+
+  .keyValEntry {
+    width: 100%;
+    max-height: 30px;
+
+    .key {
+      text-transform: capitalize;
+    }
+  }
+}
