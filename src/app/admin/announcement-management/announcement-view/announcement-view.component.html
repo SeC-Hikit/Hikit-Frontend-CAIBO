@@ -1,0 +1,78 @@
+<div>
+    <!--    <app-trail-floating-preview-->
+    <!--            [trails]="trailsPreview"-->
+    <!--            [isVisible]="isPlacePreviewVisible"-->
+    <!--            [markers]="markersPreview"-->
+    <!--            (onClose)="this.togglePreview()"-->
+    <!--    ></app-trail-floating-preview>-->
+    <div class="row">
+        <div class="col-12" *ngIf="authService.isRealmMatch()">
+            <a routerLink="./add">
+                <button class="btn btn-primary top-margin">+ Aggiungi annuncio</button>
+            </a>
+        </div>
+    </div>
+    <div class="row top-margin-x2">
+        <div class="col-12" *ngIf="announcementList && announcementList.length > 0">
+            <p>Le seguenti sono le località legate ai sentieri. Quando attraversate da più sentieri, queste diventando crocevia di collegamento.</p>
+            <table
+                    id="trailTable"
+                    class="table table-striped interactive-table thin-rows"
+            >
+                <thead class="">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome località</th>
+                    <th scope="col">Numero sentieri attr.</th>
+                    <th scope="col">Numero media attr.</th>
+                    <th scope="col">Caricato il</th>
+                    <th scope="col">Caricato da</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let announcement of announcementList" class="place-preview">
+                    <th class="small-column ellipsis" [title]="announcement.id">{{announcement.id}}</th>
+                    <td (click)="onPreview(announcement)">
+                        {{ announcement.name }}
+                    </td>
+                    <td>{{ announcement.type }}</td>
+                    <td>{{ announcement.relatedTopic }}</td>
+                    <td>{{ announcement.valid }}</td>
+                    <td class="clickable" *ngIf="authService.isRealmMatch()">
+                        <svg class="bi" width="24"
+                             height="24" fill="currentColor" (click)="onEdit(announcement.id)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
+                            />
+                        </svg>
+                    </td>
+                    <td class="clickable" *ngIf="authService.isRealmMatch()">
+                        <svg class="bi" width="24"
+                             height="24" fill="currentColor" (click)="onDeleteClick(announcement)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                            />
+                        </svg>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagination-position">
+                <ngb-pagination
+                        [pageSize]="entryPerPage"
+                        [collectionSize]="totalPlaces"
+                        [(page)]="selectedPage"
+                        aria-label="Default pagination"
+                        (pageChange)="onAnnouncementLoad($event)"
+                ></ngb-pagination>
+            </div>
+        </div>
+        <div *ngIf="announcementList.length == 0">
+            <app-items-not-found class="top-margin-x2"
+                                 text="Non ci sono ancora annunci caricati.">
+            </app-items-not-found>
+        </div>
+    </div>
+</div>

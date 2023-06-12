@@ -34,6 +34,9 @@ import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landin
 import {MaintenanceAddComponent} from "./admin/maintenance-management/maintenance-add/maintenance-add.component";
 import {MaintenanceViewComponent} from "./admin/maintenance-management/maintenance-view/maintenance-view.component";
 import {PlaceGeneralViewComponent} from "./admin/place-management/place-general-view/place-general-view.component";
+import {AnnouncementEditComponent} from "./admin/announcement-management/announcement-edit/announcement-edit.component";
+import {AnnouncementManagementComponent} from "./admin/announcement-management/announcement-management.component";
+import {AnnouncementViewComponent} from "./admin/announcement-management/announcement-view/announcement-view.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -145,6 +148,15 @@ const routes: Routes = [
                     {path: "edit/:id", component: MaintenanceAddComponent},
                 ],
                 component: MaintenanceManagementComponent,
+            },
+            {
+                path: "announcement-management",
+                children: [
+                    {path: "", component: AnnouncementViewComponent},
+                    {path: "add", component: AnnouncementEditComponent},
+                    {path: "edit/:id", component: AnnouncementEditComponent},
+                ],
+                component: AnnouncementManagementComponent,
             },
         ]
     },
