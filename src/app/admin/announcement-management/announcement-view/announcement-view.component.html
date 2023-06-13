@@ -5,6 +5,8 @@
     <!--            [markers]="markersPreview"-->
     <!--            (onClose)="this.togglePreview()"-->
     <!--    ></app-trail-floating-preview>-->
+    <app-loading-spinner
+            *ngIf="this.isLoading "></app-loading-spinner>
     <div class="row">
         <div class="col-12" *ngIf="authService.isRealmMatch()">
             <a routerLink="./add">

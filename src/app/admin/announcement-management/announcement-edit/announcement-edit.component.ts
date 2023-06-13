@@ -6,6 +6,8 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./announcement-edit.component.scss']
 })
 export class AnnouncementEditComponent implements OnInit {
+    isModify: boolean;
+
 
     constructor() {
     }
