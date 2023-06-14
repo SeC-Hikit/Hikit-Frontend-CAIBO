@@ -9,7 +9,7 @@
             *ngIf="this.isLoading "></app-loading-spinner>
     <div class="row top-margin-x2">
         <div class="col-12" *ngIf="announcementList && announcementList.length > 0">
-            <p>Le seguenti sono le località legate ai sentieri. Quando attraversate da più sentieri, queste diventando crocevia di collegamento.</p>
+            <p>I seguenti sono gli annunci mostrati sull'applicazione e collegati ad altri elementi.</p>
             <table
                     id="trailTable"
                     class="table table-striped interactive-table thin-rows"
@@ -17,9 +17,10 @@
                 <thead class="">
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Nome località</th>
-                    <th scope="col">Numero sentieri attr.</th>
-                    <th scope="col">Numero media attr.</th>
+                    <th scope="col">Titolo</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Collegato a</th>
+                    <th scope="col">Pubblico</th>
                     <th scope="col">Caricato il</th>
                     <th scope="col">Caricato da</th>
                     <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
@@ -33,8 +34,10 @@
                         {{ announcement.name }}
                     </td>
                     <td>{{ announcement.type }}</td>
-                    <td>{{ announcement.relatedTopic }}</td>
-                    <td>{{ announcement.valid }}</td>
+                    <td>{{ announcement.relatedTopic.announcementTopicType }}</td>
+                    <td>{{ announcement.valid ? "Si" : "No" }}</td>
+                    <td>{{ formatDate(announcement.recordDetails.uploadedOn) }}</td>
+                    <td>{{ announcement.recordDetails.uploadedBy }}</td>
                     <td class="clickable" *ngIf="authService.isRealmMatch()">
                         <svg class="bi" width="24"
                              height="24" fill="currentColor" (click)="onEdit(announcement.id)">
@@ -57,7 +60,7 @@
             <div class="pagination-position">
                 <ngb-pagination
                         [pageSize]="entryPerPage"
-                        [collectionSize]="totalPlaces"
+                        [collectionSize]="totalAnnouncements"
                         [(page)]="selectedPage"
                         aria-label="Default pagination"
                         (pageChange)="onAnnouncementLoad($event)"

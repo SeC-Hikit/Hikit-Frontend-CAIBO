@@ -29,7 +29,6 @@
                                 class="form-control col-11"
                                 [formControlName]="'type'">
                             <option *ngFor="let announcement of announcementTypes"
-                                    (change)="setElement($event)"
                                     [value]="announcement.value">{{announcement.name}}</option>
                         </select>
                     </div>
