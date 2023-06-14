@@ -78,6 +78,7 @@
                         [pageSize]="entryPerPage"
                         [collectionSize]="totalPlaces"
                         [(page)]="selectedPage"
+                        [maxSize]="5"
                         aria-label="Default pagination"
                         (pageChange)="onPlaceLoad($event)"
                 ></ngb-pagination>

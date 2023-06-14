@@ -1,4 +1,4 @@
-import {HttpHeaders, HttpClient, HttpResponse, HttpParams} from '@angular/common/http';
+import {HttpHeaders, HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {tap, catchError} from 'rxjs/operators';
@@ -6,13 +6,13 @@ import {components} from 'src/binding/Binding';
 
 export type AnnouncementDto = components["schemas"]["AnnouncementDto"]
 export type AnnouncementResponse = components["schemas"]["AnnouncementResponse"]
+export type AnnouncementType = components["schemas"]["AnnouncementDto"]["type"]
 
 @Injectable({
     providedIn: 'root'
 })
 export class AnnouncementService {
-
-    baseUrl = "api/admin/announcement";
+    baseUrl = "api/announcement";
     httpOptions = {
         headers: new HttpHeaders({'Content-Type': 'application/json'})
     };
@@ -24,6 +24,7 @@ export class AnnouncementService {
     getAnnouncements(skip: number,
                      limit: number, realm: string): Observable<AnnouncementResponse> {
         const params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+            .append("realm", realm)
         return this.httpClient.get<AnnouncementResponse>(this.baseUrl, {params: params})
             .pipe(
                 tap(),

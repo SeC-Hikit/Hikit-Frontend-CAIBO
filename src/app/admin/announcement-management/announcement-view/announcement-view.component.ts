@@ -29,13 +29,14 @@ export class AnnouncementViewComponent implements OnInit {
 
     private loadAnnouncement() {
         this.isLoading = true;
-        this.announcementService.getAnnouncements(0, 10, this.realm).subscribe((it) => {
-            this.announcementList = it.content;
-            this.isLoading = false;
-        }, (it) => {
-        }, () => {
-            this.isLoading = false;
-        })
+        this.announcementService.getAnnouncements(0, 10, this.realm)
+            .subscribe((it) => {
+                this.announcementList = it.content;
+                this.isLoading = false;
+            }, (_) => {
+            }, () => {
+                this.isLoading = false;
+            })
     }
 
     onAnnouncementLoad($event: number) {
