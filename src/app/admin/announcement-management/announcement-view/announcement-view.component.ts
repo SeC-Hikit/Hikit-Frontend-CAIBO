@@ -18,6 +18,8 @@ export class AnnouncementViewComponent implements OnInit {
     totalAnnouncements = 0;
     selectedPage: number = 0;
 
+    announcementTypes = AnnouncementService.announcementTypes;
+    announcementTopicTypes = AnnouncementService.relatedElementTypes;
     announcementList: AnnouncementDto[] = [];
     isLoading: boolean = false;
 
@@ -69,5 +71,13 @@ export class AnnouncementViewComponent implements OnInit {
 
     formatDate(uploadedOn: string) {
         return DateUtils.formatDateToDay(uploadedOn);
+    }
+
+    getType(type: string) {
+        return this.announcementTypes.filter(it => it.value == type)[0].name;
+    }
+
+    getTopicType(announcementTopicType: string) {
+        return this.announcementTopicTypes.filter(it=> it.value == announcementTopicType)[0].name;
     }
 }

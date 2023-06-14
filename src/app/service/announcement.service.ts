@@ -25,6 +25,21 @@ export class AnnouncementService {
         headers: new HttpHeaders({'Content-Type': 'application/json'})
     };
 
+    public static announcementTypes = [
+        {name: "Evento", value: "EVENT"},
+        {name: "Informazione", value: "INFO"},
+        {name: "Avviso", value: "WARNING"},
+        {name: "Emergenza", value: "EMERGENCY"},
+    ];
+
+    public static relatedElementTypes = [
+        {name: "Sentiero", value: "TRAIL"},
+        {name: "Punto d'interesse", value: "POI"},
+        {name: "Località/Crocevia", value: "PLACE"},
+        {name: "Avviso di percorribilità", value: "ACCESSIBILITY_NOTIFICATION"},
+        {name: "Manutenzione", value: "MAINTENANCE"},
+    ]
+
     constructor(private httpClient: HttpClient) {
     }
 

@@ -14,31 +14,20 @@ import {AuthService} from "../../../service/auth.service";
 })
 export class AnnouncementEditComponent implements OnInit {
     isModify: boolean = false;
-    announcementTypes = [
-        {name: "Evento", value: "EVENT"},
-        {name: "Informazione", value: "INFO"},
-        {name: "Avviso", value: "WARNING"},
-        {name: "Emergenza", value: "EMERGENCY"},
-    ];
+    announcementTypes = AnnouncementService.announcementTypes;
     formGroup: FormGroup = new FormGroup({
         id: new FormControl(""),
         name: new FormControl("", Validators.required),
         description: new FormControl([]),
         relatedTopic: new FormControl("TRAIL"),
         relatedTopicId: new FormControl(""),
-        type: new FormControl(this.announcementTypes[0].value),
+        type: new FormControl(AnnouncementService.announcementTypes[0].value),
         valid: new FormControl(true)
     });
 
     hasFormBeenInitialized: boolean = false;
 
-    relatedElementTypes = [
-        {name: "Sentiero", value: "TRAIL"},
-        {name: "Punto d'interesse", value: "POI"},
-        {name: "Località/Crocevia", value: "PLACE"},
-        {name: "Avviso di percorribilità", value: "ACCESSIBILITY_NOTIFICATION"},
-        {name: "Manutenzione", value: "MAINTENANCE"},
-    ];
+    relatedElementTypes = AnnouncementService.relatedElementTypes;
 
     validationErrors: string[] = [];
     isRelatedTopicValid: boolean = false;
@@ -115,22 +104,29 @@ export class AnnouncementEditComponent implements OnInit {
             }
 
             if(this.isModify){
-                this.adminAnnouncementService.update(announcementDto).subscribe((it) => {
-                    if (it.status == "OK") {
-                        this.routerService.navigate(["/admin/announcement-management"]);
-                        scroll(0, 0)
-                    }
-                })
+                this.onModify(announcementDto);
                 return;
             }
-            this.adminAnnouncementService.create(announcementDto).subscribe((it) => {
-                if (it.status == "OK") {
-                    this.routerService.navigate(["/admin/announcement-management"]);
-                    scroll(0, 0)
-                }
-            })
+            this.onCreate(announcementDto);
 
         })
     }
 
+    private onCreate(announcementDto: AnnouncementDto) {
+        this.adminAnnouncementService.create(announcementDto).subscribe((it) => {
+            if (it.status == "OK") {
+                this.routerService.navigate(["/admin/announcement-management"]);
+                scroll(0, 0)
+            }
+        })
+    }
+
+    private onModify(announcementDto: AnnouncementDto) {
+        this.adminAnnouncementService.update(announcementDto).subscribe((it) => {
+            if (it.status == "OK") {
+                this.routerService.navigate(["/admin/announcement-management"]);
+                scroll(0, 0)
+            }
+        })
+    }
 }
