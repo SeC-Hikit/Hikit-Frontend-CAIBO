@@ -13,7 +13,7 @@ export class AnnouncementEditComponent implements OnInit {
     announcementTypes = [
         {name: "Evento", value: "EVENT"},
         {name: "Informazione", value: "INFO"},
-        {name: "Avvertimento", value: "WARNING"},
+        {name: "Avviso", value: "WARNING"},
         {name: "Emergenza", value: "EMERGENCY"},
     ];
     formGroup: FormGroup = new FormGroup({
@@ -21,7 +21,7 @@ export class AnnouncementEditComponent implements OnInit {
         name: new FormControl("", Validators.required),
         description: new FormArray([]),
         relatedTopic: new FormControl("TRAIL"),
-        relatedId: new FormControl(""),
+        relatedTopicId: new FormControl(""),
         type: new FormControl(this.announcementTypes[0].value),
         valid: new FormControl(true)
     });
@@ -36,6 +36,7 @@ export class AnnouncementEditComponent implements OnInit {
     ];
 
     validationErrors: string[] = [];
+    isRelatedTopicValid: boolean = false;
 
     constructor(private announcementService: AnnouncementService,
                 private activatedRoute: ActivatedRoute,) {
@@ -45,8 +46,18 @@ export class AnnouncementEditComponent implements OnInit {
         this.hasFormBeenInitialized = true;
         const idFromPath: string = this.activatedRoute.snapshot.paramMap.get("id");
 
+        // related topic from load
+        const relatedTopic: string = this.activatedRoute.snapshot.paramMap.get("relatedTopic");
+        const relatedTopicId: string = this.activatedRoute.snapshot.paramMap.get("relatedTopicId");
+
+        if(relatedTopic && relatedTopicId) {
+            this.formGroup.get("relatedTopic").setValue(relatedTopic);
+            this.formGroup.get("relatedTopicId").setValue(relatedTopicId);
+        }
+
         if(idFromPath != null) {
             this.loadAnnouncement(idFromPath)
+            this.isRelatedTopicValid = true;
         }
     }
 
@@ -55,6 +66,14 @@ export class AnnouncementEditComponent implements OnInit {
     }
 
     processModule() {
+
+    }
+
+    getEntity() {
+
+    }
+
+    setElement($event: Event) {
 
     }
 }

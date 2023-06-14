@@ -7,13 +7,6 @@
     <!--    ></app-trail-floating-preview>-->
     <app-loading-spinner
             *ngIf="this.isLoading "></app-loading-spinner>
-    <div class="row">
-        <div class="col-12" *ngIf="authService.isRealmMatch()">
-            <a routerLink="./add">
-                <button class="btn btn-primary top-margin">+ Aggiungi annuncio</button>
-            </a>
-        </div>
-    </div>
     <div class="row top-margin-x2">
         <div class="col-12" *ngIf="announcementList && announcementList.length > 0">
             <p>Le seguenti sono le località legate ai sentieri. Quando attraversate da più sentieri, queste diventando crocevia di collegamento.</p>
@@ -72,7 +65,7 @@
             </div>
         </div>
         <div *ngIf="announcementList.length == 0">
-            <app-items-not-found class="top-margin-x2"
+            <app-items-not-found class="top-margin-x2 align-content-center"
                                  text="Non ci sono ancora annunci caricati.">
             </app-items-not-found>
         </div>

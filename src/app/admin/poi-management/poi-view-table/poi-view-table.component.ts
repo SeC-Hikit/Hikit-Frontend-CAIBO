@@ -13,6 +13,10 @@ import {Marker} from "../../../map-preview/map-preview.component";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
 import {Coordinates2D} from "../../../service/geo-trail-service";
 import {AuthService} from "../../../service/auth.service";
+import {PaginationUtils} from "../../../utils/PaginationUtils";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AnnouncementTopic} from "../../../service/announcement.service";
 
 export type PoiDto = components["schemas"]["PoiDto"];
 
@@ -35,7 +39,7 @@ export class PoiViewTableComponent implements OnInit {
     savedTrailCode: string;
     selected: PoiDto;
 
-    selectedTrail : TrailDto;
+    selectedTrail: TrailDto;
     marker: Marker;
 
     macroMap: Map<string, string> = PoiEnums.macroMap();
@@ -48,7 +52,8 @@ export class PoiViewTableComponent implements OnInit {
         private poiService: PoiService,
         private poiAdminService: AdminPoiService,
         private trailPreviewService: TrailPreviewService,
-        private trailService: TrailService
+        private trailService: TrailService,
+        private modalService: NgbModal
     ) {
     }
 
@@ -64,7 +69,7 @@ export class PoiViewTableComponent implements OnInit {
     }
 
     getTrailCode(id: string): string {
-        if(!id) return "";
+        if (!id) return "";
         if (this.cachedTrail.length == 0) return "";
         return this.cachedTrail.filter((ct) => ct.id == id)[0].code;
     }
@@ -118,5 +123,16 @@ export class PoiViewTableComponent implements OnInit {
 
     togglePreview() {
         this.isPreviewVisible = !this.isPreviewVisible;
+    }
+
+    copyId(id: string) {
+        PaginationUtils.copyToClipboard(id).then(() => {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = "ID '" + id + "', copiato";
+            if(this.authService.isRealmMatch()) {
+                modal.componentInstance.body = PaginationUtils.getOptionsText(id,
+                    AnnouncementTopic.POI)
+            }
+        })
     }
 }

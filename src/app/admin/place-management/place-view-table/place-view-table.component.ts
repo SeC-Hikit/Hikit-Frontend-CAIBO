@@ -11,6 +11,7 @@ import {TrailPreviewService} from "../../../service/trail-preview-service.servic
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 import {PaginationUtils} from "../../../utils/PaginationUtils";
+import {AnnouncementTopic} from "../../../service/announcement.service";
 
 @Component({
     selector: 'app-place-view-table',
@@ -133,4 +134,16 @@ export class PlaceViewTableComponent implements OnInit {
         modal.componentInstance.title = title;
         modal.componentInstance.body = body;
     }
+
+    copyId(id: string) {
+        PaginationUtils.copyToClipboard(id).then(() => {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = "ID '" + id + "', copiato";
+            if(this.authService.isRealmMatch()) {
+                modal.componentInstance.body = PaginationUtils.getOptionsText(id,
+                    AnnouncementTopic.PLACE)
+            }
+        })
+    }
 }
+

@@ -7,6 +7,10 @@ import {ActivatedRoute} from "@angular/router";
 import {Status} from "../../../Status";
 import {DateUtils} from "../../../utils/DateUtils";
 import {AdminMaintenanceService} from "../../../service/admin-maintenance.service";
+import {PaginationUtils} from "../../../utils/PaginationUtils";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AnnouncementTopic} from "../../../service/announcement.service";
 
 @Component({
     selector: 'app-maintenance-past-view',
@@ -36,7 +40,8 @@ export class MaintenancePastViewComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private authService: AuthService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private modalService: NgbModal
     ) {
         this.maintenanceListPast = [];
         this.trailMapping = [];
@@ -112,9 +117,20 @@ export class MaintenancePastViewComponent implements OnInit {
         this.isLoaded = false;
         this.maintenanceService.getPast(skip, limit, realm)
             .subscribe((resp) => {
-            this.maintenanceListPast = resp.content;
-            this.totalEntries = resp.totalCount;
-            this.isLoaded = true;
-        });
+                this.maintenanceListPast = resp.content;
+                this.totalEntries = resp.totalCount;
+                this.isLoaded = true;
+            });
+    }
+
+    copyId(id: string) {
+        PaginationUtils.copyToClipboard(id).then(() => {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = "ID '" + id + "', copiato";
+            if(this.authService.isRealmMatch()) {
+                modal.componentInstance.body = PaginationUtils.getOptionsText(id,
+                    AnnouncementTopic.MAINTENANCE)
+            }
+        })
     }
 }

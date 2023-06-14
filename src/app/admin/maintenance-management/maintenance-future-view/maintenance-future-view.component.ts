@@ -7,6 +7,8 @@ import {TrailPreviewService} from "../../../service/trail-preview-service.servic
 import {AdminMaintenanceService} from "../../../service/admin-maintenance.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {PaginationUtils} from "../../../utils/PaginationUtils";
+import {AnnouncementTopic} from "../../../service/announcement.service";
 
 @Component({
     selector: 'app-maintenance-future-view',
@@ -112,4 +114,13 @@ export class MaintenanceFutureViewComponent implements OnInit {
     }
 
 
-}
+    copyId(id: string) {
+        PaginationUtils.copyToClipboard(id).then(() => {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = "ID '" + id + "', copiato";
+            if(this.authService.isRealmMatch()) {
+                modal.componentInstance.body = PaginationUtils.getOptionsText(id,
+                    AnnouncementTopic.MAINTENANCE)
+            }
+        })
+    }}

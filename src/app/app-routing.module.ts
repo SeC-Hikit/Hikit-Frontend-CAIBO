@@ -154,7 +154,9 @@ const routes: Routes = [
                 children: [
                     {path: "", component: AnnouncementViewComponent},
                     {path: "add", component: AnnouncementEditComponent},
+                    {path: "add/:id", component: AnnouncementEditComponent},
                     {path: "edit/:id", component: AnnouncementEditComponent},
+                    {path: "add/topic/:relatedTopic/id/:relatedTopicId", component: AnnouncementEditComponent},
                 ],
                 component: AnnouncementManagementComponent,
             },

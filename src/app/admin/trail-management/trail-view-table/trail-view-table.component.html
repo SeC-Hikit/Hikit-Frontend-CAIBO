@@ -44,8 +44,9 @@
                     >
                         <th
                                 scope="row"
-                                class="ellipsis small-column"
+                                class="ellipsis small-column clickable"
                                 title="{{ trailPreview.id }}"
+                                (click)="copyId(trailPreview.id)"
                         >
                             {{ trailPreview.id }}
                         </th>

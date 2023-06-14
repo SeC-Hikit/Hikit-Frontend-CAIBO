@@ -38,8 +38,9 @@
             <tr *ngFor="let notification of unresolvedNotifications">
                 <th
                         scope="row"
-                        class="ellipsis small-column"
+                        class="ellipsis small-column clickable"
                         title="{{ notification.id }}"
+                        (click)="copyId(notification.id)"
                 >
                     {{ notification.id }}
                 </th>
