@@ -3,7 +3,6 @@
 #main-menu {
   width: 100%;
 
-
   div {
     text-align: center;
   }
@@ -84,6 +83,10 @@
   padding-top: 3px !important;
   border-top: 1px solid white;
   height: inherit !important;
+  position: fixed;
+  width: 100%;
+  z-index: 10000;
+  top: 0;
 
   .brand {
     margin-top: 3px;

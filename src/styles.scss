@@ -9,7 +9,7 @@
   background: white;
 }
 
-.ql-container{
+.ql-container {
   font-size: 14px !important;
   color: black !important;
   font-weight: 400 !important;
@@ -20,7 +20,11 @@
 }
 
 #main .container {
-  padding: 0 0 2.5% 0;
+  padding: 13% 0 2.5% 0;
+}
+
+#header-wrapper .container {
+  padding: 0 0 0 0;
 }
 
 .btn.btn-light {
@@ -58,6 +62,7 @@ form {
   .errors {
     color: $error-color;
   }
+
   .mandatory-field-asterisk {
     color: $error-color;
   }
@@ -296,13 +301,15 @@ select {
 @media only screen and (min-width: 768px) {
   .container {
     max-width: 97.5% !important;
-    padding: 0 1.25%;
+    padding: 1.25% 1.25%;
   }
 
   #main {
+    margin-top: 50px;
+
     .container {
       max-width: 97% !important;
-      padding: 0 1.5%;
+      padding: 1% 1.5%;
     }
   }
 

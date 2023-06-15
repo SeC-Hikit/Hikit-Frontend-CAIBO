@@ -1,5 +1,13 @@
 @import "../../style/const.scss";
 
+#header-wrapper-2 {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  z-index: 10000;
+  box-shadow: -5px 0 15px black;
+  border-top: 1px solid white;
+}
 
 .it-nav-wrapper-admin {
   .navbar .navbar-collapsable .navbar-nav li a.nav-link {

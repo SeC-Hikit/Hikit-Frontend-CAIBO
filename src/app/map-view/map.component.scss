@@ -2,6 +2,12 @@
 
 footer .it-footer { display: none !important; }
 
+@media (max-width: 992px) {
+  .MapComponent {
+    margin-top: 10%;
+  }
+}
+
 .MapComponent {
 
   .navigation-back {
