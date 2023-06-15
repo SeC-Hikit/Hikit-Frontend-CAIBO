@@ -1,25 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { GraphicUtils } from '../utils/GraphicUtils';
+import {Component, OnInit} from '@angular/core';
+import {GraphicUtils} from '../utils/GraphicUtils';
+import {AnnouncementDto, AnnouncementService} from "../service/announcement.service";
+import {AuthService} from "../service/auth.service";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
 
-  static HOME_ID : string = "image";
+    announcementsList: AnnouncementDto[] = []
 
-  constructor() { }
+    static HOME_ID: string = "image";
 
-  ngOnInit(): void {
-  }
+    constructor(private announcementService: AnnouncementService,
+                private authService: AuthService) {
 
-  ngAfterViewInit(): void {
-    let menuHeight = GraphicUtils.getMenuHeight();
-    let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenuImage();
-    document.getElementById(HomeComponent.HOME_ID).style.minHeight = fullSizeWOBorder.toString() + "px";
-    document.getElementById("holder").style.minHeight = (fullSizeWOBorder - menuHeight) .toString() + "px";
-  }
-  
+    }
+
+    ngOnInit(): void {
+        this.announcementService.getAnnouncements(
+            0, 5,
+            this.authService.getInstanceRealm()).subscribe((it) => {
+            this.announcementsList = it.content;
+        })
+    }
+
+    ngAfterViewInit(): void {
+        let menuHeight = GraphicUtils.getMenuHeight();
+        let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenuImage();
+        document.getElementById(HomeComponent.HOME_ID).style.minHeight = fullSizeWOBorder.toString() + "px";
+        document.getElementById("holder").style.minHeight = (fullSizeWOBorder - menuHeight).toString() + "px";
+    }
+
+    getIcon(type: "EVENT" | "INFO" | "WARNING" | "EMERGENCY") {
+        switch (type) {
+            case "EVENT":
+                return `<svg class="bi clickable" width="24" *ngIf="true" height="24" fill="currentColor"><use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar-check-fill"/></svg>`
+            case "WARNING":
+                return `<svg class="bi clickable" width="24" *ngIf="true" height="24" fill="currentColor"><use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle-fill"/></svg>`
+            case "EMERGENCY":
+                return `<svg class="bi clickable" width="24" *ngIf="true" height="24" fill="currentColor"><use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-octagon-fill"/></svg>`
+            default:
+                return `<svg class="bi clickable" width="24" *ngIf="true" height="24" fill="currentColor"><use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle-fill"/></svg>`
+        }
+
+    }
 }

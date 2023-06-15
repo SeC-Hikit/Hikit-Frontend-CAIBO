@@ -5,7 +5,7 @@
     background-size:cover;
     background-position: center;
     width: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     z-index: -1;
 }
@@ -16,7 +16,6 @@
     font-family: 'Fira Sans', serif;
     opacity: 0.8;
     font-weight: 100;
-
   }
 
   .action-square-btn {
@@ -27,7 +26,7 @@
   }
 
   h1.massive-font {
-    font-size: $menu-huge-font-size !important;
+    font-size: $menu-primary-font-size !important;
   }
 
   #map-image {
@@ -48,12 +47,8 @@
     margin-left: 30px;
   }
 
-  .fixed-bottom {
-    left: 10%;
-  }
-
   .box:hover {
-    background: #1D9566;
+    margin-left: 3px;
   }
 
   .box {
@@ -62,11 +57,39 @@
     color: $secondary-text-color;
     padding: 1.5%;
     transition: 0.2s all;
+    border: 1px solid white;
+    animation-name: showUp;
+    animation-duration: 1s;
+
+    svg {
+      margin: 10px;
+    }
+
   }
 
-  .fixed {
-    position: absolute;
-    bottom: 2.5em;
+  .box:last-child {
+    margin-bottom: 20px;
+  }
 
+  @keyframes showUp {
+    from {opacity: 0.5;}
+    to {opacity: 0.9;}
+  }
+
+  .INFO {
+    background: $info-color;
+  }
+
+  .EMERGENCY {
+    background: $error-color;
+  }
+
+  .WARNING {
+    background: $action-btn-color;
+  }
+
+  .description {
+    max-height: 200px;
+    overflow: hidden;
   }
 }

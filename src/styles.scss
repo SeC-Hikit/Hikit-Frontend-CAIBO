@@ -180,6 +180,12 @@ table td {
   background: $secondary-bg-color;
 }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 table {
   .trailCodeColumn {
     background: black;
