@@ -7,7 +7,9 @@ import {RouterModule, Routes} from "@angular/router";
 import {SafetyComponent} from "./safety/safety.component";
 import {TrekkingComponent} from "./trekking/trekking.component";
 import {MapComponent} from "./map-view/map.component";
-import {TrailUploadManagementComponent} from "./admin/trail-management/trail-upload-management/trail-upload-management.component";
+import {
+    TrailUploadManagementComponent
+} from "./admin/trail-management/trail-upload-management/trail-upload-management.component";
 import {TrailManagementComponent} from "./admin/trail-management/trail-management.component";
 import {MaintenanceManagementComponent} from "./admin/maintenance-management/maintenance-management.component";
 import {AccessibilityManagementComponent} from "./admin/accessibility-management/accessibility-management.component";
@@ -18,19 +20,29 @@ import {TrailRawManagementComponent} from "./admin/trail-raw-management/trail-ra
 import {PoiManagementComponent} from "./admin/poi-management/poi-management.component";
 import {PoiAddComponent} from "./admin/poi-management/poi-add/poi-add.component";
 import {PoiViewTableComponent} from "./admin/poi-management/poi-view-table/poi-view-table.component";
-import {AccessibilityAddComponent} from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
-import {AccessibilityViewComponent} from "./admin/accessibility-management/accessibility-view/accessibility-view.component";
+import {
+    AccessibilityAddComponent
+} from "./admin/accessibility-management/accessibility-add/accessibility-add.component";
+import {
+    AccessibilityViewComponent
+} from "./admin/accessibility-management/accessibility-view/accessibility-view.component";
 import {ReportingFormComponent} from "./accessibility/reporting-form/reporting-form.component";
 import {CycloComponent} from "./info/cyclo/cyclo.component";
 import {CycloManagementComponent} from "./admin/trail-management/cyclo-management/cyclo-management.component";
 import {PlaceViewTableComponent} from "./admin/place-management/place-view-table/place-view-table.component";
 import {PlaceAddComponent} from "./admin/place-management/place-add/place-add.component";
 import {PlaceManagementComponent} from "./admin/place-management/place-management.component";
-import {TrailModifyManagementComponent} from "./admin/trail-management/trail-modify-management/trail-modify-management.component";
+import {
+    TrailModifyManagementComponent
+} from "./admin/trail-management/trail-modify-management/trail-modify-management.component";
 import {TrailViewTableComponent} from "./admin/trail-management/trail-view-table/trail-view-table.component";
-import {TrailRawViewTableComponent} from "./admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component";
+import {
+    TrailRawViewTableComponent
+} from "./admin/trail-raw-management/trail-raw-view-table/trail-raw-view-table.component";
 import {PlaceEditComponent} from "./admin/place-management/place-edit/place-edit.component";
-import {LandingPageSuccessComponent} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
+import {
+    LandingPageSuccessComponent
+} from "./accessibility/reporting-form/landing-page-success/landing-page-success.component";
 import {MaintenanceAddComponent} from "./admin/maintenance-management/maintenance-add/maintenance-add.component";
 import {MaintenanceViewComponent} from "./admin/maintenance-management/maintenance-view/maintenance-view.component";
 import {PlaceGeneralViewComponent} from "./admin/place-management/place-general-view/place-general-view.component";
@@ -92,7 +104,7 @@ const routes: Routes = [
                 path: "raw-trail-management",
                 children: [
                     {path: "", component: TrailRawViewTableComponent},
-                    { path: "view", component: TrailRawViewTableComponent},
+                    {path: "view", component: TrailRawViewTableComponent},
                     {path: "init/:id", component: TrailUploadManagementComponent},
                     {path: "init/:id/:quick", component: TrailUploadManagementComponent}
                 ],

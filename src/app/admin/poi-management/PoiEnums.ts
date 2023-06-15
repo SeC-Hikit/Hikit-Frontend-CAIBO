@@ -1,6 +1,7 @@
 export interface SelectChoicesMicro {
     name: string,
-    value: string
+    value: string,
+    image: string,
 }
 
 export interface SelectChoicesMacro {
@@ -23,24 +24,27 @@ export class PoiEnums {
             name: PoiEnums.CULTURAL_READ,
             value: PoiEnums.CULTURAL,
             micro: [
-                {name: "Pieve", value: "church"},
-                {name: "Albero Monumentale", value: "tree"},
-                {name: "Muretto", value: "wall"},
-                {name: "Forno", value: "historic_oven"},
-                {name: "Lavatoio", value: "wash_house"},
-                {name: "Cimitero", value: "cemetery"},
-                {name: "Edificio Storico", value: "historical_building"},
-                {name: "Falesia", value: "climbing_crag"},
+                {name: "Pieve", value: "church", image: "pieve-min.webp"},
+                {name: "Albero Monumentale", value: "tree", image: "albero-monumentale-min.webp"},
+                {name: "Muretto", value: "wall", image: "ruin.png"},
+                {name: "Forno", value: "historic_oven", image: "forno-min.webp"},
+                {name: "Lavatoio", value: "wash_house", image: "lavatoio-min.webp"},
+                {name: "Cimitero", value: "cemetery", image: "cimitero-min.webp"},
+                {name: "Edificio Storico", value: "historical_building", image: "edificio_storico.webp"},
+                {name: "Casa rurale", value: "country_house", image: "casa-in-sasso-min.webp"},
+                {name: "Falesia", value: "climbing_crag", image: "falesia-min.webp"},
+                {name: "Calanchi", value: "ravine", image: "calanco.webp"},
+                {name: "Borgo", value: "town", image: "borgo-min.webp"},
             ]
         }, {
             name: PoiEnums.SUPPORT_READ,
             value: "SUPPORT",
             micro: [
-                {name: "Rifugio", value: "shalet"},
-                {name: "Fonte", value: "fountain"},
-                {name: "Bottega", value: "grocery_shop"},
-                {name: "Supermercato", value: "supermarket"},
-                {name: "Ufficio Informazioni", value: "iat"},
+                {name: "Rifugio", value: "shalet", image: "shalet.png"},
+                {name: "Fonte", value: "fountain", image: "fountain.png"},
+                {name: "Bottega", value: "grocery_shop", image: "bottega.webp"},
+                {name: "Supermercato", value: "supermarket", image: "supermarket.webp"},
+                {name: "Ufficio Informazioni", value: "iat", image: "ufficio_turistico.webp"},
             ]
         }, {
             name: PoiEnums.BELVEDERE_READ,

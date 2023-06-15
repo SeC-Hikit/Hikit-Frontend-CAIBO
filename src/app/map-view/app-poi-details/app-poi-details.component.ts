@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PoiDto} from "../../service/poi-service.service";
 import {TrailMappingDto} from "../../service/trail-service.service";
+import {PoiEnums} from "../../admin/poi-management/PoiEnums";
 
 @Component({
     selector: 'app-poi-details',
@@ -32,18 +33,13 @@ export class AppPoiDetailsComponent implements OnInit {
 
     getImage(macroType: "BELVEDERE" | "SUPPORT" | "CULTURAL", microType: string[]) {
         const base_folder = "assets/cai/poi/";
-        if (macroType == "BELVEDERE") {
+
+        if(macroType == "BELVEDERE") {
             return base_folder + "belvedere.png";
         }
-        if (macroType == "SUPPORT") {
-            if (microType.indexOf("fountain") >= 0) {
-                return base_folder + "fountain.png"
-            }
-            return base_folder + "shalet.png";
-        }
-        if (macroType == "CULTURAL") {
-            return base_folder + "ruin.png"
-        }
+        const microtypes = PoiEnums.macroTypes.filter((it) => it.value == macroType)[0].micro;
+        const foundMicrotype = microtypes.filter(it=> it.value == microType[0]);
+        return base_folder + foundMicrotype[0].image
     }
 
     onRelatedTrailHover(id: string) {
