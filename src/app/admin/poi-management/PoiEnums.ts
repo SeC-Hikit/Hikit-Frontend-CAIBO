@@ -30,9 +30,10 @@ export class PoiEnums {
                 {name: "Forno", value: "historic_oven", image: "forno-min.webp"},
                 {name: "Lavatoio", value: "wash_house", image: "lavatoio-min.webp"},
                 {name: "Cimitero", value: "cemetery", image: "cimitero-min.webp"},
-                {name: "Edificio Storico", value: "historical_building", image: "casa-in-sasso-min.webp"},
+                {name: "Edificio Storico", value: "historical_building", image: "edificio_storico.webp"},
+                {name: "Casa rurale", value: "country_house", image: "casa-in-sasso-min.webp"},
                 {name: "Falesia", value: "climbing_crag", image: "falesia-min.webp"},
-                {name: "Calanchi", value: "ravine", image: "belvedere.png"},
+                {name: "Calanchi", value: "ravine", image: "calanco.webp"},
                 {name: "Borgo", value: "town", image: "borgo-min.webp"},
             ]
         }, {
@@ -41,9 +42,9 @@ export class PoiEnums {
             micro: [
                 {name: "Rifugio", value: "shalet", image: "shalet.png"},
                 {name: "Fonte", value: "fountain", image: "fountain.png"},
-                {name: "Bottega", value: "grocery_shop", image: "sign.png"},
-                {name: "Supermercato", value: "supermarket", image: "sign.png"},
-                {name: "Ufficio Informazioni", value: "iat", image: "sign.png"},
+                {name: "Bottega", value: "grocery_shop", image: "bottega.webp"},
+                {name: "Supermercato", value: "supermarket", image: "supermarket.webp"},
+                {name: "Ufficio Informazioni", value: "iat", image: "ufficio_turistico.webp"},
             ]
         }, {
             name: PoiEnums.BELVEDERE_READ,
