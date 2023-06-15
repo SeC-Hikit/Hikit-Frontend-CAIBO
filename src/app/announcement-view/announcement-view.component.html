@@ -1,15 +1,9 @@
-<div>
-    <!--    <app-trail-floating-preview-->
-    <!--            [trails]="trailsPreview"-->
-    <!--            [isVisible]="isPlacePreviewVisible"-->
-    <!--            [markers]="markersPreview"-->
-    <!--            (onClose)="this.togglePreview()"-->
-    <!--    ></app-trail-floating-preview>-->
+<div class="container">
     <app-loading-spinner
             *ngIf="this.isLoading "></app-loading-spinner>
     <div class="row top-margin-x2">
         <div class="col-12" *ngIf="announcementList && announcementList.length > 0">
-            <p>I seguenti sono gli annunci mostrati sull'applicazione e collegati ad altri elementi.</p>
+            <h1>Archivio Annunci</h1>
             <table
                     id="trailTable"
                     class="table table-striped interactive-table thin-rows"
@@ -19,12 +13,8 @@
                     <th scope="col">ID</th>
                     <th scope="col">Titolo</th>
                     <th scope="col">Tipo</th>
-                    <th scope="col">Collegato a</th>
-                    <th scope="col">Pubblico</th>
                     <th scope="col">Caricato il</th>
-                    <th scope="col">Caricato da</th>
-                    <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
-                    <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
+                    <th scope="col">Leggi</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,24 +23,26 @@
                     <td (click)="onPreview(announcement)">
                         {{ announcement.name }}
                     </td>
-                    <td>{{ getType(announcement.type) }}</td>
-                    <td>{{ getTopicType(announcement.relatedTopic.announcementTopicType) }}</td>
-                    <td>{{ announcement.valid ? "Si" : "No" }}</td>
-                    <td>{{ formatDate(announcement.recordDetails.uploadedOn) }}</td>
-                    <td>{{ announcement.recordDetails.uploadedBy }}</td>
-                    <td class="clickable" *ngIf="authService.isRealmMatch()">
-                        <svg class="bi" width="24"
-                             height="24" fill="currentColor" (click)="onEdit(announcement.id)">
-                            <use
-                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
-                            />
-                        </svg>
+                    <td [class]="announcement.type">
+                        <svg *ngIf="announcement.type == 'EVENT'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar-check-fill"/></svg>
+                        <svg *ngIf="announcement.type == 'WARNING'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle-fill"/></svg>
+                        <svg *ngIf="announcement.type == 'EMERGENCY'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-octagon-fill"/></svg>
+                        <svg *ngIf="announcement.type == 'INFO'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle-fill"/></svg>
                     </td>
-                    <td class="clickable" *ngIf="authService.isRealmMatch()">
+                    <td>{{ formatDate(announcement.recordDetails.uploadedOn) }}</td>
+                    <td class="clickable">
                         <svg class="bi" width="24"
-                             height="24" fill="currentColor" (click)="onDeleteClick(announcement)">
+                             height="24" fill="currentColor" (click)="onPreview(announcement.id)">
                             <use
-                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#book"
                             />
                         </svg>
                     </td>

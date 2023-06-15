@@ -8,10 +8,10 @@ import {PaginationUtils} from "../../../utils/PaginationUtils";
 
 @Component({
     selector: 'app-announcement-view',
-    templateUrl: './announcement-view.component.html',
-    styleUrls: ['./announcement-view.component.scss']
+    templateUrl: './admin-announcement-view.component.html',
+    styleUrls: ['./admin-announcement-view.component.scss']
 })
-export class AnnouncementViewComponent implements OnInit {
+export class AdminAnnouncementViewComponent implements OnInit {
 
     realm = "";
     entryPerPage = 10;

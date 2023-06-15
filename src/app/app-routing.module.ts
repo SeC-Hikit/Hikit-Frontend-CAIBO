@@ -36,7 +36,8 @@ import {MaintenanceViewComponent} from "./admin/maintenance-management/maintenan
 import {PlaceGeneralViewComponent} from "./admin/place-management/place-general-view/place-general-view.component";
 import {AnnouncementEditComponent} from "./admin/announcement-management/announcement-edit/announcement-edit.component";
 import {AnnouncementManagementComponent} from "./admin/announcement-management/announcement-management.component";
-import {AnnouncementViewComponent} from "./admin/announcement-management/announcement-view/announcement-view.component";
+import {AdminAnnouncementViewComponent} from "./admin/announcement-management/announcement-view/admin-announcement-view.component";
+import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -79,6 +80,7 @@ const routes: Routes = [
             },
         ],
     },
+    {path: "announcements", component: AnnouncementViewComponent},
     {path: "maintenance", component: MaintenanceComponent},
 
     // ADMIN
@@ -152,7 +154,7 @@ const routes: Routes = [
             {
                 path: "announcement-management",
                 children: [
-                    {path: "", component: AnnouncementViewComponent},
+                    {path: "", component: AdminAnnouncementViewComponent},
                     {path: "add", component: AnnouncementEditComponent},
                     {path: "add/:id", component: AnnouncementEditComponent},
                     {path: "edit/:id", component: AnnouncementEditComponent},

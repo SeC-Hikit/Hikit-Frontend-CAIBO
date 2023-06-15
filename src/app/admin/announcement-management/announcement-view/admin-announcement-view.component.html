@@ -1,0 +1,70 @@
+<div>
+    <app-loading-spinner
+            *ngIf="this.isLoading "></app-loading-spinner>
+    <div class="row top-margin-x2">
+        <div class="col-12" *ngIf="announcementList && announcementList.length > 0">
+            <p>I seguenti sono gli annunci mostrati sull'applicazione e collegati ad altri elementi.</p>
+            <table
+                    id="trailTable"
+                    class="table table-striped interactive-table thin-rows"
+            >
+                <thead class="">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Titolo</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Collegato a</th>
+                    <th scope="col">Pubblico</th>
+                    <th scope="col">Caricato il</th>
+                    <th scope="col">Caricato da</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let announcement of announcementList" class="place-preview">
+                    <th class="small-column ellipsis" [title]="announcement.id">{{announcement.id}}</th>
+                    <td (click)="onPreview(announcement)">
+                        {{ announcement.name }}
+                    </td>
+                    <td>{{ getType(announcement.type) }}</td>
+                    <td>{{ getTopicType(announcement.relatedTopic.announcementTopicType) }}</td>
+                    <td>{{ announcement.valid ? "Si" : "No" }}</td>
+                    <td>{{ formatDate(announcement.recordDetails.uploadedOn) }}</td>
+                    <td>{{ announcement.recordDetails.uploadedBy }}</td>
+                    <td class="clickable" *ngIf="authService.isRealmMatch()">
+                        <svg class="bi" width="24"
+                             height="24" fill="currentColor" (click)="onEdit(announcement.id)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
+                            />
+                        </svg>
+                    </td>
+                    <td class="clickable" *ngIf="authService.isRealmMatch()">
+                        <svg class="bi" width="24"
+                             height="24" fill="currentColor" (click)="onDeleteClick(announcement)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                            />
+                        </svg>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagination-position">
+                <ngb-pagination
+                        [pageSize]="entryPerPage"
+                        [collectionSize]="totalAnnouncements"
+                        [(page)]="selectedPage"
+                        aria-label="Default pagination"
+                        (pageChange)="onAnnouncementLoad($event)"
+                ></ngb-pagination>
+            </div>
+        </div>
+        <div *ngIf="announcementList.length == 0">
+            <app-items-not-found class="top-margin-x2 align-content-center"
+                                 text="Non ci sono ancora annunci caricati.">
+            </app-items-not-found>
+        </div>
+    </div>
+</div>
