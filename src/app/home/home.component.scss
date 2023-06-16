@@ -1,22 +1,69 @@
 @import "src/app/style/const";
 
 #image {
-    background: url(/assets/cai/bg_home.avif) no-repeat;
-    background-size:cover;
-    background-position: center;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    z-index: -1;
+  background: url(/assets/cai/bg_home.avif) no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: -1;
 }
 
 .Home {
+
+  .adv {
+    position: absolute;
+    right: 5%;
+    top: 12%;
+    transition: 0.5s all;
+    a {
+      text-decoration: none;
+    }
+  }
+
+  .adv:hover {
+    right: 5.5%;
+  }
+
+  @media (max-width: 992px) {
+    .adv {
+      display: none;
+    }
+
+    .text-on-background {
+      display: none;
+    }
+  }
+
+  .text-adv {
+    color : black;
+    padding: 10px;
+    background: rgba(255, 255, 255);
+    text-align: right;
+    font-size: 48px !important;
+
+
+
+    .strike-through {
+      font-family: "Bebas Neue", cursive !important;
+      text-decoration: underline;
+      color: $info-color;
+    }
+
+  }
+
+  .text-on-background {
+    background: $primary-bg-color;
+    color: white;
+    padding: 10px;
+  }
+
 
   .light-text {
     font-family: 'Fira Sans', serif;
     opacity: 0.8;
     font-weight: 100;
-
   }
 
   .action-square-btn {
@@ -27,7 +74,7 @@
   }
 
   h1.massive-font {
-    font-size: $menu-huge-font-size !important;
+    font-size: $menu-primary-font-size !important;
   }
 
   #map-image {
@@ -48,12 +95,8 @@
     margin-left: 30px;
   }
 
-  .fixed-bottom {
-    left: 10%;
-  }
-
   .box:hover {
-    background: #1D9566;
+    margin-left: 3px;
   }
 
   .box {
@@ -62,11 +105,33 @@
     color: $secondary-text-color;
     padding: 1.5%;
     transition: 0.2s all;
+    border: 1px solid white;
+
+    svg {
+      margin: 10px 10px 10px 0;
+    }
+
   }
 
-  .fixed {
-    position: absolute;
-    bottom: 2.5em;
+  .box:last-child {
+    margin-bottom: 20px;
+  }
 
+
+  .INFO {
+    background: $info-color;
+  }
+
+  .EMERGENCY {
+    background: $error-color;
+  }
+
+  .WARNING {
+    background: $action-btn-color;
+  }
+
+  .description {
+    max-height: 200px;
+    overflow: hidden;
   }
 }

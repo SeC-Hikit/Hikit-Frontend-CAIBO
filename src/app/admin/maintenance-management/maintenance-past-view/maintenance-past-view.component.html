@@ -27,7 +27,7 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let maintenance of maintenanceListPast">
-                        <th class="small-column ellipsis">{{maintenance.id}}</th>
+                        <th class="small-column ellipsis clickable" (click)="copyId(maintenance.id)">{{maintenance.id}}</th>
                         <td>{{ formatDate(maintenance.date) }}</td>
                         <td>
                           <span class="trailCodeColumn clickable"

@@ -7,6 +7,9 @@ import {AuthService} from "../../../service/auth.service";
 import {Status} from "../../../Status";
 import {takeUntil, tap} from "rxjs/operators";
 import {PaginationUtils} from "../../../utils/PaginationUtils";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {AnnouncementTopic} from "../../../service/announcement.service";
 
 @Component({
     selector: 'app-trail-view-table',
@@ -33,7 +36,8 @@ export class TrailViewTableComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private adminTrailService: AdminTrailService,
-        public authService: AuthService
+        public authService: AuthService,
+        private modalService: NgbModal
     ) {
     }
 
@@ -116,20 +120,19 @@ export class TrailViewTableComponent implements OnInit {
     }
 
     onSearch($event: string) {
-        if($event.trim() == "") {
+        if ($event.trim() == "") {
             this.loadTrails(1);
             return;
         }
 
         this.trailPreviewService.findTrailByNameOrLocationsNames
-        ($event, this.realm, true,  0, this.entryPerPage).subscribe((resp)=>
-        {
+        ($event, this.realm, true, 0, this.entryPerPage).subscribe((resp) => {
             this.trailPreviewList = resp.content;
             this.totalTrail = resp.size;
         });
     }
 
-    changeStatus(trailPreview: TrailPreview, status : "DRAFT" | "PUBLIC") {
+    changeStatus(trailPreview: TrailPreview, status: "DRAFT" | "PUBLIC") {
         this.isLoading = true;
         this.trailService
             .getTrailById(trailPreview.id)
@@ -138,7 +141,7 @@ export class TrailViewTableComponent implements OnInit {
 
                     let targetTrail = it.content[0];
                     targetTrail.status = status;
-                    this.adminTrailService.updateStatus(targetTrail).subscribe(()=> {
+                    this.adminTrailService.updateStatus(targetTrail).subscribe(() => {
                         this.loadTrails(this.page);
                     });
                 }
@@ -146,5 +149,15 @@ export class TrailViewTableComponent implements OnInit {
 
     }
 
+    copyId(id: string) {
+        PaginationUtils.copyToClipboard(id).then(() => {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = "ID '" + id + "', copiato";
+            if(this.authService.isRealmMatch()) {
+                modal.componentInstance.body = PaginationUtils.getOptionsText(id,
+                    AnnouncementTopic.TRAIL)
+            }
+        })
+    }
 
 }

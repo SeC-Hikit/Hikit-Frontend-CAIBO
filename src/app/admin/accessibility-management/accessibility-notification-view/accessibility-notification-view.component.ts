@@ -12,6 +12,9 @@ import {PromptModalComponent} from "../../../modal/prompt-modal/prompt-modal.com
 import {Marker} from "../../../map-preview/map-preview.component";
 import {Coordinates2D} from "../../../service/geo-trail-service";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
+import { PaginationUtils } from 'src/app/utils/PaginationUtils';
+import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+import {AnnouncementTopic} from "../../../service/announcement.service";
 
 @Component({
     selector: "app-accessibility-notification-view",
@@ -132,7 +135,8 @@ export class AccessibilityNotificationViewComponent implements OnInit {
                 this.onResolve(unresolvedNotification);
             }
         });
-        modal.componentInstance.onPromptCancel.subscribe(() => {})
+        modal.componentInstance.onPromptCancel.subscribe(() => {
+        })
     }
 
     onResolve(unresolvedNotification: AccessibilityNotification) {
@@ -160,7 +164,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         return "";
     }
 
-    showPreview(trailId : string, coordinates: Coordinates2D) {
+    showPreview(trailId: string, coordinates: Coordinates2D) {
         this.trailService.getTrailById(trailId).subscribe(
             trailResp => {
                 this.selectedTrail = trailResp.content[0];
@@ -178,9 +182,20 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         this.isPreviewVisible = !this.isPreviewVisible;
     }
 
-    onResolvedSuccess(
-    ): void {
+    onResolvedSuccess(): void {
         this.loadSolvedNotification(this.solvedPage);
         this.loadNotification(this.unresolvedPage);
+    }
+
+    copyId(id: string) {
+        PaginationUtils.copyToClipboard(id).then(() => {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = "ID '" + id + "', copiato";
+            if(this.authService.isRealmMatch()) {
+                modal.componentInstance.body = PaginationUtils.getOptionsText(id,
+                    AnnouncementTopic.ACCESSIBILITY_NOTIFICATION)
+            }
+
+        })
     }
 }

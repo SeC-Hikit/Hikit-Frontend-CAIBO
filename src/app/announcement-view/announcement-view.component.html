@@ -1,0 +1,68 @@
+<div class="container">
+    <app-loading-spinner
+            *ngIf="this.isLoading "></app-loading-spinner>
+    <div class="row top-margin-x2">
+        <div class="col-12" *ngIf="announcementList && announcementList.length > 0">
+            <h1>Archivio Annunci</h1>
+            <table
+                    id="trailTable"
+                    class="table table-striped interactive-table thin-rows"
+            >
+                <thead class="">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Titolo</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Caricato il</th>
+                    <th scope="col">Leggi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let announcement of announcementList" class="place-preview">
+                    <th class="small-column ellipsis" [title]="announcement.id">{{announcement.id}}</th>
+                    <td (click)="onPreview(announcement)">
+                        {{ announcement.name }}
+                    </td>
+                    <td [class]="announcement.type">
+                        <svg *ngIf="announcement.type == 'EVENT'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar-check-fill"/></svg>
+                        <svg *ngIf="announcement.type == 'WARNING'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle-fill"/></svg>
+                        <svg *ngIf="announcement.type == 'EMERGENCY'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-octagon-fill"/></svg>
+                        <svg *ngIf="announcement.type == 'INFO'" class="bi clickable" width="24" height="24"
+                             fill="currentColor"><use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle-fill"/></svg>
+                    </td>
+                    <td>{{ formatDate(announcement.recordDetails.uploadedOn) }}</td>
+                    <td class="clickable">
+                        <svg class="bi" width="24"
+                             height="24" fill="currentColor" (click)="onPreview(announcement.id)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#book"
+                            />
+                        </svg>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagination-position">
+                <ngb-pagination
+                        [pageSize]="entryPerPage"
+                        [collectionSize]="totalAnnouncements"
+                        [(page)]="selectedPage"
+                        aria-label="Default pagination"
+                        (pageChange)="onAnnouncementLoad($event)"
+                ></ngb-pagination>
+            </div>
+        </div>
+        <div *ngIf="announcementList.length == 0">
+            <app-items-not-found class="top-margin-x2 align-content-center"
+                                 text="Non ci sono ancora annunci caricati.">
+            </app-items-not-found>
+        </div>
+    </div>
+</div>

@@ -33,7 +33,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let place of placeList" class="place-preview">
-                    <th class="small-column ellipsis" [title]="place.id">{{place.id}}</th>
+                    <th class="small-column ellipsis clickable" [title]="place.id" (click)="copyId(place.id)">{{place.id}}</th>
                     <td (click)="onPreview(place)">
                         {{ place.name }}
                     </td>
@@ -78,6 +78,7 @@
                         [pageSize]="entryPerPage"
                         [collectionSize]="totalPlaces"
                         [(page)]="selectedPage"
+                        [maxSize]="5"
                         aria-label="Default pagination"
                         (pageChange)="onPlaceLoad($event)"
                 ></ngb-pagination>

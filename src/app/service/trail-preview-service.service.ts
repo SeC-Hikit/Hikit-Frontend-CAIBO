@@ -32,7 +32,6 @@ export class TrailPreviewService {
         }
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/find/code/" + code, {params: params})
             .pipe(
-                tap(_ => console.log(_)),
                 catchError(this.handleError<TrailPreviewResponse>('find previews by code', null))
             );
     }

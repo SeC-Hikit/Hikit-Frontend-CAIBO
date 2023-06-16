@@ -1,0 +1,13 @@
+@import "../style/const.scss";
+
+.INFO {
+  color: $info-color !important;
+}
+
+.EMERGENCY {
+  color: $error-color;
+}
+
+.WARNING {
+  color: $action-btn-color !important;
+}

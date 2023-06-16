@@ -1,0 +1,108 @@
+<div>
+    <div class="AnnouncementAddComponent">
+        <div class="space-up">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>
+                        {{ this.isModify ? "Modifica" : "Aggiungi"}}
+                        annuncio</h2>
+                </div>
+            </div>
+            <form [formGroup]="formGroup" (ngSubmit)="processModule()">
+                <div class="row top-margin-x2" [ngClass]="isModify ? '' : 'hidden'">
+                    <div class="col-md-12">
+                        <label>ID <span class="mandatory-field-asterisk">*</span></label>
+                        <input type="text" disabled="disabled" formControlName="id"/>
+                    </div>
+                </div>
+                <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
+                    <div class="col-md-12 top-margin">
+                        <label>Titolo <span class="mandatory-field-asterisk">*</span></label>
+                        <input type="text" formControlName="name"/>
+                    </div>
+                </div>
+                <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
+                    <div class="col-md-12 top-margin">
+                        <label>Tipo <span class="mandatory-field-asterisk">*</span></label>
+                        <select
+                                title="Scegli un'opzione"
+                                class="form-control col-11"
+                                [formControlName]="'type'">
+                            <option *ngFor="let announcement of announcementTypes"
+                                    [value]="announcement.value">{{announcement.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="top-margin-x2 row">
+                    <div class="col-md-12 col-lg-12">
+                        <label>Descrizione</label>
+                        <quill-editor
+                                [formControlName]="'description'"
+                                [className]="'description'"
+                                [modules]="{
+                toolbar: [
+                  ['bold', 'italic', 'underline'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link']
+                ]
+              }"></quill-editor>
+                    </div>
+                </div>
+
+                <span class="hidden">
+                    <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
+                        <div class="col-md-12 top-margin">
+                            <label>Collegato a elemento di tipo <span class="mandatory-field-asterisk">*</span></label>
+                            <select
+                                    title="Scegli un'opzione"
+                                    class="form-control col-11"
+                                    [formControlName]="'relatedTopic'">
+                                <option *ngFor="let relatedElement of relatedElementTypes"
+                                        [value]="relatedElement.value">{{relatedElement.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8 top-margin">
+                            <label>ID <span class="mandatory-field-asterisk">*</span></label>
+                            <input  type="text"
+                                    class="form-control col-11"
+                                    [formControlName]="'relatedTopicId'"/>
+                        </div>
+                    </div>
+                </span>
+
+                <div class="row top-margin">
+                    <div>
+                        <div class="form-check">
+                            <input
+                                    id="checkbox1"
+                                    type="checkbox"
+                                    formControlName="valid"
+                            />
+                            <label ngbTooltip="Indica se l'annuncio è valido e da visualizzare agli utenti"
+                                   for="checkbox1">{{ this.formGroup.get("valid").value ? "Pubblica" : "Non pubblica"}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row errors" *ngIf="validationErrors.length > 0">
+                    <div class="col-12 top-margin-x2">
+                        <ul>
+                            <li *ngFor="let error of validationErrors">{{error}}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row top-margin-x2">
+                    <div class="col-12">
+                        <button class="btn btn-primary">Pubblica annuncio</button>
+                    </div>
+                    <div class="col-12">
+                        <button routerLink="/admin/announcement-management"
+                                class="btn btn-outline-warning full-width top-margin">
+                            Torna a gestione annunci
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

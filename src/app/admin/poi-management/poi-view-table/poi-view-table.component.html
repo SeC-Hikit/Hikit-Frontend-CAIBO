@@ -29,7 +29,7 @@
       </thead>
       <tbody class="short-list">
         <tr *ngFor="let poi of poiResponse.content">
-          <th scope="row" class="ellipsis small-column" title="{{ poi.id }}">
+          <th scope="row" class="ellipsis small-column clickable" title="{{ poi.id }}" (click)="copyId(poi.id)">
             {{ poi.id }}
           </th>
           <td>

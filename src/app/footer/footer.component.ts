@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+    selector: 'app-footer',
+    templateUrl: './footer.component.html',
+    styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
+    isVisible = true;
 
-  constructor() { }
+    constructor(private routerService: Router) {
+    }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+        this.routerService.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+                this.isVisible = !this.routerService.url.startsWith("/map");
+            }
+        });
+
+    }
 
 }

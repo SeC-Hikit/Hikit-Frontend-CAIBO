@@ -78,6 +78,11 @@ import { PlaceGeneralViewComponent } from './admin/place-management/place-genera
 import { AutoCrosswayViewComponent } from './admin/place-management/auto-crossway-view/auto-crossway-view.component';
 import { AppPoiDetailsComponent } from './map-view/app-poi-details/app-poi-details.component';
 import {AppPlaceDetailsComponent} from "./map-view/app-place-details/app-place-details.component";
+import { AnnouncementManagementComponent } from './admin/announcement-management/announcement-management.component';
+import { AdminAnnouncementViewComponent } from './admin/announcement-management/announcement-view/admin-announcement-view.component';
+import { AnnouncementEditComponent } from './admin/announcement-management/announcement-edit/announcement-edit.component';
+import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
+import { AnnouncementSingleViewComponent } from './announcement-single-view/announcement-single-view.component';
 
 @NgModule({
   declarations: [
@@ -148,7 +153,12 @@ import {AppPlaceDetailsComponent} from "./map-view/app-place-details/app-place-d
     PlaceGeneralViewComponent,
     AutoCrosswayViewComponent,
     AppPoiDetailsComponent,
-    AppPlaceDetailsComponent
+    AppPlaceDetailsComponent,
+    AnnouncementManagementComponent,
+    AdminAnnouncementViewComponent,
+    AnnouncementEditComponent,
+    AnnouncementViewComponent,
+    AnnouncementSingleViewComponent
   ],
   imports: [
     BrowserModule,

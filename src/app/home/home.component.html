@@ -1,19 +1,38 @@
 <div id="image"></div>
 <div id="holder" class="Home">
     <div class="container">
-<!--        <div class="row margin-top-xl section-distance-up fixed-bottom">-->
-<!--            <div class="col-s-8 col-md-2 box">-->
-<!--                <h1 class="massive-font">Mappa</h1>-->
-<!--                <div class="light-text">Scopri il territorio direttamente dalla mappa</div>-->
-<!--                <div id="map-image" class="top-margin-x2"></div>-->
-<!--                <div class="action-square-btn top-margin-x2 bottom-right"></div>-->
-<!--            </div>-->
-<!--            <div class="col-s-8 col-md-2 offset-1 box">-->
-<!--                <h1 class="massive-font">Percorrenza</h1>-->
-<!--                <div class="light-text">Tutti le notifiche di percorrenza dell'area Bolognese</div>-->
-<!--                <div id="trails-image" class="top-margin-x2"></div>-->
-<!--                <div class="action-square-btn top-margin-x2 bottom-right"></div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="row margin-top-xl section-distance-up" *ngIf="announcementsList.length > 0">
+            <div class="col-s-8 col-md-12 col-lg-4 top-margin-x2">
+                <h1 class="text-on-background">Annunci</h1>
+            </div>
+        </div>
+        <div class="row margin-top-xl section-distance-up" *ngFor="let announcement of announcementsList" (click)="navigateToAnnouncement(announcement.id)">
+            <div class="col-s-8 col-md-12 col-lg-4 box top-margin-x2" [class]="announcement.type">
+                <h1 class="massive-font">
+                    <span>
+                 <svg *ngIf="announcement.type == 'EVENT'" class="bi clickable" width="24" height="24"
+                      fill="currentColor"><use
+                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar-check-fill"/></svg>
+                 <svg *ngIf="announcement.type == 'WARNING'" class="bi clickable" width="24" height="24"
+                      fill="currentColor"><use
+                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle-fill"/></svg>
+                 <svg *ngIf="announcement.type == 'EMERGENCY'" class="bi clickable" width="24" height="24"
+                      fill="currentColor"><use
+                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-octagon-fill"/></svg>
+                 <svg *ngIf="announcement.type == 'INFO'" class="bi clickable" width="24" height="24"
+                      fill="currentColor"><use
+                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle-fill"/></svg>
+                    </span>{{announcement.name}}</h1>
+                <div class="light-text description" [innerHTML]="announcement.description"></div>
+            </div>
+        </div>
+
+        <div class="adv">
+            <a routerLink="/map">
+                <h1 class="text-adv"><span class="strike-through animate-letters">Esplora</span> la rete sentieristica
+                    <br/> di Bologna</h1>
+            </a>
+        </div>
+
     </div>
 </div>

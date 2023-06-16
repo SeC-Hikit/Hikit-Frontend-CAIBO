@@ -2,7 +2,7 @@ import { Chart, ChartOptions } from 'chart.js';
 
 export class ChartUtils {
 
-    private static DEBOUNCE_TIME = 300;
+    private static DEBOUNCE_TIME = 50;
     private static interval : ReturnType<typeof setTimeout> = null;
 
 

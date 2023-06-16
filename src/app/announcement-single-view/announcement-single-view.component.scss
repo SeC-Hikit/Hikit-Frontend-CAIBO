@@ -1,0 +1,19 @@
+@import "../style/const.scss";
+
+#AnnouncementViewSingle {
+  .navigation-back:hover {
+    color: $action-btn-color;
+  }
+
+  .INFO {
+    color: $info-color !important;
+  }
+
+  .EMERGENCY {
+    color: $error-color;
+  }
+
+  .WARNING {
+    color: $action-btn-color !important;
+  }
+}

@@ -39,7 +39,8 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let maintenance of maintenanceListFuture">
-                        <th class="ellipsis small-column" title="{{ maintenance.id }}">
+                        <th class="ellipsis small-column clickable" title="{{ maintenance.id }}"
+                            (click)="copyId(maintenance.id)">
                             {{ maintenance.id }}
                         </th>
                         <td>{{ formatDate(maintenance.date) }}</td>
