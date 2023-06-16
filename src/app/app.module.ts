@@ -82,6 +82,7 @@ import { AnnouncementManagementComponent } from './admin/announcement-management
 import { AdminAnnouncementViewComponent } from './admin/announcement-management/announcement-view/admin-announcement-view.component';
 import { AnnouncementEditComponent } from './admin/announcement-management/announcement-edit/announcement-edit.component';
 import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
+import { AnnouncementSingleViewComponent } from './announcement-single-view/announcement-single-view.component';
 
 @NgModule({
   declarations: [
@@ -156,7 +157,8 @@ import {AnnouncementViewComponent} from "./announcement-view/announcement-view.c
     AnnouncementManagementComponent,
     AdminAnnouncementViewComponent,
     AnnouncementEditComponent,
-    AnnouncementViewComponent
+    AnnouncementViewComponent,
+    AnnouncementSingleViewComponent
   ],
   imports: [
     BrowserModule,

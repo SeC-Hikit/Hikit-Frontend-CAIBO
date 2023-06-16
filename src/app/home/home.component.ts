@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import {AnnouncementDto, AnnouncementService} from "../service/announcement.service";
 import {AuthService} from "../service/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-home',
@@ -15,6 +16,7 @@ export class HomeComponent implements OnInit {
     static HOME_ID: string = "image";
 
     constructor(private announcementService: AnnouncementService,
+                private routerService: Router,
                 private authService: AuthService) {
 
     }
@@ -46,5 +48,9 @@ export class HomeComponent implements OnInit {
                 return `<svg class="bi clickable" width="24" *ngIf="true" height="24" fill="currentColor"><use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle-fill"/></svg>`
         }
 
+    }
+
+    navigateToAnnouncement(id: string) {
+        this.routerService.navigate([`/announcements/${id}`])
     }
 }

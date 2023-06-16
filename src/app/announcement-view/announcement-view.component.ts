@@ -66,6 +66,6 @@ export class AnnouncementViewComponent implements OnInit {
   }
 
   onPreview(id) {
-
+    this.routerService.navigate([`/announcements/${id}`])
   }
 }

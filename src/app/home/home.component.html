@@ -6,7 +6,7 @@
                 <h1 class="text-on-background">Annunci</h1>
             </div>
         </div>
-        <div class="row margin-top-xl section-distance-up" *ngFor="let announcement of announcementsList">
+        <div class="row margin-top-xl section-distance-up" *ngFor="let announcement of announcementsList" (click)="navigateToAnnouncement(announcement.id)">
             <div class="col-s-8 col-md-12 col-lg-4 box top-margin-x2" [class]="announcement.type">
                 <h1 class="massive-font">
                     <span>

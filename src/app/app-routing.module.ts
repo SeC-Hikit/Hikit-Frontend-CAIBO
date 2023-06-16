@@ -38,6 +38,7 @@ import {AnnouncementEditComponent} from "./admin/announcement-management/announc
 import {AnnouncementManagementComponent} from "./admin/announcement-management/announcement-management.component";
 import {AdminAnnouncementViewComponent} from "./admin/announcement-management/announcement-view/admin-announcement-view.component";
 import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
+import {AnnouncementSingleViewComponent} from "./announcement-single-view/announcement-single-view.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -81,6 +82,7 @@ const routes: Routes = [
         ],
     },
     {path: "announcements", component: AnnouncementViewComponent},
+    {path: "announcements/:id", component: AnnouncementSingleViewComponent},
     {path: "maintenance", component: MaintenanceComponent},
 
     // ADMIN

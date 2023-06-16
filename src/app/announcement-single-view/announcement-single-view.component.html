@@ -1,0 +1,46 @@
+<div class="container" id="AnnouncementViewSingle">
+    <app-loading-spinner
+            *ngIf="this.isLoading"></app-loading-spinner>
+    <div class="row">
+        <div class="col-12">
+            <div
+                    class="navigation-back clickable" (click)="onBack()">
+                <svg class="bi pulse" width="24" height="24" fill="#D04341">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+                </svg>
+                <span class="back">Torna alla lista sentieri</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-margin" *ngIf="!this.isLoading">
+        <div class="col-10">
+            <h1>
+                <span [class]="announcement.type">
+                <svg *ngIf="announcement.type == 'EVENT'" class="bi clickable" width="24" height="24"
+                     fill="currentColor"><use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#calendar-check-fill"/></svg>
+                <svg *ngIf="announcement.type == 'WARNING'" class="bi clickable" width="24" height="24"
+                     fill="currentColor"><use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle-fill"/></svg>
+                <svg *ngIf="announcement.type == 'EMERGENCY'" class="bi clickable" width="24" height="24"
+                     fill="currentColor"><use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-octagon-fill"/></svg>
+                <svg *ngIf="announcement.type == 'INFO'" class="bi clickable" width="24" height="24"
+                     fill="currentColor"><use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#info-circle-fill"/></svg>
+
+            </span>
+                {{ announcement.name }}</h1>
+        </div>
+    </div>
+    <div class="col-2">
+        <p>Aggiornato al: {{ formatDate(announcement.recordDetails.uploadedOn) }}</p>
+    </div>
+    <div class="row" *ngIf="!this.isLoading">
+        <div class="col-8">
+            <p [innerHTML]="announcement.description"></p>
+        </div>
+    </div>
+</div>
