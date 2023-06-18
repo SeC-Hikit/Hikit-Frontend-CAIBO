@@ -82,9 +82,10 @@ export class TrailPreviewService {
             );
     }
 
-    getMappings(realm: string): Observable<TrailMappingResponse> {
+    getMappings(realm: string, limit = "500"): Observable<TrailMappingResponse> {
         let params = new HttpParams().set("realm", realm)
-            .append("isDraftTrailVisible", String(true));
+            .append("isDraftTrailVisible", String(true))
+            .append("limit", limit);
         return this.httpClient.get<TrailMappingResponse>(this.baseUrl + "/map", {params: params})
             .pipe(
                 tap(_ => console.log(_)),
