@@ -39,7 +39,11 @@
                         <h4>Risorse esterne</h4>
                     </div>
                     <div class="col-12" *ngFor="let externalResource of selectedPoi.externalResources ">
-                        <a [href]="externalResource" target="_blank">{{externalResource}}</a>
+                        <a [href]="externalResource" target="_blank">
+                            <span class="clickable white-font trailCodeColumn">
+                                {{externalResource | extRes }}
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -83,6 +83,7 @@ import { AdminAnnouncementViewComponent } from './admin/announcement-management/
 import { AnnouncementEditComponent } from './admin/announcement-management/announcement-edit/announcement-edit.component';
 import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
 import { AnnouncementSingleViewComponent } from './announcement-single-view/announcement-single-view.component';
+import {ExternalResourcePipe} from "./ExternalResourcePipe";
 
 @NgModule({
   declarations: [
@@ -117,6 +118,7 @@ import { AnnouncementSingleViewComponent } from './announcement-single-view/anno
     IncreasedIndexPipe,
     PoiManagementComponent,
     EtaPipe,
+    ExternalResourcePipe,
     UploadButtonManagementComponent,
     TrailRawManagementComponent,
     LoadingSpinnerComponent,
