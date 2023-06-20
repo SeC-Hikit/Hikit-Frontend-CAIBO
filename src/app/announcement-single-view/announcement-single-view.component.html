@@ -35,8 +35,13 @@
                 {{ announcement.name }}</h1>
         </div>
     </div>
-    <div class="col-2">
-        <p>Aggiornato al: {{ formatDate(announcement.recordDetails.uploadedOn) }}</p>
+    <div class="row">
+        <div class="col-2" *ngIf="announcement">
+            <p>Aggiornato al: {{ formatDate(announcement.recordDetails.uploadedOn) }}</p>
+        </div>
+        <div class="offset-1 col-4">
+            <p>Riferito al <span [innerHTML]="referralText"></span></p>
+        </div>
     </div>
     <div class="row" *ngIf="!this.isLoading">
         <div class="col-8">

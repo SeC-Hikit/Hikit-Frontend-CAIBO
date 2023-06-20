@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AnnouncementDto, AnnouncementService} from "../service/announcement.service";
 import {DateUtils} from "../utils/DateUtils";
+import {TrailPreviewService} from "../service/trail-preview-service.service";
 
 @Component({
     selector: 'app-announcement-single-view',
@@ -11,10 +12,13 @@ import {DateUtils} from "../utils/DateUtils";
 export class AnnouncementSingleViewComponent implements OnInit {
     isLoading = true;
     announcement: AnnouncementDto = null;
+    announcementTopicTypes = AnnouncementService.relatedElementTypes;
+    referralText: string = "";
 
     constructor(private activatedRoute: ActivatedRoute,
                 private router: Router,
-                private announcementService: AnnouncementService) {
+                private announcementService: AnnouncementService,
+                private trailService: TrailPreviewService) {
     }
 
     ngOnInit(): void {
@@ -35,10 +39,29 @@ export class AnnouncementSingleViewComponent implements OnInit {
                 this.bounceToAnnouncementPage();
             }
 
-            this.announcement = it.content[0]
+            const contentElement = it.content[0];
+            this.announcement = contentElement
+            this.composeReferralText(contentElement)
         }, () => this.bounceToAnnouncementPage(), () => {
             this.isLoading = false;
         })
+    }
+
+    private composeReferralText(contentElement: AnnouncementDto): string {
+        let isTrail = contentElement.relatedTopic.announcementTopicType == "TRAIL";
+        if (isTrail) {
+            this.trailService.getPreview(contentElement.relatedTopic.id).subscribe(
+                (it) => {
+                    const targetTrail = it.content[0];
+                    this.referralText = `sentiero <a href="/map?trail=${targetTrail.id}"><span class='clickable white-font trailCodeColumn'>${targetTrail.code}</span></a>`
+                });
+            return;
+        }
+        this.referralText = this.getTopicType(contentElement.relatedTopic.announcementTopicType)
+    }
+
+    getTopicType(announcementTopicType: string) {
+        return this.announcementTopicTypes.filter(it => it.value == announcementTopicType)[0].name;
     }
 
     formatDate(uploadedOn: string) {

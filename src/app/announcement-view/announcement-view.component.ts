@@ -65,7 +65,7 @@ export class AnnouncementViewComponent implements OnInit {
     return this.announcementTopicTypes.filter(it=> it.value == announcementTopicType)[0].name;
   }
 
-  onPreview(id) {
-    this.routerService.navigate([`/announcements/${id}`])
+  onPreview(announcement) {
+    this.routerService.navigate([`/announcements/${announcement.id}`])
   }
 }

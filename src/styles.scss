@@ -9,6 +9,15 @@
   background: white;
 }
 
+.container {
+  a {
+    text-decoration: none !important;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+}
+
 .ql-container {
   font-size: 14px !important;
   color: black !important;
@@ -316,4 +325,9 @@ select {
 
 }
 
-
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
