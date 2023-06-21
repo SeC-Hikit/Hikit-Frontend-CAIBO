@@ -10,6 +10,7 @@ import {Marker} from "../map-preview/map-preview.component";
 import {AdminNotificationService} from "../service/admin-notification-service.service";
 import {Coordinates2D} from "../service/geo-trail-service";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
+import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 
 @Component({
     selector: 'app-accessibility',
@@ -108,7 +109,7 @@ export class AccessibilityComponent implements OnInit {
         return "";
     }
 
-    showPreview(trailId : string, coordinates: Coordinates2D) {
+    showMapPreview(trailId : string, coordinates: Coordinates2D) {
         this.trailService.getTrailById(trailId).subscribe(
             trailResp => {
                 this.selectedTrail = trailResp.content[0];
@@ -121,6 +122,16 @@ export class AccessibilityComponent implements OnInit {
             }
         );
     }
+
+    showDetails(accessibilityNotification: AccessibilityNotification) {
+        this.trailService.getTrailById(accessibilityNotification.trailId).subscribe((trailResp => {
+            const trail = trailResp.content[0];
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = "Problema di percorrenza su sentiero " + trail.code;
+            modal.componentInstance.body = accessibilityNotification.description;
+        }));
+    }
+
 
     togglePreview() {
         this.isPreviewVisible = !this.isPreviewVisible;

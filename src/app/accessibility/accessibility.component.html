@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="AccessibilityViewComponent">
     <div *ngIf="!isLoading && selectedTrail != null">
         <app-trail-floating-preview
                 [trails]="[selectedTrail]"
@@ -8,13 +8,18 @@
         ></app-trail-floating-preview>
     </div>
     <div class="row">
-        <div class="col-12 col-md-12">
+        <div class="col-sm-12 col-md-8 col-lg-7">
             <h1>
-                Percorribilità dei sentieri
+                Problemi di percorrenza accertati sui sentieri
             </h1>
-            <p>Hai notato un problema che blocca un sentiero? <a routerLink="./reporting-form">Aiutaci segnalandolo</a>
+            <p>I seguenti sono i problemi di percorrenza, presenti sui sentieri della rete, accertati dal gruppo di sentieristica.</p>
+            <p>Hai per caso notato un problema, frana, albero schiantato, o altro, che blocca un sentiero? <a routerLink="./reporting-form">Aiutaci segnalandolo</a>
             </p>.
         </div>
+        <div class="col-sm-12 offset-md-2 col-md-2 offset-lg-3 col-lg-2">
+            <img src="../../assets/cai/trekking/maintenance.jpg" alt="maintenance" class="full-width"/>
+        </div>
+
     </div>
     <div class="row">
         <div class="col-12">
@@ -27,12 +32,11 @@
                         <th scope="col">Sentiero</th>
                         <th scope="col">Descrizione Problema</th>
                         <th scope="col">Aggirabile?</th>
-                        <th scope="col">Segnalazione approvata da</th>
+                        <th scope="col">Posizione</th>
                     </tr>
                     </thead>
                     <tbody *ngIf="hasLoaded">
-                    <tr class="clickable" *ngFor="let notification of unresolvedNotifications"
-                        (click)="showPreview(notification.trailId, notification.coordinates)">
+                    <tr class="clickable" *ngFor="let notification of unresolvedNotifications">
                         <th
                                 scope="row"
                                 class="ellipsis small-column"
@@ -41,15 +45,25 @@
                             {{ notification.id }}
                         </th>
                         <td>{{ formatDate(notification.reportDate) }}</td>
-                        <td>
+                        <td (click)="showDetails(notification)">
                             <span class="trailCodeColumn">
                               {{ getTrailCode(notification.trailId) }}
                             </span>
                         </td>
-                        <td class="ellipsis small-column" [innerHTML]="notification.description"></td>
-                        <td>{{ notification.minor === true ? "si" : "no" }}</td>
-                        <td>
-                            {{ notification.recordDetails.uploadedBy }}
+                        <td class="ellipsis small-column" [innerHTML]="notification.description"
+                            (click)="showDetails(notification)"></td>
+                        <td (click)="showDetails(notification)">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check"
+                                     *ngIf="notification.minor"/>
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#cross"
+                                     *ngIf="!notification.minor"/>
+                            </svg>
+                        </td>
+                        <td (click)="showMapPreview(notification.trailId, notification.coordinates)">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
+                            </svg>
                         </td>
                     </tr>
                     </tbody>

@@ -114,10 +114,11 @@ export class MapComponent implements OnInit {
         this.ensureMapping();
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
-            debounceTime(1000),
+            debounceTime(500),
             distinctUntilChanged(),
             switchMap((data: string,) => {
                 this.searchTermString = data;
+                this.isLoading = true;
                 return this.getTrailPreviewResponseObservable(data, 1, false)
             }));
 
@@ -125,6 +126,7 @@ export class MapComponent implements OnInit {
             (resp) => {
                 this.trailPreviewList = resp.content;
                 this.trailPreviewCount = resp.totalCount;
+                this.isLoading = false;
                 this.showListOnSide();
             });
     }
@@ -414,7 +416,7 @@ export class MapComponent implements OnInit {
     }
 
     private electShowTrailCodes(zoomLevel: number) {
-        return zoomLevel > 12;
+        return zoomLevel > 14;
     }
 
     private loadPoiForTrail(id: string) {

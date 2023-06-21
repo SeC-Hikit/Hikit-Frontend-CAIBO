@@ -84,6 +84,9 @@ import { AnnouncementEditComponent } from './admin/announcement-management/annou
 import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
 import { AnnouncementSingleViewComponent } from './announcement-single-view/announcement-single-view.component';
 import {ExternalResourcePipe} from "./ExternalResourcePipe";
+import { CreditsComponent } from './credits/credits.component';
+import { DevelopmentComponent } from './development/development.component';
+import { BugReportingComponent } from './bug-reporting/bug-reporting.component';
 
 @NgModule({
   declarations: [
@@ -160,7 +163,10 @@ import {ExternalResourcePipe} from "./ExternalResourcePipe";
     AdminAnnouncementViewComponent,
     AnnouncementEditComponent,
     AnnouncementViewComponent,
-    AnnouncementSingleViewComponent
+    AnnouncementSingleViewComponent,
+    CreditsComponent,
+    DevelopmentComponent,
+    BugReportingComponent
   ],
   imports: [
     BrowserModule,

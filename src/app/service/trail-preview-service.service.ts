@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {components} from 'src/binding/Binding';
-import {TrailMappingResponse, TrailResponse} from "./trail-service.service";
+import {TrailMappingResponse} from "./trail-service.service";
 
 export type TrailPreviewResponse = components["schemas"]["TrailPreviewResponse"];
 export type TrailPreview = components["schemas"]["TrailPreviewDto"];
@@ -44,7 +44,8 @@ export class TrailPreviewService {
         if (realm) {
             params.append("realm", realm);
         }
-        return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/find/name/" + name)
+        return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/find/name/" + name,
+            {params: params})
             .pipe(
                 tap(),
                 catchError(this.handleError<TrailPreviewResponse>('get trail', null))
@@ -74,7 +75,9 @@ export class TrailPreviewService {
     getRawPreviews(skip: number, limit: number, realm?: string): Observable<TrailPreviewResponse> {
         let params = new HttpParams().set("skip", skip.toString())
             .append("limit", limit.toString());
-        if (realm) { params = params.append("realm", realm); }
+        if (realm) {
+            params = params.append("realm", realm);
+        }
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/raw", {params: params})
             .pipe(
                 tap(_ => console.log(_)),

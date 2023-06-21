@@ -51,12 +51,26 @@ import {AnnouncementManagementComponent} from "./admin/announcement-management/a
 import {AdminAnnouncementViewComponent} from "./admin/announcement-management/announcement-view/admin-announcement-view.component";
 import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
 import {AnnouncementSingleViewComponent} from "./announcement-single-view/announcement-single-view.component";
+import {CreditsComponent} from "./credits/credits.component";
+import {DevelopmentComponent} from "./development/development.component";
+import {BugReportingComponent} from "./bug-reporting/bug-reporting.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
     {path: "home", component: HomeComponent},
     {path: "trails", component: TrailsComponent},
     {path: "map", component: MapComponent},
+    {path: "credits", component: CreditsComponent},
+    {path: "development", children: [
+            {
+                path: "",
+                component: DevelopmentComponent
+            },
+            {
+                path: "bug-reporting",
+                component: BugReportingComponent
+            }
+    ]},
     {path: "map/:id", component: MapComponent},
     {path: "safety", component: SafetyComponent},
     {
