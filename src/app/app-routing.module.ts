@@ -105,6 +105,10 @@ const routes: Routes = [
                 path: "reporting-form",
                 component: ReportingFormComponent,
             },
+            {
+                path: "reporting-form/:id",
+                component: ReportingFormComponent,
+            }
         ],
     },
     {path: "announcements", component: AnnouncementViewComponent},

@@ -12,7 +12,7 @@ import {TrailImportFormUtils} from "../../utils/TrailImportFormUtils";
 import {AccessibilityReportDto} from "../../service/accessibility-service.service";
 import {GeoToolsService} from "../../service/geotools.service";
 import {NotificationReportService} from "../../service/notification-report-service.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: "app-reporting-form",
@@ -60,15 +60,17 @@ export class ReportingFormComponent implements OnInit {
         private modalService: NgbModal,
         private notificationReportService: NotificationReportService,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private activatedRoute: ActivatedRoute
     ) {
-        this.loadPreviews();
+        const referredId = this.activatedRoute.snapshot.paramMap.get("id");
+        this.loadPreviews(referredId);
     }
 
     ngOnInit(): void {
     }
 
-    private loadPreviews() {
+    private loadPreviews(referredId) {
         this.trailPreviewService
             .getPreviews(0, 10000,
                 this.authService.getInstanceRealm())
@@ -78,7 +80,7 @@ export class ReportingFormComponent implements OnInit {
                     this.router.navigate(["/accessibility"]);
                 }
                 if (resp.content.length != 0) {
-                    let firstValue = resp.content[0].id;
+                    const firstValue = referredId ? referredId : resp.content[0].id;
                     this.loadTrailById(firstValue);
                     this.formGroup.get("trailId").setValue(firstValue);
                 }
