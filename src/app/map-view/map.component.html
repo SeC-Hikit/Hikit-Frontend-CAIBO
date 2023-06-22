@@ -5,16 +5,18 @@
     </div>
     <div class="row">
 
-        <div *ngIf="sideView=='POI' || sideView=='PLACE' && (selectedPoi || selectedPlace)"
-             class="navigation-back clickable" (click)="onBackToTrailPoiClick()">
+        <div *ngIf="sideView=='poi' || sideView=='place' || sideView=='accessibility'
+         && (selectedPoi || selectedPlace || selectedNotification)"
+             class="navigation-back clickable">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use
                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
             </svg>
-            <span class="back">Torna al sentiero {{selectedTrail.code}}</span>
+            <span class="back" (click)="onBackToTrailPoiClick()" *ngIf="selectedTrail">Torna al sentiero {{selectedTrail.code}}</span>
+            <span class="back" (click)="onBackToTrailList()" *ngIf="!selectedTrail">Vai alla lista sentieri</span>
         </div>
 
-        <div *ngIf="sideView=='TRAIL'"
+        <div *ngIf="sideView=='trail'"
              class="navigation-back clickable" (click)="showTrailList()">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use
@@ -26,8 +28,8 @@
         <div class="column-map col-lg-4 col-md-4 white details functional-column" id="side-column">
             <div class="row">
                 <div class="col-11 offset-1" id="trail-detail-column"
-                     [class]="sideView == 'TRAIL' || sideView == 'POI' || sideView == 'PLACE' ? 'selection-margin' : ''">
-                    <div *ngIf="sideView=='NONE' || sideView=='TRAIL_LIST'" class="row search-section top-margin-x2">
+                     [class]="sideView == 'trail' || sideView == 'poi' || sideView == 'place' || sideView == 'accessibility' ? 'selection-margin' : ''">
+                    <div *ngIf="sideView=='' || sideView=='list'" class="row search-section top-margin-x2">
                         <div class="col-11">
                             <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
                                               (onChange)="onSearchKeyPress($event)">
@@ -35,7 +37,14 @@
                         </div>
                     </div>
 
-                    <div *ngIf="sideView=='POI' && selectedPoi" class="row top-margin">
+                    <div *ngIf="sideView=='accessibility' && selectedNotification" class="row top-margin">
+                        <app-notification-details
+                                [selectedNotification]="selectedNotification"
+                                [trailMappings]="trailMappings"
+                        ></app-notification-details>
+                    </div>
+
+                    <div *ngIf="sideView=='poi' && selectedPoi" class="row top-margin">
                         <app-poi-details
                                 [selectedPoi]="selectedPoi"
                                 [trailMappings]="trailMappings"
@@ -44,7 +53,7 @@
                         ></app-poi-details>
                     </div>
 
-                    <div *ngIf="sideView=='PLACE' && selectedPlace" class="row top-margin">
+                    <div *ngIf="sideView=='place' && selectedPlace" class="row top-margin">
                         <app-place-details
                                 [selectedPlace]="selectedPlace"
                                 [trailMappings]="trailMappings"
@@ -53,7 +62,7 @@
                         ></app-place-details>
                     </div>
 
-                    <div *ngIf="sideView=='NONE'">
+                    <div *ngIf="sideView==''">
                         <div class="row align-middle">
                             <div class="col-md-12">
                                 <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
@@ -72,7 +81,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="sideView=='TRAIL_LIST'" class="top-margin">
+                    <div *ngIf="sideView=='list'" class="top-margin">
                         <app-map-trail-list
                                 [trailsPreviewList]="trailPreviewList"
                                 (onSelectTrail)="onSelectTrail($event)"
@@ -91,7 +100,7 @@
                             ></ngb-pagination>
                         </div>
                     </div>
-                    <div *ngIf="sideView=='TRAIL'" class="top-margin">
+                    <div *ngIf="sideView=='trail'" class="top-margin">
                         <app-map-trail-details
                                 [selectedTrail]="selectedTrail"
                                 [selectedTrailPois]="selectedTrailPois"
@@ -106,11 +115,11 @@
                                 (toggleFullTrailPageEvent)="toggleFullPageTrail()"
                                 (toggleNotificationListEvent)="toggleNotificationsModal()"
                                 (onNavigateToLocation)="navigateToLocation($event)"
-                                (onShowLocation)="onLocationSelection($event)"
+                                (onShowLocation)="onSelectPlaceByRef($event)"
                                 (onSelectTrail)="onSelectTrail($event)"
                                 (onNavigateToSelectedTrailCoordIndex)="navigateToSelectedTrailIndex($event)"
                                 (onNavigateToTrailReportIssue)="navigateToTrailReportIssue($event)"
-                                (onSelectedNotification)="onFocusOnNotification($event)"
+                                (onSelectedNotification)="onAccessibilityNotificationSelection($event)"
                                 (onMaintenanceClick)="onMaintenanceClick($event)"
                                 (onToggleModeClick)="onToggleMode()"
                                 (onPoiClickEvent)="onPoiClick($event)"
@@ -143,12 +152,12 @@
                           [highlightedLocation]="highlightedLocation"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"
-                          (onNotificationClick)="onFocusOnNotification($event)"
+                          (onNotificationClick)="onAccessibilityNotificationSelection($event)"
                           (onZoomChange)="onZoomChange($event)"
                           (onLoading)="onLoading()"
                           (onDoneLoading)="onDoneLoading()"
                           (onPoiClick)="onPoiClick($event)"
-                          (onLocationSelection)="onLocationSelection($event)"
+                          (onLocationSelection)="onSelectPlaceByRef($event)"
             >
             </app-map-full>
         </div>

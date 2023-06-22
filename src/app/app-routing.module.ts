@@ -59,7 +59,24 @@ const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
     {path: "home", component: HomeComponent},
     {path: "trails", component: TrailsComponent},
-    {path: "map", component: MapComponent},
+    {path: "map", children: [
+            {
+                path: "",
+                component: MapComponent
+            },
+            {
+                path: "trail/:id",
+                component: MapComponent
+            },
+            {
+                path: "place/:id",
+                component: MapComponent
+            },
+            {
+                path: "accessibility/:id",
+                component: MapComponent
+            }
+        ], },
     {path: "credits", component: CreditsComponent},
     {path: "development", children: [
             {

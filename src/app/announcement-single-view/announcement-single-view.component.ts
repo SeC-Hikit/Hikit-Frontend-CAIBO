@@ -53,7 +53,7 @@ export class AnnouncementSingleViewComponent implements OnInit {
             this.trailService.getPreview(contentElement.relatedTopic.id).subscribe(
                 (it) => {
                     const targetTrail = it.content[0];
-                    this.referralText = `sentiero <a href="/map?trail=${targetTrail.id}"><span class='clickable white-font trailCodeColumn'>${targetTrail.code}</span></a>`
+                    this.referralText = `sentiero <a href="/map/trail/${targetTrail.id}"><span class='clickable white-font trailCodeColumn'>${targetTrail.code}</span></a>`
                 });
             return;
         }

@@ -87,6 +87,8 @@ import {ExternalResourcePipe} from "./ExternalResourcePipe";
 import { CreditsComponent } from './credits/credits.component';
 import { DevelopmentComponent } from './development/development.component';
 import { BugReportingComponent } from './bug-reporting/bug-reporting.component';
+import { NotificationDetailsComponent } from './map-view/notification-details/notification-details.component';
+import {DatePipe} from "./DatePipe";
 
 @NgModule({
   declarations: [
@@ -166,7 +168,9 @@ import { BugReportingComponent } from './bug-reporting/bug-reporting.component';
     AnnouncementSingleViewComponent,
     CreditsComponent,
     DevelopmentComponent,
-    BugReportingComponent
+    BugReportingComponent,
+    NotificationDetailsComponent,
+    DatePipe
   ],
   imports: [
     BrowserModule,

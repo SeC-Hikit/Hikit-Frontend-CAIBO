@@ -32,7 +32,8 @@
                         <th scope="col">Sentiero</th>
                         <th scope="col">Descrizione Problema</th>
                         <th scope="col">Aggirabile?</th>
-                        <th scope="col">Posizione</th>
+                        <th scope="col">Anteprima</th>
+                        <th scope="col">Apri</th>
                     </tr>
                     </thead>
                     <tbody *ngIf="hasLoaded">
@@ -63,6 +64,11 @@
                         <td (click)="showMapPreview(notification.trailId, notification.coordinates)">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
+                            </svg>
+                        </td>
+                        <td (click)="navigateToMap(notification.id)">
+                            <svg class="bi" width="24" height="24" fill="currentColor">
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrows-fullscreen"/>
                             </svg>
                         </td>
                     </tr>

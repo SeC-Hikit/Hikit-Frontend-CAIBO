@@ -1,0 +1,58 @@
+<div class="MapPoiDetails row">
+    <div class="top-margin col-12">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="poiCodeColumn" [ngClass]="selectedNotification.minor ? 'yellow-bg' : 'red-bg'">Problema di
+                    percorrenza su sentiero {{
+                    trailMappings.get(selectedNotification.trailId).code}}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <span class="poiCodeColumn black">{{ selectedNotification.coordinates.altitude }}m</span>
+            </div>
+            <div class="col-md-8">
+                <span class="poiCodeColumn">~
+                    {{ selectedNotification.coordinates.latitude.toPrecision(6) }},
+                    {{ selectedNotification.coordinates.longitude.toPrecision(6) }}</span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="selectedNotification" id="scrollable-content" class="col-12 top-margin">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="{{ getImage(selectedNotification.description)}}" class="poi-image full-width"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 top-margin">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Descrizione</h4>
+                    </div>
+                    <div class="col-12">
+                        <div *ngIf="selectedNotification.description"
+                             [innerHTML]="selectedNotification.description"></div>
+                        <div *ngIf="!selectedNotification.description">Non ci sono info supplementari per questa
+                            notifica
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Riportato il</h4>
+                    </div>
+                    <div class="col-12">
+                            <span class="clickable white-font trailCodeColumn">
+                                {{ selectedNotification.reportDate | date }}
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

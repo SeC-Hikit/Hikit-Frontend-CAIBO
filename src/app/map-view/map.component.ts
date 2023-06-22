@@ -18,13 +18,9 @@ import {PoiDto, PoiService} from "../service/poi-service.service";
 import {AuthService} from "../service/auth.service";
 import {PaginationUtils} from "../utils/PaginationUtils";
 import {PlaceDto, PlaceRefDto, PlaceService} from "../service/place.service";
-import { ReadingUtils } from '../utils/ReadingUtils';
-
-export enum ViewState {
-    NONE = "NONE", TRAIL = "TRAIL",
-    POI = "POI", TRAIL_LIST = "TRAIL_LIST",
-    PLACE = "PLACE"
-}
+import {ReadingUtils} from '../utils/ReadingUtils';
+import {Location} from "@angular/common";
+import {MapUtils, ViewState} from "./MapUtils";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -57,13 +53,14 @@ export class MapComponent implements OnInit {
 
     // Bound elements
     searchTermString: string = "";
-    trailPreviewList: TrailPreview[];
+    trailPreviewList: TrailPreview[] = [];
     trailPreviewCount: number = 0;
     trailPreviewPage: number = 0;
 
     selectedTrail: TrailDto;
+    selectedNotification: AccessibilityNotification;
     selectedTrailPois: PoiDto[] = [];
-    trailList: TrailDto[];
+    trailList: TrailDto[] = [];
     connectedTrails: TrailDto[] = [];
     selectedTileLayer: string;
     selectedTrailBinaryPath: string;
@@ -100,17 +97,16 @@ export class MapComponent implements OnInit {
         private maintenanceService: MaintenanceService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
+        private location: Location,
         private modalService: NgbModal,
         private authService: AuthService,
         private placeService: PlaceService) {
     }
 
     ngOnInit(): void {
-        this.sideView = ViewState.NONE;
+        this.sideView = this.getViewFromLocation();
+        this.loadDataPassedByUrl();
         this.changeTileLayer("topo");
-        this.trailPreviewList = [];
-        this.trailList = [];
-        this.handleQueryParam();
         this.ensureMapping();
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
@@ -131,6 +127,11 @@ export class MapComponent implements OnInit {
             });
     }
 
+    private getViewFromLocation(): ViewState {
+        const path = this.location.path();
+        return MapUtils.getViewFromPath(path);
+    }
+
     private getTrailPreviewResponseObservable(code: string, page: number,
                                               areDraftVisible: boolean,
                                               entriesPerPage: number = 10): Observable<TrailPreviewResponse> {
@@ -143,11 +144,6 @@ export class MapComponent implements OnInit {
         }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
             areDraftVisible, skip, limit);
-    }
-
-    private handleQueryParam() {
-        const idFromPath: string = this.activatedRoute.snapshot.queryParamMap.get("id");
-        this.selectTrail(idFromPath);
     }
 
     ngAfterViewInit(): void {
@@ -165,20 +161,21 @@ export class MapComponent implements OnInit {
         if (!id) {
             return;
         }
-        this.router.navigate([], {
-            relativeTo: this.activatedRoute,
-            queryParams: {trail: id},
-            queryParamsHandling: 'merge'
-        });
+
+        MapUtils.changeUrlToState(ViewState.TRAIL, id);
         this.selectTrail(id, true);
     }
 
-    selectTrail(id: string, refresh?: boolean): void {
+    selectTrail(id: string, refresh?: boolean, switchView = true): void {
         this.isLoading = true;
         if (!id) {
             return;
         }
         let electedTrail = this.trailList.filter(t => t.id == id);
+
+        if(switchView){
+            this.sideView = ViewState.TRAIL;
+        }
 
         if (electedTrail.length > 0) {
             this.sideView = ViewState.TRAIL;
@@ -188,12 +185,11 @@ export class MapComponent implements OnInit {
 
         if (refresh || electedTrail.length == 0) {
             this.trailService.getTrailById(id).subscribe((resp) => {
-                this.sideView = ViewState.TRAIL;
                 this.selectedTrail = resp.content[0];
                 this.loadRelatedForTrailId(id);
             }, () => {
 
-            }, ()=> {
+            }, () => {
                 this.isLoading = false;
             })
         }
@@ -392,11 +388,10 @@ export class MapComponent implements OnInit {
         modal.componentInstance.body = body;
     }
 
-    onFocusOnNotification(notificationId: string) {
-        const accessibilityNotification = this.selectedTrailNotifications.filter(it => it.id == notificationId)[0];
-        this.openInfoModal(`Problema di percorrenza su sentiero ${this.selectedTrail.code}`,
-            `<div>Riportato il: <b>${DateUtils.formatDateToIta(accessibilityNotification.reportDate)}</b></div>` +
-            `<div>Descrizione: <b>${accessibilityNotification.description}</b></div>`)
+    onAccessibilityNotificationSelection(id: string) {
+        this.selectedNotification = this.selectedTrailNotifications.filter(it => it.id == id)[0];
+        MapUtils.changeUrlToState(ViewState.ACCESSIBILITY, id);
+        this.sideView = ViewState.ACCESSIBILITY;
     }
 
     onMaintenanceClick($event: string) {
@@ -425,6 +420,7 @@ export class MapComponent implements OnInit {
     }
 
     onPoiClick($event: PoiDto) {
+        MapUtils.changeUrlToState(ViewState.POI, $event.id)
         this.navigateToLocation($event.coordinates)
         this.selectedPoi = $event;
         this.sideView = ViewState.POI;
@@ -435,6 +431,7 @@ export class MapComponent implements OnInit {
     }
 
     onBackToTrailPoiClick() {
+        MapUtils.changeUrlToState(ViewState.TRAIL, this.selectedTrail.id)
         this.sideView = ViewState.TRAIL;
         this.selectedPoi = null;
         this.poiHovering = null;
@@ -462,9 +459,9 @@ export class MapComponent implements OnInit {
         this.highlightedTrail = this.trailMappings.get(trail_id)
     }
 
-    onLocationSelection(place: PlaceRefDto) {
-        this.isLoading = true;
-        this.placeService.getById(place.placeId).subscribe((it) => {
+    onSelectPlace(id: string) {
+        MapUtils.changeUrlToState(ViewState.PLACE, id)
+        this.placeService.getById(id).subscribe((it) => {
             if (it.content.length == 0) {
                 this.openInfoModal("Errore", "La località selezionata non è stata trovata");
                 return;
@@ -473,7 +470,71 @@ export class MapComponent implements OnInit {
             this.selectedPlace = it.content[0]
             this.isLoading = false;
         }, () => {
+        }, () => {
             this.isLoading = false;
+        })
+    }
+
+    onSelectPlaceByRef(place: PlaceRefDto) {
+        this.isLoading = true;
+        this.onSelectPlace(place.placeId);
+    }
+
+    onSelectPoi(id: string) {
+        MapUtils.changeUrlToState(ViewState.POI, id)
+        this.isLoading = true;
+        this.poiService.getById(id).subscribe((it) => {
+            if (it.content.length == 0) {
+                this.openInfoModal("Errore", "Il punto d'interesse selezionato non è stato trovato");
+                return;
+            }
+            this.selectedPoi = it.content[0]
+            this.isLoading = false;
+        }, () => {
+        }, () => {
+            this.isLoading = false;
+        })
+    }
+
+
+    private loadDataPassedByUrl() {
+        const id = this.activatedRoute.snapshot.paramMap.get("id");
+        if (!id) return;
+        switch (this.sideView) {
+            case ViewState.TRAIL:
+                this.onSelectTrail(id);
+                break;
+            case ViewState.PLACE:
+                this.onSelectPlace(id);
+                break;
+            case ViewState.POI:
+                this.onSelectPoi(id);
+                break;
+            case ViewState.ACCESSIBILITY:
+                this.onSelectAccessibilityNotificationFromUrl(id);
+        }
+    }
+
+    onBackToTrailList() {
+        MapUtils.changeUrlToState(ViewState.TRAIL_LIST)
+        this.showTrailList()
+    }
+
+    private onSelectAccessibilityNotificationFromUrl(id: string) {
+        this.isLoading = true;
+
+        this.accessibilityService.getById(id).subscribe((notificationResp) => {
+            const target = notificationResp.content[0];
+            Promise.all([
+                this.accessibilityService.getUnresolvedForTrailId(target.trailId).toPromise(),
+                this.trailService.getTrailById(target.trailId).toPromise()]).then(
+                (responses) => {
+                    this.selectTrail(target.trailId, false, false);
+                    this.selectedTrailNotifications = responses[0].content;
+                    this.onAccessibilityNotificationSelection(id);
+                })
+
+
         })
     }
 }

@@ -11,6 +11,7 @@ import {AdminNotificationService} from "../service/admin-notification-service.se
 import {Coordinates2D} from "../service/geo-trail-service";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
 import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-accessibility',
@@ -46,6 +47,7 @@ export class AccessibilityComponent implements OnInit {
         private trailService: TrailService,
         private modalService: NgbModal,
         private authService: AuthService,
+        private routerService: Router
     ) {
         this.unresolvedNotifications = [];
         this.solvedNotifications = [];
@@ -137,4 +139,7 @@ export class AccessibilityComponent implements OnInit {
         this.isPreviewVisible = !this.isPreviewVisible;
     }
 
+    navigateToMap(id: string) {
+        this.routerService.navigate(["map", "accessibility", id]);
+    }
 }
