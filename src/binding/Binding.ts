@@ -77,6 +77,9 @@ export interface paths {
     post: operations["addMediaToTrail"];
     delete: operations["removeMediaFromTrail"];
   };
+  "/admin/trail-preview/list/export": {
+    post: operations["downloadCsv"];
+  };
   "/admin/resource/status": {
     post: operations["getGenerationResourceStatus"];
   };
@@ -664,6 +667,7 @@ export interface components {
       locations?: components["schemas"]["PlaceRefDto"][];
       bikeData?: boolean;
       trailStatus?: "DRAFT" | "PUBLIC";
+      length?: number;
       fileDetails?: components["schemas"]["FileDetailsDto"];
     };
     TrailPreviewResponse: {
@@ -1233,6 +1237,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UnLinkeMediaRequestDto"];
+      };
+    };
+  };
+  downloadCsv: {
+    parameters: {
+      query: {
+        realm?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/octet-stream": string[];
+        };
       };
     };
   };
