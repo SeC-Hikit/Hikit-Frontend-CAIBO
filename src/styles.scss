@@ -30,6 +30,9 @@
 
 #main .container {
   padding: 13% 0 2.5% 0;
+  @media only screen and (max-width: 752px) {
+    padding: 13% 1% 2.5% 1%;
+  }
 }
 
 #header-wrapper .container {

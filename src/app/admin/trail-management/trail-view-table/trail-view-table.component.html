@@ -13,65 +13,64 @@
                 (onClose)="togglePreview()"
         ></app-trail-floating-preview>
     </div>
-
     <div class="row section-distance-up">
-        <div class="col-12 col-md-12">
-            <div class="row">
-                <div class="col-12">
-                    <app-search-input placeholder="Cerca sentieri per nome o località"
-                                      (onChange)="onSearch($event)"></app-search-input>
-                </div>
-            </div>
-            <div *ngIf="trailPreviewList && trailPreviewList.length > 0 else notShow">
-                <table id="trailTable" class="table table-striped interactive-table">
-                    <thead class="">
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Codice</th>
-                        <th scope="col">Localita</th>
-                        <th scope="col">Cl.</th>
-                        <th scope="col">C. da Utente</th>
-                        <th scope="col" *ngIf="authService.isRealmMatch()">+ Ciclo</th>
-                        <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
-                        <th scope="col" *ngIf="authService.isRealmMatch()">Pubblicato</th>
-                        <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
-                    </tr>
-                    </thead>
-                    <tbody class="short-list">
-                    <tr
-                            *ngFor="let trailPreview of trailPreviewList"
-                            class="trailPreview"
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            <app-search-input placeholder="Cerca sentieri per nome o località"
+                              (onChange)="onSearch($event)"></app-search-input>
+        </div>
+        <div class="col-lg-3 col-md-8 col-sm-12">
+            <button class="btn btn-primary" (click)="onDownloadList()">Download lista</button>
+        </div>
+        <div class="col-12 top-margin" *ngIf="trailPreviewList && trailPreviewList.length > 0 else notShow">
+            <table id="trailTable" class="table table-striped interactive-table">
+                <thead class="">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Codice</th>
+                    <th scope="col">Localita</th>
+                    <th scope="col">Cl.</th>
+                    <th scope="col">C. da Utente</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">+ Ciclo</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Pubblicato</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
+                </tr>
+                </thead>
+                <tbody class="short-list">
+                <tr
+                        *ngFor="let trailPreview of trailPreviewList"
+                        class="trailPreview"
+                >
+                    <th
+                            scope="row"
+                            class="ellipsis small-column clickable"
+                            title="{{ trailPreview.id }}"
+                            (click)="copyId(trailPreview.id)"
                     >
-                        <th
-                                scope="row"
-                                class="ellipsis small-column clickable"
-                                title="{{ trailPreview.id }}"
-                                (click)="copyId(trailPreview.id)"
-                        >
-                            {{ trailPreview.id }}
-                        </th>
+                        {{ trailPreview.id }}
+                    </th>
 
-                        <td>
+                    <td>
                             <span (click)="onPreview(trailPreview)"
                                   class="trailCodeColumn">{{ trailPreview.code }}
                             </span>
-                        </td>
-                        <td>
+                    </td>
+                    <td>
                             <span ngbTooltip="{{ getLocationsFromPreview(trailPreview)}}" class="icon">
                             {{ trailPreview.startPos.name }} -
                                 {{ trailPreview.finalPos.name }}
                             </span>
-                        </td>
-                        <td>{{ trailPreview.classification }}</td>
-                        <td>
-                            {{ trailPreview.fileDetails.uploadedBy }}
-                        </td>
+                    </td>
+                    <td>{{ trailPreview.classification }}</td>
+                    <td>
+                        {{ trailPreview.fileDetails.uploadedBy }}
+                    </td>
 
-                        <td *ngIf="authService.isRealmMatch()"
-                            [ngClass]="trailPreview.bikeData ? 'complete' : 'incomplete'"
-                            class="clickable"
-                            routerLink="/admin/trail-management/cyclo/{{ trailPreview.id }}"
-                        >
+                    <td *ngIf="authService.isRealmMatch()"
+                        [ngClass]="trailPreview.bikeData ? 'complete' : 'incomplete'"
+                        class="clickable"
+                        routerLink="/admin/trail-management/cyclo/{{ trailPreview.id }}"
+                    >
                             <span
                                     ngbTooltip="{{trailPreview.bikeData ? 'Modifica dati ciclo' : 'Aggiungi dati ciclo'}}"
                                     [ngClass]="trailPreview.bikeData ? '' : 'iconDataNotPresent'"
@@ -82,64 +81,63 @@
                                 />
                             </svg>
                             </span>
-                        </td>
-                        <td *ngIf="authService.isRealmMatch()">
+                    </td>
+                    <td *ngIf="authService.isRealmMatch()">
+                        <svg
+                                class="bi clickable" width="24"
+                                height="24" fill="currentColor"
+                                routerLink="/admin/trail-management/edit/{{ trailPreview.id }}">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
+                            />
+                        </svg>
+                    </td>
+                    <td *ngIf="authService.isRealmMatch()">
+                        <div ngbTooltip="{{trailPreview.trailStatus == 'PUBLIC' ?
+                            'Cambia in BOZZA' : 'Pubblica'}}">
                             <svg
+                                    *ngIf="trailPreview.trailStatus == 'PUBLIC'"
                                     class="bi clickable" width="24"
                                     height="24" fill="currentColor"
-                                    routerLink="/admin/trail-management/edit/{{ trailPreview.id }}">
-                                <use
-                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#pencil"
-                                />
+                                    (click)="changeStatus(trailPreview, 'DRAFT')">
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
                             </svg>
-                        </td>
-                        <td *ngIf="authService.isRealmMatch()">
-                            <div ngbTooltip="{{trailPreview.trailStatus == 'PUBLIC' ?
-                            'Cambia in BOZZA' : 'Pubblica'}}">
-                                <svg
-                                        *ngIf="trailPreview.trailStatus == 'PUBLIC'"
-                                        class="bi clickable" width="24"
-                                        height="24" fill="currentColor"
-                                        (click)="changeStatus(trailPreview, 'DRAFT')">
-                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
-                                </svg>
-                                <svg
-                                        *ngIf="trailPreview.trailStatus == 'DRAFT'"
-                                        class="bi clickable" width="24"
-                                        height="24" fill="currentColor"
-                                        (click)="changeStatus(trailPreview, 'PUBLIC')"
-                                >
-                                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye-slash"/>
-                                </svg>
-                            </div>
-                        </td>
-                        <td class="clickable" *ngIf="authService.isRealmMatch()">
-                            <svg class="bi" width="24" height="24" fill="currentColor"
-                                 (click)="onDelete($event, trailPreview)">
-                                <use
-                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
-                                />
+                            <svg
+                                    *ngIf="trailPreview.trailStatus == 'DRAFT'"
+                                    class="bi clickable" width="24"
+                                    height="24" fill="currentColor"
+                                    (click)="changeStatus(trailPreview, 'PUBLIC')"
+                            >
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye-slash"/>
                             </svg>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="pagination-position">
-                    <ngb-pagination
-                            [pageSize]="entryPerPage"
-                            [collectionSize]="totalTrail"
-                            [(page)]="page"
-                            [maxSize]="5"
-                            aria-label="Default pagination"
-                            (pageChange)="loadTrails(page)"
-                    ></ngb-pagination>
-                </div>
+                        </div>
+                    </td>
+                    <td class="clickable" *ngIf="authService.isRealmMatch()">
+                        <svg class="bi" width="24" height="24" fill="currentColor"
+                             (click)="onDelete($event, trailPreview)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                            />
+                        </svg>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagination-position">
+                <ngb-pagination
+                        [pageSize]="entryPerPage"
+                        [collectionSize]="totalTrail"
+                        [(page)]="page"
+                        [maxSize]="5"
+                        aria-label="Default pagination"
+                        (pageChange)="loadTrails(page)"
+                ></ngb-pagination>
             </div>
-            <ng-template #notShow>
-                <app-items-not-found
-                        text="Nessun sentiero trovato.</br>
-                         Creane uno caricando una traccia"></app-items-not-found>
-            </ng-template>
         </div>
+        <ng-template #notShow>
+            <app-items-not-found
+                    text="Nessun sentiero trovato.</br>
+                         Creane uno caricando una traccia"></app-items-not-found>
+        </ng-template>
     </div>
 </div>

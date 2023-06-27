@@ -121,7 +121,7 @@ export class MapUtils {
     static determineIcon(marker: Marker) {
         switch (marker.icon) {
             case MapPinIconType.ALERT_PIN:
-                return AlertPinIcon.get();
+                return AlertPinIcon.get(marker.color);
             case MapPinIconType.CROSSWAY_ICON:
                 return CrossWayIcon.get();
             case MapPinIconType.PIN:

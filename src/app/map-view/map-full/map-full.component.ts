@@ -209,7 +209,7 @@ export class MapFullComponent implements OnInit {
         const mainPolyline = L.polyline(coordinatesInverted);
         mainPolyline.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
         const backgroundPolyline = L.polyline(coordinatesInverted);
-        backgroundPolyline.setStyle(MapUtils.getBackgroundLineStyle(6, 0.9));
+        backgroundPolyline.setStyle(MapUtils.getBackgroundLineStyle(this.getLineWeight(), 0.9));
 
 
         this.selectedTrailLayer = new TrailToPolyline(
@@ -223,6 +223,12 @@ export class MapFullComponent implements OnInit {
 
         this.showLocations(selectedTrail);
         this.map.fitBounds(this.selectedTrailLayer.getBackgroundPolyline().getBounds());
+    }
+
+    private getLineWeight() {
+        console.log(this.map.getZoom())
+        if(this.map.getZoom() > 14) { return 10; }
+        return 6;
     }
 
     private renderPois(pois: PoiDto[], selectedPoi?: PoiDto) {
@@ -260,13 +266,15 @@ export class MapFullComponent implements OnInit {
         this.otherTrailsPolylines = electedTrailList
             .map(trail => {
                 let coordinatesInverted = MapUtils.getCoordinatesInverted(trail.coordinates);
+                const lineWeight = this.getLineWeight();
                 return new TrailToPolyline(trail.code,
                     trail.id,
                     trail.classification,
                     L.polyline(coordinatesInverted,
                         MapUtils.getLineStyle(false, trail.classification)),
+
                     L.polyline(coordinatesInverted,
-                        MapUtils.getBackgroundLineStyle()),
+                        MapUtils.getBackgroundLineStyle(lineWeight)),
                 )
             });
         this.otherTrailsPolylines.forEach(trailToPoly => {
@@ -424,8 +432,10 @@ export class MapFullComponent implements OnInit {
     private renderNotification(selectedTrailNotification: AccessibilityNotification[]) {
         this.notificationMarkers.forEach((it) => this.map.removeLayer(it));
         selectedTrailNotification.forEach((it) => {
+            const color = it.minor ? "#ECC333" : "#D04341";
+            alert(color);
             const marker: Marker = {
-                icon: MapPinIconType.ALERT_PIN, color: "yellow",
+                icon: MapPinIconType.ALERT_PIN, color: color,
                 coords: {latitude: it.coordinates.latitude, longitude: it.coordinates.longitude}
             };
             const notificationMarker = L.marker(

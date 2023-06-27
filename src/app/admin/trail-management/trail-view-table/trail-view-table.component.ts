@@ -10,6 +10,8 @@ import {PaginationUtils} from "../../../utils/PaginationUtils";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 import {AnnouncementTopic} from "../../../service/announcement.service";
+import {AdminTrailPreviewService} from "../../../service/admin-trail_preview.service";
+import * as FileSaver from "file-saver";
 
 @Component({
     selector: 'app-trail-view-table',
@@ -36,6 +38,7 @@ export class TrailViewTableComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private adminTrailService: AdminTrailService,
+        private adminTrailPreviewService: AdminTrailPreviewService,
         public authService: AuthService,
         private modalService: NgbModal
     ) {
@@ -153,11 +156,20 @@ export class TrailViewTableComponent implements OnInit {
         PaginationUtils.copyToClipboard(id).then(() => {
             const modal = this.modalService.open(InfoModalComponent);
             modal.componentInstance.title = "ID '" + id + "', copiato";
-            if(this.authService.isRealmMatch()) {
+            if (this.authService.isRealmMatch()) {
                 modal.componentInstance.body = PaginationUtils.getOptionsText(id,
                     AnnouncementTopic.TRAIL)
             }
         })
     }
 
+    onDownloadList() {
+        this.isLoading = true;
+        let userRealm = this.authService.getUserRealm();
+        this.adminTrailPreviewService.exportList(userRealm)
+            .subscribe(response => {
+                let blob: any = new Blob([response], {type: 'application/csv'});
+                FileSaver.saveAs(blob,  `export_${userRealm}.csv`);
+            }, ()=>{}, ()=>{ this.isLoading = false; });
+    }
 }
