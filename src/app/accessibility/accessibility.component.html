@@ -12,14 +12,31 @@
             <h1>
                 Problemi di percorrenza accertati sui sentieri
             </h1>
-            <p>I seguenti sono i problemi di percorrenza, presenti sui sentieri della rete, accertati dal gruppo di sentieristica.</p>
-            <p>Hai per caso notato un problema, frana, albero schiantato, o altro, che blocca un sentiero? <a routerLink="./reporting-form">Aiutaci segnalandolo</a>
+            <p>I seguenti sono i problemi di percorrenza, presenti sui sentieri della rete, accertati dal gruppo di
+                sentieristica.</p>
+            <p>Hai per caso notato un problema, frana, albero schiantato, o altro, che blocca un sentiero? <a
+                    routerLink="./reporting-form">Aiutaci segnalandolo</a>
             </p>.
         </div>
-        <div class="col-sm-12 offset-md-2 col-md-2 offset-lg-3 col-lg-2">
+        <div class="offset-lg-3 col-lg-2 d-none d-lg-block">
             <img src="../../assets/cai/trekking/maintenance.jpg" alt="maintenance" class="full-width"/>
         </div>
-
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <button class="btn btn-primary full-width">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#phone"/>
+            </svg>
+            Segnala in base alla posizione</button>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-secondary full-width">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost"/>
+                </svg>
+                Segnala in base al sentiero</button>
+        </div>
     </div>
     <div class="row">
         <div class="col-12">
@@ -28,16 +45,17 @@
                     <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Data Segnalazione</th>
+                        <th scope="col" class="d-none d-lg-block">Data Segnalazione</th>
                         <th scope="col">Sentiero</th>
                         <th scope="col">Descrizione Problema</th>
                         <th scope="col">Aggirabile?</th>
-                        <th scope="col">Anteprima</th>
+                        <th scope="col" class="d-none d-lg-block">Anteprima</th>
                         <th scope="col">Apri</th>
                     </tr>
                     </thead>
                     <tbody *ngIf="hasLoaded">
-                    <tr class="clickable" *ngFor="let notification of unresolvedNotifications">
+                    <tr *ngFor="let notification of unresolvedNotifications"
+                        [class]="!notification.minor ? 'highlight clickable' : 'clickable'">
                         <th
                                 scope="row"
                                 class="ellipsis small-column"
@@ -45,7 +63,7 @@
                         >
                             {{ notification.id }}
                         </th>
-                        <td>{{ formatDate(notification.reportDate) }}</td>
+                        <td class="d-none d-lg-block">{{ formatDate(notification.reportDate) }}</td>
                         <td (click)="showDetails(notification)">
                             <span class="trailCodeColumn">
                               {{ getTrailCode(notification.trailId) }}
@@ -57,11 +75,12 @@
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check"
                                      *ngIf="notification.minor"/>
-                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#cross"
+                                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#x-circle"
                                      *ngIf="!notification.minor"/>
                             </svg>
                         </td>
-                        <td (click)="showMapPreview(notification.trailId, notification.coordinates)">
+                        <td (click)="showMapPreview(notification.trailId, notification.coordinates)"
+                            class="d-none d-lg-block">
                             <svg class="bi" width="24" height="24" fill="currentColor">
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"/>
                             </svg>

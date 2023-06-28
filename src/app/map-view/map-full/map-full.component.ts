@@ -433,7 +433,6 @@ export class MapFullComponent implements OnInit {
         this.notificationMarkers.forEach((it) => this.map.removeLayer(it));
         selectedTrailNotification.forEach((it) => {
             const color = it.minor ? "#ECC333" : "#D04341";
-            alert(color);
             const marker: Marker = {
                 icon: MapPinIconType.ALERT_PIN, color: color,
                 coords: {latitude: it.coordinates.latitude, longitude: it.coordinates.longitude}

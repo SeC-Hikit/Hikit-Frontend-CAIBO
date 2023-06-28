@@ -32,7 +32,7 @@ export class AccessibilityComponent implements OnInit {
     isPreviewVisible: boolean = false;
     hasLoaded = false;
 
-    realm : string = "";
+    realm: string = "";
     trailMapping: TrailMappingDto[] = [];
     selectedTrail: TrailDto;
     unresolvedNotifications: AccessibilityNotification[];
@@ -54,13 +54,16 @@ export class AccessibilityComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this.isLoading = true;
         this.realm = this.authService.getInstanceRealm();
         this.trailPreviewService.getMappings(this.realm)
             .subscribe((resp) => {
                 this.trailMapping = resp.content;
                 this.loadNotification(1);
                 this.loadSolvedNotification(1);
+            }, () => {
+            }, () => {
+                this.isLoading = false;
             })
     }
 
@@ -111,14 +114,14 @@ export class AccessibilityComponent implements OnInit {
         return "";
     }
 
-    showMapPreview(trailId : string, coordinates: Coordinates2D) {
+    showMapPreview(trailId: string, coordinates: Coordinates2D) {
         this.trailService.getTrailById(trailId).subscribe(
             trailResp => {
                 this.selectedTrail = trailResp.content[0];
                 this.markers = [{
                     coords: coordinates,
                     icon: MapPinIconType.ALERT_PIN,
-                    color: "yellow"
+                    color: "#ECC333"
                 }]
                 this.togglePreview();
             }

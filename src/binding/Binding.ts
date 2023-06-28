@@ -441,7 +441,7 @@ export interface components {
       name?: string;
       description?: string;
       tags?: string[];
-      macroType?: "BELVEDERE" | "SUPPORT" | "CULTURAL";
+      macroType?: "BELVEDERE" | "SUPPORT" | "CULTURAL" | "CURIOSITY";
       microType?: string[];
       mediaList?: components["schemas"]["LinkedMediaDto"][];
       trailIds?: string[];
@@ -667,7 +667,7 @@ export interface components {
       locations?: components["schemas"]["PlaceRefDto"][];
       bikeData?: boolean;
       trailStatus?: "DRAFT" | "PUBLIC";
-      length?: number;
+      statsTrailMetadata?: components["schemas"]["StatsTrailMetadataDto"];
       fileDetails?: components["schemas"]["FileDetailsDto"];
     };
     TrailPreviewResponse: {
@@ -1250,7 +1250,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/octet-stream": string[];
+          "text/plain": string[];
         };
       };
     };

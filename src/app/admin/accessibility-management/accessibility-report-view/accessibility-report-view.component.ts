@@ -1,5 +1,4 @@
 import {Component, OnInit} from "@angular/core";
-import * as moment from "moment";
 import {AuthService} from "src/app/service/auth.service";
 import {AccessibilityReport, ReportService,} from "src/app/service/report-service.service";
 import {TrailPreviewService} from "src/app/service/trail-preview-service.service";
@@ -7,7 +6,6 @@ import {TrailDto, TrailMappingDto, TrailService} from "src/app/service/trail-ser
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmModalComponent} from "../../../modal/confirm-modal/confirm-modal.component";
 import {AdminReportService} from "../../../service/admin-report.service";
-import {Router} from "@angular/router";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 import {Marker} from "../../../map-preview/map-preview.component";
 import {Coordinates2D} from "../../../service/geo-trail-service";
@@ -49,8 +47,7 @@ export class AccessibilityReportViewComponent implements OnInit {
         private trailService: TrailService,
         private adminReportService: AdminReportService,
         private notificationService: NotificationService,
-        private modalService: NgbModal,
-        private route: Router
+        private modalService: NgbModal
     ) {
     }
 
@@ -118,7 +115,7 @@ export class AccessibilityReportViewComponent implements OnInit {
             trailResp => {
                 this.selectedTrail = trailResp.content[0];
                 this.markers = [{
-                    color: "yellow",
+                    color: "#ECC333",
                     icon: MapPinIconType.ALERT_PIN,
                     coords: coordinates
                 }]
