@@ -104,7 +104,7 @@ export class MapUtils {
                 if (microType.indexOf("shalet") >= 0) {
                     return MapPinIconType.SHALET
                 }
-                if (microType.indexOf("camping") >= 0) {
+                if (microType.indexOf("camping") >= 0 || microType.indexOf("picnic-area") >= 0) {
                     return MapPinIconType.CAMPING_PIN
                 }
                 if (microType.indexOf("fountain") >= 0) {

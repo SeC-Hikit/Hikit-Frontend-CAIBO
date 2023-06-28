@@ -75,6 +75,10 @@ const routes: Routes = [
             {
                 path: "accessibility/:id",
                 component: MapComponent
+            },
+            {
+                path: "poi/:id",
+                component: MapComponent
             }
         ], },
     {path: "credits", component: CreditsComponent},

@@ -47,6 +47,7 @@ export class PoiEnums {
                 {name: "Bottega", value: "grocery_shop", image: "bottega.webp"},
                 {name: "Supermercato", value: "supermarket", image: "supermarket.webp"},
                 {name: "Ufficio Informazioni", value: "iat", image: "ufficio_turistico.webp"},
+                {name: "Area pic-nic", value: "picnic-area", image: "area-pic-nic-min.webp"},
             ]
         }, {
             name: PoiEnums.BELVEDERE_READ,
