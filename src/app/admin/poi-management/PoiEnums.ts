@@ -14,10 +14,12 @@ export class PoiEnums {
     private static CULTURAL = "CULTURAL";
     private static SUPPORT = "SUPPORT";
     private static BELVEDERE = "BELVEDERE";
+    private static CURIOSITY = "CURIOSITY";
 
     private static SUPPORT_READ = "Supporto escursionistico";
     private static CULTURAL_READ = "Culturale";
     private static BELVEDERE_READ = "Belvedere";
+    private static CURIOSITY_READ = "Curiosità";
 
     public static macroTypes: SelectChoicesMacro[] = [
         {
@@ -50,13 +52,24 @@ export class PoiEnums {
             name: PoiEnums.BELVEDERE_READ,
             value: "BELVEDERE",
             micro: []
-        }]
+        },
+        {
+            name: PoiEnums.CURIOSITY_READ,
+            value: "CURIOSITY",
+            micro: [
+                {name: "Luogo storico", value: "history_landmark", image: "curiosity-min.webp"},
+                {name: "Fiaba", value: "fable", image: "curiosity-min.webp"},
+                {name: "Citazione", value: "mention", image: "curiosity-min.webp"}
+            ]
+        }
+    ]
 
     public static macroMap() : Map<string, string> {
         let map = new Map();
         map.set(PoiEnums.CULTURAL, PoiEnums.CULTURAL_READ)
         map.set(PoiEnums.SUPPORT, PoiEnums.SUPPORT_READ)
         map.set(PoiEnums.BELVEDERE, PoiEnums.BELVEDERE_READ);
+        map.set(PoiEnums.CURIOSITY, PoiEnums.CURIOSITY_READ);
         return map;
     }
 }

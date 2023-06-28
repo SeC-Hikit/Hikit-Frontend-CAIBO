@@ -31,7 +31,7 @@ export class AppPoiDetailsComponent implements OnInit {
             this.trailMappings.get(id).code
     }
 
-    getImage(macroType: "BELVEDERE" | "SUPPORT" | "CULTURAL", microType: string[]) {
+    getImage(macroType: "BELVEDERE" | "SUPPORT" | "CULTURAL" | "CURIOSITY", microType: string[]) {
         const base_folder = "assets/cai/poi/";
 
         if(macroType == "BELVEDERE") {

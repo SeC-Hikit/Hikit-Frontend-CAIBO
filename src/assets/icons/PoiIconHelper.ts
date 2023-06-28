@@ -9,6 +9,8 @@ export class PoiIconHelper {
             return PoiIconHelper.getCulturalIcon(poiDto.microType);
         } else if(poiDto.macroType == "SUPPORT") {
             return PoiIconHelper.getSupportIcon(poiDto.microType);
+        } else if(poiDto.macroType == "CURIOSITY") {
+            return PoiIconHelper.getCuriosityIcon(poiDto.microType);
         }
     }
 
@@ -22,5 +24,9 @@ export class PoiIconHelper {
 
     private static getSupportIcon(microType: string[]) {
         return `<img src='/assets/icons/poi/png/Tent_pin.png' width="24" alt="cultural_icon" />`;
+    }
+
+    private static getCuriosityIcon(microType: string[]) {
+        return `<img src='/assets/icons/poi/png/Info_pin.png' width="24" alt="info_icon" />`;
     }
 }
