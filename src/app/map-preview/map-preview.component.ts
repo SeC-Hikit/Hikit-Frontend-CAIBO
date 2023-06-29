@@ -1,7 +1,7 @@
 import {EventEmitter, Output, SimpleChanges} from "@angular/core";
 import {Component, Input, OnInit} from "@angular/core";
 import * as L from "leaflet";
-import {Coordinates2D, GeoTrailService} from "../service/geo-trail-service";
+import {Coordinates2D, GeoTrailService, LocateDto} from "../service/geo-trail-service";
 import {MapUtils} from "../map-view/MapUtils";
 import {TrailDto, TrailCoordinatesDto, CoordinatesDto} from "../service/trail-service.service";
 import {StartIcon} from "../../assets/icons/MapPinIconType";
@@ -288,8 +288,9 @@ export class MapPreviewComponent implements OnInit {
     private loadSegmentsInArea() {
         const bounds = this.map.getBounds();
         const rectangleDtoFromLatLng = MapUtils.getRectangleDtoFromLatLng(bounds);
+        const locateDto : LocateDto = { rectangleDto: rectangleDtoFromLatLng, trailIdsNotToLoad: []}
         this.geoTrailService
-            .locate(rectangleDtoFromLatLng, "MEDIUM", false)
+            .locate(locateDto, "MEDIUM", false)
             .subscribe((resp)=> {
                 const mapped = resp.content.filter(trail=> trail.id != this.trailPreview.id).map(r => {
                      return {id: r.id, polyline: MapUtils.getTrailPolyline(r.code, r.coordinates)} });

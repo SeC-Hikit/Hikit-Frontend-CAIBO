@@ -7,7 +7,7 @@ import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from '../service
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import *  as FileSaver from 'file-saver';
-import {Coordinates2D, GeoTrailService, RectangleDto} from "../service/geo-trail-service";
+import {Coordinates2D, GeoTrailService, LocateDto, RectangleDto} from "../service/geo-trail-service";
 import {environment} from "../../environments/environment.prod";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {Observable, ObservedValueOf, Subject} from "rxjs";
@@ -21,6 +21,8 @@ import {PlaceDto, PlaceRefDto, PlaceService} from "../service/place.service";
 import {ReadingUtils} from '../utils/ReadingUtils';
 import {Location} from "@angular/common";
 import {MapUtils, ViewState} from "./MapUtils";
+import {control} from "leaflet";
+
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -78,6 +80,7 @@ export class MapComponent implements OnInit {
     isLoading: boolean = false;
 
     zoomLevel = 12;
+    zoomChangingShallTriggerTrailsReload = false;
     sideView = ViewState.NONE;
     selectedTrailIndex: number = 0;
     showTrailCodeMarkers: boolean;
@@ -173,7 +176,7 @@ export class MapComponent implements OnInit {
         }
         let electedTrail = this.trailList.filter(t => t.id == id);
 
-        if(switchView){
+        if (switchView) {
             this.sideView = ViewState.TRAIL;
         }
 
@@ -292,17 +295,32 @@ export class MapComponent implements OnInit {
         if (!$event) {
             return;
         }
+
+        const trailIdsNotForLoading = this.getTrailIdsNotForLoading();
+        const locateDto: LocateDto = {rectangleDto: $event, trailIdsNotToLoad: trailIdsNotForLoading}
+        const diff_with_already_loaded_trails: TrailDto[] = trailIdsNotForLoading.map(
+            (it: string) => this.trailList.filter((tr) => tr.id == it)[0])
+
+        this.zoomChangingShallTriggerTrailsReload = false;
         this.onLoading();
-        let level = this.electTrailSimplifierLevel(this.zoomLevel);
+        const level = this.electTrailSimplifierLevel(this.zoomLevel);
         if (level == TrailSimplifierLevel.NONE) return;
         this.geoTrailService
-            .locate($event, level.toUpperCase(), false)
+            .locate(locateDto, level.toUpperCase(), false)
             .subscribe((e) => {
-                this.trailList = e.content;
+                this.trailList = e.content.concat(diff_with_already_loaded_trails);
                 this.populateTrailMap(e.content);
                 this.showTrailCodeMarkers = this.electShowTrailCodes(this.zoomLevel);
                 this.onDoneLoading();
             });
+    }
+
+    private getTrailIdsNotForLoading() {
+        if (this.zoomChangingShallTriggerTrailsReload) return [];
+        if (this.trailList.length > 0) {
+            return this.trailList.map((it) => it.id)
+        }
+        return [];
     }
 
     private populateTrailMap(e: TrailDto[]) {
@@ -318,6 +336,11 @@ export class MapComponent implements OnInit {
     }
 
     onZoomChange(zoomLevel: number) {
+        const previousZoomLevelSimplifier = this.electTrailSimplifierLevel(this.zoomLevel);
+        const newZoomLayerSimplifier = this.electTrailSimplifierLevel(zoomLevel);
+        if(previousZoomLevelSimplifier != newZoomLayerSimplifier && zoomLevel > this.zoomLevel)
+            console.log("User zoomed in and trail simplified changed... reloading visible trail!")
+            this.zoomChangingShallTriggerTrailsReload = true;
         this.zoomLevel = zoomLevel;
     }
 

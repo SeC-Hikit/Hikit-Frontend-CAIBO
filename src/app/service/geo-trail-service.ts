@@ -1,4 +1,4 @@
-import { HttpHeaders, HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
@@ -9,6 +9,7 @@ export type TrailIntersectionResponse = components["schemas"]["TrailIntersection
 export type TrailIntersection = components["schemas"]["TrailIntersectionDto"];
 export type GeoLine = components["schemas"]["GeoLineDto"];
 export type RectangleDto = components["schemas"]["RectangleDto"];
+export type LocateDto = components["schemas"]["LocateDto"];
 export type Coordinates2D = components["schemas"]["Coordinates2D"];
 
 @Injectable({
@@ -31,11 +32,11 @@ export class GeoTrailService {
       );
   }
 
-  locate(rectangle: RectangleDto, level: string = "MEDIUM",
+  locate(locateDto: LocateDto, level: string = "MEDIUM",
          areDraftVisible: boolean = true): Observable<TrailResponse> {
     let params = new HttpParams().set("level", level)
         .append("isDraftTrailVisible", String(areDraftVisible))
-    return this.httpClient.post<TrailResponse>(this.baseUrl + "/locate", rectangle, {params: params})
+    return this.httpClient.post<TrailResponse>(this.baseUrl + "/locate", locateDto, {params: params})
       .pipe(
         tap(),
         catchError(this.handleError<TrailResponse>('', null))
