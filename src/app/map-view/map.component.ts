@@ -338,7 +338,7 @@ export class MapComponent implements OnInit {
     onZoomChange(zoomLevel: number) {
         const previousZoomLevelSimplifier = this.electTrailSimplifierLevel(this.zoomLevel);
         const newZoomLayerSimplifier = this.electTrailSimplifierLevel(zoomLevel);
-        if(previousZoomLevelSimplifier != newZoomLayerSimplifier && zoomLevel > this.zoomLevel)
+        if(previousZoomLevelSimplifier != newZoomLayerSimplifier)
             console.log("User zoomed in and trail simplified changed... reloading visible trail!")
             this.zoomChangingShallTriggerTrailsReload = true;
         this.zoomLevel = zoomLevel;
