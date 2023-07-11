@@ -28,6 +28,15 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
+                    <div class="col-12">
+                        Sentiero che attraversa l'area comunale di
+                        <div class="white-font trailCodeColumn full-width top-margin" *ngFor="let municipality of selectedTrail.municipalities">
+                            {{municipality.city}}
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row top-margin-x2">
                     <div class="col-6">
                         <h4>Classificazione</h4>
                     </div>
