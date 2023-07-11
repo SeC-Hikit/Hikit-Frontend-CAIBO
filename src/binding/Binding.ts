@@ -578,6 +578,10 @@ export interface components {
       latitude?: number;
       longitude?: number;
     };
+    LocateDto: {
+      rectangleDto?: components["schemas"]["RectangleDto"];
+      trailIdsNotToLoad?: string[];
+    };
     RectangleDto: {
       bottomLeft?: components["schemas"]["Coordinates2D"];
       topRight?: components["schemas"]["Coordinates2D"];
@@ -1114,7 +1118,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RectangleDto"];
+        "application/json": components["schemas"]["LocateDto"];
       };
     };
   };
