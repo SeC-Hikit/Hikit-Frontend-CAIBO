@@ -156,6 +156,9 @@ export interface paths {
   "/preview/find/name/{name}": {
     get: operations["findByLocationOrTrailNames"];
   };
+  "/preview/find/municipality/{municipality}": {
+    get: operations["findByMunicipality"];
+  };
   "/preview/find/code/{code}": {
     get: operations["findByTrailCode"];
   };
@@ -186,6 +189,9 @@ export interface paths {
   "/place/name/{name}": {
     get: operations["getLikeNameOrTags"];
   };
+  "/municipality": {
+    get: operations["get_6"];
+  };
   "/media": {
     get: operations["getMedia"];
   };
@@ -211,7 +217,7 @@ export interface paths {
     get: operations["getCount_3"];
   };
   "/instance": {
-    get: operations["get_6"];
+    get: operations["get_7"];
   };
   "/geo-tool/polyline_altitude": {
     get: operations["getAltitudeTrail"];
@@ -220,16 +226,16 @@ export interface paths {
     get: operations["geoLocateTrail_2"];
   };
   "/ert/localities": {
-    get: operations["get_7"];
+    get: operations["get_8"];
   };
   "/dataset": {
     get: operations["getTrailDatasetV"];
   };
   "/announcement": {
-    get: operations["get_8"];
+    get: operations["get_9"];
   };
   "/announcement/{id}": {
-    get: operations["get_9"];
+    get: operations["get_10"];
   };
   "/admin/diagnose/weather": {
     get: operations["testWeather"];
@@ -358,6 +364,12 @@ export interface components {
       description?: string;
       keyVal?: components["schemas"]["KeyValueDto"][];
     };
+    MunicipalityDetailsDto: {
+      code?: string;
+      city?: string;
+      province?: string;
+      provinceShort?: string;
+    };
     PlaceRefDto: {
       name?: string;
       coordinates?: components["schemas"]["CoordinatesDto"];
@@ -406,6 +418,7 @@ export interface components {
       fileDetails?: components["schemas"]["FileDetailsDto"];
       staticTrailDetails?: components["schemas"]["StaticTrailDetailsDto"];
       cycloDetails?: components["schemas"]["CycloDetailsDto"];
+      municipalities?: components["schemas"]["MunicipalityDetailsDto"][];
     };
     TrailResponse: {
       currentPage?: number;
@@ -449,6 +462,8 @@ export interface components {
       externalResources?: string[];
       keyVal?: components["schemas"]["KeyValueDto"][];
       recordDetails?: components["schemas"]["RecordDetailsDto"];
+      externalId?: string;
+      externalSystemName?: string;
     };
     PoiResponse: {
       currentPage?: number;
@@ -562,10 +577,6 @@ export interface components {
     Coordinates2D: {
       latitude?: number;
       longitude?: number;
-    };
-    LocateDto: {
-      rectangleDto?: components["schemas"]["RectangleDto"];
-      trailIdsNotToLoad?: string[];
     };
     RectangleDto: {
       bottomLeft?: components["schemas"]["Coordinates2D"];
@@ -682,6 +693,15 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["TrailPreviewDto"][];
+    };
+    MunicipalityResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["MunicipalityDetailsDto"][];
     };
     InstanceInfoDto: {
       realm?: string;
@@ -1094,7 +1114,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["LocateDto"];
+        "application/json": components["schemas"]["RectangleDto"];
       };
     };
   };
@@ -1688,6 +1708,27 @@ export interface operations {
       };
     };
   };
+  findByMunicipality: {
+    parameters: {
+      path: {
+        municipality: string;
+      };
+      query: {
+        skip?: number;
+        limit?: number;
+        realm?: string;
+        isDraftTrailVisible?: boolean;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TrailPreviewResponse"];
+        };
+      };
+    };
+  };
   findByTrailCode: {
     parameters: {
       path: {
@@ -1861,6 +1902,16 @@ export interface operations {
       };
     };
   };
+  get_6: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["MunicipalityResponse"];
+        };
+      };
+    };
+  };
   getMedia: {
     parameters: {
       query: {
@@ -1991,7 +2042,7 @@ export interface operations {
       };
     };
   };
-  get_6: {
+  get_7: {
     responses: {
       /** OK */
       200: {
@@ -2032,7 +2083,7 @@ export interface operations {
       };
     };
   };
-  get_7: {
+  get_8: {
     parameters: {
       query: {
         skip?: number;
@@ -2061,7 +2112,7 @@ export interface operations {
       };
     };
   };
-  get_8: {
+  get_9: {
     parameters: {
       query: {
         skip?: number;
@@ -2078,7 +2129,7 @@ export interface operations {
       };
     };
   };
-  get_9: {
+  get_10: {
     parameters: {
       path: {
         id: string;
