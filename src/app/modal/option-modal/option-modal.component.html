@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+</div>
+<div class="modal-body row">
+    <p [innerHTML]="body"></p>
+    <div *ngFor="let selector of selectors" class="col-sm-6 col-md-6 col-lg-8 selector" (change)="onSelectValue(selector)">
+        <input type="radio" name="selection"
+               [value]="selector.value" [checked]="selected == selector"
+        (change)="onSelectValue(selector)">
+        <span>{{selector.name}}</span>
+    </div>
+    <div class="col-sm-5 col-md-5 col-lg-4">
+        <img [src]="selected.imageUrl" *ngIf="selected != null && selected.imageUrl">
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="onOk()">Ok</button>
+</div>

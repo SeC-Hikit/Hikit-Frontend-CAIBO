@@ -22,6 +22,8 @@ import {ReadingUtils} from '../utils/ReadingUtils';
 import {Location} from "@angular/common";
 import {MapUtils, ViewState} from "./MapUtils";
 import {control} from "leaflet";
+import {Municipality, MunicipalityService} from "../service/municipality.service";
+import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
 
 
 export enum TrailSimplifierLevel {
@@ -58,6 +60,8 @@ export class MapComponent implements OnInit {
     trailPreviewList: TrailPreview[] = [];
     trailPreviewCount: number = 0;
     trailPreviewPage: number = 0;
+
+    municipalityList: Municipality[] = []
 
     selectedTrail: TrailDto;
     selectedNotification: AccessibilityNotification;
@@ -103,11 +107,14 @@ export class MapComponent implements OnInit {
         private location: Location,
         private modalService: NgbModal,
         private authService: AuthService,
-        private placeService: PlaceService) {
+        private placeService: PlaceService,
+        private municipalityService: MunicipalityService,
+    ) {
     }
 
     ngOnInit(): void {
         this.sideView = this.getViewFromLocation();
+        this.loadMunicipalities();
         this.loadDataPassedByUrl();
         this.changeTileLayer("topo");
         this.ensureMapping();
@@ -133,6 +140,13 @@ export class MapComponent implements OnInit {
     private getViewFromLocation(): ViewState {
         const path = this.location.path();
         return MapUtils.getViewFromPath(path);
+    }
+
+    private loadMunicipalities() {
+        this.municipalityService.get().subscribe((it) => {
+            this.municipalityList = it.content;
+        }, () => {
+        })
     }
 
     private getTrailPreviewResponseObservable(code: string, page: number,
@@ -277,13 +291,20 @@ export class MapComponent implements OnInit {
 
     toggleUserPosition(): void {
         this.isUserPositionToggled = !this.isTrailFullScreenVisible;
+        this.isLoading = true;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 this.userPosition = new UserCoordinates(
                     position.coords.latitude,
                     position.coords.longitude)
-            }, (error) => alert(error))
+                this.isLoading = false;
+            }, (_) => {
+                this.openInfoModal("Posizione non trovata o negata",
+                    "Non è stato possibile usare il servizio di geolocalizzazione del dispositivo.")
+                this.isLoading = false;
+            });
+
         }
     }
 
@@ -338,9 +359,9 @@ export class MapComponent implements OnInit {
     onZoomChange(zoomLevel: number) {
         const previousZoomLevelSimplifier = this.electTrailSimplifierLevel(this.zoomLevel);
         const newZoomLayerSimplifier = this.electTrailSimplifierLevel(zoomLevel);
-        if(previousZoomLevelSimplifier != newZoomLayerSimplifier)
+        if (previousZoomLevelSimplifier != newZoomLayerSimplifier)
             console.log("User zoomed in and trail simplified changed... reloading visible trail!")
-            this.zoomChangingShallTriggerTrailsReload = true;
+        this.zoomChangingShallTriggerTrailsReload = true;
         this.zoomLevel = zoomLevel;
     }
 
@@ -559,5 +580,45 @@ export class MapComponent implements OnInit {
 
 
         })
+    }
+
+    onGeolocaliseUserClick() {
+        this.toggleUserPosition()
+    }
+
+    onMunicipalitySelectionClick() {
+        const modal = this.modalService.open(OptionModalComponent)
+        modal.componentInstance.title = "Seleziona un comune per esplorarne la rete sentieristica";
+        modal.componentInstance.body = "";
+
+        const selectors = this.municipalityList.map(it=> {
+            return {
+                name: it.city,
+                value: it.code,
+                imageUrl: ""
+            }
+        })
+        modal.componentInstance.selected = "";
+        modal.componentInstance.selectors = selectors;
+        modal.componentInstance.onPromptOk.subscribe((valueResolution: Choice) => {
+            //
+        });
+    }
+
+    onTerrainChangeSelectionClick() {
+        const modal = this.modalService.open(OptionModalComponent)
+        modal.componentInstance.title = "Seleziona una base cartografica";
+        modal.componentInstance.body = "";
+        const path = "/assets/cai/terrains/"
+        const selectors = [
+            {name: "Topografica", value: "topo", imageUrl: path + "topo.webp"},
+            {name: "Geopolitica", value: "geopolitic", imageUrl: path + "geopolitic1.webp"},
+            {name: "Geopolitica 2", value: "geopolitic2", imageUrl: path + "geopolitic2.webp"}
+        ];
+        modal.componentInstance.selected = selectors.filter(it=>it.value==this.selectedTileLayer)[0];
+        modal.componentInstance.selectors = selectors;
+        modal.componentInstance.onPromptOk.subscribe((valueResolution: Choice) => {
+            this.changeTileLayer(valueResolution.value)
+        });
     }
 }

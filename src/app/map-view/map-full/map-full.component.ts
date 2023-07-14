@@ -28,6 +28,8 @@ export class MapFullComponent implements OnInit {
     private static CIRCLE_SIZE: number = 40;
     private static HALF_CIRCLE_SIZE: number = 15;
 
+
+    hint : string = ""
     timeIntervalMsBeforeTrigger: number = 600;
     intervalObject: number;
     selectionCircle;
@@ -40,6 +42,8 @@ export class MapFullComponent implements OnInit {
     trailCodeMarkers: L.Marker[] = [];
     notificationMarkers: L.Marker[] = [];
     poiMarkers: L.Marker[] = [];
+
+    userCircle: L.Circle = null
 
     otherTrailsPolylines: TrailToPolyline[];
 
@@ -69,6 +73,9 @@ export class MapFullComponent implements OnInit {
     @Output() onPoiClick = new EventEmitter<PoiDto>();
     @Output() onLocationSelection = new EventEmitter<PlaceRefDto>();
 
+    @Output() onMunicipalitySelectionClick = new EventEmitter();
+    @Output() onTerrainChangeSelectionClick = new EventEmitter();
+    @Output() onGeolocaliseMeSelectionClick = new EventEmitter();
 
     constructor() {
         this.otherTrailsPolylines = [];
@@ -191,11 +198,14 @@ export class MapFullComponent implements OnInit {
 
     focusOnUser(userPosition: UserCoordinates) {
         // TODO shall be removed on update
-        const circle = L.circle([userPosition.latitude, userPosition.longitude],
+        if(this.userCircle) {
+            this.map.removeLayer(this.userCircle);
+        }
+        this.userCircle = L.circle([userPosition.latitude, userPosition.longitude],
             {radius: 30, color: 'blue'}).addTo(this.map);
-        circle.bindTooltip("Posizione attuale").openTooltip();
-        this.map.addLayer(circle);
-        this.map.flyTo(circle.getLatLng());
+        this.userCircle.bindTooltip("Posizione attuale").openTooltip();
+        this.map.addLayer(this.userCircle);
+        this.map.flyTo(this.userCircle.getLatLng());
     }
 
     renderTrail(selectedTrail: TrailDto) {
@@ -303,6 +313,7 @@ export class MapFullComponent implements OnInit {
 
     highlightTrail(trailToPoly: TrailToPolyline): LeafletMouseEventHandlerFn {
         return () => {
+            this.hint = trailToPoly.getCode();
             trailToPoly
                 .getPolyline()
                 .setStyle({
@@ -475,6 +486,7 @@ export class MapFullComponent implements OnInit {
         this.map.removeLayer(location_circle)
         this.locationsOnTrail.splice(this.locationsOnTrail.indexOf(location_circle), 1);
         let latLng = location_circle.getLatLng();
+        this.hint = it.name;
         const circle = L.circle(
             [latLng.lat, latLng.lng],
             {radius: MapFullComponent.CIRCLE_SIZE, fill: true, fillColor: "yellow", color: "yellow"});
@@ -497,10 +509,12 @@ export class MapFullComponent implements OnInit {
             this.renderAllTrail(this.trailList);
             return;
         }
+        this.hint = trailHovering.code;
         let highlightedElement = this.otherTrailsPolylines.filter(it => it.getId() == trailHovering.id);
         highlightedElement.forEach(it => {
             this.map.removeLayer(it.getPolyline())
-            it.getPolyline().setStyle(MapUtils.getLineStyle(true, it.getClassification(), "yellow"));
+            it.getPolyline().setStyle(MapUtils.getLineStyle(true,
+                it.getClassification(), "yellow"));
             it.getPolyline().addTo(this.map);
         });
     }

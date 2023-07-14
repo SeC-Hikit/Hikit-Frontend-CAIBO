@@ -89,6 +89,7 @@ import { DevelopmentComponent } from './development/development.component';
 import { BugReportingComponent } from './bug-reporting/bug-reporting.component';
 import { NotificationDetailsComponent } from './map-view/notification-details/notification-details.component';
 import {DatePipe} from "./DatePipe";
+import {OptionModalComponent} from "./modal/option-modal/option-modal.component";
 
 @NgModule({
   declarations: [
@@ -170,7 +171,8 @@ import {DatePipe} from "./DatePipe";
     DevelopmentComponent,
     BugReportingComponent,
     NotificationDetailsComponent,
-    DatePipe
+    DatePipe,
+    OptionModalComponent
   ],
   imports: [
     BrowserModule,

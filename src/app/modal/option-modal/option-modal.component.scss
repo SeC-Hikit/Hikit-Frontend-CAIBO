@@ -1,0 +1,17 @@
+.modal-body {
+  img{
+      height: auto;
+      width: 100%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+      border-radius: 50%;
+  }
+
+  .selector {
+    span {
+      margin-left: 10px;
+    }
+  }
+}

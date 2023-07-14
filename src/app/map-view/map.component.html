@@ -12,7 +12,8 @@
                 <use
                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
             </svg>
-            <span class="back" (click)="onBackToTrailPoiClick()" *ngIf="selectedTrail">Torna al sentiero {{selectedTrail.code}}</span>
+            <span class="back" (click)="onBackToTrailPoiClick()"
+                  *ngIf="selectedTrail">Torna al sentiero {{selectedTrail.code}}</span>
             <span class="back" (click)="onBackToTrailList()" *ngIf="!selectedTrail">Vai alla lista sentieri</span>
         </div>
 
@@ -61,7 +62,7 @@
                                 (onHighlightTrail)="onHighlightTrail($event)"
                         ></app-place-details>
                     </div>
-
+                    <!-- TODO DIVIDE THIS MODULE -->
                     <div *ngIf="sideView==''">
                         <div class="row align-middle">
                             <div class="col-md-12">
@@ -71,7 +72,8 @@
                                 </p>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-primary full-width" (click)="showTrailList()">Lista sentieri</button>
+                                <button class="btn btn-primary full-width" (click)="showTrailList()">Lista sentieri
+                                </button>
                             </div>
                             <div class="col-md-12 top-margin-x2">
                                 <div class="row">
@@ -158,6 +160,9 @@
                           (onDoneLoading)="onDoneLoading()"
                           (onPoiClick)="onPoiClick($event)"
                           (onLocationSelection)="onSelectPlaceByRef($event)"
+                          (onGeolocaliseMeSelectionClick)="onGeolocaliseUserClick()"
+                          (onMunicipalitySelectionClick)="onMunicipalitySelectionClick()"
+                          (onTerrainChangeSelectionClick)="onTerrainChangeSelectionClick()"
             >
             </app-map-full>
         </div>
