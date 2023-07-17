@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body row">
     <p [innerHTML]="body"></p>
-    <div *ngFor="let selector of selectors" class="col-sm-6 col-md-6 col-lg-8 selector" (change)="onSelectValue(selector)">
+    <div *ngFor="let selector of selectors" class="col-sm-6 col-md-6 col-lg-8 selector" (click)="onSelectValue(selector)">
         <input type="radio" name="selection"
                [value]="selector.value" [checked]="selected == selector"
         (change)="onSelectValue(selector)">

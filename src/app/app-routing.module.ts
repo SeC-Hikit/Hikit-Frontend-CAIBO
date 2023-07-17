@@ -79,6 +79,10 @@ const routes: Routes = [
             {
                 path: "poi/:id",
                 component: MapComponent
+            },
+            {
+                path: "municipalities/:id",
+                component: MapComponent
             }
         ], },
     {path: "credits", component: CreditsComponent},

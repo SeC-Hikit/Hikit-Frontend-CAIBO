@@ -39,7 +39,8 @@ export class AppPoiDetailsComponent implements OnInit {
         }
         const microtypes = PoiEnums.macroTypes.filter((it) => it.value == macroType)[0].micro;
         const foundMicrotype = microtypes.filter(it=> it.value == microType[0]);
-        return base_folder + foundMicrotype[0].image
+        const electMicrotype = foundMicrotype.length > 0 ? foundMicrotype[0] : microtypes[0];
+        return base_folder + electMicrotype.image
     }
 
     onRelatedTrailHover(id: string) {

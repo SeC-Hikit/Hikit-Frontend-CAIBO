@@ -18,7 +18,8 @@ import {Marker} from "../map-preview/map-preview.component";
 export enum ViewState {
     NONE = "", TRAIL = "trail",
     POI = "poi", TRAIL_LIST = "list",
-    PLACE = "place", ACCESSIBILITY = "accessibility"
+    PLACE = "place", ACCESSIBILITY = "accessibility",
+    MUNICIPALITY = "municipality"
 }
 
 export class MapUtils {

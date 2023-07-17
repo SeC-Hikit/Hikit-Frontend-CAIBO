@@ -21,8 +21,7 @@ import {PlaceDto, PlaceRefDto, PlaceService} from "../service/place.service";
 import {ReadingUtils} from '../utils/ReadingUtils';
 import {Location} from "@angular/common";
 import {MapUtils, ViewState} from "./MapUtils";
-import {control} from "leaflet";
-import {Municipality, MunicipalityService} from "../service/municipality.service";
+import {MunicipalityDetails, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
 
 
@@ -61,10 +60,16 @@ export class MapComponent implements OnInit {
     trailPreviewCount: number = 0;
     trailPreviewPage: number = 0;
 
-    municipalityList: Municipality[] = []
+    municipalityList: MunicipalityDetails[] = []
 
     selectedTrail: TrailDto;
     selectedNotification: AccessibilityNotification;
+
+    // municipalities
+    selectedMunicipality: MunicipalityDetails;
+    municipalityTrails: TrailPreview[] = [];
+    municipalityTrailsMax: number = 0;
+
     selectedTrailPois: PoiDto[] = [];
     trailList: TrailDto[] = [];
     connectedTrails: TrailDto[] = [];
@@ -426,6 +431,8 @@ export class MapComponent implements OnInit {
             })
     }
 
+    loadTrailPreviewForMunicipality(page: number) {}
+
     private openInfoModal(title: string, body: string) {
         const modal = this.modalService.open(InfoModalComponent);
         modal.componentInstance.title = title;
@@ -591,7 +598,7 @@ export class MapComponent implements OnInit {
         modal.componentInstance.title = "Seleziona un comune per esplorarne la rete sentieristica";
         modal.componentInstance.body = "";
 
-        const selectors = this.municipalityList.map(it=> {
+        const selectors = this.municipalityList.map(it => {
             return {
                 name: it.city,
                 value: it.code,
@@ -601,8 +608,19 @@ export class MapComponent implements OnInit {
         modal.componentInstance.selected = "";
         modal.componentInstance.selectors = selectors;
         modal.componentInstance.onPromptOk.subscribe((valueResolution: Choice) => {
-            //
+            this.selectMunicipality(valueResolution.value)
         });
+    }
+
+    selectMunicipality(code: string) {
+        this.selectedMunicipality = this.municipalityList.filter(it => it.code == code)[0]
+        this.trailPreviewService.findByMunicipality(this.selectedMunicipality.city, environment.realm,
+            false, 0, 1000).subscribe((resp) => {
+            this.municipalityTrails = resp.content
+            this.municipalityTrailsMax = resp.totalCount
+            this.sideView = ViewState.MUNICIPALITY;
+            MapUtils.changeUrlToState(ViewState.MUNICIPALITY, code);
+        })
     }
 
     onTerrainChangeSelectionClick() {
@@ -615,10 +633,14 @@ export class MapComponent implements OnInit {
             {name: "Geopolitica", value: "geopolitic", imageUrl: path + "geopolitic1.webp"},
             {name: "Geopolitica 2", value: "geopolitic2", imageUrl: path + "geopolitic2.webp"}
         ];
-        modal.componentInstance.selected = selectors.filter(it=>it.value==this.selectedTileLayer)[0];
+        modal.componentInstance.selected = selectors.filter(it => it.value == this.selectedTileLayer)[0];
         modal.componentInstance.selectors = selectors;
         modal.componentInstance.onPromptOk.subscribe((valueResolution: Choice) => {
             this.changeTileLayer(valueResolution.value)
         });
+    }
+
+    onSelectMunicipality($event: string) {
+        this.selectMunicipality($event);
     }
 }

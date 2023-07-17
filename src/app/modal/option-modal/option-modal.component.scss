@@ -1,4 +1,7 @@
 .modal-body {
+  max-height: 500px;
+  overflow: scroll;
+
   img{
       height: auto;
       width: 100%;

@@ -60,6 +60,22 @@ export class TrailPreviewService {
             );
     }
 
+    findByMunicipality(municipalityName: string, realm: string,
+                       areDraftsVisible: boolean,
+                       skip: number, limit: number): Observable<TrailPreviewResponse> {
+        const params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+            .append("isDraftTrailVisible", String(areDraftsVisible))
+        if (realm) {
+            params.append("realm", realm);
+        }
+        return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/find/municipality/" + municipalityName,
+            {params: params})
+            .pipe(
+                tap(_ => console.log(_)),
+                catchError(this.handleError<TrailPreviewResponse>('get preview', null))
+            );
+    }
+
     getPreviews(skip: number, limit: number, realm?: string, areDraftsVisible: boolean = true): Observable<TrailPreviewResponse> {
         let params = new HttpParams().set("skip", skip.toString())
             .append("limit", limit.toString())

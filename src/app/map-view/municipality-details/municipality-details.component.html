@@ -1,0 +1,54 @@
+<div class="MapPoiDetails row">
+    <div class="top-margin col-12" *ngIf="selectedMunicipality">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="poiCodeColumn">Comune di {{selectedMunicipality.city}}</h1>
+            </div>
+        </div>
+        <div class="row" *ngIf="false">
+            <div class="col-md-4">
+                <span class="poiCodeColumn black"></span>
+            </div>
+            <div class="col-md-8">
+                <span class="poiCodeColumn"></span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="selectedMunicipality" id="scrollable-content" class="col-12 top-margin">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Sentieri</h4>
+                    </div>
+                    <div class="col-12">
+                        <app-map-trail-list
+                                [trailsPreviewList]="trailsForMunicipality"
+                                (onSelectTrail)="onSelectTrail($event)"
+                        >
+                        </app-map-trail-list>
+                        <div *ngIf="isPaginationToShow" class="pagination-position">
+                            <ngb-pagination
+                                    [pageSize]="maxTrailEntriesPerPage"
+                                    [collectionSize]="trailsForMunicipalityMax"
+                                    [(page)]="trailPreviewPage"
+                                    [size]="'sm'"
+                                    [ellipses]="true"
+                                    [maxSize]="2"
+                                    aria-label="Default pagination"
+                                    (pageChange)="loadTrailPreview($event)"
+                            ></ngb-pagination>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
