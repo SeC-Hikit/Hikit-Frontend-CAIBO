@@ -91,6 +91,7 @@ import { NotificationDetailsComponent } from './map-view/notification-details/no
 import {DatePipe} from "./DatePipe";
 import {OptionModalComponent} from "./modal/option-modal/option-modal.component";
 import { MunicipalityDetailsComponent } from './map-view/municipality-details/municipality-details.component';
+import { ReportingOnPositionComponent } from './accessibility/reporting-on-position/reporting-on-position.component';
 
 @NgModule({
   declarations: [
@@ -174,7 +175,8 @@ import { MunicipalityDetailsComponent } from './map-view/municipality-details/mu
     NotificationDetailsComponent,
     DatePipe,
     OptionModalComponent,
-    MunicipalityDetailsComponent
+    MunicipalityDetailsComponent,
+    ReportingOnPositionComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,52 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div class="container ReportingForm">
+    <form [formGroup]="formGroup" (ngSubmit)="this.onSubmit()">
+        <div class="row">
+            <div class="col-12 col-md-12 top-margin-x2">
+                <h1>Segnala in base alla tua posizione</h1>
+            </div>
+        </div>
+        <div class="col-md-12 top-margin">
+            <label>Geolocalizza la tua posizione, utilizzando la rete dati ed eventualmente il ricevitore GPS del dispositivo.</label>
+        </div>
+        <div class="col-md-12 top-margin">
+            <button class="btn btn-primary top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                    *ngIf="!hasBeenGeolocalised">
+                Condividi posizione
+            </button>
+            <button class="btn btn-outline-warning top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                    *ngIf="hasBeenGeolocalised">
+                Ripeti geolocalizazzione
+            </button>
+        </div>
+        <div class="col-md-12 top-margin-x2">
+            <label *ngIf="hasBeenGeolocalised" class="red-text">
+                <svg class="bi right-fix" width="24"
+                     height="24" fill="currentColor">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#wrench"
+                    />
+                </svg>
+                Se la geolocalizzazione non fosse accurata,
+                procedi a ripetere la geolocalizzazione tra qualche secondo. In alternativa, se conosci il sentiero
+                su cui ti trovi riporta il problema usando la <button class="btn-primary" routerLink="/accessibility/reporting-form">pagina dedicata</button></label>
+        </div>
+        <div class="col-md-12">
+            <div *ngIf="!isLoading && hasBeenGeolocalised">
+                <div *ngIf="trail">
+                    <app-report-location-entry
+                            [focusPoint]="specifiedPosition"
+                            [classPrefix]="'choice'"
+                            [isEditableLocation]="true"
+                            [trail]="trail"
+                            [inputForm]="position"
+                            [markers]="mapMarkers"
+                            [i]="0"
+                            [title]="''"
+                            [isShowPositionCoords]="false"
+                    ></app-report-location-entry>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

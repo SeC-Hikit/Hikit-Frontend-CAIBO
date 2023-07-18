@@ -3,7 +3,7 @@
     <form [formGroup]="formGroup" (ngSubmit)="this.onSubmit()">
         <div class="row">
             <div class="col-12 col-md-12 top-margin-x2">
-                <h1>Segnala un problema, da lista sentieri</h1>
+                <h1>Segnala in base al sentiero</h1>
             </div>
         </div>
         <div class="row">
@@ -43,31 +43,6 @@
                     </div>
                     <div class="col-md-12 top-margin-x2">
                         <h3>Località</h3>
-                    </div>
-                    <div class="col-md-12 top-margin">
-                        <label>Geolocalizza la tua posizione, oppure usa le frecce ai lati della mappa
-                            per selezionare il punto per evidenziare la posizione del problema di percorrenza.</label>
-                    </div>
-                    <div class="col-md-12 top-margin">
-                        <button class="btn btn-primary top-margin-x2 col-12" (click)="onGeolocatingPosition()"
-                                *ngIf="!hasBeenGeolocalised">
-                            Condividi posizione
-                        </button>
-                        <button class="btn btn-outline-warning top-margin-x2 col-12" (click)="onGeolocatingPosition()"
-                                *ngIf="hasBeenGeolocalised">
-                            Ripeti geolocalizazzione
-                        </button>
-                    </div>
-                    <div class="col-md-12 top-margin-x2">
-                        <label *ngIf="hasBeenGeolocalised" class="red-text">
-                            <svg class="bi right-fix" width="24"
-                                 height="24" fill="currentColor">
-                                <use
-                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#wrench"
-                                />
-                            </svg>
-                            Se la geolocalizzazione non fosse accurata,
-                            procedi a selezionare un punto usando le frecce sottostanti, ai lati della mappa.</label>
                     </div>
                     <div class="col-md-12">
                         <div *ngIf="hasLoaded">

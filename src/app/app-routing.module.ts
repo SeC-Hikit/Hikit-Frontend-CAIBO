@@ -54,6 +54,7 @@ import {AnnouncementSingleViewComponent} from "./announcement-single-view/announ
 import {CreditsComponent} from "./credits/credits.component";
 import {DevelopmentComponent} from "./development/development.component";
 import {BugReportingComponent} from "./bug-reporting/bug-reporting.component";
+import {ReportingOnPositionComponent} from "./accessibility/reporting-on-position/reporting-on-position.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -125,6 +126,10 @@ const routes: Routes = [
             {
                 path: "success",
                 component: LandingPageSuccessComponent,
+            },
+            {
+                path: "geolocalizeme-reporting-form",
+                component: ReportingOnPositionComponent,
             },
             {
                 path: "reporting-form",

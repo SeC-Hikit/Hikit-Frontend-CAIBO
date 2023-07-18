@@ -153,45 +153,6 @@ export class ReportingFormComponent implements OnInit {
         }
     }
 
-    onGeolocatingPosition() {
-        if (navigator.geolocation) {
-            this.isLoading = true;
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const longitude = position.coords.longitude;
-                    const latitude = position.coords.latitude;
-
-                    // TODO: make this call with a certain delay
-                    this.geoToolsService.getAltitude({latitude, longitude})
-                        .subscribe((resp) => {
-                            const altitude = resp.altitude;
-                            this.specifiedPosition = {
-                                longitude: longitude,
-                                latitude: latitude,
-                                altitude: altitude
-                            }
-                            this.setPosInForm(latitude, longitude, altitude);
-                            this.hasBeenGeolocalised = true;
-                            this.isLoading = false;
-                            this.mapMarkers = [{
-                                coords: this.specifiedPosition,
-                                icon: MapPinIconType.ALERT_PIN,
-                                color: "red"
-                            }]
-                        });
-                }, (error) => {
-                    this.isLoading = false;
-                    this.noticeErrorModal("Errore nel geolocalizzare l'utente",
-                        `Non è stato possibile registrare la sua posizione. \n
-                        Usi le frecce a lato della mappa per segnalare il problema (errore='${error.POSITION_UNAVAILABLE}')`)
-                })
-        } else {
-            this.noticeErrorModal("Errore nel geolocalizzare l'utente", "Il suo dispositivo non supporta la" +
-                " geolocalizzazione e/o non ha dato il consenso per condividere la sua posizione")
-        }
-        return false;
-    }
-
     private noticeErrorModal(title: string, body: string) {
         const modal = this.modalService.open(InfoModalComponent);
         modal.componentInstance.title = title;

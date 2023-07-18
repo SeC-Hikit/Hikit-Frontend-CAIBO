@@ -33,7 +33,7 @@ export class GeoTrailService {
   }
 
   locate(locateDto: LocateDto, level: string = "MEDIUM",
-         areDraftVisible: boolean = true): Observable<TrailResponse> {
+         areDraftVisible: boolean = false): Observable<TrailResponse> {
     let params = new HttpParams().set("level", level)
         .append("isDraftTrailVisible", String(areDraftVisible))
     return this.httpClient.post<TrailResponse>(this.baseUrl + "/locate", locateDto, {params: params})
