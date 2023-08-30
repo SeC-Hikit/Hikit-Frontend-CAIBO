@@ -228,14 +228,17 @@ export interface paths {
   "/ert/localities": {
     get: operations["get_8"];
   };
+  "/ert/localities/{istat}": {
+    get: operations["get_9"];
+  };
   "/dataset": {
     get: operations["getTrailDatasetV"];
   };
   "/announcement": {
-    get: operations["get_9"];
+    get: operations["get_10"];
   };
   "/announcement/{id}": {
-    get: operations["get_10"];
+    get: operations["get_11"];
   };
   "/admin/diagnose/weather": {
     get: operations["testWeather"];
@@ -2106,6 +2109,21 @@ export interface operations {
       };
     };
   };
+  get_9: {
+    parameters: {
+      path: {
+        istat: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LocalityResponse"];
+        };
+      };
+    };
+  };
   getTrailDatasetV: {
     responses: {
       /** OK */
@@ -2116,7 +2134,7 @@ export interface operations {
       };
     };
   };
-  get_9: {
+  get_10: {
     parameters: {
       query: {
         skip?: number;
@@ -2133,7 +2151,7 @@ export interface operations {
       };
     };
   };
-  get_10: {
+  get_11: {
     parameters: {
       path: {
         id: string;

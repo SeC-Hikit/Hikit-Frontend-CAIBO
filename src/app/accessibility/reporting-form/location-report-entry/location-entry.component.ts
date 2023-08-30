@@ -17,11 +17,12 @@ export class LocationEntryReportComponent implements OnInit {
     @Input() classPrefix: string;
     @Input() i: number;
     @Input() inputForm?: FormGroup;
-    @Input() trail: TrailDto;
+    @Input() trail?: TrailDto;
     @Input() otherTrails?: TrailDto[];
     @Input() markers?: Marker[];
     @Input() isEditableLocation: boolean;
     @Input() isShowPositionCoords?: boolean;
+    @Input() isPositionalSliderVisible?: boolean = true;
 
     @Input() focusPoint?: CoordinatesDto;
 

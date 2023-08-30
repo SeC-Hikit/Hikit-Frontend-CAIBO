@@ -41,12 +41,14 @@
                         <!-- TODO -->
                         <app-municipality-details
                             [selectedMunicipality] = "selectedMunicipality"
+                            [selectedLocationDetails] = "selectedLocationDetails"
                             [trailMappings]="trailMappings"
                             [trailsForMunicipality]="municipalityTrails"
                             [trailsForMunicipalityMax] = "municipalityTrailsMax"
                             [isPaginationToShow] = "false"
                             (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
                             (onSelectTrailCode)="selectTrail($event)"
+                            (onNavigateToLocation)="navigateToLocation($event)"
                         >
                         </app-municipality-details>
                     </div>

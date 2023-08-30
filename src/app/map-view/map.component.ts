@@ -23,6 +23,7 @@ import {Location} from "@angular/common";
 import {MapUtils, ViewState} from "./MapUtils";
 import {MunicipalityDetails, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
+import {ErtService, LocalityDto} from "../service/ert.service";
 
 
 export enum TrailSimplifierLevel {
@@ -99,6 +100,7 @@ export class MapComponent implements OnInit {
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
     trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
     highlightedTrail: TrailDto;
+    selectedLocationDetails: LocalityDto;
 
     constructor(
         private trailService: TrailService,
@@ -114,6 +116,7 @@ export class MapComponent implements OnInit {
         private authService: AuthService,
         private placeService: PlaceService,
         private municipalityService: MunicipalityService,
+        private ertService: ErtService,
     ) {
     }
 
@@ -614,6 +617,9 @@ export class MapComponent implements OnInit {
 
     selectMunicipality(code: string) {
         this.selectedMunicipality = this.municipalityList.filter(it => it.code == code)[0]
+        this.ertService.getLocalityDetailsByIstat(code).subscribe(resp => {
+            this.selectedLocationDetails = resp.content[0];
+        });
         this.trailPreviewService.findByMunicipality(this.selectedMunicipality.city, environment.realm,
             false, 0, 1000).subscribe((resp) => {
             this.municipalityTrails = resp.content

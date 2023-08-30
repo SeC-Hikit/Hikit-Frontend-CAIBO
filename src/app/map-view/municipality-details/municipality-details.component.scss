@@ -9,6 +9,20 @@
     border-radius: 5px;
   }
 
+  .ert-logo {
+    max-width: 200px;
+  }
+
+  .info {
+    height: 400px;
+    border-left: 2px solid $secondary-bg-color;
+    padding-left: 15px;
+  }
+
+  .scrollable-height {
+    overflow-y: scroll;
+  }
+
   .black {
     background: black !important;
   }

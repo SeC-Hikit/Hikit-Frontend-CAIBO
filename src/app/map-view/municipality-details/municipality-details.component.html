@@ -4,6 +4,12 @@
             <div class="col-md-8">
                 <h1 class="poiCodeColumn">Comune di {{selectedMunicipality.city}}</h1>
             </div>
+            <div class="col-md-2 clickable" *ngIf="selectedLocationDetails"
+                 (click)="navigateToLocation(selectedLocationDetails.coordinates[0])">
+                <svg class="bi" width="24" height="24" fill="red">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#binoculars-fill"/>
+                </svg>
+            </div>
         </div>
         <div class="row" *ngIf="false">
             <div class="col-md-4">
@@ -14,15 +20,28 @@
             </div>
         </div>
     </div>
-    <div *ngIf="selectedMunicipality" id="scrollable-content" class="col-12 top-margin">
+    <div *ngIf="selectedMunicipality && selectedLocationDetails">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 top-margin-x2">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-5">
+                        <h4>Info</h4>
+                    </div>
+                    <div class="col-md-7">
+                        <img src="assets/ert/ert_logo.png" alt="ert-logo" class="ert-logo">
+                    </div>
+                    <div class="col-md-12 info scrollable-height">
+                        <p [innerHTML]="selectedLocationDetails.description"></p>
+                    </div>
+                    <div class="col-md-5 top-margin-x2">
+                        <h4>Foto</h4>
+                    </div>
+                    <div class="col-md-12 info scrollable-height">
+                        <img [src]="image.thumb" *ngFor="let image of selectedLocationDetails.image" />
                     </div>
                 </div>
             </div>
-            <div class="col-12">
+            <div class="col-12 top-margin-x2">
                 <div class="row">
                     <div class="col-12">
                         <h4>Sentieri</h4>
@@ -45,7 +64,6 @@
                                     (pageChange)="loadTrailPreview($event)"
                             ></ngb-pagination>
                         </div>
-
                     </div>
                 </div>
             </div>
