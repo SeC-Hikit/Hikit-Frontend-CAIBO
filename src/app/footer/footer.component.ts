@@ -12,6 +12,10 @@ export class FooterComponent implements OnInit {
     constructor(private routerService: Router) {
     }
 
+
+    scrollTop() {
+        scroll(0,0);
+    }
     ngOnInit(): void {
         this.routerService.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {

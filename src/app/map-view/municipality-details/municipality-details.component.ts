@@ -4,7 +4,6 @@ import {MunicipalityDetails} from "../../service/municipality.service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
 import {LocalityDto} from "../../service/ert.service";
 import {Coordinates2D} from "../../service/geo-trail-service";
-import {$e} from "codelyzer/angular/styles/chars";
 
 @Component({
     selector: 'app-municipality-details',
@@ -27,9 +26,6 @@ export class MunicipalityDetailsComponent implements OnInit {
     maxTrailEntriesPerPage = 350; // TODO: manage size and pagination
 
 
-    constructor() {
-    }
-
     ngOnInit(): void {
     }
 
@@ -46,5 +42,8 @@ export class MunicipalityDetailsComponent implements OnInit {
             latitude: $event.latitude,
             longitude: $event.longitude
         });
+    }
+
+    openModal(id: number, imageIndex: number): void {
     }
 }

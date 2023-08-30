@@ -37,7 +37,9 @@
                         <h4>Foto</h4>
                     </div>
                     <div class="col-md-12 info scrollable-height">
-                        <img [src]="image.thumb" *ngFor="let image of selectedLocationDetails.image" />
+                        <img *ngFor="let image of selectedLocationDetails.image; let i = index"
+                             [src]="image.thumb"
+                             (click)="openModal(i, 0)"/>
                     </div>
                 </div>
             </div>
