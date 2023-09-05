@@ -53,13 +53,6 @@ export class MapUtils {
         const electedLineWeight = !lineStyleWeight ? MapUtils.LINE_WEIGHT : lineStyleWeight;
         const electedFillOpacity = !fillOpacity ? 1 : fillOpacity;
         switch (trailClassification) {
-            case TrailClassification.E:
-                return {
-                    weight: electedLineWeight,
-                    color: electedTrailColor,
-                    dashArray: "5, 10",
-                    opacity: electedFillOpacity
-                };
             case TrailClassification.EEA:
                 return {
                     weight: electedLineWeight,
@@ -71,7 +64,7 @@ export class MapUtils {
                 return {
                     weight: electedLineWeight,
                     color: electedTrailColor,
-                    dashArray: "3, 10",
+                    dashArray: "7, 10",
                     opacity: electedFillOpacity
                 };
             default:

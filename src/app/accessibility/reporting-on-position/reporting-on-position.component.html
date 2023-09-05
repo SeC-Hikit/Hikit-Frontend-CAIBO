@@ -33,19 +33,19 @@
         </div>
         <div class="col-md-12">
             <div *ngIf="!isLoading && hasBeenGeolocalised">
-                <div *ngIf="trail">
-                    <app-report-location-entry
-                            [focusPoint]="specifiedPosition"
-                            [classPrefix]="'choice'"
-                            [isEditableLocation]="true"
-                            [trail]="trail"
-                            [inputForm]="position"
-                            [markers]="mapMarkers"
-                            [i]="0"
-                            [title]="''"
-                            [isShowPositionCoords]="false"
-                    ></app-report-location-entry>
+                <div>
+                    <app-reporting-geolocalized-issue
+                     [trails]="trailList"
+                     [userPosition]="specifiedPosition"
+                    >
+
+                    </app-reporting-geolocalized-issue>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div *ngIf="!isLoading && hasBeenGeolocalised">
+                <p>Trovati {{trailList.length}} sentieri. Indica su quale ti trovi.</p>
             </div>
         </div>
     </form>

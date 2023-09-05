@@ -23,8 +23,8 @@ export class ReportingOnPositionComponent implements OnInit {
     });
     hasBeenGeolocalised: boolean = false;
     mapMarkers: Marker[] = [];
-    private specifiedPosition: CoordinatesDto;
-    private trail: TrailDto;
+    trailList: TrailDto[] = [];
+    specifiedPosition: CoordinatesDto;
 
 
     constructor(private modalService: NgbModal,
@@ -55,7 +55,7 @@ export class ReportingOnPositionComponent implements OnInit {
                     const latitude = position.coords.latitude;
 
                     // TODO: make this call with a certain delay
-                    this.geoToolsService.getAltitude({latitude, longitude})
+                    this.geoToolsService.getAltitude({longitude, latitude})
                         .subscribe((resp) => {
 
                             const boundary = 0.00425;
@@ -65,16 +65,18 @@ export class ReportingOnPositionComponent implements OnInit {
                                     topRight: {longitude: longitude + boundary, latitude: latitude + boundary}
                                 },
                                 trailIdsNotToLoad: []}).subscribe((resp)=> {
-                                console.log(resp)
+                                    this.trailList = resp.content;
                             })
+
 
                             const altitude = resp.altitude;
                             this.specifiedPosition = {
-                                longitude: longitude,
-                                latitude: latitude,
-                                altitude: altitude
+                                longitude: resp.longitude,
+                                latitude: resp.latitude,
+                                altitude: resp.altitude
                             }
                             this.setPosInForm(latitude, longitude, altitude);
+
                             this.hasBeenGeolocalised = true;
                             this.isLoading = false;
                             this.mapMarkers = [{

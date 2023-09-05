@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MaintenanceDto, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
@@ -75,12 +75,12 @@ export class MapComponent implements OnInit {
     trailList: TrailDto[] = [];
     connectedTrails: TrailDto[] = [];
     selectedTileLayer: string;
-    selectedTrailBinaryPath: string;
     selectedTrailNotifications: AccessibilityNotification[];
     selectedTrailMaintenances: MaintenanceDto[];
 
     userPosition: UserCoordinates;
     highlightedLocation: Coordinates2D;
+    zoomToTrail: boolean = false;
 
     isTrailSelectedVisible: boolean = false;
     isTrailFullScreenVisible: boolean = false;
@@ -145,6 +145,15 @@ export class MapComponent implements OnInit {
             });
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        for (const propName in changes) {
+            if (propName == "sideView") {
+                document.getElementById("trail-detail-column")
+                    .scrollTo(0, 0);
+            }
+        }
+    }
+
     private getViewFromLocation(): ViewState {
         const path = this.location.path();
         return MapUtils.getViewFromPath(path);
@@ -182,16 +191,16 @@ export class MapComponent implements OnInit {
         document.getElementById(MapComponent.MAP_ID).style.height = fullSize.toString() + "px";
     }
 
-    onSelectTrail(id: string) {
+    onSelectTrail(id: string, zoomIn: boolean = false, switchView: boolean = false) {
         if (!id) {
             return;
         }
 
         MapUtils.changeUrlToState(ViewState.TRAIL, id);
-        this.selectTrail(id, true);
+        this.selectTrail(id, true, switchView, zoomIn);
     }
 
-    selectTrail(id: string, refresh?: boolean, switchView = true): void {
+    selectTrail(id: string, refresh?: boolean, switchView = true, zoomIn = false): void {
         this.isLoading = true;
         if (!id) {
             return;
@@ -215,6 +224,9 @@ export class MapComponent implements OnInit {
             }, () => {
 
             }, () => {
+                if(zoomIn) {
+                    this.zoomToTrail = !this.zoomToTrail;
+                }
                 this.isLoading = false;
             })
         }
@@ -550,13 +562,12 @@ export class MapComponent implements OnInit {
         })
     }
 
-
     private loadDataPassedByUrl() {
         const id = this.activatedRoute.snapshot.paramMap.get("id");
         if (!id) return;
         switch (this.sideView) {
             case ViewState.TRAIL:
-                this.onSelectTrail(id);
+                this.onSelectTrail(id, true);
                 break;
             case ViewState.PLACE:
                 this.onSelectPlace(id);
@@ -583,7 +594,7 @@ export class MapComponent implements OnInit {
                 this.accessibilityService.getUnresolvedForTrailId(target.trailId).toPromise(),
                 this.trailService.getTrailById(target.trailId).toPromise()]).then(
                 (responses) => {
-                    this.selectTrail(target.trailId, false, false);
+                    this.selectTrail(target.trailId, false, false, true);
                     this.selectedTrailNotifications = responses[0].content;
                     this.onAccessibilityNotificationSelection(id);
                 })
