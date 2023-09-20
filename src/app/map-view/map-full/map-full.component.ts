@@ -224,11 +224,13 @@ export class MapFullComponent implements OnInit {
         this.clearPreviouslySelectedLayer(previousTrailId);
         this.clearPathFromList(selectedTrail);
 
-        let coordinatesInverted = MapUtils.getCoordinatesInverted(selectedTrail.coordinates);
-        const mainPolyline = L.polyline(coordinatesInverted);
+
+
+        const inverted = MapUtils.getCoordinatesInverted(selectedTrail.coordinates);
+        const mainPolyline = MapUtils.getPolylineFromCoords(inverted)
         mainPolyline.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
-        const backgroundPolyline = L.polyline(coordinatesInverted);
-        backgroundPolyline.setStyle(MapUtils.getBackgroundLineStyle(this.getLineWeight(), 0.9));
+        const backgroundPolyline = L.polyline(inverted);
+        backgroundPolyline.setStyle(MapUtils.getBackgroundLineStyle(10, 0.9));
 
 
         this.selectedTrailLayer = new TrailToPolyline(

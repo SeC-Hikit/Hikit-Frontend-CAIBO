@@ -6,46 +6,103 @@
                 <h1>Segnala in base alla tua posizione</h1>
             </div>
         </div>
-        <div class="col-md-12 top-margin">
-            <label>Geolocalizza la tua posizione, utilizzando la rete dati ed eventualmente il ricevitore GPS del dispositivo.</label>
-        </div>
-        <div class="col-md-12 top-margin">
-            <button class="btn btn-primary top-margin-x2 col-12" (click)="onGeolocatingPosition()"
-                    *ngIf="!hasBeenGeolocalised">
-                Condividi posizione
-            </button>
-            <button class="btn btn-outline-warning top-margin-x2 col-12" (click)="onGeolocatingPosition()"
-                    *ngIf="hasBeenGeolocalised">
-                Ripeti geolocalizazzione
-            </button>
-        </div>
-        <div class="col-md-12 top-margin-x2">
-            <label *ngIf="hasBeenGeolocalised" class="red-text">
-                <svg class="bi right-fix" width="24"
-                     height="24" fill="currentColor">
-                    <use
-                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#wrench"
-                    />
-                </svg>
-                Se la geolocalizzazione non fosse accurata,
-                procedi a ripetere la geolocalizzazione tra qualche secondo. In alternativa, se conosci il sentiero
-                su cui ti trovi riporta il problema usando la <button class="btn-primary" routerLink="/accessibility/reporting-form">pagina dedicata</button></label>
-        </div>
-        <div class="col-md-12">
-            <div *ngIf="!isLoading && hasBeenGeolocalised">
-                <div>
-                    <app-reporting-geolocalized-issue
-                     [trails]="trailList"
-                     [userPosition]="specifiedPosition"
-                    >
-
-                    </app-reporting-geolocalized-issue>
-                </div>
+        <div class="row">
+            <div class="col-md-12 top-margin">
+                <label>Geolocalizza la tua posizione, utilizzando la rete dati ed eventualmente il ricevitore GPS del
+                    dispositivo.</label>
+            </div>
+            <div class="col-md-12 top-margin">
+                <button class="btn btn-primary top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                        *ngIf="!hasBeenGeolocalised">
+                    Condividi posizione
+                </button>
+                <button class="btn btn-outline-warning top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                        *ngIf="hasBeenGeolocalised">
+                    Ripeti geolocalizazzione
+                </button>
             </div>
         </div>
-        <div class="col-md-12">
-            <div *ngIf="!isLoading && hasBeenGeolocalised">
-                <p>Trovati {{trailList.length}} sentieri. Indica su quale ti trovi.</p>
+        <div class="row top-margin-x2">
+            <div class="col-md-6">
+                <div *ngIf="!isLoading && hasBeenGeolocalised">
+                    <div>
+                        <app-reporting-geolocalized-issue
+                                [trails]="trailList"
+                                [selected]="selectedTrail"
+                                [userPosition]="specifiedPosition"
+                        >
+
+                        </app-reporting-geolocalized-issue>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" *ngIf="!selectedTrail">
+                <div *ngIf="!isLoading && hasBeenGeolocalised">
+                    <p>Sulla mappa, in rosso, e' stata localizzata la tua posizione.</p>
+                    <p>Sono stati trovati {{trailList.length}} sentieri nei tuoi immediati pressi.
+                        Indica su quale ti trovi, selezionando il pulsante del colore corrispondente</p>
+                </div>
+                <button *ngFor="let trail of trailList; let i = index" class="btn btn-primary full-width top-margin-x2"
+                        [style]="'background:' + COLORS[i] + ' !important'"
+                        (click)="onTrailSelection(trail)">{{trail.code}}
+                    | {{trail.startLocation.name}} - {{trail.endLocation.name}}</button>
+            </div>
+            <div class="col-md-6" *ngIf="selectedTrail">
+                <div>Hai selezionato <span class="trailCodeColumn"
+                                           [style]="'background:' + COLORS[trailList.indexOf(selectedTrail)]">
+                    {{selectedTrail.code}}</span>,
+                    {{selectedTrail.startLocation.name}} - {{selectedTrail.endLocation.name}}</div>
+                <form [formGroup]="formGroup" (ngSubmit)="this.onSubmit()" class="top-margin-x2">
+                    <label>Problema riscontrato <span class="mandatory-field-asterisk">*</span></label>
+                    <div class="col-12">
+                        <select title="Scegli un'opzione"
+                                formControlName="cause"
+                                class="form-control">
+                            <option
+                                    *ngFor="let foundIssue of foundIssues"
+                                    value="{{ foundIssue }}"
+                            >
+                                {{ foundIssue }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-12 top-margin-x2">
+                        <div>
+                            <h2>Le tue info</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <div>
+                            <label>Indirizzo email <span class="mandatory-field-asterisk">*</span></label>
+                            <input type="email" class="form-control"
+                                   formControlName="email"
+                                   placeholder="email@esempio.com">
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 top-margin">
+                        <div>
+                            <label for="telephoneFormControl">Telefono</label>
+                            <input type="tel" class="form-control"
+                                   formControlName="telephone"
+                                   id="telephoneFormControl">
+                        </div>
+                    </div>
+                    <div class="row errors" *ngIf="formErrors.length > 0">
+                        <div class="col-12 top-margin-x2">
+                            <ul>
+                                <li *ngFor="let error of formErrors">{{error}}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-12 top-margin-x2">
+                            <button type="button" class="btn btn-primary btn-complete full-width" (click)="onSubmit()">Invia
+                                segnalazione
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </form>

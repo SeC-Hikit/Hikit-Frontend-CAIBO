@@ -43,8 +43,12 @@ export class MapUtils {
     }
 
     static getBackgroundLineStyle(lineWeight = 5, opacity = 0.6) {
-        return this.getLineStyle(false, TrailClassification.T,
+        return MapUtils.getLineStyle(false, TrailClassification.T,
             "white", lineWeight, opacity)
+    }
+
+    static getPolylineFromCoords(coordinatesInverted) {
+        return L.polyline(coordinatesInverted);
     }
 
     static getLineStyle(isSelectedLine: boolean, trailClassification: String,

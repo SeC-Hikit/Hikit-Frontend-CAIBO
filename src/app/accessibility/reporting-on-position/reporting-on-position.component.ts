@@ -8,6 +8,7 @@ import {GeoToolsService} from "../../service/geotools.service";
 import {Marker} from "../../map-preview/map-preview.component";
 import {CoordinatesDto, TrailDto} from "../../service/trail-service.service";
 import {GeoTrailService} from "../../service/geo-trail-service";
+import {environment} from "../../../environments/environment";
 
 @Component({
     selector: 'app-reporting-on-position',
@@ -15,8 +16,15 @@ import {GeoTrailService} from "../../service/geo-trail-service";
     styleUrls: ['./reporting-on-position.component.scss']
 })
 export class ReportingOnPositionComponent implements OnInit {
+
+    COLORS = ["#001021", "#1481BA", "#034748",
+        "#11B5E4", "#004FA3", "#0CAADC", "#3396FF"];
+
+
     isLoading: boolean = true;
     formGroup: FormGroup = new FormGroup({
+        foundIssue: new FormControl("", Validators.required),
+        telephone: new FormControl("", ),
         position: TrailImportFormUtils.getLocationForGroup(),
         email: new FormControl("", [Validators.email, Validators.required]),
         trailId: new FormControl("", Validators.required),
@@ -24,7 +32,11 @@ export class ReportingOnPositionComponent implements OnInit {
     hasBeenGeolocalised: boolean = false;
     mapMarkers: Marker[] = [];
     trailList: TrailDto[] = [];
+    selectedTrail: TrailDto;
+    foundIssues = environment.issueReportingList;
     specifiedPosition: CoordinatesDto;
+    hasBeenSelected: Boolean = false;
+    formErrors = [];
 
 
     constructor(private modalService: NgbModal,
@@ -47,6 +59,7 @@ export class ReportingOnPositionComponent implements OnInit {
     }
 
     onGeolocatingPosition() {
+        this.selectedTrail = null;
         if (navigator.geolocation) {
             this.isLoading = true;
             navigator.geolocation.getCurrentPosition(
@@ -54,7 +67,6 @@ export class ReportingOnPositionComponent implements OnInit {
                     const longitude = position.coords.longitude;
                     const latitude = position.coords.latitude;
 
-                    // TODO: make this call with a certain delay
                     this.geoToolsService.getAltitude({longitude, latitude})
                         .subscribe((resp) => {
 
@@ -67,7 +79,6 @@ export class ReportingOnPositionComponent implements OnInit {
                                 trailIdsNotToLoad: []}).subscribe((resp)=> {
                                     this.trailList = resp.content;
                             })
-
 
                             const altitude = resp.altitude;
                             this.specifiedPosition = {
@@ -106,5 +117,11 @@ export class ReportingOnPositionComponent implements OnInit {
 
     get position() {
         return this.formGroup.controls["position"] as FormGroup;
+    }
+
+    onTrailSelection(trail: TrailDto) {
+        this.selectedTrail = trail;
+        this.formGroup.get("trailId").setValue(trail.id);
+        this.formGroup.get("foundIssue").setValue(this.foundIssues[0]);
     }
 }

@@ -13,6 +13,7 @@ import {AccessibilityReportDto} from "../../service/accessibility-service.servic
 import {GeoToolsService} from "../../service/geotools.service";
 import {NotificationReportService} from "../../service/notification-report-service.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Component({
     selector: "app-reporting-form",
@@ -21,20 +22,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class ReportingFormComponent implements OnInit {
     hasLoaded = false;
-    hasBeenGeolocalised = false;
     trail: TrailDto;
     specifiedPosition: CoordinatesDto;
     errors: string[] = [];
 
     mapMarkers: Marker[] = [];
     trailPreviews: TrailPreview[];
-
-    foundIssues: string[] = [
-        "Schianto d'albero su sentiero",
-        "Sentiero smottato",
-        "Sentiero invaso da piante",
-        "Sentiero non visibile"
-    ];
+    foundIssues: string[] = environment.issueReportingList;
 
     // TODO: remove form param from the map component.
     formGroupz: FormGroup = new FormGroup({
@@ -42,7 +36,7 @@ export class ReportingFormComponent implements OnInit {
     });
     formGroup: FormGroup = new FormGroup({
         trailId: new FormControl("", Validators.required),
-        cause: new FormControl(this.foundIssues[0], Validators.required),
+        cause: new FormControl(environment.issueReportingList, Validators.required),
         email: new FormControl("", [Validators.email, Validators.required]),
         telephone: new FormControl(""),
         coordLatitude: new FormControl("", Validators.required),
