@@ -14,28 +14,21 @@
             </h1>
             <p>I seguenti sono i problemi di percorrenza, presenti sui sentieri della rete, accertati dal gruppo di
                 sentieristica.</p>
-            <p>Hai per caso notato un problema, frana, albero schiantato, o altro, che blocca un sentiero? <a
-                    routerLink="./reporting-form">Aiutaci segnalandolo</a>
-            </p>.
+            <p>Hai per caso notato un problema quale una frana, albero crollato, o altro, che blocca un sentiero?
+                Con il tuo aiuto, il gruppo di sentieristica può organizzare sopralluoghi mirati ad interventi di manutenzione.
+            </p>
         </div>
         <div class="offset-lg-3 col-lg-2 d-none d-lg-block">
             <img src="../../assets/cai/trekking/maintenance.jpg" alt="maintenance" class="full-width"/>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <button class="btn btn-primary full-width" routerLink="/accessibility/geolocalizeme-reporting-form">
+        <div class="col-md-12">
+            <button class="btn btn-primary full-width" (click)="openOptionModal()">
             <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#phone"/>
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#lightning-fill"/>
             </svg>
-            Segnala in base alla tua posizione</button>
-        </div>
-        <div class="col-md-6">
-            <button class="btn btn-secondary full-width" routerLink="/accessibility/reporting-form">
-                <svg class="bi" width="24" height="24" fill="currentColor">
-                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost"/>
-                </svg>
-                Segnala in base al sentiero</button>
+            Segnala problema di percorrenza</button>
         </div>
     </div>
     <div class="row">

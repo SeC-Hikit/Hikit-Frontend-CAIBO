@@ -93,6 +93,7 @@ import {OptionModalComponent} from "./modal/option-modal/option-modal.component"
 import { MunicipalityDetailsComponent } from './map-view/municipality-details/municipality-details.component';
 import { ReportingOnPositionComponent } from './accessibility/reporting-on-position/reporting-on-position.component';
 import { ReportingGeolocalizedIssueComponent } from './accessibility/reporting-on-position/reporting-geolocalized-issue/reporting-geolocalized-issue.component';
+import { SelectionModalComponent } from './modal/selection-modal/selection-modal.component';
 
 @NgModule({
   declarations: [
@@ -178,7 +179,8 @@ import { ReportingGeolocalizedIssueComponent } from './accessibility/reporting-o
     OptionModalComponent,
     MunicipalityDetailsComponent,
     ReportingOnPositionComponent,
-    ReportingGeolocalizedIssueComponent
+    ReportingGeolocalizedIssueComponent,
+    SelectionModalComponent
   ],
   imports: [
     BrowserModule,

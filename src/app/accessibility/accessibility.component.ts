@@ -12,6 +12,7 @@ import {Coordinates2D} from "../service/geo-trail-service";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
 import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {Router} from "@angular/router";
+import {SelectionModalComponent} from "../modal/selection-modal/selection-modal.component";
 
 @Component({
     selector: 'app-accessibility',
@@ -26,9 +27,6 @@ export class AccessibilityComponent implements OnInit {
 
     totalUnresolvedNotification: number;
     totalSolvedNotification: number;
-
-    private destroy$ = new Subject();
-
     isPreviewVisible: boolean = false;
     hasLoaded = false;
 
@@ -47,7 +45,7 @@ export class AccessibilityComponent implements OnInit {
         private trailService: TrailService,
         private modalService: NgbModal,
         private authService: AuthService,
-        private routerService: Router
+        private routerService: Router,
     ) {
         this.unresolvedNotifications = [];
         this.solvedNotifications = [];
@@ -144,5 +142,11 @@ export class AccessibilityComponent implements OnInit {
 
     navigateToMap(id: string) {
         this.routerService.navigate(["map", "accessibility", id]);
+    }
+
+    openOptionModal() {
+        const modal = this.modalService.open(SelectionModalComponent);
+        modal.componentInstance.title = "Segnala un problema di percorrenza";
+        modal.componentInstance.body = "Seleziona come segnalare un problema di percorrenza:";
     }
 }

@@ -2,7 +2,7 @@
 <div class="container ReportingForm">
     <form [formGroup]="formGroup" (ngSubmit)="this.onSubmit()">
         <div class="row">
-            <div class="col-12 col-md-12 top-margin-x2">
+            <div class="col-12 col-md-12">
                 <h1>Segnala in base alla tua posizione</h1>
             </div>
         </div>
@@ -12,11 +12,11 @@
                     dispositivo.</label>
             </div>
             <div class="col-md-12 top-margin">
-                <button class="btn btn-primary top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                <button class="btn btn-primary col-12" (click)="onGeolocatingPosition()"
                         *ngIf="!hasBeenGeolocalised">
                     Condividi posizione
                 </button>
-                <button class="btn btn-outline-warning top-margin-x2 col-12" (click)="onGeolocatingPosition()"
+                <button class="btn btn-outline-warning col-12" (click)="onGeolocatingPosition()"
                         *ngIf="hasBeenGeolocalised">
                     Ripeti geolocalizazzione
                 </button>
@@ -38,9 +38,11 @@
             </div>
             <div class="col-md-6" *ngIf="!selectedTrail">
                 <div *ngIf="!isLoading && hasBeenGeolocalised">
-                    <p>Sulla mappa, in rosso, e' stata localizzata la tua posizione.</p>
-                    <p>Sono stati trovati {{trailList.length}} sentieri nei tuoi immediati pressi.
+                    <p>Sulla mappa, in <span class="trailCodeColumn red-bg">rosso</span>, e' stata localizzata la tua posizione.</p>
+                    <p *ngIf="trailList.length > 0">Sono stati trovati {{trailList.length}} sentieri vicino a te.
                         Indica su quale ti trovi, selezionando il pulsante del colore corrispondente</p>
+                    <p *ngIf="trailList.length == 0">Non sono stati trovati sentieri vicino a te.
+                        Ritenta la geolocalizzazione, oppure, <a routerLink="">se conosci il sentiero, segnalalo</a></p>
                 </div>
                 <button *ngFor="let trail of trailList; let i = index" class="btn btn-primary full-width top-margin-x2"
                         [style]="'background:' + COLORS[i] + ' !important'"

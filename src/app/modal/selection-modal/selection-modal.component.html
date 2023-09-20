@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+</div>
+<div class="modal-body">
+    <img src="assets/cai/reporting/report.webp" alt="reporting_issue" />
+    <p [innerHTML]="body"></p>
+</div>
+<div class="modal-footer">
+        <button class="btn btn-secondary full-width" routerLink="/accessibility/reporting-form"
+                (click)="dismiss()">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost"/>
+            </svg>
+            Segnala in base al codice sentiero
+        </button>
+        <button class="btn btn-secondary full-width" routerLink="/accessibility/geolocalizeme-reporting-form"
+                (click)="dismiss()">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#phone"/>
+            </svg>
+            Segnala in base alla tua posizione
+        </button>
+</div>
