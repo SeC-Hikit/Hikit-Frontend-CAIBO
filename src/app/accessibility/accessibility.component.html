@@ -62,7 +62,8 @@
                               {{ getTrailCode(notification.trailId) }}
                             </span>
                         </td>
-                        <td class="ellipsis small-column" [innerHTML]="notification.description"
+                        <td class="ellipsis small-column"
+                            [innerHTML]="notification.description"
                             (click)="showDetails(notification)"></td>
                         <td (click)="showDetails(notification)">
                             <svg class="bi" width="24" height="24" fill="currentColor">

@@ -66,6 +66,7 @@ export class ReportingGeolocalizedIssueComponent implements OnInit {
 
 
     private renderTrails(trails: TrailDto[], selected: TrailDto = null) {
+        if(!this.map) { return; }
         this.map.removeLayer(this.userPositionCircle);
         this.selectedTrailLayer.forEach(it=>this.map.removeLayer(it.getPolyline()));
 

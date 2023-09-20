@@ -2,13 +2,16 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MapPinIconType} from "../../../assets/icons/MapPinIconType";
 import {InfoModalComponent} from "../../modal/info-modal/info-modal.component";
-import {TrailImportFormUtils} from "../../utils/TrailImportFormUtils";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GeoToolsService} from "../../service/geotools.service";
 import {Marker} from "../../map-preview/map-preview.component";
 import {CoordinatesDto, TrailDto} from "../../service/trail-service.service";
 import {GeoTrailService} from "../../service/geo-trail-service";
 import {environment} from "../../../environments/environment";
+import {AccessibilityReportDto} from "../../service/accessibility-service.service";
+import {AuthService} from "../../service/auth.service";
+import {NotificationReportService} from "../../service/notification-report-service.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-reporting-on-position',
@@ -23,11 +26,13 @@ export class ReportingOnPositionComponent implements OnInit {
 
     isLoading: boolean = true;
     formGroup: FormGroup = new FormGroup({
-        foundIssue: new FormControl("", Validators.required),
-        telephone: new FormControl("", ),
-        position: TrailImportFormUtils.getLocationForGroup(),
+        cause: new FormControl("", Validators.required),
+        telephone: new FormControl("",),
         email: new FormControl("", [Validators.email, Validators.required]),
         trailId: new FormControl("", Validators.required),
+        coordLatitude: new FormControl("", Validators.required),
+        coordLongitude: new FormControl("", Validators.required),
+        coordAltitude: new FormControl("", Validators.required)
     });
     hasBeenGeolocalised: boolean = false;
     mapMarkers: Marker[] = [];
@@ -36,12 +41,15 @@ export class ReportingOnPositionComponent implements OnInit {
     foundIssues = environment.issueReportingList;
     specifiedPosition: CoordinatesDto;
     hasBeenSelected: Boolean = false;
-    formErrors = [];
+    formErrors: string[] = [];
 
 
     constructor(private modalService: NgbModal,
                 private geoToolsService: GeoToolsService,
-                private geoTrailService: GeoTrailService) {
+                private geoTrailService: GeoTrailService,
+                private authService: AuthService,
+                private notificationReportService: NotificationReportService,
+                private router: Router) {
     }
 
     ngOnInit(): void {
@@ -49,7 +57,55 @@ export class ReportingOnPositionComponent implements OnInit {
     }
 
     onSubmit() {
+        this.isLoading = true;
+        this.formErrors = [];
+        if (this.formGroup.valid) {
+            const uploadedOn = new Date().toISOString();
+            const reportDto: AccessibilityReportDto = {
+                id: null,
+                reportDate: uploadedOn,
+                email: this.formGroup.get("email").value,
+                coordinates: {
+                    altitude: this.formGroup.get("coordAltitude").value,
+                    latitude: this.formGroup.get("coordLatitude").value,
+                    longitude: this.formGroup.get("coordLongitude").value,
+                },
+                description: this.formGroup.get("cause").value,
+                issueId: "",
+                telephone: this.formGroup.get("telephone").value,
+                trailId: this.formGroup.get("trailId").value,
+                recordDetails: {
+                    uploadedOn: uploadedOn,
+                    uploadedBy: "",
+                    realm: this.authService.getInstanceRealm(),
+                    onInstance: ""
+                }
+            }
 
+            this.notificationReportService.report(reportDto)
+                .subscribe((resp) => {
+                    if (resp.status == "OK") {
+                        scroll(0, 0);
+                        this.router.navigate(["/accessibility/success"]);
+                    } else {
+                        this.noticeErrorsModal(resp.messages);
+                        this.isLoading = false;
+                        this.formErrors = ["Alcuni campi sono errati"];
+                    }
+                });
+
+        } else {
+            this.isLoading = false;
+            this.formErrors = ["Alcuni campi sono vuoti o errati"];
+        }
+    }
+
+    private noticeErrorsModal(errors: string[]) {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Errore nel salvataggio della notifica:`;
+        errors.map(it => "<b>" + it + "</b>");
+        const errorsString = errors.join("<br>")
+        modal.componentInstance.body = `<ul>I seguenti errori imepdiscono il salvataggio: <br/>${errorsString}</ul>`;
     }
 
     private noticeErrorModal(title: string, body: string) {
@@ -76,8 +132,9 @@ export class ReportingOnPositionComponent implements OnInit {
                                     bottomLeft: {longitude: longitude - boundary, latitude: latitude - boundary},
                                     topRight: {longitude: longitude + boundary, latitude: latitude + boundary}
                                 },
-                                trailIdsNotToLoad: []}).subscribe((resp)=> {
-                                    this.trailList = resp.content;
+                                trailIdsNotToLoad: []
+                            }).subscribe((resp) => {
+                                this.trailList = resp.content;
                             })
 
                             const altitude = resp.altitude;
@@ -110,9 +167,9 @@ export class ReportingOnPositionComponent implements OnInit {
     }
 
     private setPosInForm(latitude: number, longitude: number, altitude: number) {
-        this.formGroup.get("position").get("latitude").setValue(latitude);
-        this.formGroup.get("position").get("longitude").setValue(longitude);
-        this.formGroup.get("position").get("altitude").setValue(altitude);
+        this.formGroup.get("coordLatitude").setValue(latitude);
+        this.formGroup.get("coordLongitude").setValue(longitude);
+        this.formGroup.get("coordAltitude").setValue(altitude);
     }
 
     get position() {
@@ -122,6 +179,6 @@ export class ReportingOnPositionComponent implements OnInit {
     onTrailSelection(trail: TrailDto) {
         this.selectedTrail = trail;
         this.formGroup.get("trailId").setValue(trail.id);
-        this.formGroup.get("foundIssue").setValue(this.foundIssues[0]);
+        this.formGroup.get("cause").setValue(this.foundIssues[0]);
     }
 }
