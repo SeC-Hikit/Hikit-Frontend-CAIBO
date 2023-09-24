@@ -324,8 +324,11 @@ select {
       padding: 1% 1.5%;
     }
   }
+}
 
-
+.btn-outline-secondary {
+  border: 3px solid #ECC333 !important;
+  background: white !important;
 }
 
 .center {

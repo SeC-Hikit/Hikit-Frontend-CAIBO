@@ -2,10 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
-import {
-    AccessibilityNotification,
-    NotificationService
-} from 'src/app/service/notification-service.service';
+import {AccessibilityNotification, NotificationService} from 'src/app/service/notification-service.service';
 import {TrailPreviewService} from 'src/app/service/trail-preview-service.service';
 import {TrailDto, TrailMappingDto, TrailService} from 'src/app/service/trail-service.service';
 import {Coordinates2D} from "../../../service/geo-trail-service";
@@ -25,6 +22,7 @@ import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component
 })
 export class AccessibilityAddComponent implements OnInit {
 
+
     formGroup: FormGroup = new FormGroup({
         id: new FormControl(""),
         trailId: new FormControl("", Validators.required),
@@ -40,8 +38,10 @@ export class AccessibilityAddComponent implements OnInit {
     trailMappings: TrailMappingDto[];
     selectedTrails: TrailDto[] = [];
     hasFormBeenInitialized: boolean = false;
+    shouldShowLatLng: boolean = false;
 
     validationErrors: string[] = [];
+    isLoading: boolean = false;
 
     constructor(
         private trailPreviewService: TrailPreviewService,
@@ -56,6 +56,7 @@ export class AccessibilityAddComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.isLoading = true;
         const idFromPath: string = this.activatedRoute.snapshot.paramMap.get("id");
         if (this.isNotificationLoad(idFromPath)) {
             this.load(idFromPath);
@@ -64,9 +65,13 @@ export class AccessibilityAddComponent implements OnInit {
         const realm = this.authService.getInstanceRealm();
         this.trailPreviewService.getMappings(realm)
             .subscribe(resp => {
-                this.trailMappings = resp.content;
+                this.trailMappings = resp.content.sort((it, it2) => {
+                    if (it.code > it2.code) return 1;
+                    if (it.code < it2.code) return -1;
+                    return 0;
+                });
                 this.hasFormBeenInitialized = true;
-                if(!this.isNotificationLoad(idFromPath)) {
+                if (!this.isNotificationLoad(idFromPath)) {
                     const firstValueInMappings = resp.content[0].id;
                     this.formGroup.get("trailId").setValue(firstValueInMappings);
                     this.loadTrail(firstValueInMappings);
@@ -84,9 +89,10 @@ export class AccessibilityAddComponent implements OnInit {
     }
 
     private loadTrail(id) {
-        this.trailService.getTrailById(id).subscribe(resp =>
-            this.selectedTrails = [...resp.content]
-        );
+        this.trailService.getTrailById(id).subscribe(resp => {
+            this.isLoading = false;
+            this.selectedTrails = [...resp.content];
+        });
     }
 
     onSaveNotification() {
@@ -144,10 +150,18 @@ export class AccessibilityAddComponent implements OnInit {
 
     onMapClick(coords: Coordinates2D) {
         this.drawMarker(coords);
+        this.isLoading = true;
         this.geoToolService.getAltitude(coords).subscribe((resp) => {
+            if(resp.altitude == 0) {
+                const modal = this.modalService.open(InfoModalComponent);
+                modal.componentInstance.title = "Errore nel rilevare l'altitudine";
+                modal.componentInstance.body = "Il servizio di rilevazione dell'altitudine non copre il punto selezionato.";
+            }
             this.formGroup.get("coordLongitude").setValue(resp.longitude);
             this.formGroup.get("coordLatitude").setValue(resp.latitude);
             this.formGroup.get("coordAltitude").setValue(resp.altitude);
+        }, null, () => {
+            this.isLoading = false;
         })
     }
 
@@ -180,19 +194,33 @@ export class AccessibilityAddComponent implements OnInit {
                 this.formGroup.get("coordLatitude").setValue(loaded.coordinates.latitude);
                 this.formGroup.get("coordAltitude").setValue(loaded.coordinates.altitude);
                 this.loadTrail(loaded.trailId);
-                this.drawMarker({latitude: loaded.coordinates.latitude,
-                    longitude: loaded.coordinates.longitude});
+                this.drawMarker({
+                    latitude: loaded.coordinates.latitude,
+                    longitude: loaded.coordinates.longitude
+                });
                 this.hasFormBeenInitialized = true;
             });
     }
 
     private getDate(dateString) {
         const momentDate = moment(dateString);
-        const date = {
+        return {
             year: momentDate.year(),
             month: momentDate.month() + 1,
             day: momentDate.date()
         };
-        return date;
+    }
+
+    toggleLatLng(e) {
+        e.preventDefault();
+        this.shouldShowLatLng = !this.shouldShowLatLng;
+    }
+
+    localizeGivenCoordinates(e) {
+        e.preventDefault();
+        this.onMapClick({
+            latitude: this.formGroup.get("coordLatitude").value,
+            longitude: this.formGroup.get("coordLongitude").value
+        });
     }
 }

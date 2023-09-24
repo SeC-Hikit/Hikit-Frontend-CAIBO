@@ -1,6 +1,7 @@
 <div class="AccessibilityAdd">
     <app-menu-management></app-menu-management>
     <h2>Aggiungi notifica di percorribilità legata a un sentiero</h2>
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 
     <div class="table-wrapper space-up">
         <form
@@ -13,19 +14,19 @@
                     <p>Sentiero interessato <span class="mandatory-field-asterisk">*</span></p>
                 </div>
                 <div class="col-12">
-                <select
-                        title="Scegli una opzione"
-                        formControlName="trailId"
-                        data-live-search="true"
-                        data-live-search-placeholder="Cerca opzioni"
-                        (change)="onSelectedTrail($event)"
-                        id="trailId_select"
-                >
-                    <option *ngFor="let trailMapping of trailMappings"
-                            [value]="trailMapping.id">
-                        {{ trailMapping.code }}
-                    </option>
-                </select>
+                    <select
+                            title="Scegli una opzione"
+                            formControlName="trailId"
+                            data-live-search="true"
+                            data-live-search-placeholder="Cerca opzioni"
+                            (change)="onSelectedTrail($event)"
+                            id="trailId_select"
+                    >
+                        <option *ngFor="let trailMapping of trailMappings"
+                                [value]="trailMapping.id">
+                            {{ trailMapping.code }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="row top-margin">
@@ -83,6 +84,28 @@
                     ></quill-editor>
                 </div>
             </div>
+            <button class="btn btn-outline-secondary" (click)="toggleLatLng($event)">
+                📍 Mostra/nascondi controllo coordinate
+            </button>
+            <div [class]="(this.shouldShowLatLng ? '' : 'hidden') + ' latLngBg'">
+                <div class="row top-margin" *ngIf="hasFormBeenInitialized">
+                    <div class="col-md-12 col-lg-6">
+                        <label>Latitude</label>
+                        <input type="text" required [formControlName]="'coordLatitude'">
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                        <label>Longitude</label>
+                        <input type="text" required [formControlName]="'coordLongitude'">
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                        <label>Altitude</label>
+                        <input type="text" disabled required [formControlName]="'coordAltitude'">
+                    </div>
+                </div>
+                <button class="full-width btn btn-primary top-margin" (click)="localizeGivenCoordinates($event)">
+                    Geolocalizza e rileva altitudine per le coordinate date
+                </button>
+            </div>
             <div class="row top-margin-x2" *ngIf="hasFormBeenInitialized">
                 <div class="col-md-12 col-lg-12">
                     <p>Seleziona un punto sulla mappa, nei pressi del sentiero <span
@@ -98,20 +121,6 @@
                             (onClick)="onMapClick($event)"
                     ></app-map-preview>
                     </span>
-                </div>
-            </div>
-            <div class="row top-margin" *ngIf="hasFormBeenInitialized">
-                <div class="col-md-12 col-lg-6">
-                    <label>Latitude</label>
-                    <input type="text" disabled required [formControlName]="'coordLatitude'">
-                </div>
-                <div class="col-md-12 col-lg-6">
-                    <label>Longitude</label>
-                    <input type="text" disabled required [formControlName]="'coordLongitude'">
-                </div>
-                <div class="col-md-12 col-lg-6">
-                    <label>Altitude</label>
-                    <input type="text" disabled required [formControlName]="'coordAltitude'">
                 </div>
             </div>
             <div class="row errors" *ngIf="validationErrors.length > 0">

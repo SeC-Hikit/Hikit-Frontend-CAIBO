@@ -1,25 +1,32 @@
+@import "/src/app/style/const.scss";
+
 .AccessibilityAdd {
-    button {
-        width: 100%;
-    }
+  button {
+    width: 100%;
+  }
 }
 
 input[name='dp'] {
-    border-bottom: 1px solid gray;
+  border-bottom: 1px solid gray;
 }
 
 #trailId_select {
-    background: white;
-    white-space: nowrap;
-    font-size: 1rem;
-    line-height: 1.5;
-    border: 0px;
-    border-top-right-radius: 0;
-border-bottom-right-radius: 0;
-    border-bottom: 1px solid gray;
+  width: 100%;
+  background: white;
+  white-space: nowrap;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid gray;
+}
+
+.latLngBg {
+  background: $soft-action-color;
 }
 
 .space-up {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
