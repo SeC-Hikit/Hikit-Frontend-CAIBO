@@ -427,6 +427,9 @@ export class MapComponent implements OnInit {
     }
 
     onSearchKeyPress($event: string) {
+        if($event == ""){
+            this.trailPreviewPage = 1;
+        }
         this.searchTerms.next($event);
     }
 

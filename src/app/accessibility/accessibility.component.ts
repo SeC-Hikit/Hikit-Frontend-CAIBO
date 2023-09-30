@@ -5,7 +5,6 @@ import {TrailDto, TrailMappingDto, TrailService} from "../service/trail-service.
 import {TrailPreviewService} from "../service/trail-preview-service.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../service/auth.service";
-import {Subject} from "rxjs";
 import {Marker} from "../map-preview/map-preview.component";
 import {AdminNotificationService} from "../service/admin-notification-service.service";
 import {Coordinates2D} from "../service/geo-trail-service";
@@ -78,11 +77,12 @@ export class AccessibilityComponent implements OnInit {
     }
 
     loadUnresolved(skip: number, limit: number, realm: string) {
+        window.scrollTo(0, 0);
         this.hasLoaded = false;
         this.notificationService.getUnresolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.unresolvedNotifications = resp.content;
-                this.totalUnresolvedNotification = resp.totalPages;
+                this.totalUnresolvedNotification = resp.totalCount;
                 this.hasLoaded = true;
             });
     }

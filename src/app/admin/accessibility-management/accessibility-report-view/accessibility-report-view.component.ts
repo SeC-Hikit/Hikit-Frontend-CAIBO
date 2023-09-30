@@ -80,7 +80,7 @@ export class AccessibilityReportViewComponent implements OnInit {
             .getUnapgradedByRealm(skip, limit, this.authService.getInstanceRealm())
             .subscribe((x) => {
                 this.unresolvedNotifications = x.content;
-                this.totalUnresolvedNotifications = x.totalPages;
+                this.totalUnresolvedNotifications = x.totalCount;
                 this.hasLoaded = true;
             });
     }
@@ -91,7 +91,7 @@ export class AccessibilityReportViewComponent implements OnInit {
             .getUpgradedByRealm(skip, limit, this.realm)
             .subscribe((x) => {
                 this.upgradedNotifications = x.content;
-                this.totalUpgradedNotifications = x.totalPages;
+                this.totalUpgradedNotifications = x.totalCount;
                 this.hasLoaded = true;
             });
     }

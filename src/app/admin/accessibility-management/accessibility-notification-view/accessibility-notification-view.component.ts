@@ -12,7 +12,7 @@ import {PromptModalComponent} from "../../../modal/prompt-modal/prompt-modal.com
 import {Marker} from "../../../map-preview/map-preview.component";
 import {Coordinates2D} from "../../../service/geo-trail-service";
 import {MapPinIconType} from "../../../../assets/icons/MapPinIconType";
-import { PaginationUtils } from 'src/app/utils/PaginationUtils';
+import {PaginationUtils} from 'src/app/utils/PaginationUtils';
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 import {AnnouncementTopic} from "../../../service/announcement.service";
 
@@ -31,9 +31,6 @@ export class AccessibilityNotificationViewComponent implements OnInit {
 
     totalUnresolvedNotification: number;
     totalSolvedNotification: number;
-
-    private destroy$ = new Subject();
-
     isPreviewVisible: boolean = false;
     hasLoaded = false;
 
@@ -83,7 +80,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         this.notificationService.getUnresolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.unresolvedNotifications = resp.content;
-                this.totalUnresolvedNotification = resp.totalPages;
+                this.totalUnresolvedNotification = resp.totalCount;
                 this.hasLoaded = true;
             });
     }
@@ -93,7 +90,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         this.notificationService.getResolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.solvedNotifications = resp.content;
-                this.totalSolvedNotification = resp.totalPages;
+                this.totalSolvedNotification = resp.totalCount;
                 this.hasLoaded = true;
             });
     }
@@ -191,7 +188,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         PaginationUtils.copyToClipboard(id).then(() => {
             const modal = this.modalService.open(InfoModalComponent);
             modal.componentInstance.title = "ID '" + id + "', copiato";
-            if(this.authService.isRealmMatch()) {
+            if (this.authService.isRealmMatch()) {
                 modal.componentInstance.body = PaginationUtils.getOptionsText(id,
                     AnnouncementTopic.ACCESSIBILITY_NOTIFICATION)
             }
