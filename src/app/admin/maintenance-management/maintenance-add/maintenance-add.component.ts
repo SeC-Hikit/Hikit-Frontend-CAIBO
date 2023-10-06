@@ -21,7 +21,8 @@ import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component
 export class MaintenanceAddComponent implements OnInit {
 
     formGroup: FormGroup = new FormGroup({
-        'trailId': new FormControl('', Validators.required),
+        'trailId': new FormControl(''),
+        'trailCode': new FormControl(''),
         'time': new FormControl('', Validators.required),
         'description': new FormControl(''),
         'contact': new FormControl('', Validators.required),
@@ -94,6 +95,7 @@ export class MaintenanceAddComponent implements OnInit {
                 description: formGroup.get("description").value,
                 meetingPlace: formGroup.get("meetingPlace").value,
                 trailId: formGroup.get("trailId").value,
+                trailCode: formGroup.get("trailCode").value,
                 id: null,
                 recordDetails: {
                     uploadedOn: moment().toDate().toISOString(),
