@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators, ValidatorFn, ValidationErrors, AbstractControl} from '@angular/forms';
 import {Router} from '@angular/router';
 import * as moment from 'moment';
 import {MaintenanceDto, MaintenanceService} from 'src/app/service/maintenance.service';
@@ -12,6 +12,13 @@ import {NgbDateStruct, NgbModal, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap
 import {environment} from "../../../../environments/environment.prod";
 import {AdminMaintenanceService} from "../../../service/admin-maintenance.service";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
+
+export const trailCodeOrIdValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const trailId = control.get('trailId');
+    const trailCode = control.get('trailCode');
+
+    return trailId.value == "" && trailCode.value == "" ? { missingTrailInformation: true } : null;
+}
 
 @Component({
     selector: 'app-maintenance-add',
@@ -28,7 +35,7 @@ export class MaintenanceAddComponent implements OnInit {
         'contact': new FormControl('', Validators.required),
         'meetingPlace': new FormControl('', Validators.required),
         'date': new FormControl('', Validators.required),
-    });
+    }, { validators: trailCodeOrIdValidator });
 
     trail: TrailDto;
     markers: Marker[] = [];
