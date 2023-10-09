@@ -75,6 +75,13 @@ export class MaintenanceFutureViewComponent implements OnInit {
     }
 
     showPreview(trailId) {
+        if(!trailId)
+        {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = `Il sentiero non è ancora collegato ad alcuno da sistema`;
+            modal.componentInstance.body = `Il sentiero su cui è svolta la manutenzione non è ancora accatastato.`;
+            return;
+        }
         this.trailService.getTrailById(trailId).subscribe(
             trailResp => {
                 this.selectedTrail = trailResp.content[0];
@@ -90,19 +97,12 @@ export class MaintenanceFutureViewComponent implements OnInit {
             return filtered[0].code;
         else
             return maintenance.trailCode;
-        console.warn(`Could not find trailId or trailCode for maintenance ${maintenance.id}`);
-        return "";
     }
 
     isTrailCodeValid(maintenance: MaintenanceDto) {
         const filtered = this.trailMapping
             .filter((tp) => tp.id == maintenance.trailId);
-        if (filtered.length > 0)
-            return true;
-        else
-            return false;
-        console.warn(`Could not find trailId or trailCode for maintenance ${maintenance.id}`);
-        return "";
+        return filtered.length > 0;
     }
 
     onDeleteClick(maintenance: MaintenanceDto) {

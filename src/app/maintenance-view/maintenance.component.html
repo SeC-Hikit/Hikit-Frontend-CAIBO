@@ -24,7 +24,7 @@
                 <tr *ngFor="let maintenance of maintenanceListFuture">
                     <td>{{ formatDate(maintenance.date) }}</td>
                     <td><span class="trailCodeColumn clickable"
-                              (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId) }}</span>
+                              (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
                     <td class="small-column">{{ maintenance.meetingPlace }}</td>
                     <td>
@@ -58,7 +58,7 @@
                 <tr *ngFor="let maintenance of maintenanceListPast">
                     <td>{{ formatDate(maintenance.date) }}</td>
                     <td><span class="trailCodeColumn clickable"
-                              (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId) }}</span>
+                              (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
                     <td class="small-column">{{ maintenance.meetingPlace }}</td>
                     <td>
