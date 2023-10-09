@@ -90,7 +90,7 @@ export class MaintenanceFutureViewComponent implements OnInit {
             return filtered[0].code;
         else
             return maintenance.trailCode;
-        console.warn(`Could not find trail mapping for id: ${trailId}`)
+        console.warn(`Could not find trailId or trailCode for maintenance ${maintenance.id}`);
         return "";
     }
 
