@@ -32,8 +32,16 @@
                     <div *ngIf="sideView=='' || sideView=='list'" class="row search-section top-margin-x2">
                         <div class="col-11">
                             <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
-                                              (onChange)="onSearchKeyPress($event)">
+                                              (onTypingChange)="onSearchKeyPress($event)"
+                                              (onEnterPress)="onSearchClick()"
+                            >
                             </app-search-input>
+                        </div>
+                        <div class="col-1 clickable">
+                            <svg class="bi" width="24" height="24" fill="#D04341" (click)="onSearchClick()">
+                                <use
+                                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#search"/>
+                            </svg>
                         </div>
                     </div>
 
@@ -104,7 +112,7 @@
                                 (onSelectTrail)="onSelectTrail($event, true, true)"
                         >
                         </app-map-trail-list>
-                        <div class="pagination-position" *ngIf="trailPreviewList.length > 0 && this.searchTermString == ''">
+                        <div class="pagination-position" *ngIf="trailPreviewList.length > 0 && !this.isSearch">
                             <ngb-pagination
                                     [pageSize]="maxTrailEntriesPerPage"
                                     [collectionSize]="trailPreviewCount"
