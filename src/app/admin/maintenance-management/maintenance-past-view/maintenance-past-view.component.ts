@@ -69,34 +69,36 @@ export class MaintenancePastViewComponent implements OnInit {
         this.isPreviewVisible = !this.isPreviewVisible;
     }
 
-    onFileSave(saveMaintenanceCode: string) {
-        this.savedMaintenance = saveMaintenanceCode;
-    }
 
-    onDelete(maintenace: MaintenanceDto) {
+    onDelete(maintenance: MaintenanceDto) {
         let isDeleting = confirm(
             "Sei sicuro di voler cancellare la manuntenzione con codice '" +
-            maintenace.id +
+            maintenance.id +
             "' e data '" +
-            this.formatDate(maintenace.date.toString()) +
+            this.formatDate(maintenance.date.toString()) +
             "'?"
         );
         if (isDeleting) {
-            this.adminMaintenanceService.deleteById(maintenace.trailId)
+            this.adminMaintenanceService.deleteById(maintenance.trailId)
                 .subscribe((d) => {
-                    if (d.status == Status.OK) this.onDeleted(maintenace);
+                    if (d.status == Status.OK) this.onDeleted(maintenance);
                 });
         }
     }
 
-    getTrailCode(trailId: string) {
+    getTrailCode(maintenance: MaintenanceDto) {
         const filtered = this.trailMapping
-            .filter((tp) => tp.id == trailId);
-        if (filtered.length > 0) {
+            .filter((tp) => tp.id == maintenance.trailId);
+        if (filtered.length > 0)
             return filtered[0].code;
-        }
-        console.warn(`Could not find trail mapping for id: ${trailId}`)
-        return "";
+        else
+            return maintenance.trailCode;
+    }
+
+    isTrailCodeValid(maintenance: MaintenanceDto) {
+        const filtered = this.trailMapping
+            .filter((tp) => tp.id == maintenance.trailId);
+        return filtered.length > 0;
     }
 
     onDeleted(unresolvedNotification: MaintenanceDto): void {

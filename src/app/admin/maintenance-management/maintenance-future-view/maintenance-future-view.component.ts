@@ -49,7 +49,7 @@ export class MaintenanceFutureViewComponent implements OnInit {
             })
     }
 
-    onLoadMaintenance(page: number){
+    onLoadMaintenance(page: number) {
         this.page = page;
         const lowerBound = this.entryPerPage * (page - 1);
         this.loadMaintenanceFuture(
@@ -75,6 +75,13 @@ export class MaintenanceFutureViewComponent implements OnInit {
     }
 
     showPreview(trailId) {
+        if(!trailId)
+        {
+            const modal = this.modalService.open(InfoModalComponent);
+            modal.componentInstance.title = `Il sentiero non è ancora collegato ad alcuno da sistema`;
+            modal.componentInstance.body = `Il sentiero su cui è svolta la manutenzione non è ancora accatastato.`;
+            return;
+        }
         this.trailService.getTrailById(trailId).subscribe(
             trailResp => {
                 this.selectedTrail = trailResp.content[0];
@@ -83,14 +90,19 @@ export class MaintenanceFutureViewComponent implements OnInit {
         );
     }
 
-    getTrailCode(trailId: string) {
+    getTrailCode(maintenance: MaintenanceDto) {
         const filtered = this.trailMapping
-            .filter((tp) => tp.id == trailId);
-        if (filtered.length > 0) {
+            .filter((tp) => tp.id == maintenance.trailId);
+        if (filtered.length > 0)
             return filtered[0].code;
-        }
-        console.warn(`Could not find trail mapping for id: ${trailId}`)
-        return "";
+        else
+            return maintenance.trailCode;
+    }
+
+    isTrailCodeValid(maintenance: MaintenanceDto) {
+        const filtered = this.trailMapping
+            .filter((tp) => tp.id == maintenance.trailId);
+        return filtered.length > 0;
     }
 
     onDeleteClick(maintenance: MaintenanceDto) {

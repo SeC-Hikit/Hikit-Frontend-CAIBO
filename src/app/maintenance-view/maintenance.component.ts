@@ -82,6 +82,13 @@ export class MaintenanceComponent implements OnInit {
   }
 
   showPreview(trailId) {
+    if(!trailId)
+    {
+        const modal = this.modalService.open(InfoModalComponent);
+        modal.componentInstance.title = `Il sentiero non è ancora collegato ad alcuno da sistema`;
+        modal.componentInstance.body = `Il sentiero su cui è svolta la manutenzione non è ancora accatastato.`;
+        return;
+    }
     this.trailService.getTrailById(trailId).subscribe(
         trailResp => {
           this.selectedTrail = trailResp.content[0];
@@ -90,7 +97,10 @@ export class MaintenanceComponent implements OnInit {
     );
   }
 
-  getTrailCode(trailId: string) {
+    getTrailCode(trailId: string, trailCode: string) {
+      if(!trailId) {
+          return trailCode;
+      }
     const filtered = this.trailMapping
         .filter((tp) => tp.id == trailId);
     if (filtered.length > 0) {

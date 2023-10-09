@@ -45,8 +45,10 @@
                         </th>
                         <td>{{ formatDate(maintenance.date) }}</td>
                         <td>
-                        <span class="trailCodeColumn clickable" (click)="showPreview(maintenance.trailId)">
-                    {{getTrailCode(maintenance.trailId)}}</span>
+                          <span class="trailCodeColumn clickable " [ngClass]="{'btn-error': !isTrailCodeValid(maintenance)}"
+                                (click)="showPreview(maintenance.trailId)">
+                              {{getTrailCode(maintenance)}}
+                          </span>
                         </td>
                         <td>{{ maintenance.meetingPlace }}</td>
                         <td class="ellipsis">

@@ -506,6 +506,7 @@ export interface components {
       id?: string;
       date?: string;
       trailId?: string;
+      trailCode?: string;
       meetingPlace?: string;
       description?: string;
       contact?: string;
