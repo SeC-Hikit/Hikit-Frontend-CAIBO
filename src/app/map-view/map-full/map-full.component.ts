@@ -31,7 +31,7 @@ export class MapFullComponent implements OnInit {
 
     hint: string = ""
     timeIntervalMsBeforeTrigger: number = 600;
-    intervalObject: number;
+    intervalObject: any;
     selectionCircle;
 
     map: L.Map;

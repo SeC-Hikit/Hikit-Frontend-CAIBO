@@ -94,6 +94,8 @@ import { MunicipalityDetailsComponent } from './map-view/municipality-details/mu
 import { ReportingOnPositionComponent } from './accessibility/reporting-on-position/reporting-on-position.component';
 import { ReportingGeolocalizedIssueComponent } from './accessibility/reporting-on-position/reporting-geolocalized-issue/reporting-geolocalized-issue.component';
 import { SelectionModalComponent } from './modal/selection-modal/selection-modal.component';
+import { DataUpdateComponent } from './data-update/data-update.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 @NgModule({
   declarations: [
@@ -180,7 +182,9 @@ import { SelectionModalComponent } from './modal/selection-modal/selection-modal
     MunicipalityDetailsComponent,
     ReportingOnPositionComponent,
     ReportingGeolocalizedIssueComponent,
-    SelectionModalComponent
+    SelectionModalComponent,
+    DataUpdateComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,

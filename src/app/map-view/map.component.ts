@@ -81,10 +81,7 @@ export class MapComponent implements OnInit {
     userPosition: UserCoordinates;
     highlightedLocation: Coordinates2D;
     zoomToTrail: boolean = false;
-
-    isTrailSelectedVisible: boolean = false;
     isTrailFullScreenVisible: boolean = false;
-    isTrailListVisible: boolean = false;
     isNotificationModalVisible: boolean = false;
     isUserPositionToggled: boolean = false;
     isLoading: boolean = false;
@@ -101,6 +98,7 @@ export class MapComponent implements OnInit {
     trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
     highlightedTrail: TrailDto;
     selectedLocationDetails: LocalityDto;
+    isSearch: boolean = false;
 
     constructor(
         private trailService: TrailService,
@@ -132,6 +130,7 @@ export class MapComponent implements OnInit {
             distinctUntilChanged(),
             switchMap((data: string,) => {
                 this.searchTermString = data;
+                this.isSearch = this.searchTermString.trim() != "";
                 this.isLoading = true;
                 return this.getTrailPreviewResponseObservable(data, 1, false)
             }));
@@ -427,10 +426,15 @@ export class MapComponent implements OnInit {
     }
 
     onSearchKeyPress($event: string) {
+        this.searchTermString = $event;
         if($event == ""){
             this.trailPreviewPage = 1;
+            this.searchTerms.next($event);
         }
-        this.searchTerms.next($event);
+    }
+
+    onSearchClick() {
+        this.searchTerms.next(this.searchTermString);
     }
 
     navigateToTrailReportIssue(trailId: string) {

@@ -1,34 +1,47 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
-  selector: 'app-search-input',
-  templateUrl: './search-input.component.html',
-  styleUrls: ['./search-input.component.scss']
+    selector: 'app-search-input',
+    templateUrl: './search-input.component.html',
+    styleUrls: ['./search-input.component.scss']
 })
 export class SearchInputComponent implements OnInit {
 
-  private readonly timeout = 600;
+    private readonly timeout = 100;
 
-  private value: string = "";
-  private interval;
+    private value: string = "";
+    private interval;
 
-  @Input() placeholder: string;
-  @Output() onChange = new EventEmitter<string>();
+    @Input() placeholder: string;
+    @Output() onTypingChange = new EventEmitter<string>();
+    @Output() onEnterPress = new EventEmitter<string>();
 
-  constructor() { }
+    constructor() {
+    }
 
-  ngOnInit(): void {}
+    ngOnInit(): void {
+    }
 
-  onSearchKeyPress($event: Event) {
-    // @ts-ignore
-    this.value = $event.target.value;
-    this.ensureEraseTimeOut();
-    this.interval = setTimeout(()=> { this.onChange.emit(this.value)}, this.timeout)
-  }
+    onTyping($event: KeyboardEvent) {
+        // @ts-ignore
+        this.value = $event.target.value;
+        this.ensureEraseTimeOut();
+        this.interval = setTimeout(() => {
+            this.onTypingChange.emit(this.value)
+        }, this.timeout)
+    }
 
-  ngOnDestroy(): void {this.ensureEraseTimeOut();}
+    ngOnDestroy(): void {
+        this.ensureEraseTimeOut();
+    }
 
-  private ensureEraseTimeOut() {
-    if (this.interval) clearTimeout(this.interval);
-  }
+    private ensureEraseTimeOut() {
+        if (this.interval) clearTimeout(this.interval);
+    }
+
+    onSearchKeyPress($event: Event) {
+        // @ts-ignore
+        const value = $event.target.value;
+        this.onEnterPress.emit(value);
+    }
 }

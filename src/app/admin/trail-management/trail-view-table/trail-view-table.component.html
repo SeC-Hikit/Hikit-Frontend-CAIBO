@@ -16,7 +16,7 @@
     <div class="row section-distance-up">
         <div class="col-lg-9 col-md-8 col-sm-12">
             <app-search-input placeholder="Cerca sentieri per nome o località"
-                              (onChange)="onSearch($event)"></app-search-input>
+                              (onTypingChange)="onSearch($event)"></app-search-input>
         </div>
         <div class="col-lg-3 col-md-8 col-sm-12">
             <button class="btn btn-primary" (click)="onDownloadList()">Download lista</button>

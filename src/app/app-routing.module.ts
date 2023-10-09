@@ -55,6 +55,8 @@ import {CreditsComponent} from "./credits/credits.component";
 import {DevelopmentComponent} from "./development/development.component";
 import {BugReportingComponent} from "./bug-reporting/bug-reporting.component";
 import {ReportingOnPositionComponent} from "./accessibility/reporting-on-position/reporting-on-position.component";
+import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
+import {DataUpdateComponent} from "./data-update/data-update.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -144,6 +146,8 @@ const routes: Routes = [
     {path: "announcements", component: AnnouncementViewComponent},
     {path: "announcements/:id", component: AnnouncementSingleViewComponent},
     {path: "maintenance", component: MaintenanceComponent},
+    {path: "privacy-policy", component: PrivacyPolicyComponent},
+    {path: "data", component: DataUpdateComponent},
 
     // ADMIN
     {
