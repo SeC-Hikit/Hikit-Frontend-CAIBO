@@ -94,6 +94,17 @@ export class MaintenanceFutureViewComponent implements OnInit {
         return "";
     }
 
+    getTrailColor(maintenance: MaintenanceDto) {
+        const filtered = this.trailMapping
+            .filter((tp) => tp.id == maintenance.trailId);
+        if (filtered.length > 0)
+            return "#000000";
+        else
+            return "#6B0909";
+        console.warn(`Could not find trailId or trailCode for maintenance ${maintenance.id}`);
+        return "";
+    }
+
     onDeleteClick(maintenance: MaintenanceDto) {
         this.isLoaded = false;
         this.adminMaintenanceService.deleteById(maintenance.id).subscribe(
