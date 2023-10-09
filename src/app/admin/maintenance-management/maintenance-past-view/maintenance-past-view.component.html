@@ -30,9 +30,9 @@
                         <th class="small-column ellipsis clickable" (click)="copyId(maintenance.id)">{{maintenance.id}}</th>
                         <td>{{ formatDate(maintenance.date) }}</td>
                         <td>
-                          <span class="trailCodeColumn clickable"
+                          <span class="trailCodeColumn clickable " [ngClass]="{'btn-error': !isTrailCodeValid(maintenance)}"
                                 (click)="showPreview(maintenance.trailId)">
-                              {{getTrailCode(maintenance.trailId)}}
+                              {{getTrailCode(maintenance)}}
                           </span>
                         </td>
                         <td>{{ maintenance.meetingPlace }}</td>

@@ -21,10 +21,13 @@
                         (ngSubmit)="onSubmit()"
                 >
                     <div class="row">
-                        <div class="col-12 top-margin">
-                            <p>Sentiero interessato <span class="mandatory-field-asterisk">*</span></p>
+                        <div class="col-md-6 top-margin">
+                            <p>Sentiero interessato</p>
                         </div>
-                        <div class="col-12">
+                        <div class="col--md-6 top-margin">
+                            <p>Codice sentiero, se non presente nella lista</p>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
                             <select
                                     title="Scegli una opzione"
                                     formControlName="trailId"
@@ -38,6 +41,13 @@
                                     {{ trailMapping.code }}
                                 </option>
                             </select>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div>
+                                <input type="text" class="form-control"
+                                       formControlName="trailCode"
+                                       id="exampleFormControlInput1">
+                            </div>
                         </div>
                     </div>
 
