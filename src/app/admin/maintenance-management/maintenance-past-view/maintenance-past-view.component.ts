@@ -89,12 +89,13 @@ export class MaintenancePastViewComponent implements OnInit {
         }
     }
 
-    getTrailCode(trailId: string) {
+    getTrailCode(maintenance: Maintenance) {
         const filtered = this.trailMapping
-            .filter((tp) => tp.id == trailId);
-        if (filtered.length > 0) {
+            .filter((tp) => tp.id == maintenance.trailId);
+        if (filtered.length > 0)
             return filtered[0].code;
-        }
+        else
+            return maintenance.trailCode;
         console.warn(`Could not find trail mapping for id: ${trailId}`)
         return "";
     }
