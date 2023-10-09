@@ -57,7 +57,7 @@
                             {{ notification.id }}
                         </th>
                         <td class="d-none d-lg-block">{{ formatDate(notification.reportDate) }}</td>
-                        <td (click)="showDetails(notification)">
+                        <td (click)="showMapPreview(notification.trailId, notification.coordinates)">
                             <span class="trailCodeColumn">
                               {{ getTrailCode(notification.trailId) }}
                             </span>
