@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AnnouncementDto, AnnouncementService} from "../service/announcement.service";
 import {DateUtils} from "../utils/DateUtils";
 import {TrailPreviewService} from "../service/trail-preview-service.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-announcement-single-view',
@@ -14,11 +15,13 @@ export class AnnouncementSingleViewComponent implements OnInit {
     announcement: AnnouncementDto = null;
     announcementTopicTypes = AnnouncementService.relatedElementTypes;
     referralText: string = "";
+    text;
 
     constructor(private activatedRoute: ActivatedRoute,
                 private router: Router,
                 private announcementService: AnnouncementService,
-                private trailService: TrailPreviewService) {
+                private trailService: TrailPreviewService,
+                private sanitizer: DomSanitizer) {
     }
 
     ngOnInit(): void {
@@ -41,6 +44,7 @@ export class AnnouncementSingleViewComponent implements OnInit {
 
             const contentElement = it.content[0];
             this.announcement = contentElement
+            this.text = this.sanitizer.bypassSecurityTrustHtml(this.announcement.description)
             this.composeReferralText(contentElement)
         }, () => this.bounceToAnnouncementPage(), () => {
             this.isLoading = false;

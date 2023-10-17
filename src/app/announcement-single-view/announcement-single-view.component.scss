@@ -1,6 +1,11 @@
 @import "../style/const.scss";
 
 #AnnouncementViewSingle {
+
+  .ql-video {
+    width: 100% !important;
+  }
+
   .navigation-back:hover {
     color: $action-btn-color;
   }
