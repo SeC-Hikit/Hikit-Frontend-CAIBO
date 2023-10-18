@@ -15,19 +15,19 @@
                 <tr>
                     <th scope="col">Data</th>
                     <th scope="col">Codice Sentiero</th>
-                    <th scope="col">Posto di Ritrovo</th>
-                    <th scope="col">Descrizione</th>
+                    <th scope="col" class="hide_on_md">Posto di Ritrovo</th>
+                    <th scope="col" class="hide_on_md">Descrizione</th>
                     <th scope="col">Contatto</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let maintenance of maintenanceListFuture">
-                    <td>{{ formatDate(maintenance.date) }}</td>
+                    <td>{{ maintenance.date | date:'shortDate' }}</td>
                     <td><span class="trailCodeColumn clickable"
                               (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
-                    <td class="small-column">{{ maintenance.meetingPlace }}</td>
-                    <td>
+                    <td class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
+                    <td class="text-truncate small-column hide_on_md">
                         <span [innerHTML]="maintenance.description"></span>
                     </td>
                     <td>{{ maintenance.contact }}</td>
@@ -49,20 +49,20 @@
                 <tr>
                     <th scope="col">Data</th>
                     <th scope="col">Codice Sentiero</th>
-                    <th scope="col">Posto di Ritrovo</th>
-                    <th scope="col">Descrizione</th>
+                    <th scope="col" class="hide_on_md">Posto di Ritrovo</th>
+                    <th scope="col" class="hide_on_md">Descrizione</th>
                     <th scope="col">Contatto</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let maintenance of maintenanceListPast">
-                    <td>{{ formatDate(maintenance.date) }}</td>
+                    <td>{{ maintenance.date | date:'shortDate' }}</td>
                     <td><span class="trailCodeColumn clickable"
                               (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
-                    <td class="small-column">{{ maintenance.meetingPlace }}</td>
-                    <td>
-                        <span [innerHTML]="maintenance.description"></span>
+                    <td class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
+                    <td class="text-truncate small-column hide_on_md"
+                        [innerHTML]="maintenance.description">
                     </td>
                     <td>{{ maintenance.contact }}</td>
                 </tr>
