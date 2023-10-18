@@ -1,9 +1,9 @@
 <div id="header-wrapper">
-    <div class="container">
+    <div class="container-flex">
         <div class="row">
             <div class="container">
                 <div class="row">
-                    <div class="offset-lg-0 col-lg-4 offset-md-2 col-md-7 col-sm-9 col-10 offset-sm-0 brand">
+                    <div class="col-lg-4 col-md-4 col-10 brand">
                         <a href="#/home">
                             <img src="/assets/cai/cai_logo_slim.png" alt="cai slim icon" class="logo"/>
                             <div class="it-brand-text">
@@ -16,7 +16,7 @@
 
 
                     <!--  Mobile -->
-                    <div class="col-sm-2 offset-md-1 col-1 offset-1 hide-on-wider menu-btn margin-top" (click)="toggleMenu()">
+                    <div class="col-1 offset-md-1 offset-1 hide-on-wider menu-btn margin-top" (click)="toggleMenu()">
                         <svg width="24" height="24" fill="white" class="inner" *ngIf="!isMobileMenuShowing">
                             <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#three-dots-vertical"/>
                         </svg>
@@ -30,7 +30,7 @@
                     <div class="full-screen-menu hide-on-wider mobile-menu" *ngIf="isMobileMenuShowing">
                         <div class="menu-wrapper">
                             <ul class="navbar-nav">
-                                <div class="container">
+                                <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-12 align-content-center" (click)="toggleMenu()">
                                             <a routerLink="/map" routerLinkActive="active"
@@ -67,7 +67,7 @@
                     </div>
 
                     <!-- Larger menu -->
-                    <div class="offset-lg-1 col-lg-7 col-md-12 col-sm-12 hide-on-small">
+                    <div class="offset-md-1 col-lg-7 col-md-7 col-xs-12 hide-on-small">
                         <div class="it-header-navbar-wrapper">
                             <nav class="navbar">
                                 <div id="main-menu">
@@ -75,20 +75,20 @@
                                         <ul class="navbar-nav">
                                             <div class="container">
                                                 <div class="row">
-                                                    <div class="offset-lg-3 col-lg-2 col-md-3 col-sm-12">
+                                                    <div class="col-md-2 offset-md-1 col-12">
                                                         <a routerLink="/map" routerLinkActive="active"
                                                            class="nav-item nav-link">
                                                             Esplora
                                                         </a>
                                                     </div>
-                                                    <div class="col-lg-3 offset-lg-0 offset-md-1 col-md-3 col-sm-12">
+                                                    <div class="col-md-3 offset-md-1 col-12">
                                                         <a routerLink="/accessibility"
                                                            routerLinkActive="active"
                                                            class="nav-item nav-link">
                                                             Criticità
                                                         </a>
                                                     </div>
-                                                    <div class="col-lg-2 offset-lg-0 offset-md-1 col-md-4 col-sm-12">
+                                                    <div class="col-md-4 offset-md-1 col-12">
                                                         <a routerLink="/announcements"
                                                            routerLinkActive="active"
                                                            class="nav-item nav-link">
