@@ -3,9 +3,19 @@
 #main-menu {
   width: 100%;
 
+  .separator-vertical {
+    border-right: 1px solid white;
+    margin-top: 10%;
+    height: 80%;
+  }
+
   div {
     text-align: center;
   }
+}
+
+hr {
+  background: white;
 }
 
 .menu-btn {
