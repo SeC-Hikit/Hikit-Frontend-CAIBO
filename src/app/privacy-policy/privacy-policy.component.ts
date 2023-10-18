@@ -12,4 +12,8 @@ export class PrivacyPolicyComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  resetCookie() {
+    localStorage.removeItem("cookiesAcceptance");
+    window.location.reload()
+  }
 }
