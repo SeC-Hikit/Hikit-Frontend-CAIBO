@@ -72,11 +72,6 @@ export class MaintenanceComponent implements OnInit {
             })
   }
 
-
-  formatDate(dateString: string) {
-    return DateUtils.formatDateToDay(dateString);
-  }
-
   togglePreview() {
     this.isPreviewVisible = !this.isPreviewVisible;
   }
