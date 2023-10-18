@@ -28,6 +28,10 @@
   width: 100%;
 }
 
+.container {
+  max-width: 97.5% !important;
+}
+
 #main .container {
   padding: 13% 0 2.5% 0;
   @media only screen and (max-width: 768px) {
@@ -312,7 +316,6 @@ select {
 
 @media only screen and (min-width: 768px) {
   .container {
-    max-width: 97.5% !important;
     padding: 1.25% 1.25%;
   }
 
