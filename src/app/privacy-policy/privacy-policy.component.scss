@@ -1,0 +1,10 @@
+@import "/src/app/style/const.scss";
+
+ul li {
+  font-family: "Fira Sans", serif;
+}
+
+.red-colored {
+  color: $secondary-bg-color;
+  font-weight: bold;
+}
