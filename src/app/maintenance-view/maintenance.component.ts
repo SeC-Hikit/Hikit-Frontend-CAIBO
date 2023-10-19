@@ -76,7 +76,7 @@ export class MaintenanceComponent implements OnInit {
     this.isPreviewVisible = !this.isPreviewVisible;
   }
 
-  showPreview(trailId) {
+  showPreview(trailId: string) {
     if(!trailId)
     {
         const modal = this.modalService.open(InfoModalComponent);
@@ -90,6 +90,12 @@ export class MaintenanceComponent implements OnInit {
           this.togglePreview();
         }
     );
+  }
+
+  showDetails(maintenance: MaintenanceDto) {
+    const modal = this.modalService.open(InfoModalComponent);
+    modal.componentInstance.title = 'Manutenzione';
+    modal.componentInstance.body = `<b>Luogo d'incontro:</b> ${maintenance.meetingPlace}<br><b>Descrizione:</b> ${maintenance.description}`;
   }
 
     getTrailCode(trailId: string, trailCode: string) {

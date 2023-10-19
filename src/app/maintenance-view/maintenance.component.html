@@ -22,15 +22,15 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let maintenance of maintenanceListFuture">
-                    <td>{{ maintenance.date | date:'shortDate' }}</td>
+                    <td (click)="showDetails(maintenance)">{{ maintenance.date | date:'shortDate' }}</td>
                     <td><span class="trailCodeColumn clickable"
                               (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
-                    <td class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
-                    <td class="text-truncate small-column hide_on_md">
+                    <td (click)="showDetails(maintenance)" class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
+                    <td (click)="showDetails(maintenance)" class="text-truncate small-column hide_on_md">
                         <span [innerHTML]="maintenance.description"></span>
                     </td>
-                    <td>{{ maintenance.contact }}</td>
+                    <td (click)="showDetails(maintenance)">{{ maintenance.contact }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -56,15 +56,19 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let maintenance of maintenanceListPast">
-                    <td>{{ maintenance.date | date:'shortDate' }}</td>
+                    <td (click)="showDetails(maintenance)">
+                        {{ maintenance.date | date:'shortDate' }}</td>
                     <td><span class="trailCodeColumn clickable"
                               (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
-                    <td class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
-                    <td class="text-truncate small-column hide_on_md"
+                    <td (click)="showDetails(maintenance)"
+                            class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
+                    <td (click)="showDetails(maintenance)"
+                        class="text-truncate small-column hide_on_md"
                         [innerHTML]="maintenance.description">
                     </td>
-                    <td>{{ maintenance.contact }}</td>
+                    <td (click)="showDetails(maintenance)">
+                        {{ maintenance.contact }}</td>
                 </tr>
                 </tbody>
             </table>
