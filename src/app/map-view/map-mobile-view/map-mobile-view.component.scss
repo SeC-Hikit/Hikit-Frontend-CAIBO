@@ -1,0 +1,51 @@
+.MapMobileView {
+    #bike-icon, #people-icon, #clock-icon {
+        color: white;
+    }
+
+    #mobile-side-column {
+        width: 100%;
+        padding: 3%;
+    }
+
+    .mobile-preview-text {
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .mobile-preview-text-small-top {
+        color: #00ff00;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .mobile-preview-text-small-bottom {
+        color: #ff0000;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    #mobile-side-column {
+        width: 100%;
+        padding: 3%;
+        .trailCodeColumn {
+            width: fit-content;
+            padding: 0 0.3em;
+            color: white;
+        }
+    }
+
+    #mobile-side-column {
+        background-color: #0B2E20;
+    }
+
+    .bottom-margin {
+        margin-bottom: 20px;
+    }
+
+    .mobile-preview-text-small {
+        font-size: 14px;
+        color: #fff;
+    }
+}

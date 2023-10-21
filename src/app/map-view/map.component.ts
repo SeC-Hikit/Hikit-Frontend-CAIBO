@@ -99,6 +99,7 @@ export class MapComponent implements OnInit {
     highlightedTrail: TrailDto;
     selectedLocationDetails: LocalityDto;
     isSearch: boolean = false;
+    isPortraitMode: boolean = true;
 
     constructor(
         private trailService: TrailService,
@@ -119,6 +120,7 @@ export class MapComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.isPortraitMode = this.getIsPortraitMode();
         this.sideView = this.getViewFromLocation();
         this.loadMunicipalities();
         this.loadDataPassedByUrl();
@@ -184,6 +186,7 @@ export class MapComponent implements OnInit {
     }
 
     adaptSize() {
+        this.isPortraitMode = this.getIsPortraitMode();
         let fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
         document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
@@ -666,5 +669,9 @@ export class MapComponent implements OnInit {
 
     onSelectMunicipality($event: string) {
         this.selectMunicipality($event);
+    }
+
+    getIsPortraitMode() {
+        return(window.innerWidth < window.innerHeight);
     }
 }

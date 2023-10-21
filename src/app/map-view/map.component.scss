@@ -2,9 +2,9 @@
 
 footer .it-footer { display: none !important; }
 
-@media (max-width: 992px) {
+@media (max-width: 767px) {
   .MapComponent {
-    margin-top: 10%;
+    margin-top: 58px;
   }
 }
 
@@ -106,4 +106,3 @@ footer .it-footer { display: none !important; }
     opacity: 1;
   }
 }
-

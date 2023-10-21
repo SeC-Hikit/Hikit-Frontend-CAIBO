@@ -16,7 +16,7 @@
             <span class="back" (click)="onBackToTrailList()" *ngIf="!selectedTrail">Vai alla lista sentieri</span>
         </div>
 
-        <div *ngIf="sideView=='trail'"
+        <div *ngIf="sideView=='trail' && !isPortraitMode"
              class="navigation-back clickable" (click)="showTrailList()">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use
@@ -25,7 +25,19 @@
             <span class="back">Torna alla lista sentieri</span>
         </div>
 
-        <div class="column-map col-lg-4 col-md-4 white details functional-column" id="side-column">
+            <div class="row">
+                <div class="col-11 offset-1" id="trail-detail-column"
+                     *ngIf="isPortraitMode">
+                    <app-map-mobile-view
+                        [selectedTrail]="selectedTrail"
+                        [isCycloSwitchOn]="isCycloToggled"
+                        (onToggleModeClick)="onToggleMode()"
+                    >
+                    </app-map-mobile-view>
+                </div>
+            </div>
+        <div class="column-map col-lg-4 col-md-4 white details" id="side-column"
+             *ngIf="!isPortraitMode">
             <div class="row">
                 <div class="col-11 offset-1" id="trail-detail-column"
                      [class]="sideView == 'trail' || sideView == 'poi' || sideView == 'place' || sideView == 'accessibility' || sideView == 'municipality' ? 'selection-margin' : ''">
@@ -87,7 +99,7 @@
                     <!-- TODO DIVIDE THIS MODULE -->
                     <div *ngIf="sideView==''">
                         <div class="row align-middle">
-                            <div class="col-md-12">
+                            <div class="col-12">
                                 <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
                                         class="clickable"
                                         (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
@@ -161,7 +173,8 @@
         </div>
 
         <!--  Map Column  -->
-        <div class="column-map col-lg-8 col-md-8">
+        <div class="column-map"
+            [ngClass]="{'col-8': !isPortraitMode, 'col-12': isPortraitMode}">
             <app-map-full id="map-full-container"
                           [selectedTrail]="selectedTrail"
                           [selectedTrailNotification]="selectedTrailNotifications"

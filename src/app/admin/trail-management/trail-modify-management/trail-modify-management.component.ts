@@ -117,8 +117,6 @@ export class TrailModifyManagementComponent implements OnInit {
         ]);
     }
 
-
-
     togglePreview() {
         this.isPreviewVisible = !this.isPreviewVisible;
     }

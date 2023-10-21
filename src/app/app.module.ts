@@ -96,6 +96,7 @@ import { ReportingGeolocalizedIssueComponent } from './accessibility/reporting-o
 import { SelectionModalComponent } from './modal/selection-modal/selection-modal.component';
 import { DataUpdateComponent } from './data-update/data-update.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { MapMobileViewComponent } from './map-view/map-mobile-view/map-mobile-view.component';
 
 @NgModule({
   declarations: [
@@ -184,7 +185,8 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
     ReportingGeolocalizedIssueComponent,
     SelectionModalComponent,
     DataUpdateComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    MapMobileViewComponent
   ],
   imports: [
     BrowserModule,
