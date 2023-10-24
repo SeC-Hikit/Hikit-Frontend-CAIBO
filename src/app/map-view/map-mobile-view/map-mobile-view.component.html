@@ -72,5 +72,11 @@
                 {{ selectedTrail.classification }}
             </div>
         </div>
+        <div class="row"
+            *ngIf="isMobileDetailOn">
+            <app-map-full-detail-view>
+
+            </app-map-full-detail-view>
+        </div>
     </div>
 </div>

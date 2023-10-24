@@ -4,7 +4,7 @@ footer .it-footer { display: none !important; }
 
 @media (max-width: 767px) {
   .MapComponent {
-    margin-top: 58px;
+    margin-top: 54px;
   }
 }
 
@@ -20,7 +20,9 @@ footer .it-footer { display: none !important; }
     background: white;
     height: 50px;
   }
-
+    .column-map {
+        padding: 0;
+    }
   .selection-margin {
     margin-top: 50px;
     margin-bottom: 20px;

@@ -97,6 +97,7 @@ import { SelectionModalComponent } from './modal/selection-modal/selection-modal
 import { DataUpdateComponent } from './data-update/data-update.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { MapMobileViewComponent } from './map-view/map-mobile-view/map-mobile-view.component';
+import { MapFullDetailViewComponent } from './map-view/map-full-detail-view/map-full-detail-view.component';
 
 @NgModule({
   declarations: [
@@ -186,7 +187,8 @@ import { MapMobileViewComponent } from './map-view/map-mobile-view/map-mobile-vi
     SelectionModalComponent,
     DataUpdateComponent,
     PrivacyPolicyComponent,
-    MapMobileViewComponent
+    MapMobileViewComponent,
+    MapFullDetailViewComponent
   ],
   imports: [
     BrowserModule,

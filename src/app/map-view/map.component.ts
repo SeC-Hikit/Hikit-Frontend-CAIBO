@@ -6,7 +6,7 @@ import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../servic
 import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
-import *  as FileSaver from 'file-saver';
+import * as FileSaver from 'file-saver';
 import {Coordinates2D, GeoTrailService, LocateDto, RectangleDto} from "../service/geo-trail-service";
 import {environment} from "../../environments/environment.prod";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
@@ -100,6 +100,7 @@ export class MapComponent implements OnInit {
     selectedLocationDetails: LocalityDto;
     isSearch: boolean = false;
     isPortraitMode: boolean = true;
+    isMobileDetailMode: boolean = false;
 
     constructor(
         private trailService: TrailService,
@@ -496,8 +497,8 @@ export class MapComponent implements OnInit {
     }
 
     onPoiClick($event: PoiDto) {
-        MapUtils.changeUrlToState(ViewState.POI, $event.id)
-        this.navigateToLocation($event.coordinates)
+        MapUtils.changeUrlToState(ViewState.POI, $event.id);
+        this.navigateToLocation($event.coordinates);
         this.selectedPoi = $event;
         this.sideView = ViewState.POI;
     }
@@ -507,7 +508,7 @@ export class MapComponent implements OnInit {
     }
 
     onBackToTrailPoiClick() {
-        MapUtils.changeUrlToState(ViewState.TRAIL, this.selectedTrail.id)
+        MapUtils.changeUrlToState(ViewState.TRAIL, this.selectedTrail.id);
         this.sideView = ViewState.TRAIL;
         this.selectedPoi = null;
         this.poiHovering = null;
@@ -673,5 +674,9 @@ export class MapComponent implements OnInit {
 
     getIsPortraitMode() {
         return(window.innerWidth < window.innerHeight);
+    }
+
+    onDetailMode() {
+        this.isMobileDetailMode = !this.isMobileDetailMode;
     }
 }

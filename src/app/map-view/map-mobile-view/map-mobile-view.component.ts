@@ -10,8 +10,10 @@ export class MapMobileViewComponent implements OnInit {
 
     @Input() selectedTrail: TrailDto;
     @Input() isCycloSwitchOn: boolean;
+    @Input() isMobileDetailOn: boolean;
 
     @Output() onToggleModeClick = new EventEmitter<void>();
+    @Output() onDetailModeClick = new EventEmitter<void>();
 
     constructor() { }
 
@@ -20,6 +22,10 @@ export class MapMobileViewComponent implements OnInit {
 
     onToggleMode() {
         this.onToggleModeClick.emit();
+    }
+
+    showMobileDetail() {
+        this.onDetailModeClick.emit();
     }
 
     getDistance() {

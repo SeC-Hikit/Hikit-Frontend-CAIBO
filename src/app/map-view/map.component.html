@@ -26,12 +26,14 @@
         </div>
 
             <div class="row">
-                <div class="col-11 offset-1" id="trail-detail-column"
+                <div class="col" id="trail-detail-column"
                      *ngIf="isPortraitMode">
                     <app-map-mobile-view
                         [selectedTrail]="selectedTrail"
                         [isCycloSwitchOn]="isCycloToggled"
+                        [isMobileDetailOn]="isMobileDetailMode"
                         (onToggleModeClick)="onToggleMode()"
+                        (onDetailModeClick)="onDetailMode()"
                     >
                     </app-map-mobile-view>
                 </div>
