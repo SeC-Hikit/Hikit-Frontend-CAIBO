@@ -524,7 +524,7 @@ export class MapFullComponent implements OnInit {
             [latLng.lat, latLng.lng],
             {radius: MapFullComponent.CIRCLE_SIZE, fill: true, fillColor: "yellow", color: "yellow"});
         circle.on("click", () => this.onLocationSelection.emit(it))
-        circle.on("mouseout", () => this.dehighlightPlaceLocation(circle));
+        circle.on("mouseout", () => this.dehighlightPlaceLocation());
         this.locationsOnTrail.push(circle)
         this.map.addLayer(circle)
     }
