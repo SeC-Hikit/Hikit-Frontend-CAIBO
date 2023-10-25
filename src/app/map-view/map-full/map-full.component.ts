@@ -13,6 +13,7 @@ import {Marker} from 'src/app/map-preview/map-preview.component';
 import {MapPinIconType} from "../../../assets/icons/MapPinIconType";
 import {PoiDto} from "../../service/poi-service.service";
 import {PlaceRefDto} from "../../service/place.service";
+import {environment} from "../../../environments/environment";
 
 declare let L; // to be able to use L namespace
 
@@ -96,7 +97,11 @@ export class MapFullComponent implements OnInit {
         this.map = L.map(MapFullComponent.MAP_ID, {
             layers: [this.selectedLayer],
             maxZoom: this._maxZoom,
-            minZoom: this._minZoom
+            minZoom: this._minZoom,
+            maxBoundsViscosity: 1,
+            maxBounds: new L.LatLngBounds(
+                new L.LatLng(environment.boundsTopLeft[0], environment.boundsTopLeft[1]),
+                new L.LatLng(environment.boundsBottomRight[0], environment.boundsBottomRight[1])),
         })
             .setView(
                 [44.498955, 11.327591], // TODO: remember last visited area
@@ -524,7 +529,7 @@ export class MapFullComponent implements OnInit {
         this.map.addLayer(circle)
     }
 
-    private dehighlightPlaceLocation(location: L.Circle) {
+    private dehighlightPlaceLocation() {
         this.showLocations(this.selectedTrail)
     }
 

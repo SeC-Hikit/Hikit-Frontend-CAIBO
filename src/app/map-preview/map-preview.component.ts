@@ -7,6 +7,7 @@ import {TrailDto, TrailCoordinatesDto, CoordinatesDto} from "../service/trail-se
 import {StartIcon} from "../../assets/icons/MapPinIconType";
 import {EndIcon} from "../../assets/icons/MapPinIconType";
 import {MapPinIconType} from "../../assets/icons/MapPinIconType";
+import {environment} from "../../environments/environment";
 
 export interface Marker {
     coords: Coordinates2D;
@@ -84,6 +85,10 @@ export class MapPreviewComponent implements OnInit {
             layers: [topoLayer],
             maxZoom: 16,
             scrollWheelZoom: false,
+            maxBoundsViscosity: 1,
+            maxBounds: new L.LatLngBounds(
+                new L.LatLng(environment.boundsTopLeft[0], environment.boundsTopLeft[1]),
+                new L.LatLng(environment.boundsBottomRight[0], environment.boundsBottomRight[1])),
         });
         this.map.setView([44.498955, 11.327591], 11);
 
