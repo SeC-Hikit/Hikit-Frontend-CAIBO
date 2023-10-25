@@ -8,6 +8,10 @@
   .container {
     padding: 0 0;
   }
+
+  .list-inline-item {
+    cursor: pointer;
+  }
 }
 
 .it-footer-main {
@@ -39,3 +43,4 @@ hr {
 .list-item:hover {
   text-decoration: underline;
 }
+
