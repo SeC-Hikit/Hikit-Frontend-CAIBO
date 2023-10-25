@@ -12,6 +12,7 @@ import {MapPinIconType} from "../../assets/icons/MapPinIconType";
 import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {Router} from "@angular/router";
 import {SelectionModalComponent} from "../modal/selection-modal/selection-modal.component";
+import { Help } from '../utils/Help';
 
 @Component({
     selector: 'app-accessibility',
@@ -34,7 +35,6 @@ export class AccessibilityComponent implements OnInit {
     selectedTrail: TrailDto;
     unresolvedNotifications: AccessibilityNotification[];
     solvedNotifications: AccessibilityNotification[];
-    notificationSaved: string;
     markers: Marker[] = [];
 
     constructor(
@@ -131,7 +131,8 @@ export class AccessibilityComponent implements OnInit {
             const trail = trailResp.content[0];
             const modal = this.modalService.open(InfoModalComponent);
             modal.componentInstance.title = "Problema di percorrenza su sentiero " + trail.code;
-            modal.componentInstance.body = accessibilityNotification.description;
+            modal.componentInstance.body = accessibilityNotification.description +
+            "<br>"+ "<b>Nota:</b> " + Help.getDescription(accessibilityNotification.minor)
         }));
     }
 
