@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
 import { MaintenanceDto, MaintenanceService as MaintenanceService } from '../service/maintenance.service';
 import {TrailDto, TrailMappingDto, TrailService} from "../service/trail-service.service";
-import {DateUtils} from "../utils/DateUtils";
 import {InfoModalComponent} from "../modal/info-modal/info-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TrailPreviewService} from "../service/trail-preview-service.service";
@@ -80,7 +78,7 @@ export class MaintenanceComponent implements OnInit {
     if(!trailId)
     {
         const modal = this.modalService.open(InfoModalComponent);
-        modal.componentInstance.title = `Il sentiero non è ancora collegato ad alcuno da sistema`;
+        modal.componentInstance.title = `Sentiero non accatastato`;
         modal.componentInstance.body = `Il sentiero su cui è svolta la manutenzione non è ancora accatastato.`;
         return;
     }

@@ -87,8 +87,8 @@ export class MapPreviewComponent implements OnInit {
             scrollWheelZoom: false,
             maxBoundsViscosity: 1,
             maxBounds: new L.LatLngBounds(
-                new L.LatLng(environment.boundsTopLeft[0], environment.boundsTopLeft[1]),
-                new L.LatLng(environment.boundsBottomRight[0], environment.boundsBottomRight[1])),
+                new L.LatLng(environment.northWestBoundsLatLng[0], environment.northWestBoundsLatLng[1]),
+                new L.LatLng(environment.southEastBoundsLatLng[0], environment.southEastBoundsLatLng[1])),
         });
         this.map.setView([44.498955, 11.327591], 11);
 

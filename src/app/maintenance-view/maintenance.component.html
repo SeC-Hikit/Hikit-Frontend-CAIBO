@@ -27,7 +27,7 @@
                               (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
                     <td (click)="showDetails(maintenance)" class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
-                    <td (click)="showDetails(maintenance)" class="text-truncate small-column hide_on_md">
+                    <td (click)="showDetails(maintenance)" class="text-truncate small-column hide_on_md clickable">
                         <span [innerHTML]="maintenance.description"></span>
                     </td>
                     <td (click)="showDetails(maintenance)">{{ maintenance.contact }}</td>
