@@ -189,8 +189,8 @@ export class MapComponent implements OnInit {
     adaptSize() {
         this.isPortraitMode = this.getIsPortraitMode();
         let fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
-        document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
-        document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
+//        document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
+//        document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
         document.getElementById(MapComponent.MAP_ID).style.height = fullSize.toString() + "px";
     }
 

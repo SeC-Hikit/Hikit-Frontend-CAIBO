@@ -92,6 +92,8 @@
             <app-map-full-detail-view
                 [selectedTrailData]="selectedTrail"
                 [isMapInitialized]="isMapInizialized"
+                [isCycloToggled]="isCycloSwitchOn"
+                [isPoiLoaded]="isPoiLoaded"
                 [trailPreviewList]="trailPreviewList"
                 (onSelectedTrailId)="onSelectedTrailId.emit($event)"
                 (onLoadLastMaintenanceForTrail)="onLoadLastMaintenanceForTrail.emit($event)"

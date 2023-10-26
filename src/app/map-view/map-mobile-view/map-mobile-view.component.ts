@@ -13,6 +13,7 @@ export class MapMobileViewComponent implements OnInit {
     @Input() selectedTrail: TrailDto;
     @Input() isCycloSwitchOn: boolean;
     @Input() isMobileDetailOn: boolean;
+    @Input() isPoiLoaded: boolean;
     @Input() trailPreviewList: TrailPreview[];
 
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();

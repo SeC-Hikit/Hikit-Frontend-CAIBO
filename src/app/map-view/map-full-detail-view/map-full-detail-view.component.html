@@ -78,3 +78,75 @@
             (onHighlightTrail)="onHighlightTrail($event)"
     ></app-place-details>
 </div>
+
+<div *ngIf="viewType==''">
+    <div class="row align-middle">
+        <div class="col-12">
+            <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
+                    class="clickable"
+                    (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
+            </p>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary full-width" (click)="showTrailList()">Lista sentieri
+            </button>
+        </div>
+        <div class="col-md-12 top-margin-x2">
+            <div class="row">
+                <div class="map-icon offset-md-3 offset-sm-0"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="viewType=='list'" class="top-margin">
+    <app-map-trail-list
+            [trailsPreviewList]="trailPreviewList"
+            (onSelectTrail)="onSelectTrail($event, true, true)"
+    >
+    </app-map-trail-list>
+    <div class="pagination-position"
+         *ngIf="trailPreviewList.length > 0 && !this.isSearch">
+        <ngb-pagination
+                [pageSize]="maxTrailEntriesPerPage"
+                [collectionSize]="trailPreviewCount"
+                [(page)]="trailPreviewPage"
+                [size]="'sm'"
+                [ellipses]="true"
+                [maxSize]="2"
+                aria-label="Default pagination"
+                (pageChange)="onLoadTrailPreview.emit($event)"
+        ></ngb-pagination>
+    </div>
+</div>
+<div *ngIf="sideView=='trail'" class="top-margin">
+    <app-map-trail-details
+            [selectedTrail]="selectedTrail"
+            [selectedTrailPois]="selectedTrailPois"
+            [trailNotifications]="selectedTrailNotifications"
+            [selectedTrailMaintenances]="selectedTrailMaintenances"
+            [connectedTrails]="connectedTrails"
+            [isCycloSwitchOn]="isCycloToggled"
+            [isPoiLoaded]="isPoiLoaded"
+            (onDownloadGpx)="onDownloadGpx()"
+            (onDownloadKml)="onDownloadKml()"
+            (onDownloadPdf)="onDownloadPdf()"
+            (toggleFullTrailPageEvent)="toggleFullPageTrail()"
+            (toggleNotificationListEvent)="toggleNotificationsModal()"
+            (onNavigateToLocation)="navigateToLocation($event)"
+            (onShowLocation)="onSelectPlaceByRef($event)"
+            (onSelectTrail)="onSelectTrail($event, true, true)"
+            (onNavigateToSelectedTrailCoordIndex)="navigateToSelectedTrailIndex($event)"
+            (onNavigateToTrailReportIssue)="navigateToTrailReportIssue($event)"
+            (onSelectedNotification)="onAccessibilityNotificationSelection($event)"
+            (onMaintenanceClick)="onMaintenanceClick($event)"
+            (onToggleModeClick)="onToggleMode()"
+            (onPoiClickEvent)="onPoiClick($event)"
+            (onPoiHoveringEvent)="onPoiHovering($event)"
+            (onShowTrailClassificationCycloInfo)="onShowCyclingClassification()"
+            (onShowTrailClassificationHikingInfo)="onShowHikingClassification()"
+            (onHighlightTrail)="onHighlightTrail($event)"
+            (onSelectMunicipality)="onSelectMunicipality($event)"
+    >
+    </app-map-trail-details>
+</div>

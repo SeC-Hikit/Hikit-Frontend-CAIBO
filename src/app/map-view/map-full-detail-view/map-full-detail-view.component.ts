@@ -11,6 +11,7 @@ import {UserCoordinates} from "../../UserCoordinates";
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {PlaceDto} from "../../service/place.service";
 import {LocalityDto} from "../../service/ert.service";
+import {environment} from "../../../environments/environment.prod";
 
 @Component({
     selector: 'app-map-full-detail-view',
@@ -21,6 +22,8 @@ export class MapFullDetailViewComponent implements OnInit {
 
     @Input() selectedTrailData: TrailDto;
     @Input() isMapInitialized: boolean;
+    @Input() isCycloToggled: boolean;
+    @Input() isPoiLoaded: boolean;
     @Input() trailPreviewList: TrailPreview[];
 
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
@@ -34,6 +37,11 @@ export class MapFullDetailViewComponent implements OnInit {
 
     private searchTerms = new Subject<string>();
 
+    maxTrailEntriesPerPage = 10;
+    trailPreviewCount: number = 0;
+
+    sectionName = environment.publicName;
+
     // municipalities
     selectedMunicipality: MunicipalityDetails;
     municipalityTrails: TrailPreview[] = [];
@@ -42,7 +50,7 @@ export class MapFullDetailViewComponent implements OnInit {
     selectedTrail: TrailDto;
     selectedNotification: AccessibilityNotification;
 
-    viewType = ViewState.TRAIL;
+    viewType = ViewState.NONE;
     isPortraitMode: boolean = false;
     searchTermString: string = "";
     trailPreviewPage: number = 0;
@@ -92,6 +100,7 @@ export class MapFullDetailViewComponent implements OnInit {
     }
 
     showList() {
+        console.log(this.trailPreviewList.length);
         this.viewType = ViewState.TRAIL_LIST;
     }
 
@@ -194,11 +203,13 @@ export class MapFullDetailViewComponent implements OnInit {
         return(window.innerWidth < window.innerHeight);
     }
 
-
     ngOnChanges(changes: SimpleChanges) {
         if (this.isMapInitialized) {
             for (const propName in changes) {
                 if (propName == "selectedTrailNotifications") {
+                }
+                if(propName == "trailPreviewList") {
+                    console.log("preview list changed");
                 }
             }
         }
