@@ -1,1 +1,80 @@
-<p>map-full-detail-view works!</p>
+<div class="MapFullDetailView row">
+    <div *ngIf="viewType=='poi' || viewType=='place' || viewType=='accessibility' || viewType=='municipality'"
+         class="navigation-back clickable">
+        <svg class="bi pulse" width="24" height="24" fill="#D04341">
+            <use
+                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+        </svg>
+        <span class="back" (click)="onBackToTrailPoiClick.emit()"
+              *ngIf="selectedTrail">Torna al sentiero {{selectedTrail.code}}</span>
+        <span class="back" (click)="onBackToTrailPoiClick.emit()" *ngIf="!selectedTrail">Vai alla lista sentieri</span>
+    </div>
+
+    <div *ngIf="viewType=='trail'"
+         class="navigation-back clickable" (click)="showTrailList()">
+        <svg class="bi pulse" width="24" height="24" fill="#D04341">
+            <use
+                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+        </svg>
+        <span class="back">Torna alla lista sentieri</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-11 offset-1" id="trail-detail-column"
+         [class]="viewType=='trail' || viewType=='poi' || viewType=='place' || viewType=='accessibility' || viewType=='municipality' ? 'selection-margin' : ''">
+        <div *ngIf="viewType=='' || viewType=='list'" class="row search-section top-margin-x2">
+            <div class="col-11">
+                <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
+                                  (onTypingChange)="onSearchKeyPress($event)"
+                                  (onEnterPress)="onSearchClick()"
+                >
+                </app-search-input>
+            </div>
+            <div class="col-1 clickable">
+                <svg class="bi" width="24" height="24" fill="#D04341" (click)="onSearchClick()">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#search"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="viewType=='municipality' && selectedMunicipality" class="row top-margin">
+    <app-municipality-details
+            [selectedMunicipality] = "selectedMunicipality"
+            [selectedLocationDetails] = "selectedLocationDetails"
+            [trailMappings]="trailMappings"
+            [trailsForMunicipality]="municipalityTrails"
+            [trailsForMunicipalityMax] = "municipalityTrailsMax"
+            [isPaginationToShow] = "false"
+            (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
+            (onSelectTrailCode)="selectTrail($event)"
+            (onNavigateToLocation)="navigateToLocation($event)"
+    >
+    </app-municipality-details>
+</div>
+
+<div *ngIf="viewType=='accessibility' && selectedNotification" class="row top-margin">
+    <app-notification-details
+            [selectedNotification]="selectedNotification"
+            [trailMappings]="trailMappings"
+    ></app-notification-details>
+</div>
+
+<div *ngIf="viewType=='poi' && selectedPoi" class="row top-margin">
+    <app-poi-details
+            [selectedPoi]="selectedPoi"
+            [trailMappings]="trailMappings"
+            (onSelectTrail)="onSelectTrail($event, false, true)"
+            (onHighlightTrail)="onHighlightTrail($event)"
+    ></app-poi-details>
+</div>
+
+<div *ngIf="viewType=='place' && selectedPlace" class="row top-margin">
+    <app-place-details
+            [selectedPlace]="selectedPlace"
+            [trailMappings]="trailMappings"
+            (onSelectTrail)="onSelectTrail($event, false, true)"
+            (onHighlightTrail)="onHighlightTrail($event)"
+    ></app-place-details>
+</div>

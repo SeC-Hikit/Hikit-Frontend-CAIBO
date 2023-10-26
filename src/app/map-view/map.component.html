@@ -32,8 +32,17 @@
                         [selectedTrail]="selectedTrail"
                         [isCycloSwitchOn]="isCycloToggled"
                         [isMobileDetailOn]="isMobileDetailMode"
+                        [trailPreviewList]="trailPreviewList"
+                        (onSelectedTrailId)="onSelectTrail($event)"
+                        (onLoadLastMaintenanceForTrail)="loadLastMaintenanceForTrail($event)"
+                        (onLoadPoiForTrail)="loadPoiForTrail($event)"
+                        (onGetUnresolvedForTrailId)="accessibilityService.getUnresolvedForTrailId($event)"
                         (onToggleModeClick)="onToggleMode()"
+                        (onHighlightedLocation)="navigateToLocation($event)"
                         (onDetailModeClick)="onDetailMode()"
+                        (onBackToTrailPoiClick)="onBackToTrailPoiClick()"
+                        (onBackToTrailList)="onBackToTrailList()"
+                        (onLoadTrailPreview)="loadTrailPreview($event)"
                     >
                     </app-map-mobile-view>
                 </div>

@@ -24,7 +24,7 @@ import {MapUtils, ViewState} from "./MapUtils";
 import {MunicipalityDetails, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
 import {ErtService, LocalityDto} from "../service/ert.service";
-
+//import {MapMobileViewComponent} from "./map-mobile-view/map-mobile-view.component";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -107,7 +107,7 @@ export class MapComponent implements OnInit {
         private geoTrailService: GeoTrailService,
         private poiService: PoiService,
         private trailPreviewService: TrailPreviewService,
-        private accessibilityService: NotificationService,
+        public accessibilityService: NotificationService,
         private maintenanceService: MaintenanceService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -347,7 +347,7 @@ export class MapComponent implements OnInit {
 
         this.zoomChangingShallTriggerTrailsReload = false;
         this.onLoading();
-        const level = this.electTrailSimplifierLevel(this.zoomLevel);
+        const level = this.selectTrailSimplifierLevel(this.zoomLevel);
         if (level == TrailSimplifierLevel.NONE) return;
         this.geoTrailService
             .locate(locateDto, level.toUpperCase(), false)
@@ -380,8 +380,8 @@ export class MapComponent implements OnInit {
     }
 
     onZoomChange(zoomLevel: number) {
-        const previousZoomLevelSimplifier = this.electTrailSimplifierLevel(this.zoomLevel);
-        const newZoomLayerSimplifier = this.electTrailSimplifierLevel(zoomLevel);
+        const previousZoomLevelSimplifier = this.selectTrailSimplifierLevel(this.zoomLevel);
+        const newZoomLayerSimplifier = this.selectTrailSimplifierLevel(zoomLevel);
         if (previousZoomLevelSimplifier != newZoomLayerSimplifier)
             console.log("User zoomed in and trail simplified changed... reloading visible trail!")
         this.zoomChangingShallTriggerTrailsReload = true;
@@ -414,7 +414,7 @@ export class MapComponent implements OnInit {
         this.sideView = ViewState.TRAIL_LIST;
     }
 
-    electTrailSimplifierLevel(zoom: number): TrailSimplifierLevel {
+    selectTrailSimplifierLevel(zoom: number): TrailSimplifierLevel {
         if (zoom <= 10) return TrailSimplifierLevel.NONE;
         if (zoom < 15) return TrailSimplifierLevel.LOW;
         if (zoom <= 17) return TrailSimplifierLevel.MEDIUM;
@@ -487,7 +487,7 @@ export class MapComponent implements OnInit {
         return zoomLevel > 14;
     }
 
-    private loadPoiForTrail(id: string) {
+    loadPoiForTrail(id: string) {
         this.isPoiLoaded = false;
         this.poiService.getByTrailCode(id)
             .subscribe((resp) => {
@@ -544,7 +544,7 @@ export class MapComponent implements OnInit {
                 return;
             }
             this.sideView = ViewState.PLACE;
-            this.selectedPlace = it.content[0]
+            this.selectedPlace = it.content[0];
             this.isLoading = false;
         }, () => {
         }, () => {
