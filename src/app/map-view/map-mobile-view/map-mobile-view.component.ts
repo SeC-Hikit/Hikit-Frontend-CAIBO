@@ -3,6 +3,7 @@ import {TrailDto} from 'src/app/service/trail-service.service';
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
 import {GraphicUtils} from "../../utils/GraphicUtils";
+import {PoiDto} from "../../service/poi-service.service";
 
 @Component({
     selector: 'app-map-mobile-view',
@@ -30,6 +31,17 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onBackToTrailPoiClick: EventEmitter<void> = new EventEmitter<void>();
     @Output() onBackToTrailList: EventEmitter<void> = new EventEmitter<void>();
     @Output() onLoadTrailPreview: EventEmitter<number> = new EventEmitter<number>();
+    @Output() onNavigateToTrailReportIssue: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onAccessibilityNotificationSelection: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onShowCyclingClassification: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onShowHikingClassification: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onToggleFullPageTrail: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onPoiClick: EventEmitter<PoiDto> = new EventEmitter<PoiDto>();
+    @Output() onPoiHovering: EventEmitter<PoiDto> = new EventEmitter<PoiDto>();
+
+    @Output() onDownloadGpx: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDownloadKml: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDownloadPdf: EventEmitter<void> = new EventEmitter<void>();
 
     isMapInitialized: boolean = true;
 
@@ -59,6 +71,7 @@ export class MapMobileViewComponent implements OnInit {
     }
 
     toggleFullView() {
+        this.showMobileDetail();
         this.isFullView = !this.isFullView;
         const element = document.getElementById("mobile-side-column");
 

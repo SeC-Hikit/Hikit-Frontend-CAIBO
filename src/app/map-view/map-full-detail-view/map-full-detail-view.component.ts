@@ -9,7 +9,7 @@ import {AccessibilityNotification} from "../../service/notification-service.serv
 import {MaintenanceDto} from "../../service/maintenance.service";
 import {UserCoordinates} from "../../UserCoordinates";
 import {Coordinates2D} from "../../service/geo-trail-service";
-import {PlaceDto} from "../../service/place.service";
+import {PlaceDto, PlaceRefDto} from "../../service/place.service";
 import {LocalityDto} from "../../service/ert.service";
 import {environment} from "../../../environments/environment.prod";
 
@@ -35,6 +35,20 @@ export class MapFullDetailViewComponent implements OnInit {
     @Output() onBackToTrailPoiClick: EventEmitter<void> = new EventEmitter<void>();
     @Output() onBackToTrailList: EventEmitter<void> = new EventEmitter<void>();
     @Output() onLoadTrailPreview: EventEmitter<number> = new EventEmitter<number>();
+    @Output() onSelectMunicipality: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onSelectPlaceByRef: EventEmitter<PlaceRefDto> = new EventEmitter<PlaceRefDto>();
+    @Output() onNavigateToTrailReportIssue: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onMaintenanceClick: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onAccessibilityNotificationSelection: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onShowCyclingClassification: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onShowHikingClassification: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onToggleFullPageTrail: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onPoiClick: EventEmitter<PoiDto> = new EventEmitter<PoiDto>();
+    @Output() onPoiHovering: EventEmitter<PoiDto> = new EventEmitter<PoiDto>();
+
+    @Output() onDownloadGpx: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDownloadKml: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDownloadPdf: EventEmitter<void> = new EventEmitter<void>();
 
     private searchTerms = new Subject<string>();
 
@@ -51,7 +65,7 @@ export class MapFullDetailViewComponent implements OnInit {
     selectedTrail: TrailDto;
     selectedNotification: AccessibilityNotification;
 
-    viewType = ViewState.NONE;
+    viewType = ViewState.TRAIL;
     isPortraitMode: boolean = false;
     searchTermString: string = "";
     trailPreviewPage: number = 0;
@@ -76,7 +90,7 @@ export class MapFullDetailViewComponent implements OnInit {
     sideView = ViewState.NONE;
     selectedTrailIndex: number = 0;
     showTrailCodeMarkers: boolean;
-    poiHovering: PoiDto;
+    poiHoveringDto: PoiDto;
     selectedPoi: PoiDto;
     selectedPlace: PlaceDto;
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
@@ -200,8 +214,37 @@ export class MapFullDetailViewComponent implements OnInit {
         this.highlightedTrail = this.trailMappings.get(trail_id);
     }
 
+    selectMunicipality(id: string) {
+        this.viewType = ViewState.MUNICIPALITY;
+        this.onSelectMunicipality.emit(id);
+    }
+
+    navigateToSelectedTrailIndex(index: number) {
+        this.selectedTrailIndex = index;
+    }
+
+    onToggleMode() {
+        this.isCycloToggled = !this.isCycloToggled;
+    }
+
     getIsPortraitMode(){
         return(window.innerWidth < window.innerHeight);
+    }
+
+    accessibilityNotificationSelection(id: string) {
+        this.onAccessibilityNotificationSelection.emit(id);
+        this.viewType = ViewState.ACCESSIBILITY;
+    }
+
+    poiClick(poidto: PoiDto) {
+        this.viewType = ViewState.POI;
+        this.selectedPoi = poidto;
+        this.onPoiClick.emit(poidto);
+    }
+
+    poiHovering(poidto: PoiDto) {
+        this.poiHoveringDto = poidto;
+        this.onPoiHovering.emit(poidto);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -209,10 +252,15 @@ export class MapFullDetailViewComponent implements OnInit {
             for (const propName in changes) {
                 if (propName == "selectedTrailNotifications") {
                 }
-                if(propName == "trailPreviewList") {
+                if(propName == "trailPreviewList")
                     console.log("preview list changed");
-                }
+                if(propName == "selectedTrailData")
+                    this.selectTrail(this.selectedTrailData.id, true);
             }
         }
+    }
+
+    toggleNotificationsModal(): void {
+        this.isNotificationModalVisible = !this.isNotificationModalVisible;
     }
 }

@@ -1,4 +1,4 @@
-§   <div class="MapFullDetailView row">
+<div class="MapFullDetailView row">
     <div *ngIf="viewType=='poi' || viewType=='place' || viewType=='accessibility' || viewType=='municipality'"
          class="navigation-back clickable">
         <svg class="bi pulse" width="24" height="24" fill="#D04341">
@@ -128,25 +128,25 @@
             [connectedTrails]="connectedTrails"
             [isCycloSwitchOn]="isCycloToggled"
             [isPoiLoaded]="isPoiLoaded"
-            (onDownloadGpx)="onDownloadGpx()"
-            (onDownloadKml)="onDownloadKml()"
-            (onDownloadPdf)="onDownloadPdf()"
-            (toggleFullTrailPageEvent)="toggleFullPageTrail()"
+            (onDownloadGpx)="onDownloadGpx.emit()"
+            (onDownloadKml)="onDownloadKml.emit()"
+            (onDownloadPdf)="onDownloadPdf.emit()"
+            (toggleFullTrailPageEvent)="onToggleFullPageTrail.emit()"
             (toggleNotificationListEvent)="toggleNotificationsModal()"
             (onNavigateToLocation)="navigateToLocation($event)"
-            (onShowLocation)="onSelectPlaceByRef($event)"
+            (onShowLocation)="onSelectPlaceByRef.emit($event)"
             (onSelectTrail)="onSelectTrail($event, true, true)"
             (onNavigateToSelectedTrailCoordIndex)="navigateToSelectedTrailIndex($event)"
-            (onNavigateToTrailReportIssue)="navigateToTrailReportIssue($event)"
-            (onSelectedNotification)="onAccessibilityNotificationSelection($event)"
-            (onMaintenanceClick)="onMaintenanceClick($event)"
+            (onNavigateToTrailReportIssue)="onNavigateToTrailReportIssue.emit($event)"
+            (onSelectedNotification)="accessibilityNotificationSelection($event)"
+            (onMaintenanceClick)="onMaintenanceClick.emit($event)"
             (onToggleModeClick)="onToggleMode()"
-            (onPoiClickEvent)="onPoiClick($event)"
-            (onPoiHoveringEvent)="onPoiHovering($event)"
-            (onShowTrailClassificationCycloInfo)="onShowCyclingClassification()"
-            (onShowTrailClassificationHikingInfo)="onShowHikingClassification()"
+            (onPoiClickEvent)="poiClick($event)"
+            (onPoiHoveringEvent)="poiHovering($event)"
+            (onShowTrailClassificationCycloInfo)="onShowCyclingClassification.emit()"
+            (onShowTrailClassificationHikingInfo)="onShowHikingClassification.emit()"
             (onHighlightTrail)="onHighlightTrail($event)"
-            (onSelectMunicipality)="onSelectMunicipality($event)"
+            (onSelectMunicipality)="selectMunicipality($event)"
     >
     </app-map-trail-details>
 </div>
