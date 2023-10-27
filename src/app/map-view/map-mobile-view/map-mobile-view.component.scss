@@ -1,53 +1,92 @@
 @import "../../style/const.scss";
 
+.hide {
+  display: none !important;
+}
+
 .MapMobileView {
-    #bike-icon, #people-icon, #clock-icon {
-        color: white;
-    }
 
-    #mobile-side-column {
-        width: 100%;
-        padding: 3%;
-    }
+  left: 18px;
+  top: 550px;
+  position: absolute;
+  transition: 0.5s all;
+  width: 100%;
+  z-index: 1000;
+  min-height: 150px;
 
-    .mobile-preview-text {
-        color: #fff;
-        font-size: 20px;
-        font-weight: bold;
-    }
+  .mobile-content {
+    background: $secondary-bg-color;
+    width: 100%;
+  }
 
-    .mobile-preview-text-small-top {
-        color: #00ff00;
-        font-size: 14px;
-        font-weight: bold;
-    }
+  #bike-icon, #people-icon, #clock-icon {
+    color: white;
+  }
 
-    .mobile-preview-text-small-bottom {
-        color: #ff0000;
-        font-size: 14px;
-        font-weight: bold;
-    }
+  .expand-bar-outer {
+    height: 30px;
+    width: 100%;
+    padding-top: 10px;
+    cursor: pointer;
+    animation-name: pulse-animation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
 
-    #mobile-side-column {
-        width: 100%;
-        padding: 3%;
-        .trailCodeColumn {
-            width: fit-content;
-            padding: 0 0.3em;
-            color: white;
-        }
-    }
+  .expand-bar {
+    cursor: pointer;
+    width: 80%;
+    height: 5px;
+    background: #fff;
+    border-radius: 5px 5px 5px;
+    margin: 0 auto 10px;
+  }
 
-    #mobile-side-column {
-        background-color: $secondary-bg-color;
-    }
+  .contents {
+    padding: 2% 5%;
+  }
 
-    .bottom-margin {
-        margin-bottom: 20px;
-    }
+  .mobile-preview-text {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+  }
 
-    .mobile-preview-text-small {
-        font-size: 14px;
-        color: #fff;
+  .mobile-preview-text-small-top {
+    color: $primary-bg-color;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .mobile-preview-text-small-bottom {
+    color: $error-color;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  #mobile-side-column {
+    width: 100%;
+    padding: 3%;
+
+    .trailCodeColumn {
+      width: fit-content;
+      padding: 0 0.3em;
+      color: white;
     }
+  }
+
+  #mobile-side-column {
+    transition: 2s all;
+    background-color: $secondary-bg-color;
+  }
+
+  .bottom-margin {
+    margin-bottom: 20px;
+  }
+
+  .mobile-preview-text-small {
+    font-size: 14px;
+    color: #fff;
+  }
 }

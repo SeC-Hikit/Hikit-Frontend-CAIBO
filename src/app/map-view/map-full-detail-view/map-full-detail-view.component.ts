@@ -20,6 +20,7 @@ import {environment} from "../../../environments/environment.prod";
 })
 export class MapFullDetailViewComponent implements OnInit {
 
+
     @Input() selectedTrailData: TrailDto;
     @Input() isMapInitialized: boolean;
     @Input() isCycloToggled: boolean;
@@ -125,7 +126,7 @@ export class MapFullDetailViewComponent implements OnInit {
         this.searchTerms.next(this.searchTermString);
     }
 
-    loadTrailPreviewForMunicipality(page: number) {}
+    loadTrailPreviewForMunicipality() {}
 
     selectTrail(id: string, refresh?: boolean, switchView = true, zoomIn = false): void {
         this.isLoading = true;

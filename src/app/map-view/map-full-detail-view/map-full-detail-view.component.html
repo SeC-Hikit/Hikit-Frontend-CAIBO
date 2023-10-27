@@ -1,4 +1,4 @@
-<div class="MapFullDetailView row">
+§   <div class="MapFullDetailView row">
     <div *ngIf="viewType=='poi' || viewType=='place' || viewType=='accessibility' || viewType=='municipality'"
          class="navigation-back clickable">
         <svg class="bi pulse" width="24" height="24" fill="#D04341">
@@ -47,7 +47,7 @@
             [trailsForMunicipality]="municipalityTrails"
             [trailsForMunicipalityMax] = "municipalityTrailsMax"
             [isPaginationToShow] = "false"
-            (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
+            (onLoadTrailPage)="loadTrailPreviewForMunicipality()"
             (onSelectTrailCode)="selectTrail($event)"
             (onNavigateToLocation)="navigateToLocation($event)"
     >

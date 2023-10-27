@@ -24,6 +24,7 @@ import {MapUtils, ViewState} from "./MapUtils";
 import {MunicipalityDetails, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
 import {ErtService, LocalityDto} from "../service/ert.service";
+
 //import {MapMobileViewComponent} from "./map-mobile-view/map-mobile-view.component";
 
 export enum TrailSimplifierLevel {
@@ -41,7 +42,6 @@ export enum TrailSimplifierLevel {
 })
 export class MapComponent implements OnInit {
 
-    static TRAIL_DETAILS_ID = "side-column";
     static MAP_ID = "map-full";
 
 
@@ -54,6 +54,8 @@ export class MapComponent implements OnInit {
     isCycloToggled = false;
 
     isPoiLoaded = false;
+
+
 
     // Bound elements
     searchTermString: string = "";
@@ -609,8 +611,6 @@ export class MapComponent implements OnInit {
                     this.selectedTrailNotifications = responses[0].content;
                     this.onAccessibilityNotificationSelection(id);
                 })
-
-
         })
     }
 
@@ -673,10 +673,14 @@ export class MapComponent implements OnInit {
     }
 
     getIsPortraitMode() {
-        return(window.innerWidth < window.innerHeight);
+        return(document.documentElement.clientWidth < document.documentElement.clientHeight);
     }
 
     onDetailMode() {
         this.isMobileDetailMode = !this.isMobileDetailMode;
+    }
+
+    onSearchClickShowListOfTrails() {
+        this.onBackToTrailList();
     }
 }

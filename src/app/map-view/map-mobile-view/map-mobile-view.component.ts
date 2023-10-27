@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {TrailCoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
+import {TrailDto} from 'src/app/service/trail-service.service';
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
+import {GraphicUtils} from "../../utils/GraphicUtils";
 
 @Component({
     selector: 'app-map-mobile-view',
@@ -9,6 +10,9 @@ import {TrailPreview} from "../../service/trail-preview-service.service";
     styleUrls: ['./map-mobile-view.component.scss']
 })
 export class MapMobileViewComponent implements OnInit {
+
+    isFullView: boolean = false;
+    min_panel_height : number = 150;
 
     @Input() selectedTrail: TrailDto;
     @Input() isCycloSwitchOn: boolean;
@@ -27,12 +31,18 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onBackToTrailList: EventEmitter<void> = new EventEmitter<void>();
     @Output() onLoadTrailPreview: EventEmitter<number> = new EventEmitter<number>();
 
-    isMapInizialized: boolean = true;
+    isMapInitialized: boolean = true;
 
     constructor() { }
 
     ngOnInit(): void {
+
     }
+
+    ngAfterViewInit() : void {
+        this.setLowerPanelSize();
+    }
+
 
     onToggleMode() {
         this.onToggleModeClick.emit();
@@ -46,6 +56,24 @@ export class MapMobileViewComponent implements OnInit {
     getDistance() {
         let s = this.selectedTrail.statsTrailMetadata.length;
         return Math.round(s);
+    }
+
+    toggleFullView() {
+        this.isFullView = !this.isFullView;
+        const element = document.getElementById("mobile-side-column");
+
+        if(this.isFullView) {
+            element.style.top = "0px";
+            element.style.height = GraphicUtils.getFullHeightSizeWOMenuHeights() + "px"
+        } else {
+            this.setLowerPanelSize();
+        }
+    }
+
+    private setLowerPanelSize() {
+        let height = GraphicUtils.getFullHeightSizeWOMenuHeights();
+        document.getElementById("mobile-side-column").style.top =
+            (height - this.min_panel_height) + "px";
     }
 
 }

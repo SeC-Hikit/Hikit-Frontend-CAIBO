@@ -1,111 +1,116 @@
-<div class="MapMobileView row">
-    <div *ngIf="selectedTrail"
-         class="container-flex column-map-mobile functional-column fixed-bottom"
-         id="mobile-side-column"
-         [ngClass]="{ 'hide' : selectedTrail }">
+<div class="MapMobileView row" id="mobile-side-column" [ngClass]="{'full-view': isFullView,
+'hide': !selectedTrail}">
+    <div class="container-flex column-map-mobile functional-column mobile-content">
         <div class="row">
-            <div class="col-2"
-                 (click)="showMobileDetail()"
-            >
-                <h1 class="trailCodeColumn trailCodeColumnColor">{{ selectedTrail.code }}</h1>
-            </div>
-            <div class="col-1 offset-2 text-right" (click)="onToggleMode()">
-                <svg class="bi clickable" id="people-icon" width="24" height="24"
-                     fill="currentColor"
-                     [ngClass]="!isCycloSwitchOn ? 'low-opacity' : ''">
-                    <use
-                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#people"
-                    />
-                </svg>
-            </div>
-            <div class="col-1 text-left" (click)="onToggleMode()">
-                <svg class="bi clickable" id="bike-icon" width="24" height="24"
-                     fill="currentColor"
-                     [ngClass]="!isCycloSwitchOn ? '' : 'low-opacity'">
-                    <use
-                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
-                    />
-                </svg>
-            </div>
-            <div class="col-1 offset-1 text-right"
-                 (click)="showMobileDetail()"
-            >
-                <svg id="clock-icon" width="24" height="24">
-                    <use
-                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#clock-fill"
-                    />
-                </svg>
-            </div>
-            <div class="col-4 text-left mobile-preview-text-small"
-                 (click)="showMobileDetail()"
-            >
-                <span *ngIf="!isCycloSwitchOn">{{ selectedTrail.officialEta != 0 ? (selectedTrail.officialEta | eta) : (selectedTrail.statsTrailMetadata.eta | eta) }}</span>
-                <span *ngIf="isCycloSwitchOn">{{ selectedTrail.cycloDetails.officialEta | eta }}</span>
+            <div class="expand-bar-outer" (click)="toggleFullView()">
+                <div class="expand-bar"></div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-1 text-center"
-                 (click)="showMobileDetail()"
-            >
-                <svg id="people-icon" width="24" height="24">
-                    <use
-                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-right"
-                    />
-                </svg>
+        <div class="contents">
+            <div class="row" *ngIf="selectedTrail">
+                <div class="col-2"
+                     (click)="showMobileDetail()"
+                >
+                    <h1 class="trailCodeColumn trailCodeColumnColor">{{ selectedTrail.code }}</h1>
+                </div>
+                <div class="col-1 offset-2 text-right" (click)="onToggleMode()">
+                    <svg class="bi clickable" id="people-icon" width="24" height="24"
+                         fill="currentColor"
+                         [ngClass]="!isCycloSwitchOn ? 'low-opacity' : ''">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#people"
+                        />
+                    </svg>
+                </div>
+                <div class="col-1 text-left" (click)="onToggleMode()">
+                    <svg class="bi clickable" id="bike-icon" width="24" height="24"
+                         fill="currentColor"
+                         [ngClass]="!isCycloSwitchOn ? '' : 'low-opacity'">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#bicycle"
+                        />
+                    </svg>
+                </div>
+                <div class="col-1 offset-1 text-right"
+                     (click)="showMobileDetail()"
+                >
+                    <svg id="clock-icon" width="24" height="24">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#clock-fill"
+                        />
+                    </svg>
+                </div>
+                <div class="col-4 text-left mobile-preview-text-small"
+                     (click)="showMobileDetail()"
+                >
+                    <span *ngIf="!isCycloSwitchOn">{{ selectedTrail.officialEta != 0 ? (selectedTrail.officialEta | eta) : (selectedTrail.statsTrailMetadata.eta | eta) }}</span>
+                    <span *ngIf="isCycloSwitchOn">{{ selectedTrail.cycloDetails.officialEta | eta }}</span>
+                </div>
             </div>
-            <div class="col-3 mobile-preview-text"
-                 (click)="showMobileDetail()"
-            >
-                {{ getDistance() }}m
-            </div>
-            <div class="col-1 offset-1 text-center"
-                 (click)="showMobileDetail()"
-            >
-                <svg id="people-icon" width="24" height="24">
-                    <use
-                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-down-up"
-                    />
-                </svg>
-            </div>
-            <div class="col-3"
-                 (click)="showMobileDetail()"
-            >
-                <div class="row">
-                    <div class="col-12 mobile-preview-text-small-top">
-                        {{ selectedTrail.statsTrailMetadata.totalRise }}m
+            <div class="row" *ngIf="selectedTrail">
+                <div class="col-1 text-center"
+                     (click)="showMobileDetail()"
+                >
+                    <svg id="people-icon" width="24" height="24">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-right"
+                        />
+                    </svg>
+                </div>
+                <div class="col-3 mobile-preview-text"
+                     (click)="showMobileDetail()"
+                >
+                    {{ getDistance() }}m
+                </div>
+                <div class="col-1 offset-1 text-center"
+                     (click)="showMobileDetail()"
+                >
+                    <svg id="people-icon" width="24" height="24">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-down-up"
+                        />
+                    </svg>
+                </div>
+                <div class="col-3"
+                     (click)="showMobileDetail()"
+                >
+                    <div class="row">
+                        <div class="col-12 mobile-preview-text-small-top">
+                            {{ selectedTrail.statsTrailMetadata.totalRise }}m
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mobile-preview-text-small-bottom">
+                            {{ selectedTrail.statsTrailMetadata.totalFall }}m
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 mobile-preview-text-small-bottom">
-                        {{ selectedTrail.statsTrailMetadata.totalFall }}m
-                    </div>
+                <div class="col-1 offset-1 text-center mobile-preview-text"
+                     (click)="showMobileDetail()"
+                >
+                    {{ selectedTrail.classification }}
                 </div>
             </div>
-            <div class="col-1 offset-1 text-center mobile-preview-text"
-                 (click)="showMobileDetail()"
-            >
-                {{ selectedTrail.classification }}
-            </div>
-        </div>
-        <div class="row"
-            *ngIf="isMobileDetailOn">
-            <app-map-full-detail-view
-                [selectedTrailData]="selectedTrail"
-                [isMapInitialized]="isMapInizialized"
-                [isCycloToggled]="isCycloSwitchOn"
-                [isPoiLoaded]="isPoiLoaded"
-                [trailPreviewList]="trailPreviewList"
-                (onSelectedTrailId)="onSelectedTrailId.emit($event)"
-                (onLoadLastMaintenanceForTrail)="onLoadLastMaintenanceForTrail.emit($event)"
-                (onLoadPoiForTrail)="onLoadPoiForTrail.emit($event)"
-                (onGetUnresolvedForTrailId)="onGetUnresolvedForTrailId.emit($event)"
-                (onHighlightedLocation)="onHighlightedLocation.emit($event)"
-                (onBackToTrailPoiClick)="onBackToTrailPoiClick.emit()"
-                (onBackToTrailList)="onBackToTrailList.emit()"
-                (onLoadTrailPreview)="onLoadTrailPreview.emit($event)"
-            >
+            <div class="row"
+                 *ngIf="isMobileDetailOn">
+                <app-map-full-detail-view
+                        [selectedTrailData]="selectedTrail"
+                        [isMapInitialized]="isMapInitialized"
+                        [isCycloToggled]="isCycloSwitchOn"
+                        [isPoiLoaded]="isPoiLoaded"
+                        [trailPreviewList]="trailPreviewList"
+                        (onSelectedTrailId)="onSelectedTrailId.emit($event)"
+                        (onLoadLastMaintenanceForTrail)="onLoadLastMaintenanceForTrail.emit($event)"
+                        (onLoadPoiForTrail)="onLoadPoiForTrail.emit($event)"
+                        (onGetUnresolvedForTrailId)="onGetUnresolvedForTrailId.emit($event)"
+                        (onHighlightedLocation)="onHighlightedLocation.emit($event)"
+                        (onBackToTrailPoiClick)="onBackToTrailPoiClick.emit()"
+                        (onBackToTrailList)="onBackToTrailList.emit()"
+                        (onLoadTrailPreview)="onLoadTrailPreview.emit($event)"
+                >
 
-            </app-map-full-detail-view>
+                </app-map-full-detail-view>
+            </div>
         </div>
     </div>
 </div>

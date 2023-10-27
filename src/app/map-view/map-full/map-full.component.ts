@@ -78,6 +78,7 @@ export class MapFullComponent implements OnInit {
     @Output() onMunicipalitySelectionClick = new EventEmitter();
     @Output() onTerrainChangeSelectionClick = new EventEmitter();
     @Output() onGeolocaliseMeSelectionClick = new EventEmitter();
+    @Output() onSearchClick = new EventEmitter();
 
     constructor() {
         this.otherTrailsPolylines = [];
