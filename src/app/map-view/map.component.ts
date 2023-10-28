@@ -129,6 +129,7 @@ export class MapComponent implements OnInit {
         this.loadDataPassedByUrl();
         this.changeTileLayer("topo");
         this.ensureMapping();
+        this.setupShortcuts();
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
             debounceTime(500),
@@ -682,5 +683,19 @@ export class MapComponent implements OnInit {
 
     onSearchClickShowListOfTrails() {
         this.onBackToTrailList();
+        setTimeout(()=> {
+            document.getElementById("search-box").focus();
+        }, 100);
+    }
+
+
+    private setupShortcuts() {
+        const context = this;
+        window.addEventListener('keydown', function (event) {
+            // SHIFT+F
+            if (event.shiftKey && event.code === 'KeyF') {
+                context.onSearchClickShowListOfTrails();
+            }
+        })
     }
 }

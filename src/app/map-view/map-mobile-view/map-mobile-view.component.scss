@@ -6,6 +6,17 @@
 
 .MapMobileView {
 
+
+
+  .navigation-back {
+    background: $secondary-bg-color;
+  }
+
+
+  .clickable {
+    color: white;
+  }
+
   left: 18px;
   top: 550px;
   position: absolute;
@@ -15,12 +26,16 @@
   min-height: 150px;
 
   .mobile-content {
-    background: $secondary-bg-color;
+    background: white;
     width: 100%;
   }
 
+  .full-view {
+    color: black;
+  }
+
   #bike-icon, #people-icon, #clock-icon {
-    color: white;
+    color: black;
   }
 
   .expand-bar-outer {
@@ -38,7 +53,7 @@
     cursor: pointer;
     width: 80%;
     height: 5px;
-    background: #fff;
+    background: $secondary-bg-color;
     border-radius: 5px 5px 5px;
     margin: 0 auto 10px;
   }
@@ -48,7 +63,7 @@
   }
 
   .mobile-preview-text {
-    color: #fff;
+    color: black;
     font-size: 20px;
     font-weight: bold;
   }
@@ -68,12 +83,6 @@
   #mobile-side-column {
     width: 100%;
     padding: 3%;
-
-    .trailCodeColumn {
-      width: fit-content;
-      padding: 0 0.3em;
-      color: white;
-    }
   }
 
   #mobile-side-column {
@@ -87,6 +96,5 @@
 
   .mobile-preview-text-small {
     font-size: 14px;
-    color: #fff;
   }
 }

@@ -12,6 +12,7 @@ export class SearchInputComponent implements OnInit {
     private value: string = "";
     private interval;
 
+    @Input() id: string = "search-box";
     @Input() placeholder: string;
     @Output() onTypingChange = new EventEmitter<string>();
     @Output() onEnterPress = new EventEmitter<string>();

@@ -25,10 +25,11 @@
             <span class="back">Torna alla lista sentieri</span>
         </div>
 
-            <div class="row">
-                <div class="col"
-                     *ngIf="isPortraitMode">
-                    <app-map-mobile-view
+        <div class="row">
+            <div class="col"
+                 *ngIf="isPortraitMode">
+                <app-map-mobile-view
+                        [sideView]="sideView"
                         [selectedTrail]="selectedTrail"
                         [isCycloSwitchOn]="isCycloToggled"
                         [isMobileDetailOn]="isMobileDetailMode"
@@ -53,10 +54,10 @@
                         (onDownloadGpx)="onDownloadGpx()"
                         (onDownloadKml)="onDownloadKml()"
                         (onDownloadPdf)="onDownloadPdf()"
-                    >
-                    </app-map-mobile-view>
-                </div>
+                >
+                </app-map-mobile-view>
             </div>
+        </div>
         <div class="column-map col-lg-4 col-md-4 white details" id="side-column"
              *ngIf="!isPortraitMode">
             <div class="row">
@@ -80,15 +81,15 @@
 
                     <div *ngIf="sideView=='municipality' && selectedMunicipality" class="row top-margin">
                         <app-municipality-details
-                            [selectedMunicipality] = "selectedMunicipality"
-                            [selectedLocationDetails] = "selectedLocationDetails"
-                            [trailMappings]="trailMappings"
-                            [trailsForMunicipality]="municipalityTrails"
-                            [trailsForMunicipalityMax] = "municipalityTrailsMax"
-                            [isPaginationToShow] = "false"
-                            (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
-                            (onSelectTrailCode)="selectTrail($event)"
-                            (onNavigateToLocation)="navigateToLocation($event)"
+                                [selectedMunicipality]="selectedMunicipality"
+                                [selectedLocationDetails]="selectedLocationDetails"
+                                [trailMappings]="trailMappings"
+                                [trailsForMunicipality]="municipalityTrails"
+                                [trailsForMunicipalityMax]="municipalityTrailsMax"
+                                [isPaginationToShow]="false"
+                                (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
+                                (onSelectTrailCode)="selectTrail($event)"
+                                (onNavigateToLocation)="navigateToLocation($event)"
                         >
                         </app-municipality-details>
                     </div>
@@ -195,7 +196,7 @@
 
         <!--  Map Column  -->
         <div class="column-map"
-            [ngClass]="{'col-8': !isPortraitMode, 'col-12': isPortraitMode}">
+             [ngClass]="{'col-8': !isPortraitMode, 'col-12': isPortraitMode}">
             <app-map-full id="map-full-container"
                           [selectedTrail]="selectedTrail"
                           [selectedTrailNotification]="selectedTrailNotifications"

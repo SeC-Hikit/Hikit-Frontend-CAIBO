@@ -4,6 +4,7 @@ import {Coordinates2D} from "../../service/geo-trail-service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
 import {GraphicUtils} from "../../utils/GraphicUtils";
 import {PoiDto} from "../../service/poi-service.service";
+import {ViewState} from "../MapUtils";
 
 @Component({
     selector: 'app-map-mobile-view',
@@ -15,6 +16,7 @@ export class MapMobileViewComponent implements OnInit {
     isFullView: boolean = false;
     min_panel_height : number = 150;
 
+    @Input() sideView: ViewState;
     @Input() selectedTrail: TrailDto;
     @Input() isCycloSwitchOn: boolean;
     @Input() isMobileDetailOn: boolean;
@@ -63,11 +65,6 @@ export class MapMobileViewComponent implements OnInit {
     showMobileDetail() {
         console.log("showing details...");
         this.onDetailModeClick.emit();
-    }
-
-    getDistance() {
-        let s = this.selectedTrail.statsTrailMetadata.length;
-        return Math.round(s);
     }
 
     toggleFullView() {
