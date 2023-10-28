@@ -165,17 +165,17 @@
                         </svg>
                     </div>
                     <div class="col-md-11">
-                        <h3 id="crocevia">Crocevia</h3>
+                        <h3 id="crocevia">Bivio</h3>
                     </div>
                     <div class="col-md-12">
                         <p>
-                            I crocevia sono punti di collegamento tra diversi sentieri. Vengono rilevati in automatico
+                            I bivii sono punti di collegamento tra diversi sentieri. Vengono rilevati in automatico
                             sulla base dei sentieri presenti.
                         </p>
                     </div>
                     <div class="col-md-12">
                         <p>
-                            Crocevia da verificare: {{crossings.length}}
+                            Bivi da verificare: {{crossings.length}}
                         </p>
                     </div>
                     <div class="col-md-12 top-margin" *ngFor="let place of intersections.controls; index as i">
@@ -192,10 +192,10 @@
                         ></app-trail-intersection-entry>
                     </div>
                     <div class="col-md-12 top-margin" *ngIf="isQuickMode">
-                        ℹ️ La compilazione rapida provvede a compilare i crocevia automaticamente.
+                        ℹ️ La compilazione rapida provvede a compilare i bivio automaticamente.
                     </div>
                     <div class="col-md-12 top-margin" *ngIf="intersections.controls.length == 0">
-                        ✔️ Nessun crocevia ancora da modificare
+                        ✔️ Nessun bivio ancora da modificare
                     </div>
                 </div>
             </div>

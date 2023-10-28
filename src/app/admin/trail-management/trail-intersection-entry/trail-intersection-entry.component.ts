@@ -30,7 +30,7 @@ export class TrailIntersectionEntryComponent implements OnInit {
     @Output() onDynamicToggle: EventEmitter<void> = new EventEmitter<void>();
 
     crossPointMarker: Marker;
-    crossWayTitle: string = "Crocevia";
+    crossWayTitle: string = "Bivio";
     isCompleted: boolean;
     isInputDisabled: boolean = false;
     isShowing: boolean;
@@ -115,12 +115,12 @@ export class TrailIntersectionEntryComponent implements OnInit {
     onToggleDynamic() {
         this.isInputDisabled = this.isDynamic.value;
         this.isCompleted = this.isDynamic.value;
-        this.name.setValue("Crocevia dinamico " + Math.random())
+        this.name.setValue("Bivio dinamico " + Math.random())
     }
 
     changeCrossWayTitle(value: string) {
         this.isCompleted = this.isComplete(value);
-        this.crossWayTitle = `Crocevia '${value}'`;
+        this.crossWayTitle = `Bivio '${value}'`;
         this.onIntersectionNameChange.emit(value);
         if (this.isCompleted) {
             this.name.setValue(value);

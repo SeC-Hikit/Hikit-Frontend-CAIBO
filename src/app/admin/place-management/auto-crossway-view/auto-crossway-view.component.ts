@@ -99,7 +99,7 @@ export class AutoCrosswayViewComponent implements OnInit {
   showTrailCode(crossingTrailIds: string[]) {
     const trails = crossingTrailIds.map(it => this.trailMap.get(it));
     const trailsHtml = trails.map((it => `<li>${it}</li>`)).join("");
-    this.openError("Sentieri passanti per " + (crossingTrailIds.length > 1 ? "crocevia" : "località"),
+    this.openError("Sentieri passanti per " + (crossingTrailIds.length > 1 ? "bivio" : "località"),
         "<p>Sentieri:</p><ul>" + trailsHtml + "</ul>");
   }
 

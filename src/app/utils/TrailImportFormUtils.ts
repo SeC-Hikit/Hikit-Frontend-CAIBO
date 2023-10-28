@@ -53,7 +53,7 @@ export class TrailImportFormUtils {
         otherTrailCode: String) {
         return new FormGroup({
             "id": new FormControl(" "), // one char empty string - Strange issue
-            "name": new FormControl("Crocevia " + trailCode + "/" + otherTrailCode,
+            "name": new FormControl("Bivio " + trailCode + "/" + otherTrailCode,
                 [Validators.required,
                 Validators.minLength(2),
                 TrailImportFormUtils.nameValidator]),

@@ -30,7 +30,7 @@ export class MaintenancePastViewComponent implements OnInit {
     savedMaintenance: string;
     realm: string;
 
-    entryPerPage = 10;
+    entryPerPage = 5;
     page = 1;
     totalEntries = 0;
 
