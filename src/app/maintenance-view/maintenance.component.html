@@ -9,6 +9,19 @@
     <div class="row">
         <div class="col-12 col-md-12 col-s-6">
             <h1>Calendario Manutenzioni</h1>
+        </div>
+        <div class="col-12 col-md-12 col-s-6">
+            <p>
+                Per partecipare alle uscite di sentieristica, serve compilare
+                <a target="_blank" href="https://https://forms.gle/x3VG9NXmURdUaRVZ9">il modulo online</a> o contattare
+                l'organizzatore e presentarsi
+                al luogo di ritrovo. <br/>
+                Si raccomandano abiti da lavoro e servono scarpe adatte.<br/>
+                Le attrezzature saranno fornite dal CAI, comunque chi possiede guanti da lavoro, forbici/seghetto da potatore,vanga, zappa ed altri strumenti utili allo scopo
+                può portarli con sé.<br/>
+            </p>
+        </div>
+        <div class="col-12 col-md-12 col-s-6">
             <h2>Prossima/e manutenzioni</h2>
             <table *ngIf="maintenanceListFuture.length > 0; else notShowFuture" class="table table-striped">
                 <thead>
@@ -26,7 +39,8 @@
                     <td><span class="trailCodeColumn clickable"
                               (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
-                    <td (click)="showDetails(maintenance)" class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
+                    <td (click)="showDetails(maintenance)"
+                        class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
                     <td (click)="showDetails(maintenance)" class="text-truncate small-column hide_on_md clickable">
                         <span [innerHTML]="maintenance.description"></span>
                     </td>
@@ -62,7 +76,7 @@
                               (click)="showPreview(maintenance.trailId)">{{ getTrailCode(maintenance.trailId, maintenance.trailCode) }}</span>
                     </td>
                     <td (click)="showDetails(maintenance)"
-                            class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
+                        class="small-column hide_on_md">{{ maintenance.meetingPlace }}</td>
                     <td (click)="showDetails(maintenance)"
                         class="text-truncate small-column hide_on_md"
                         [innerHTML]="maintenance.description">
