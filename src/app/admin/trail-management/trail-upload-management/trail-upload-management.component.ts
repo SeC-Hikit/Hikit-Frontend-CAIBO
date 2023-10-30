@@ -41,7 +41,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
 
     PLACE_OFFSET = 1;
 
-    STEPS = ["Info Generali", "Crocevia", "Località"];
+    STEPS = ["Info Generali", "Bivi", "Località"];
 
     trailFormGroup: FormGroup;
     trailRawDto: TrailRawDto;
@@ -212,7 +212,7 @@ export class TrailUploadManagementComponent implements OnInit, OnDestroy {
             return [];
         }
         if (!this.intersections.valid)
-            errors.push("Uno o più crocevia non sono stati ancora geolocalizzati o completati");
+            errors.push("Uno o più bivi non sono stati ancora geolocalizzati o completati");
         return errors;
     }
 
