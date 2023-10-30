@@ -1,5 +1,10 @@
 @import "../style/const.scss";
 
+.ql-video {
+  width: 100%;
+  min-height: 400px;
+}
+
 .INFO {
   color: $info-color !important;
 }
