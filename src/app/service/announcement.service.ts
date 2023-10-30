@@ -35,7 +35,7 @@ export class AnnouncementService {
     public static relatedElementTypes = [
         {name: "Sentiero", value: "TRAIL"},
         {name: "Punto d'interesse", value: "POI"},
-        {name: "Località/Crocevia", value: "PLACE"},
+        {name: "Località/Bivio", value: "PLACE"},
         {name: "Avviso di percorribilità", value: "ACCESSIBILITY_NOTIFICATION"},
         {name: "Manutenzione", value: "MAINTENANCE"},
     ]
