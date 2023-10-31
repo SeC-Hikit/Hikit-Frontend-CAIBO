@@ -1,6 +1,10 @@
 @import "/src/app/style/const.scss";
 
 .ReportingForm {
+  .disclaimer {
+    padding-top: 20px;
+    font-size: 14px;
+  }
 
   .red-text {
     color: 24-bg-color;
