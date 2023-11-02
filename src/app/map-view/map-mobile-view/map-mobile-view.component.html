@@ -1,7 +1,7 @@
 <div class="MapMobileView row" id="mobile-side-column" [ngClass]="{
 'hide': !selectedTrail}">
     <div class="container-flex column-map-mobile functional-column mobile-content"
-         [ngClass]="{'full-view': isFullView}">
+         [ngClass]="{'full-view': isFullView, 'opacityLevelLow': opacityLow}">
         <div class="row">
             <div class="expand-bar-outer" (click)="toggleFullView()">
                 <div class="expand-bar"></div>
@@ -10,25 +10,39 @@
         <div class="contents">
             <span [ngClass]="{'hide': isFullView}">
                 <app-mobile-trail-preview *ngIf="sideView == 'trail'" [trail]="selectedTrail"></app-mobile-trail-preview>
+                <app-mobile-poi-preview *ngIf="sideView == 'poi'"></app-mobile-poi-preview>
+                <app-mobile-place-preview *ngIf="sideView == 'place'"></app-mobile-place-preview>
             </span>
             <div class="row"
                  *ngIf="isMobileDetailOn">
                 <app-map-full-detail-view
+                        [viewState]="sideView"
                         [selectedTrailData]="selectedTrail"
                         [isMapInitialized]="isMapInitialized"
                         [isCycloToggled]="isCycloSwitchOn"
                         [isPoiLoaded]="isPoiLoaded"
                         [trailPreviewList]="trailPreviewList"
-                        (onSelectedTrailId)="onSelectedTrailId.emit($event)"
-                        (onLoadLastMaintenanceForTrail)="onLoadLastMaintenanceForTrail.emit($event)"
-                        (onLoadPoiForTrail)="onLoadPoiForTrail.emit($event)"
+                        [selectedPlace]="selectedPlace"
+                        [trailMappings]="trailMappings"
+                        [selectedTrailNotifications]="selectedTrailNotifications"
+                        [selectedPoi]="selectedPoi"
+                        [selectedNotification]="selectedNotification"
+                        [selectedMunicipality]="selectedMunicipality"
+                        [selectedTrailMaintenances]="selectedTrailMaintenances"
+                        [municipalityTrails]="municipalityTrails"
+                        [municipalityTrailsMax]="municipalityTrailsMax"
+
+                        (onSelectedTrailId)="onSelectTrail($event)"
+                        (onLoadLastMaintenanceForTrail)="onLoadLastMaintenance($event)"
+                        (onLoadPoiForTrail)="onSelectPoiForTrail($event)"
+                        (onHighlightedLocation)="onNavigateToLocation($event)"
+                        (onAccessibilityNotificationSelection)="onSelectIssue($event)"
                         (onGetUnresolvedForTrailId)="onGetUnresolvedForTrailId.emit($event)"
-                        (onHighlightedLocation)="onHighlightedLocation.emit($event)"
+                        (onSelectMunicipality)="onSelectMunicipality.emit($event)"
                         (onBackToTrailPoiClick)="onBackToTrailPoiClick.emit()"
                         (onBackToTrailList)="onBackToTrailList.emit()"
                         (onLoadTrailPreview)="onLoadTrailPreview.emit($event)"
                         (onNavigateToTrailReportIssue)="onNavigateToTrailReportIssue.emit($event)"
-                        (onAccessibilityNotificationSelection)="onAccessibilityNotificationSelection.emit($event)"
                         (onShowCyclingClassification)="onShowCyclingClassification.emit()"
                         (onShowHikingClassification)="onShowHikingClassification.emit()"
                         (onToggleFullPageTrail)="onToggleFullPageTrail.emit()"

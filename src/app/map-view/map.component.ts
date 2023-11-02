@@ -21,7 +21,7 @@ import {PlaceDto, PlaceRefDto, PlaceService} from "../service/place.service";
 import {ReadingUtils} from '../utils/ReadingUtils';
 import {Location} from "@angular/common";
 import {MapUtils, ViewState} from "./MapUtils";
-import {MunicipalityDetails, MunicipalityService} from "../service/municipality.service";
+import {MunicipalityDto, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
 import {ErtService, LocalityDto} from "../service/ert.service";
 
@@ -63,13 +63,13 @@ export class MapComponent implements OnInit {
     trailPreviewCount: number = 0;
     trailPreviewPage: number = 0;
 
-    municipalityList: MunicipalityDetails[] = []
+    municipalityList: MunicipalityDto[] = []
 
     selectedTrail: TrailDto;
     selectedNotification: AccessibilityNotification;
 
     // municipalities
-    selectedMunicipality: MunicipalityDetails;
+    selectedMunicipality: MunicipalityDto;
     municipalityTrails: TrailPreview[] = [];
     municipalityTrailsMax: number = 0;
 

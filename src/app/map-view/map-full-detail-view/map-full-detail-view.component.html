@@ -1,8 +1,8 @@
 <div class="MapFullDetailView row">
     <div class="row">
         <div class="col-11 offset-1" id="trail-detail-column"
-             [class]="viewType=='trail' || viewType=='poi' || viewType=='place' || viewType=='accessibility' || viewType=='municipality' ? 'selection-margin' : ''">
-            <div *ngIf="viewType=='' || viewType=='list'" class="row search-section top-margin-x2">
+             [class]="viewState=='trail' || viewState=='poi' || viewState=='place' || viewState=='accessibility' || viewState=='municipality' ? 'selection-margin' : ''">
+            <div *ngIf="viewState=='' || viewState=='list'" class="row search-section top-margin-x2">
                 <div class="col-11">
                     <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
                                       (onTypingChange)="onSearchKeyPress($event)"
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="viewType=='municipality' && selectedMunicipality" class="row top-margin">
+    <div *ngIf="viewState=='municipality' && selectedMunicipality" class="row top-margin">
         <app-municipality-details
                 [selectedMunicipality]="selectedMunicipality"
                 [selectedLocationDetails]="selectedLocationDetails"
@@ -34,14 +34,14 @@
         </app-municipality-details>
     </div>
 
-    <div *ngIf="viewType=='accessibility' && selectedNotification" class="row top-margin">
+    <div *ngIf="viewState=='accessibility' && selectedNotification" class="row top-margin">
         <app-notification-details
                 [selectedNotification]="selectedNotification"
                 [trailMappings]="trailMappings"
         ></app-notification-details>
     </div>
 
-    <div *ngIf="viewType=='poi' && selectedPoi" class="row top-margin">
+    <div *ngIf="viewState=='poi' && selectedPoi" class="row top-margin">
         <app-poi-details
                 [selectedPoi]="selectedPoi"
                 [trailMappings]="trailMappings"
@@ -50,7 +50,7 @@
         ></app-poi-details>
     </div>
 
-    <div *ngIf="viewType=='place' && selectedPlace" class="row top-margin">
+    <div *ngIf="viewState=='place' && selectedPlace" class="row top-margin">
         <app-place-details
                 [selectedPlace]="selectedPlace"
                 [trailMappings]="trailMappings"
@@ -59,27 +59,7 @@
         ></app-place-details>
     </div>
 
-    <div *ngIf="viewType==''">
-        <div class="row align-middle">
-            <div class="col-12">
-                <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
-                        class="clickable"
-                        (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
-                </p>
-            </div>
-            <div class="col-12">
-                <button class="btn btn-primary full-width" (click)="showTrailList()">Lista sentieri
-                </button>
-            </div>
-            <div class="col-md-12 top-margin-x2">
-                <div class="row">
-                    <div class="map-icon offset-md-3 offset-sm-0"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="viewType=='list'" class="top-margin">
+    <div *ngIf="viewState=='list'" class="top-margin">
         <app-map-trail-list
                 [trailsPreviewList]="trailPreviewList"
                 (onSelectTrail)="onSelectTrail($event, true, true)"
@@ -99,7 +79,7 @@
             ></ngb-pagination>
         </div>
     </div>
-    <div *ngIf="sideView=='trail'" class="top-margin">
+    <div *ngIf="viewState=='trail' && selectedTrail" class="top-margin">
         <app-map-trail-details
                 [selectedTrail]="selectedTrail"
                 [selectedTrailPois]="selectedTrailPois"
@@ -130,7 +110,7 @@
         >
         </app-map-trail-details>
 
-        <div *ngIf="viewType=='poi' || viewType=='place' || viewType=='accessibility' || viewType=='municipality'"
+        <div *ngIf="viewState=='poi' || viewState=='place' || viewState=='accessibility' || viewState=='municipality'"
              class="navigation-back clickable">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use
@@ -141,7 +121,7 @@
             <span class="back" (click)="onBackToTrailPoiClick.emit()"
                   *ngIf="!selectedTrail">Vai alla lista sentieri</span>
         </div>
-        <div *ngIf="viewType=='trail'"
+        <div *ngIf="viewState=='trail'"
              class="navigation-back clickable" (click)="showTrailList()">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use

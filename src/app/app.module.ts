@@ -101,6 +101,8 @@ import { MapFullDetailViewComponent } from './map-view/map-full-detail-view/map-
 import {
     MobileTrailPreviewComponent
 } from "./map-view/map-mobile-view/mobile-trail-preview/mobile-trail-preview.component";
+import { MobilePlacePreviewComponent } from './map-view/map-mobile-view/mobile-place-preview/mobile-place-preview.component';
+import { MobilePoiPreviewComponent } from './map-view/map-mobile-view/mobile-poi-preview/mobile-poi-preview.component';
 
 @NgModule({
     declarations: [
@@ -193,7 +195,9 @@ import {
         MapMobileViewComponent,
         MapFullDetailViewComponent,
         MobileTrailPreviewComponent,
-        MobileTrailPreviewComponent
+        MobileTrailPreviewComponent,
+        MobilePlacePreviewComponent,
+        MobilePoiPreviewComponent
     ],
   imports: [
     BrowserModule,

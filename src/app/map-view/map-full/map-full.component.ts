@@ -29,6 +29,7 @@ export class MapFullComponent implements OnInit {
     private static HALF_CIRCLE_SIZE: number = 15;
 
 
+
     hint: string = ""
     timeIntervalMsBeforeTrigger: number = 600;
     intervalObject: any;
@@ -61,6 +62,7 @@ export class MapFullComponent implements OnInit {
     @Input() selectedTrailIndex?: number;
     @Input() poiHovering: PoiDto;
     @Input() trailHovering: TrailDto;
+    @Input() isMobileView: boolean;
 
     @Input() zoomToTrail: boolean;
 

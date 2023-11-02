@@ -1,10 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {TrailDto} from 'src/app/service/trail-service.service';
+import {TrailDto, TrailMappingDto} from 'src/app/service/trail-service.service';
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
 import {GraphicUtils} from "../../utils/GraphicUtils";
 import {PoiDto} from "../../service/poi-service.service";
 import {ViewState} from "../MapUtils";
+import {PlaceDto} from "../../service/place.service";
+import {AccessibilityNotification} from "../../service/notification-service.service";
+import {MaintenanceDto} from "../../service/maintenance.service";
+import {MunicipalityDto} from "../../service/municipality.service";
 
 @Component({
     selector: 'app-map-mobile-view',
@@ -22,6 +26,15 @@ export class MapMobileViewComponent implements OnInit {
     @Input() isMobileDetailOn: boolean;
     @Input() isPoiLoaded: boolean;
     @Input() trailPreviewList: TrailPreview[];
+    @Input() selectedPlace: PlaceDto;
+    @Input() trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
+    @Input() selectedTrailNotifications: AccessibilityNotification[];
+    @Input() selectedPoi: PoiDto;
+    @Input() selectedTrailMaintenances: MaintenanceDto[];
+    @Input() selectedNotification: AccessibilityNotification;
+    @Input() selectedMunicipality: MunicipalityDto;
+    @Input() municipalityTrails: TrailPreview[];
+    @Input() municipalityTrailsMax: number;
 
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
@@ -44,8 +57,11 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onDownloadGpx: EventEmitter<void> = new EventEmitter<void>();
     @Output() onDownloadKml: EventEmitter<void> = new EventEmitter<void>();
     @Output() onDownloadPdf: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onSelectMunicipality: EventEmitter<string> = new EventEmitter<string>();
 
     isMapInitialized: boolean = true;
+    opacityLow: boolean = false;
+
 
     constructor() { }
 
@@ -86,4 +102,35 @@ export class MapMobileViewComponent implements OnInit {
             (height - this.min_panel_height) + "px";
     }
 
+    onNavigateToLocation($event: Coordinates2D) {
+        this.toggleFullView();
+        this.onHighlightedLocation.emit($event)
+    }
+
+    toggleOpacity() {
+        this.opacityLow = !this.opacityLow;
+    }
+
+
+    onSelectTrail($event: string) {
+        this.toggleFullView();
+        setTimeout(() => {
+            this.onSelectedTrailId.emit($event);
+        }, 5500)
+    }
+
+    onLoadLastMaintenance($event: string) {
+        this.toggleFullView();
+        this.onLoadLastMaintenanceForTrail.emit($event)
+    }
+
+    onSelectPoiForTrail($event: string) {
+        this.toggleFullView();
+        this.onLoadPoiForTrail.emit($event)
+    }
+
+    onSelectIssue($event: string) {
+        this.toggleFullView();
+        this.onAccessibilityNotificationSelection.emit($event)
+    }
 }

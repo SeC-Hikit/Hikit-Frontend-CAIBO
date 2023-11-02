@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@an
 import {MapUtils, ViewState} from "../MapUtils";
 import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from "../../service/trail-service.service";
 import {Subject} from "rxjs";
-import {MunicipalityDetails} from "../../service/municipality.service";
+import {MunicipalityDto} from "../../service/municipality.service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
 import {PoiDto} from "../../service/poi-service.service";
 import {AccessibilityNotification} from "../../service/notification-service.service";
@@ -20,12 +20,22 @@ import {environment} from "../../../environments/environment.prod";
 })
 export class MapFullDetailViewComponent implements OnInit {
 
-
+    @Input() viewState = ViewState.TRAIL;
     @Input() selectedTrailData: TrailDto;
+    @Input() selectedPoi: PoiDto;
     @Input() isMapInitialized: boolean;
     @Input() isCycloToggled: boolean;
     @Input() isPoiLoaded: boolean;
     @Input() trailPreviewList: TrailPreview[];
+    @Input() selectedTrailNotifications: AccessibilityNotification[];
+    @Input() selectedPlace: PlaceDto;
+    @Input() selectedNotification: AccessibilityNotification;
+    @Input() selectedMunicipality: MunicipalityDto;
+    @Input() trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
+    @Input() selectedTrailMaintenances: MaintenanceDto[];
+    @Input() municipalityTrails: TrailPreview[];
+    @Input() municipalityTrailsMax: number;
+
 
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
@@ -57,15 +67,9 @@ export class MapFullDetailViewComponent implements OnInit {
 
     sectionName = environment.publicName;
 
-    // municipalities
-    selectedMunicipality: MunicipalityDetails;
-    municipalityTrails: TrailPreview[] = [];
-    municipalityTrailsMax: number = 0;
-
     selectedTrail: TrailDto;
-    selectedNotification: AccessibilityNotification;
 
-    viewType = ViewState.TRAIL;
+
     isPortraitMode: boolean = false;
     searchTermString: string = "";
     trailPreviewPage: number = 0;
@@ -74,8 +78,7 @@ export class MapFullDetailViewComponent implements OnInit {
     trailList: TrailDto[] = [];
     connectedTrails: TrailDto[] = [];
     selectedTileLayer: string;
-    selectedTrailNotifications: AccessibilityNotification[];
-    selectedTrailMaintenances: MaintenanceDto[];
+
 
     userPosition: UserCoordinates;
     highlightedLocation: Coordinates2D;
@@ -91,10 +94,8 @@ export class MapFullDetailViewComponent implements OnInit {
     selectedTrailIndex: number = 0;
     showTrailCodeMarkers: boolean;
     poiHoveringDto: PoiDto;
-    selectedPoi: PoiDto;
-    selectedPlace: PlaceDto;
+
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
-    trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
     highlightedTrail: TrailDto;
     selectedLocationDetails: LocalityDto;
     isSearch: boolean = false;
@@ -102,7 +103,8 @@ export class MapFullDetailViewComponent implements OnInit {
 
     constructor(
         private trailService: TrailService,
-    ) { }
+    ) {
+    }
 
     ngOnInit(): void {
         this.isPortraitMode = this.getIsPortraitMode();
@@ -116,12 +118,12 @@ export class MapFullDetailViewComponent implements OnInit {
 
     showList() {
         console.log(this.trailPreviewList.length);
-        this.viewType = ViewState.TRAIL_LIST;
+        this.viewState = ViewState.TRAIL_LIST;
     }
 
     onSearchKeyPress($event: string) {
         this.searchTermString = $event;
-        if($event == "") {
+        if ($event == "") {
             this.trailPreviewPage = 1;
             this.searchTerms.next($event);
         }
@@ -140,7 +142,8 @@ export class MapFullDetailViewComponent implements OnInit {
         this.searchTerms.next(this.searchTermString);
     }
 
-    loadTrailPreviewForMunicipality() {}
+    loadTrailPreviewForMunicipality() {
+    }
 
     selectTrail(id: string, refresh?: boolean, switchView = true, zoomIn = false): void {
         this.isLoading = true;
@@ -150,11 +153,11 @@ export class MapFullDetailViewComponent implements OnInit {
         let electedTrail = this.trailList.filter(t => t.id == id);
 
         if (switchView) {
-            this.sideView = ViewState.TRAIL;
+            this.viewState = ViewState.TRAIL;
         }
 
         if (electedTrail.length > 0) {
-            this.sideView = ViewState.TRAIL;
+            this.viewState = ViewState.TRAIL;
             this.selectedTrail = electedTrail[0];
             this.loadRelatedForTrailId(id);
         }
@@ -166,7 +169,7 @@ export class MapFullDetailViewComponent implements OnInit {
             }, () => {
 
             }, () => {
-                if(zoomIn) {
+                if (zoomIn) {
                     this.zoomToTrail = !this.zoomToTrail;
                 }
                 this.isLoading = false;
@@ -184,7 +187,8 @@ export class MapFullDetailViewComponent implements OnInit {
         }
         this.onGetUnresolvedForTrailId.emit(id);
     }
-    private loadRelatedForTrailId(id: string){
+
+    private loadRelatedForTrailId(id: string) {
         const relatedTrailIds = this.selectedTrail.locations
             .flatMap((it) => {
                 return it.encounteredTrailIds
@@ -193,7 +197,7 @@ export class MapFullDetailViewComponent implements OnInit {
         this.loadRelatedTrailsByIdForSelectedTrail(Array.from(relatedTrailsSet.values()));
     }
 
-    loadRelatedTrailsByIdForSelectedTrail(trailIds: string[]){
+    loadRelatedTrailsByIdForSelectedTrail(trailIds: string[]) {
         const trailDtoFromCache: TrailDto[] = trailIds
             .filter((trailId) => this.trailMap.has(trailId))
             .map((it) => this.trailMap.get(it))
@@ -206,16 +210,17 @@ export class MapFullDetailViewComponent implements OnInit {
         });
     }
 
-    navigateToLocation(location: Coordinates2D){
+    navigateToLocation(location: Coordinates2D) {
         this.highlightedLocation = location;
+        this.onHighlightedLocation.emit(location);
     }
 
-    onHighlightTrail(trail_id: string){
+    onHighlightTrail(trail_id: string) {
         this.highlightedTrail = this.trailMappings.get(trail_id);
     }
 
     selectMunicipality(id: string) {
-        this.viewType = ViewState.MUNICIPALITY;
+        this.viewState = ViewState.MUNICIPALITY;
         this.onSelectMunicipality.emit(id);
     }
 
@@ -227,17 +232,17 @@ export class MapFullDetailViewComponent implements OnInit {
         this.isCycloToggled = !this.isCycloToggled;
     }
 
-    getIsPortraitMode(){
-        return(window.innerWidth < window.innerHeight);
+    getIsPortraitMode() {
+        return (window.innerWidth < window.innerHeight);
     }
 
     accessibilityNotificationSelection(id: string) {
         this.onAccessibilityNotificationSelection.emit(id);
-        this.viewType = ViewState.ACCESSIBILITY;
+        this.viewState = ViewState.ACCESSIBILITY;
     }
 
     poiClick(poidto: PoiDto) {
-        this.viewType = ViewState.POI;
+        this.viewState = ViewState.POI;
         this.selectedPoi = poidto;
         this.onPoiClick.emit(poidto);
     }
@@ -250,12 +255,15 @@ export class MapFullDetailViewComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges) {
         if (this.isMapInitialized) {
             for (const propName in changes) {
+                if (propName == "viewState") {
+                    // alert(this.viewState)
+                }
                 if (propName == "selectedTrailNotifications") {
                 }
-                if(propName == "trailPreviewList")
+                if (propName == "trailPreviewList")
                     console.log("preview list changed");
-                if(propName == "selectedTrailData")
-                    this.selectTrail(this.selectedTrailData.id, true);
+                if (propName == "selectedTrailData")
+                    this.selectTrail(this.selectedTrailData.id, true, false, false);
             }
         }
     }

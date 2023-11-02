@@ -20,9 +20,6 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
 
   private chart: Chart;
   private chartOptions: ChartOptions;
-
-  private showIntermediateLocations: boolean = false;
-
   @Input() selectedTrail: TrailDto;
   @Input() selectedTrailPois: PoiDto[] = [];
   @Input() trailNotifications: AccessibilityNotification[];
@@ -84,7 +81,8 @@ export class TrailDetailsComponent implements OnInit, AfterViewInit {
     if (!this.selectedTrail) { return; }
     for (const propName in changes) {
       if (propName == "selectedTrail") {
-        document.getElementById("side-column").scrollTo(0, 0)
+        let elementById = document.getElementById("side-column");
+        if (elementById != null) elementById.scrollTo(0, 0)
         this.updateChart();
       }
     }

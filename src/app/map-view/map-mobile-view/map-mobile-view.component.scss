@@ -6,7 +6,9 @@
 
 .MapMobileView {
 
-
+  .opacityLevelLow {
+    opacity: 0.2;
+  }
 
   .navigation-back {
     background: $secondary-bg-color;
@@ -59,7 +61,7 @@
   }
 
   .contents {
-    padding: 2% 5%;
+    padding: 0 5% 2% 5%;
   }
 
   .mobile-preview-text {
