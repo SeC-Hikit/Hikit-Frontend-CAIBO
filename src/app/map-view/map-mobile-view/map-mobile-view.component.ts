@@ -9,6 +9,7 @@ import {PlaceDto} from "../../service/place.service";
 import {AccessibilityNotification} from "../../service/notification-service.service";
 import {MaintenanceDto} from "../../service/maintenance.service";
 import {MunicipalityDto} from "../../service/municipality.service";
+import {LocalityDto} from "../../service/ert.service";
 
 @Component({
     selector: 'app-map-mobile-view',
@@ -35,6 +36,7 @@ export class MapMobileViewComponent implements OnInit {
     @Input() selectedMunicipality: MunicipalityDto;
     @Input() municipalityTrails: TrailPreview[];
     @Input() municipalityTrailsMax: number;
+    @Input() selectedLocationDetails: LocalityDto;
 
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
@@ -61,6 +63,7 @@ export class MapMobileViewComponent implements OnInit {
 
     isMapInitialized: boolean = true;
     opacityLow: boolean = false;
+
 
 
     constructor() { }

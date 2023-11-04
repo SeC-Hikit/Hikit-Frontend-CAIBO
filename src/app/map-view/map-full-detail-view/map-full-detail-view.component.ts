@@ -35,7 +35,7 @@ export class MapFullDetailViewComponent implements OnInit {
     @Input() selectedTrailMaintenances: MaintenanceDto[];
     @Input() municipalityTrails: TrailPreview[];
     @Input() municipalityTrailsMax: number;
-
+    @Input() selectedLocationDetails: LocalityDto;
 
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
@@ -97,7 +97,7 @@ export class MapFullDetailViewComponent implements OnInit {
 
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
     highlightedTrail: TrailDto;
-    selectedLocationDetails: LocalityDto;
+
     isSearch: boolean = false;
     isMobileDetailMode: boolean = false;
 
@@ -263,7 +263,9 @@ export class MapFullDetailViewComponent implements OnInit {
                 if (propName == "trailPreviewList")
                     console.log("preview list changed");
                 if (propName == "selectedTrailData")
-                    this.selectTrail(this.selectedTrailData.id, true, false, false);
+                    setTimeout(() =>
+                    this.selectTrail(this.selectedTrailData.id, true, false, false),
+                        600);
             }
         }
     }
