@@ -21,6 +21,8 @@ export const environment = {
         "Allagamento",
         "Frana di sassi da monte",
         "Frana di terra da monte",
+        "Fune di sicurezza danneggiata",
+        "Gradini danneggiati",
     ]
 };
 
