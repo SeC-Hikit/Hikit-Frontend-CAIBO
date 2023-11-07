@@ -11,6 +11,11 @@ import {MaintenanceDto} from "../../service/maintenance.service";
 import {MunicipalityDto} from "../../service/municipality.service";
 import {LocalityDto} from "../../service/ert.service";
 
+export interface PositionChangeRequest {
+    coordinates: Coordinates2D,
+    isTogglePreview: boolean
+}
+
 @Component({
     selector: 'app-map-mobile-view',
     templateUrl: './map-mobile-view.component.html',
@@ -60,6 +65,7 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onDownloadKml: EventEmitter<void> = new EventEmitter<void>();
     @Output() onDownloadPdf: EventEmitter<void> = new EventEmitter<void>();
     @Output() onSelectMunicipality: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onNavigateToLocation: EventEmitter<Coordinates2D> = new EventEmitter<Coordinates2D>();
 
     isMapInitialized: boolean = true;
     opacityLow: boolean = false;
@@ -119,9 +125,11 @@ export class MapMobileViewComponent implements OnInit {
                 (height - this.min_panel_height) + "px";
         }
     }
-    onNavigateToLocation($event: Coordinates2D) {
-        this.toggleFullView();
-        this.onHighlightedLocation.emit($event)
+    onNavigateToLocationClick($event: PositionChangeRequest) {
+        if($event.isTogglePreview) {
+            this.toggleFullView();
+        }
+        this.onHighlightedLocation.emit($event.coordinates)
     }
 
     toggleOpacity() {
@@ -149,5 +157,9 @@ export class MapMobileViewComponent implements OnInit {
     onSelectIssue($event: string) {
         this.toggleFullView();
         this.onAccessibilityNotificationSelection.emit($event)
+    }
+
+    positionClick($event: any) {
+
     }
 }

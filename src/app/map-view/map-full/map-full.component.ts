@@ -188,9 +188,6 @@ export class MapFullComponent implements OnInit {
                 if (propName == "highlightedLocation") {
                     this.flyToLocation(this.highlightedLocation)
                 }
-                if (propName == "highlightedLocation") {
-                    this.flyToLocation(this.highlightedLocation)
-                }
                 if (propName == "zoomToTrail") {
                     this.focusOnTrail();
                 }
@@ -200,7 +197,7 @@ export class MapFullComponent implements OnInit {
     }
 
     flyToLocation(highlightedLocation: Coordinates2D) {
-        this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude});
+        this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude}, 15);
     }
 
     focusOnTrail() {

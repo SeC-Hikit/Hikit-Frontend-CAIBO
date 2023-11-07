@@ -1,0 +1,17 @@
+@import "/src/app/style/const.scss";
+
+.isMinorColor {
+  color: $action-btn-color !important;
+}
+
+.notificationColor {
+  color: $error-color;
+}
+
+.isMinorBg {
+  background-color: $action-btn-color;
+}
+
+.isNotMinorBgColor {
+  background-color: $error-color !important;
+}

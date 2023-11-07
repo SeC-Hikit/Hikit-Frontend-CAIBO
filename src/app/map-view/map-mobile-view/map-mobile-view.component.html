@@ -10,11 +10,20 @@
             <span [ngClass]="{'hide': isFullView}">
                 <app-mobile-trail-preview *ngIf="sideView == 'trail' && selectedTrail"
                                           [trail]="selectedTrail"></app-mobile-trail-preview>
-                <app-mobile-poi-preview *ngIf="sideView == 'poi' && selectedPoi"></app-mobile-poi-preview>
+                <app-mobile-poi-preview *ngIf="sideView == 'poi' && selectedPoi"
+                                        [poi]="selectedPoi" [trailMappings]="trailMappings"
+                                        (onNavigateToLocation)="onNavigateToLocationClick($event)"
+                ></app-mobile-poi-preview>
                 <app-mobile-place-preview *ngIf="sideView == 'place' && selectedPlace"
                                           [place]="selectedPlace"
-                                          [trailMappings]="trailMappings"></app-mobile-place-preview>
-                <app-mobile-trail-list-preview *ngIf="sideView == 'list'"></app-mobile-trail-list-preview>
+                                          [trailMappings]="trailMappings"
+                                          (onNavigateToLocation)="onNavigateToLocationClick($event)"
+                ></app-mobile-place-preview>
+                <app-mobile-accessibility-issue-preview *ngIf="sideView == 'accessibility' && selectedNotification"
+                                                        [accessibilityNotification]="selectedNotification"
+                                                        [trailMappings]="trailMappings"
+                                                        (onNavigateToLocation)="onNavigateToLocationClick($event)"
+                ></app-mobile-accessibility-issue-preview>
             </span>
             <div class="row"
                  *ngIf="isMobileDetailOn">
@@ -38,7 +47,7 @@
                         (onSelectedTrailId)="onSelectTrail($event)"
                         (onLoadLastMaintenanceForTrail)="onLoadLastMaintenance($event)"
                         (onLoadPoiForTrail)="onSelectPoiForTrail($event)"
-                        (onHighlightedLocation)="onNavigateToLocation($event)"
+                        (onHighlightedLocation)="onNavigateToLocationClick({ coordinates: $event, isTogglePreview: true})"
                         (onAccessibilityNotificationSelection)="onSelectIssue($event)"
                         (onGetUnresolvedForTrailId)="onGetUnresolvedForTrailId.emit($event)"
                         (onSelectMunicipality)="onSelectMunicipality.emit($event)"

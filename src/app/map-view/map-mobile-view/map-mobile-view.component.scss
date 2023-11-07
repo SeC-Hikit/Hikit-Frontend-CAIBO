@@ -46,7 +46,7 @@
     padding-top: 10px;
     cursor: pointer;
     animation-name: pulse-animation;
-    animation-duration: 1.5s;
+    animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
   }
@@ -88,7 +88,7 @@
   }
 
   #mobile-side-column {
-    transition: 2s all;
+    transition: 1s all;
     background-color: $secondary-bg-color;
   }
 
