@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {TrailDto, TrailMappingDto} from 'src/app/service/trail-service.service';
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
@@ -72,8 +72,22 @@ export class MapMobileViewComponent implements OnInit {
 
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (this.isMapInitialized) {
+            for (const propName in changes) {
+                if (propName == "sideView") {
+                    if(this.sideView == ViewState.TRAIL_LIST) {
+                        this.toggleFullView();
+                    }
+                }
+            }
+        }
+    }
+
     ngAfterViewInit() : void {
-        this.setLowerPanelSize();
+        let height = GraphicUtils.getFullHeightSizeWOMenuHeights();
+        document.getElementById("mobile-side-column").style.top =
+            (height - this.min_panel_height) + "px";
     }
 
 
@@ -89,22 +103,22 @@ export class MapMobileViewComponent implements OnInit {
     toggleFullView() {
         this.showMobileDetail();
         this.isFullView = !this.isFullView;
+        this.togglePanelView();
+    }
+
+    private togglePanelView() {
         const element = document.getElementById("mobile-side-column");
 
-        if(this.isFullView) {
+        if (this.isFullView) {
             element.style.top = "0px";
             element.style.height = GraphicUtils.getFullHeightSizeWOMenuHeights() + "px"
         } else {
-            this.setLowerPanelSize();
+            let height = GraphicUtils.getFullHeightSizeWOMenuHeights();
+            element.style.height = this.min_panel_height + "px";
+            element.style.top =
+                (height - this.min_panel_height) + "px";
         }
     }
-
-    private setLowerPanelSize() {
-        let height = GraphicUtils.getFullHeightSizeWOMenuHeights();
-        document.getElementById("mobile-side-column").style.top =
-            (height - this.min_panel_height) + "px";
-    }
-
     onNavigateToLocation($event: Coordinates2D) {
         this.toggleFullView();
         this.onHighlightedLocation.emit($event)

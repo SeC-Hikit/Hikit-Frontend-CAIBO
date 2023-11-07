@@ -1,23 +1,17 @@
 <div class="MobileTrailPreview">
     <div class="row">
-        <div class="col-3"
+        <div class="col-2"
         >
-            <h1 class="trailCodeColumn trailCodeColumnColor">{{ trail.code }}</h1>
+            <h1 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor">{{ trail.code }}</h1>
         </div>
-        <div class="col-1 offset-1 text-right">
-            <svg id="clock-icon" width="24" height="24">
-                <use
-                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#clock-fill"
-                />
-            </svg>
+
+        <div class="col-8 offset-1">
+            <p>{{ trail.startLocation.name }} - {{ trail.endLocation.name }}</p>
         </div>
-        <div class="col-4 text-left mobile-preview-text-small"
-        >
-            <span>{{ trail.officialEta != 0 ? (trail.officialEta | eta) : (trail.statsTrailMetadata.eta | eta) }}</span>
-        </div>
+
     </div>
 
-    <div class="row">
+    <div class="row margin-up">
         <div class="col-1 text-center">
             <svg id="people-icon" width="24" height="24">
                 <use
@@ -25,7 +19,7 @@
                 />
             </svg>
         </div>
-        <div class="col-3 mobile-preview-text"
+        <div class="col-2 mobile-preview-text"
         >
             {{ getDistance() }}m
         </div>
@@ -37,8 +31,7 @@
                 />
             </svg>
         </div>
-        <div class="col-3"
-        >
+        <div class="col-2">
             <div class="row">
                 <div class="col-12 mobile-preview-text-small-top">
                     {{ trail.statsTrailMetadata.totalRise }}m
@@ -49,6 +42,17 @@
                     {{ trail.statsTrailMetadata.totalFall }}m
                 </div>
             </div>
+        </div>
+        <div class="col-1 offset-1 text-right">
+            <svg id="clock-icon" width="24" height="24">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#clock-fill"
+                />
+            </svg>
+        </div>
+        <div class="col-2 text-left mobile-preview-text-small"
+        >
+            <span>{{ trail.officialEta != 0 ? (trail.officialEta | etaShort) : (trail.statsTrailMetadata.eta | etaShort) }}</span>
         </div>
     </div>
 

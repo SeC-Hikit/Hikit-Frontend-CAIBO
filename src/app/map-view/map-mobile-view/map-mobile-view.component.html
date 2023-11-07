@@ -1,5 +1,4 @@
-<div class="MapMobileView row" id="mobile-side-column" [ngClass]="{
-'hide': !selectedTrail}">
+<div class="MapMobileView row" id="mobile-side-column">
     <div class="container-flex column-map-mobile functional-column mobile-content"
          [ngClass]="{'full-view': isFullView, 'opacityLevelLow': opacityLow}">
         <div class="row">
@@ -9,13 +8,17 @@
         </div>
         <div class="contents">
             <span [ngClass]="{'hide': isFullView}">
-                <app-mobile-trail-preview *ngIf="sideView == 'trail'" [trail]="selectedTrail"></app-mobile-trail-preview>
-                <app-mobile-poi-preview *ngIf="sideView == 'poi'"></app-mobile-poi-preview>
-                <app-mobile-place-preview *ngIf="sideView == 'place'"></app-mobile-place-preview>
+                <app-mobile-trail-preview *ngIf="sideView == 'trail' && selectedTrail"
+                                          [trail]="selectedTrail"></app-mobile-trail-preview>
+                <app-mobile-poi-preview *ngIf="sideView == 'poi' && selectedPoi"></app-mobile-poi-preview>
+                <app-mobile-place-preview *ngIf="sideView == 'place' && selectedPlace"
+                                          [place]="selectedPlace"
+                                          [trailMappings]="trailMappings"></app-mobile-place-preview>
+                <app-mobile-trail-list-preview *ngIf="sideView == 'list'"></app-mobile-trail-list-preview>
             </span>
             <div class="row"
                  *ngIf="isMobileDetailOn">
-                <app-map-full-detail-view
+                <app-map-mobile-full-detail-view
                         [viewState]="sideView"
                         [selectedTrailData]="selectedTrail"
                         [isMapInitialized]="isMapInitialized"
@@ -52,7 +55,7 @@
                         (onDownloadPdf)="onDownloadPdf.emit()"
                 >
 
-                </app-map-full-detail-view>
+                </app-map-mobile-full-detail-view>
             </div>
         </div>
     </div>

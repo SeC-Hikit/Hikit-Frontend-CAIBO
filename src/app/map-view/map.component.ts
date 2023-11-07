@@ -682,9 +682,16 @@ export class MapComponent implements OnInit {
     }
 
     onSearchClickShowListOfTrails() {
-        this.onBackToTrailList();
+        this.sideView = ViewState.NONE;
+
         setTimeout(()=> {
-            document.getElementById("search-box").focus();
+            this.onBackToTrailList();
+            setTimeout(()=> {
+                let element = document.getElementById("search-box");
+                if (element) {
+                    element.focus();
+                }
+            }, 300);
         }, 100);
     }
 

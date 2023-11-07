@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MapUtils, ViewState} from "../MapUtils";
 import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from "../../service/trail-service.service";
-import {Subject} from "rxjs";
+import {Observable, ObservedValueOf, Subject} from "rxjs";
 import {MunicipalityDto} from "../../service/municipality.service";
-import {TrailPreview} from "../../service/trail-preview-service.service";
+import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from "../../service/trail-preview-service.service";
 import {PoiDto} from "../../service/poi-service.service";
 import {AccessibilityNotification} from "../../service/notification-service.service";
 import {MaintenanceDto} from "../../service/maintenance.service";
@@ -12,9 +12,11 @@ import {Coordinates2D} from "../../service/geo-trail-service";
 import {PlaceDto, PlaceRefDto} from "../../service/place.service";
 import {LocalityDto} from "../../service/ert.service";
 import {environment} from "../../../environments/environment.prod";
+import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
+import {PaginationUtils} from "../../utils/PaginationUtils";
 
 @Component({
-    selector: 'app-map-full-detail-view',
+    selector: 'app-map-mobile-full-detail-view',
     templateUrl: './map-full-detail-view.component.html',
     styleUrls: ['./map-full-detail-view.component.scss']
 })
@@ -103,11 +105,29 @@ export class MapFullDetailViewComponent implements OnInit {
 
     constructor(
         private trailService: TrailService,
+        private trailPreviewService: TrailPreviewService,
     ) {
     }
 
     ngOnInit(): void {
         this.isPortraitMode = this.getIsPortraitMode();
+
+        let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
+            debounceTime(500),
+            distinctUntilChanged(),
+            switchMap((data: string,) => {
+                this.searchTermString = data;
+                this.isSearch = this.searchTermString.trim() != "";
+                this.isLoading = true;
+                return this.getTrailPreviewResponseObservable(data, 1, false)
+            }));
+
+        observable.subscribe(
+            (resp) => {
+                this.trailPreviewList = resp.content;
+                this.trailPreviewCount = resp.totalCount;
+                this.isLoading = false;
+            });
     }
 
     showTrailList() {
@@ -256,21 +276,38 @@ export class MapFullDetailViewComponent implements OnInit {
         if (this.isMapInitialized) {
             for (const propName in changes) {
                 if (propName == "viewState") {
-                    // alert(this.viewState)
+
                 }
                 if (propName == "selectedTrailNotifications") {
                 }
                 if (propName == "trailPreviewList")
                     console.log("preview list changed");
                 if (propName == "selectedTrailData")
-                    setTimeout(() =>
-                    this.selectTrail(this.selectedTrailData.id, true, false, false),
-                        600);
+                    if (this.selectedTrailData != null) {
+                        setTimeout(() =>
+                                this.selectTrail(this.selectedTrailData.id, true, false, false),
+                            600);
+                    }
+
             }
         }
     }
 
     toggleNotificationsModal(): void {
         this.isNotificationModalVisible = !this.isNotificationModalVisible;
+    }
+
+    private getTrailPreviewResponseObservable(code: string, page: number,
+                                              areDraftVisible: boolean,
+                                              entriesPerPage: number = 10) {
+        const skip = PaginationUtils.getLowerBound(page, entriesPerPage);
+        const limit = PaginationUtils.getUpperBound(page, entriesPerPage);
+
+        if (!code) {
+            return this.trailPreviewService.getPreviews(
+                skip, limit, environment.realm, areDraftVisible)
+        }
+        return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
+            areDraftVisible, skip, limit);
     }
 }

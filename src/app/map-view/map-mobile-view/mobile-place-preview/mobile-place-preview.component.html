@@ -1,1 +1,28 @@
-<p>mobile-place-preview works!</p>
+<div class="MobileTrailPreview">
+    <div class="row">
+        <div class="col-10"
+        >
+            <h1 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor">{{ place.name.slice(0, 40) }}</h1>
+        </div>
+        <div class="col-1 offset-1"
+        >
+            <svg *ngIf="place.crossingTrailIds.length > 1" class="bi" width="24" height="24"
+                 fill="currentColor"><use
+                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#signpost-2-fill"/></svg>
+        </div>
+    </div>
+
+    <div class="row margin-up">
+        <div class="col-2 text-center">
+            {{place.coordinates[0].longitude.toPrecision(6) + ", " +
+        place.coordinates[0].latitude.toPrecision(6)}}
+        </div>
+
+        <div class="col-9 offset-1">
+        <span *ngFor="let trailId of place.crossingTrailIds.slice(0, 3)"
+              class="clickable white-font trailCodeColumn">
+            {{ getNameOrCode(trailId) }}
+        </span>
+        </div>
+    </div>
+</div>

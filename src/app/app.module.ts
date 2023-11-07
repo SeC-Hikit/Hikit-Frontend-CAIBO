@@ -103,6 +103,9 @@ import {
 } from "./map-view/map-mobile-view/mobile-trail-preview/mobile-trail-preview.component";
 import { MobilePlacePreviewComponent } from './map-view/map-mobile-view/mobile-place-preview/mobile-place-preview.component';
 import { MobilePoiPreviewComponent } from './map-view/map-mobile-view/mobile-poi-preview/mobile-poi-preview.component';
+import { MobileTrailListPreviewComponent } from './map-view/map-mobile-view/mobile-trail-list-preview/mobile-trail-list-preview.component';
+import { MobileAccessibilityIssuePreviewComponent } from './map-view/map-mobile-view/mobile-accessibility-issue-preview/mobile-accessibility-issue-preview.component';
+import {EtaShortPipe} from "./EtaPipeShort";
 
 @NgModule({
     declarations: [
@@ -137,6 +140,7 @@ import { MobilePoiPreviewComponent } from './map-view/map-mobile-view/mobile-poi
         IncreasedIndexPipe,
         PoiManagementComponent,
         EtaPipe,
+        EtaShortPipe,
         ExternalResourcePipe,
         UploadButtonManagementComponent,
         TrailRawManagementComponent,
@@ -197,7 +201,9 @@ import { MobilePoiPreviewComponent } from './map-view/map-mobile-view/mobile-poi
         MobileTrailPreviewComponent,
         MobileTrailPreviewComponent,
         MobilePlacePreviewComponent,
-        MobilePoiPreviewComponent
+        MobilePoiPreviewComponent,
+        MobileTrailListPreviewComponent,
+        MobileAccessibilityIssuePreviewComponent
     ],
   imports: [
     BrowserModule,
