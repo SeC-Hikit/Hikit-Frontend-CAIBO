@@ -141,6 +141,10 @@ import {
     MobileAccessibilityIssuePreviewComponent
 } from './map-view/map-mobile-view/mobile-accessibility-issue-preview/mobile-accessibility-issue-preview.component';
 import {EtaShortPipe} from "./EtaPipeShort";
+import {EllipsisPipe} from "./EllipsisPipe";
+import {
+    MobileMunicipalityPreviewComponent
+} from './map-view/map-mobile-view/mobile-municipality-preview/mobile-municipality-preview.component';
 
 @NgModule({
     declarations: [
@@ -224,6 +228,7 @@ import {EtaShortPipe} from "./EtaPipeShort";
         BugReportingComponent,
         NotificationDetailsComponent,
         DatePipe,
+        EllipsisPipe,
         OptionModalComponent,
         MunicipalityDetailsComponent,
         ReportingOnPositionComponent,
@@ -237,7 +242,8 @@ import {EtaShortPipe} from "./EtaPipeShort";
         MobileTrailPreviewComponent,
         MobilePlacePreviewComponent,
         MobilePoiPreviewComponent,
-        MobileAccessibilityIssuePreviewComponent
+        MobileAccessibilityIssuePreviewComponent,
+        MobileMunicipalityPreviewComponent
     ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import {MunicipalityDto} from "../../service/municipality.service";
 import {TrailPreview} from "../../service/trail-preview-service.service";
 import {LocalityDto} from "../../service/ert.service";
 import {Coordinates2D} from "../../service/geo-trail-service";
+import {SelectTrailArgument} from "../map.component";
 
 @Component({
     selector: 'app-municipality-details',
@@ -19,7 +20,7 @@ export class MunicipalityDetailsComponent implements OnInit {
     @Input() trailMappings: Map<string, TrailMappingDto>;
     @Input() isPaginationToShow: boolean;
     @Output() onLoadTrailPage = new EventEmitter<number>();
-    @Output() onSelectTrailCode = new EventEmitter<string>();
+    @Output() onSelectTrailCode = new EventEmitter<SelectTrailArgument>();
     @Output() onNavigateToLocation = new EventEmitter<Coordinates2D>();
 
     trailPreviewPage = 1;
@@ -30,7 +31,8 @@ export class MunicipalityDetailsComponent implements OnInit {
     }
 
     onSelectTrail($event: string) {
-        this.onSelectTrailCode.emit($event);
+        this.onSelectTrailCode.emit(
+            { id: $event, switchView: false, zoomIn: true, refresh: false });
     }
 
     loadTrailPreview($event: number) {

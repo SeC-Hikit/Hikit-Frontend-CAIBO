@@ -14,6 +14,7 @@ import {LocalityDto} from "../../service/ert.service";
 import {environment} from "../../../environments/environment.prod";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {PaginationUtils} from "../../utils/PaginationUtils";
+import {SelectTrailArgument} from "../map.component";
 
 @Component({
     selector: 'app-map-mobile-full-detail-view',
@@ -91,8 +92,6 @@ export class MapFullDetailViewComponent implements OnInit {
     isLoading: boolean = false;
 
     zoomLevel = 12;
-    zoomChangingShallTriggerTrailsReload = false;
-    sideView = ViewState.NONE;
     selectedTrailIndex: number = 0;
     showTrailCodeMarkers: boolean;
     poiHoveringDto: PoiDto;
@@ -155,7 +154,7 @@ export class MapFullDetailViewComponent implements OnInit {
         }
 
         MapUtils.changeUrlToState(ViewState.TRAIL, id);
-        this.selectTrail(id, true, switchView, zoomIn);
+        this.selectTrail({id, refresh: true, switchView, zoomIn});
     }
 
     onSearchClick() {
@@ -165,40 +164,40 @@ export class MapFullDetailViewComponent implements OnInit {
     loadTrailPreviewForMunicipality() {
     }
 
-    selectTrail(id: string, refresh?: boolean, switchView = true, zoomIn = false): void {
+    selectTrail(sat: SelectTrailArgument): void {
         this.isLoading = true;
-        if (!id) {
+        if (!sat) {
             return;
         }
-        let electedTrail = this.trailList.filter(t => t.id == id);
+        let electedTrail = this.trailList.filter(t => t.id == sat.id);
 
-        if (switchView) {
+        if (sat.switchView) {
             this.viewState = ViewState.TRAIL;
         }
 
         if (electedTrail.length > 0) {
             this.viewState = ViewState.TRAIL;
             this.selectedTrail = electedTrail[0];
-            this.loadRelatedForTrailId(id);
+            this.loadRelatedForTrailId(sat.id);
         }
 
-        if (refresh || electedTrail.length == 0) {
-            this.trailService.getTrailById(id).subscribe((resp) => {
+        if (sat.refresh || electedTrail.length == 0) {
+            this.trailService.getTrailById(sat.id).subscribe((resp) => {
                 this.selectedTrail = resp.content[0];
-                this.loadRelatedForTrailId(id);
+                this.loadRelatedForTrailId(sat.id);
             }, () => {
 
             }, () => {
-                if (zoomIn) {
+                if (sat.zoomIn) {
                     this.zoomToTrail = !this.zoomToTrail;
                 }
                 this.isLoading = false;
             })
         }
 
-        this.loadNotificationsForTrail(id);
-        this.onLoadLastMaintenanceForTrail.emit(id);
-        this.onLoadPoiForTrail.emit(id);
+        this.loadNotificationsForTrail(sat.id);
+        this.onLoadLastMaintenanceForTrail.emit(sat.id);
+        this.onLoadPoiForTrail.emit(sat.id);
     }
 
     loadNotificationsForTrail(id: string): void {
@@ -276,7 +275,7 @@ export class MapFullDetailViewComponent implements OnInit {
         if (this.isMapInitialized) {
             for (const propName in changes) {
                 if (propName == "viewState") {
-
+                    console.log("[SIDEVIEW]: " + this.viewState);
                 }
                 if (propName == "selectedTrailNotifications") {
                 }
@@ -285,7 +284,12 @@ export class MapFullDetailViewComponent implements OnInit {
                 if (propName == "selectedTrailData")
                     if (this.selectedTrailData != null) {
                         setTimeout(() =>
-                                this.selectTrail(this.selectedTrailData.id, true, false, false),
+                                this.selectTrail({
+                                    id: this.selectedTrailData.id,
+                                    refresh: true,
+                                    switchView: false,
+                                    zoomIn: false
+                                }),
                             600);
                     }
 

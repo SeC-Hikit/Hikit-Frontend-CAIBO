@@ -6,6 +6,15 @@
 
 .MapMobileView {
 
+  left: 18px;
+  top: 550px;
+  position: absolute;
+  transition: 0.2s all;
+  width: 100%;
+  z-index: 1000;
+  min-height: 150px;
+
+
   .opacityLevelLow {
     opacity: 0.2;
   }
@@ -19,13 +28,11 @@
     color: white;
   }
 
-  left: 18px;
-  top: 550px;
-  position: absolute;
-  transition: 0.5s all;
-  width: 100%;
-  z-index: 1000;
-  min-height: 150px;
+  .map-icon {
+    min-width: 90px;
+    min-height: 90px;
+    width: 20%;
+  }
 
   .mobile-content {
     background: white;
@@ -88,7 +95,7 @@
   }
 
   #mobile-side-column {
-    transition: 1s all;
+    transition: 0.3s all;
     background-color: $secondary-bg-color;
   }
 

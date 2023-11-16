@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { components } from 'src/binding/Binding';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {components} from 'src/binding/Binding';
 
 export type PoiResponse = components["schemas"]["PoiResponse"];
 export type PoiDto = components["schemas"]["PoiDto"];
@@ -25,7 +25,7 @@ export class PoiService {
     if (realm) { params = params.append("realm", realm); }
     return this.httpClient.get<PoiResponse>(this.baseUrl, { params: params })
       .pipe(
-        tap(_ => console.log(_)),
+        tap(_ => {}),
         catchError(this.handleError<PoiResponse>('get all POI', null))
       );
   }
@@ -33,7 +33,7 @@ export class PoiService {
   getById(id: string): Observable<PoiResponse> {
     return this.httpClient.get<PoiResponse>(this.baseUrl + "/" + id)
       .pipe(
-        tap(_ => console.log(_)),
+        tap(_ => {}),
         catchError(this.handleError<PoiResponse>('get ID: ' + id, null))
       );
   }
@@ -41,7 +41,7 @@ export class PoiService {
   getByTrailCode(id: string): Observable<PoiResponse> {
     return this.httpClient.get<PoiResponse>(this.baseUrl + "/trail/" + id)
       .pipe(
-        tap(_ => console.log(_)),
+        tap(_ => {}),
         catchError(this.handleError<PoiResponse>('get by trail ID: ' + id, null))
       );
   }

@@ -346,3 +346,12 @@ select {
   margin-right: auto;
   width: 50%;
 }
+
+.map-icon {
+  min-width: 180px;
+  min-height: 180px;
+  opacity: 0.6;
+  background-image: url(/assets/cai/navigate.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}

@@ -94,7 +94,6 @@ export class MapFullComponent implements OnInit {
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         this.selectedLayer = this.getLayerByName("topo");
         this.selectedLayer.on("load", function () {
-            console.log("loaded");
         })
         this.map = L.map(MapFullComponent.MAP_ID, {
             layers: [this.selectedLayer],
@@ -140,12 +139,10 @@ export class MapFullComponent implements OnInit {
     private emitBounds() {
         let bounds = this.map.getBounds();
         let rectangleDtoFromLatLng = MapUtils.getRectangleDtoFromLatLng(bounds);
-        console.log(rectangleDtoFromLatLng)
         this.onViewChange.emit(rectangleDtoFromLatLng)
     }
 
     ngAfterViewInit(): void {
-        // let mapHeight = GraphicUtils.getMenuHeight();
         let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenuImage();
         document.getElementById(MapFullComponent.MAP_ID).style.height = fullSizeWOBorder.toString() + "px";
         this.map.invalidateSize();
@@ -246,7 +243,6 @@ export class MapFullComponent implements OnInit {
     }
 
     private getLineWeight() {
-        console.log(this.map.getZoom())
         if (this.map.getZoom() > 14) {
             return 10;
         }
@@ -460,11 +456,9 @@ export class MapFullComponent implements OnInit {
 
     private toggleTrailMarkers(showTrailCodeMarkers: boolean) {
         if (showTrailCodeMarkers) {
-            console.log("Showing trail markers")
             this.showTrailMarkers();
             return;
         }
-        console.log("Not showing trail markers")
         this.removeTrailMarkers();
     }
 

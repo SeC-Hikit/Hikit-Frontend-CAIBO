@@ -8,8 +8,19 @@
         </div>
         <div class="contents">
             <span [ngClass]="{'hide': isFullView}">
+                <div *ngIf="sideView == ''" class="row">
+                    <div class="map-icon col-md-2"></div>
+                    <div class="col-md-offset-1">
+                        Inizia a navigare la rete
+                    </div>
+                </div>
+
                 <app-mobile-trail-preview *ngIf="sideView == 'trail' && selectedTrail"
                                           [trail]="selectedTrail"></app-mobile-trail-preview>
+                <app-mobile-municipality-preview *ngIf="sideView == 'municipality' && selectedMunicipality"
+                                          [municipality]="selectedMunicipality"
+                                                 [selectedLocationDetails]="selectedLocality"
+                ></app-mobile-municipality-preview>
                 <app-mobile-poi-preview *ngIf="sideView == 'poi' && selectedPoi"
                                         [poi]="selectedPoi" [trailMappings]="trailMappings"
                                         (onNavigateToLocation)="onNavigateToLocationClick($event)"
@@ -24,6 +35,7 @@
                                                         [trailMappings]="trailMappings"
                                                         (onNavigateToLocation)="onNavigateToLocationClick($event)"
                 ></app-mobile-accessibility-issue-preview>
+                <!-- TODO: add municipality -->
             </span>
             <div class="row"
                  *ngIf="isMobileDetailOn">

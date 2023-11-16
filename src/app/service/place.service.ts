@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable, of} from "rxjs";
-import {tap, catchError} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
 import {components} from "src/binding/Binding";
 
 export type PlaceDto = components["schemas"]["PlaceDto"];
@@ -31,14 +31,14 @@ export class PlaceService {
                     .append("isDynamicShowing", isDynamic.toString());
         if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<PlaceResponse>(this.baseUrl, {params: params}).pipe(
-            tap((_) => console.log("")),
+            tap((_) => {}),
             catchError(this.handleError<PlaceResponse>("", null))
         );
     }
 
     getById(id: string): Observable<PlaceResponse> {
         return this.httpClient.get<PlaceResponse>(this.baseUrl + "/" + id).pipe(
-            tap((_) => console.log("")),
+            tap((_) => {}),
             catchError(this.handleError<PlaceResponse>("", null))
         );
     }
@@ -49,7 +49,7 @@ export class PlaceService {
         return this.httpClient
             .get<PlaceResponse>(this.baseUrl + "/name/" + name, {params: params})
             .pipe(
-                tap((_) => console.log("")),
+                tap((_) => {}),
                 catchError(this.handleError<PlaceResponse>("", null))
             );
     }

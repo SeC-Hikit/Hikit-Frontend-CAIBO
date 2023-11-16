@@ -5,8 +5,8 @@
             <h1 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor">{{ trail.code }}</h1>
         </div>
 
-        <div class="col-8 offset-1">
-            <p>{{ trail.startLocation.name }} - {{ trail.endLocation.name }}</p>
+        <div class="col-8 offset-1 smaller-font">
+            <p>{{ trail.startLocation.name | ellipsis }}   - {{ trail.endLocation.name | ellipsis }}</p>
         </div>
 
     </div>

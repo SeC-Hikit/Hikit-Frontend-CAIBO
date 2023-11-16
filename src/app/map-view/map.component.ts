@@ -35,6 +35,13 @@ export enum TrailSimplifierLevel {
     FULL = "full"
 }
 
+export interface SelectTrailArgument {
+    id: string,
+    refresh?: boolean,
+    switchView: boolean
+    zoomIn: boolean
+}
+
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -54,7 +61,6 @@ export class MapComponent implements OnInit {
     isCycloToggled = false;
 
     isPoiLoaded = false;
-
 
 
     // Bound elements
@@ -153,6 +159,7 @@ export class MapComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges) {
         for (const propName in changes) {
             if (propName == "sideView") {
+                console.log("[SIDEVIEW]: " + this.sideView);
                 document.getElementById("trail-detail-column")
                     .scrollTo(0, 0);
             }
@@ -201,45 +208,44 @@ export class MapComponent implements OnInit {
         if (!id) {
             return;
         }
-
         MapUtils.changeUrlToState(ViewState.TRAIL, id);
-        this.selectTrail(id, true, switchView, zoomIn);
+        this.selectTrail({id: id, refresh: true, switchView: switchView, zoomIn: zoomIn});
     }
 
-    selectTrail(id: string, refresh?: boolean, switchView = true, zoomIn = false): void {
+    selectTrail(sat: SelectTrailArgument): void {
         this.isLoading = true;
-        if (!id) {
+        if (!sat) {
             return;
         }
-        let electedTrail = this.trailList.filter(t => t.id == id);
+        let electedTrail = this.trailList.filter(t => t.id == sat.id);
 
-        if (switchView) {
+        if (sat.switchView) {
             this.sideView = ViewState.TRAIL;
         }
 
         if (electedTrail.length > 0) {
             this.sideView = ViewState.TRAIL;
             this.selectedTrail = electedTrail[0];
-            this.loadRelatedForTrailId(id);
+            this.loadRelatedForTrailId(sat.id);
         }
 
-        if (refresh || electedTrail.length == 0) {
-            this.trailService.getTrailById(id).subscribe((resp) => {
+        if (sat.refresh || electedTrail.length == 0) {
+            this.trailService.getTrailById(sat.id).subscribe((resp) => {
                 this.selectedTrail = resp.content[0];
-                this.loadRelatedForTrailId(id);
+                this.loadRelatedForTrailId(sat.id);
             }, () => {
 
             }, () => {
-                if(zoomIn) {
+                if (sat.zoomIn) {
                     this.zoomToTrail = !this.zoomToTrail;
                 }
                 this.isLoading = false;
             })
         }
 
-        this.loadNotificationsForTrail(id);
-        this.loadLastMaintenanceForTrail(id);
-        setTimeout(() => this.loadPoiForTrail(id), 1200);
+        this.loadNotificationsForTrail(sat.id);
+        this.loadLastMaintenanceForTrail(sat.id);
+        setTimeout(() => this.loadPoiForTrail(sat.id), 1200);
     }
 
     private loadRelatedForTrailId(id: string) {
@@ -434,7 +440,7 @@ export class MapComponent implements OnInit {
 
     onSearchKeyPress($event: string) {
         this.searchTermString = $event;
-        if($event == ""){
+        if ($event == "") {
             this.trailPreviewPage = 1;
             this.searchTerms.next($event);
         }
@@ -460,7 +466,8 @@ export class MapComponent implements OnInit {
             })
     }
 
-    loadTrailPreviewForMunicipality(page: number) {}
+    loadTrailPreviewForMunicipality(page: number) {
+    }
 
     private openInfoModal(title: string, body: string) {
         const modal = this.modalService.open(InfoModalComponent);
@@ -608,7 +615,7 @@ export class MapComponent implements OnInit {
                 this.accessibilityService.getUnresolvedForTrailId(target.trailId).toPromise(),
                 this.trailService.getTrailById(target.trailId).toPromise()]).then(
                 (responses) => {
-                    this.selectTrail(target.trailId, false, false, true);
+                    this.selectTrail({id: target.trailId, refresh: false, switchView: false, zoomIn: true});
                     this.selectedTrailNotifications = responses[0].content;
                     this.onAccessibilityNotificationSelection(id);
                 })
@@ -674,7 +681,7 @@ export class MapComponent implements OnInit {
     }
 
     getIsPortraitMode() {
-        return(document.documentElement.clientWidth < document.documentElement.clientHeight);
+        return (document.documentElement.clientWidth < document.documentElement.clientHeight);
     }
 
     onDetailMode() {
@@ -684,9 +691,9 @@ export class MapComponent implements OnInit {
     onSearchClickShowListOfTrails() {
         this.sideView = ViewState.NONE;
 
-        setTimeout(()=> {
+        setTimeout(() => {
             this.onBackToTrailList();
-            setTimeout(()=> {
+            setTimeout(() => {
                 let element = document.getElementById("search-box");
                 if (element) {
                     element.focus();

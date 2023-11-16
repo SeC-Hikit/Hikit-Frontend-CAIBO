@@ -39,6 +39,7 @@ export class MapMobileViewComponent implements OnInit {
     @Input() selectedTrailMaintenances: MaintenanceDto[];
     @Input() selectedNotification: AccessibilityNotification;
     @Input() selectedMunicipality: MunicipalityDto;
+    @Input() selectedLocality: LocalityDto;
     @Input() municipalityTrails: TrailPreview[];
     @Input() municipalityTrailsMax: number;
     @Input() selectedLocationDetails: LocalityDto;
@@ -72,6 +73,7 @@ export class MapMobileViewComponent implements OnInit {
 
 
 
+
     constructor() { }
 
     ngOnInit(): void {
@@ -102,11 +104,11 @@ export class MapMobileViewComponent implements OnInit {
     }
 
     showMobileDetail() {
-        console.log("showing details...");
         this.onDetailModeClick.emit();
     }
 
     toggleFullView() {
+        if(this.sideView == ViewState.NONE) return;
         this.showMobileDetail();
         this.isFullView = !this.isFullView;
         this.togglePanelView();
@@ -125,6 +127,7 @@ export class MapMobileViewComponent implements OnInit {
                 (height - this.min_panel_height) + "px";
         }
     }
+
     onNavigateToLocationClick($event: PositionChangeRequest) {
         if($event.isTogglePreview) {
             this.toggleFullView();
