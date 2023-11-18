@@ -68,14 +68,14 @@
         <div class="pagination-position"
              *ngIf="trailPreviewList.length > 0 && !this.isSearch">
             <ngb-pagination
-                    [pageSize]="maxTrailEntriesPerPage"
-                    [collectionSize]="trailPreviewCount"
-                    [(page)]="trailPreviewPage"
-                    [size]="'sm'"
-                    [ellipses]="true"
-                    [maxSize]="2"
+                    [pageSize]="paginationPageSize"
+                    [collectionSize]="paginationCollectionSize"
+                    [(page)]="paginationPage"
+                    [size]="paginationSize"
+                    [ellipses]="paginationEllipses"
+                    [maxSize]="paginationMaxSize"
                     aria-label="Default pagination"
-                    (pageChange)="onLoadTrailPreview.emit($event)"
+                    (pageChange)="onTrailListPageChange.emit($event)"
             ></ngb-pagination>
         </div>
     </div>

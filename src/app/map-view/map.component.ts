@@ -712,4 +712,8 @@ export class MapComponent implements OnInit {
             }
         })
     }
+
+    onForceMapRefresh() {
+        // TODO
+    }
 }

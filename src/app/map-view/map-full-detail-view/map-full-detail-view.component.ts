@@ -7,7 +7,6 @@ import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from "../../ser
 import {PoiDto} from "../../service/poi-service.service";
 import {AccessibilityNotification} from "../../service/notification-service.service";
 import {MaintenanceDto} from "../../service/maintenance.service";
-import {UserCoordinates} from "../../UserCoordinates";
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {PlaceDto, PlaceRefDto} from "../../service/place.service";
 import {LocalityDto} from "../../service/ert.service";
@@ -26,6 +25,7 @@ export class MapFullDetailViewComponent implements OnInit {
     @Input() viewState = ViewState.TRAIL;
     @Input() selectedTrailData: TrailDto;
     @Input() selectedPoi: PoiDto;
+    @Input() selectedTrailPois: PoiDto[] = [];
     @Input() isMapInitialized: boolean;
     @Input() isCycloToggled: boolean;
     @Input() isPoiLoaded: boolean;
@@ -39,7 +39,14 @@ export class MapFullDetailViewComponent implements OnInit {
     @Input() municipalityTrails: TrailPreview[];
     @Input() municipalityTrailsMax: number;
     @Input() selectedLocationDetails: LocalityDto;
+    @Input() paginationPageSize : number;
+    @Input() paginationCollectionSize: number;
+    @Input() paginationPage : number;
+    @Input() paginationSize: 'sm' | 'lg';
+    @Input() paginationEllipses: boolean;
+    @Input() paginationMaxSize: number;
 
+    @Output() onTrailListPageChange: EventEmitter<number> = new EventEmitter<number>();
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadPoiForTrail: EventEmitter<string> = new EventEmitter<string>();
@@ -65,8 +72,6 @@ export class MapFullDetailViewComponent implements OnInit {
 
     private searchTerms = new Subject<string>();
 
-    maxTrailEntriesPerPage = 10;
-    trailPreviewCount: number = 0;
 
     sectionName = environment.publicName;
 
@@ -75,32 +80,27 @@ export class MapFullDetailViewComponent implements OnInit {
 
     isPortraitMode: boolean = false;
     searchTermString: string = "";
-    trailPreviewPage: number = 0;
 
-    selectedTrailPois: PoiDto[] = [];
+
     trailList: TrailDto[] = [];
     connectedTrails: TrailDto[] = [];
-    selectedTileLayer: string;
 
 
-    userPosition: UserCoordinates;
     highlightedLocation: Coordinates2D;
     zoomToTrail: boolean = false;
-    isTrailFullScreenVisible: boolean = false;
     isNotificationModalVisible: boolean = false;
-    isUserPositionToggled: boolean = false;
     isLoading: boolean = false;
 
-    zoomLevel = 12;
     selectedTrailIndex: number = 0;
-    showTrailCodeMarkers: boolean;
     poiHoveringDto: PoiDto;
 
     private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
     highlightedTrail: TrailDto;
 
     isSearch: boolean = false;
-    isMobileDetailMode: boolean = false;
+
+    private trailPreviewCount: number = 0;
+    private trailPreviewPage: number = 1;
 
     constructor(
         private trailService: TrailService,

@@ -40,12 +40,21 @@
                         [selectedPlace]="selectedPlace"
                         [trailMappings]="trailMappings"
                         [selectedPoi]="selectedPoi"
+                        [selectTrailPois]="selectedTrailPois"
                         [selectedTrailNotifications]="selectedTrailNotifications"
                         [selectedNotification]="selectedNotification"
                         [selectedMunicipality]="selectedMunicipality"
                         [municipalityTrails]="municipalityTrails"
                         [municipalityTrailsMax]="municipalityTrailsMax"
                         [selectedLocationDetails]="selectedLocationDetails"
+                        [paginationPageSize]="maxTrailEntriesPerPage"
+                        [paginationCollectionSize]="trailPreviewCount"
+                        [paginationPage]="trailPreviewPage"
+                        [paginationSize]="'sm'"
+                        [paginationEllipses]="true"
+                        [paginationMaxSize]="2"
+
+                        (onTrailListPageChange)="loadTrailPreview($event)"
                         (onSelectedTrailId)="onSelectTrail($event)"
                         (onLoadLastMaintenanceForTrail)="loadLastMaintenanceForTrail($event)"
                         (onLoadPoiForTrail)="loadPoiForTrail($event)"
@@ -67,6 +76,7 @@
                         (onDownloadKml)="onDownloadKml()"
                         (onDownloadPdf)="onDownloadPdf()"
                         (onNavigateToLocation)="navigateToLocation($event)"
+                        (onForceMapRefresh)="onForceMapRefresh()"
                 >
                 </app-map-mobile-view>
             </div>

@@ -36,6 +36,7 @@ export class MapMobileViewComponent implements OnInit {
     @Input() trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
     @Input() selectedTrailNotifications: AccessibilityNotification[];
     @Input() selectedPoi: PoiDto;
+    @Input() selectTrailPois: PoiDto[] = [];
     @Input() selectedTrailMaintenances: MaintenanceDto[];
     @Input() selectedNotification: AccessibilityNotification;
     @Input() selectedMunicipality: MunicipalityDto;
@@ -43,7 +44,15 @@ export class MapMobileViewComponent implements OnInit {
     @Input() municipalityTrails: TrailPreview[];
     @Input() municipalityTrailsMax: number;
     @Input() selectedLocationDetails: LocalityDto;
+    @Input() paginationPageSize : number;
+    @Input() paginationCollectionSize: number;
+    @Input() paginationPage : number;
+    @Input() paginationSize: 'sm' | 'lg';
+    @Input() paginationEllipses: boolean;
+    @Input() paginationMaxSize: number;
 
+
+    @Output() onTrailListPageChange: EventEmitter<number> = new EventEmitter<number>();
     @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadPoiForTrail: EventEmitter<string> = new EventEmitter<string>();
@@ -70,9 +79,6 @@ export class MapMobileViewComponent implements OnInit {
 
     isMapInitialized: boolean = true;
     opacityLow: boolean = false;
-
-
-
 
     constructor() { }
 
@@ -154,15 +160,11 @@ export class MapMobileViewComponent implements OnInit {
 
     onSelectPoiForTrail($event: string) {
         this.toggleFullView();
-        this.onLoadPoiForTrail.emit($event)
+        setTimeout(() => this.onLoadPoiForTrail.emit($event), 500);
     }
 
     onSelectIssue($event: string) {
         this.toggleFullView();
         this.onAccessibilityNotificationSelection.emit($event)
-    }
-
-    positionClick($event: any) {
-
     }
 }

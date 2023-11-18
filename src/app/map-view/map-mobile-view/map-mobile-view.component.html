@@ -8,10 +8,15 @@
         </div>
         <div class="contents">
             <span [ngClass]="{'hide': isFullView}">
-                <div *ngIf="sideView == ''" class="row">
+                <div *ngIf="sideView == '' || sideView == 'list'" class="row">
                     <div class="map-icon col-md-2"></div>
-                    <div class="col-md-offset-1">
-                        Inizia a navigare la rete
+                    <div class="col-md-offset-1 mainViewSide" *ngIf="sideView==''">
+                        Naviga la rete escursionistica - clicca su un sentiero,
+                        oppure usa la ricerca 🔍.
+                    </div>
+                    <div class="col-md-offset-1 mainViewSide" *ngIf="sideView=='list'" (click)="toggleFullView()">
+                        Attualmente i risultati della tua ricerca sono nascosti.
+                        Premi qui per visualizzarli.
                     </div>
                 </div>
 
@@ -35,7 +40,6 @@
                                                         [trailMappings]="trailMappings"
                                                         (onNavigateToLocation)="onNavigateToLocationClick($event)"
                 ></app-mobile-accessibility-issue-preview>
-                <!-- TODO: add municipality -->
             </span>
             <div class="row"
                  *ngIf="isMobileDetailOn">
@@ -50,12 +54,20 @@
                         [trailMappings]="trailMappings"
                         [selectedTrailNotifications]="selectedTrailNotifications"
                         [selectedPoi]="selectedPoi"
+                        [selectedTrailPois]="selectTrailPois"
                         [selectedNotification]="selectedNotification"
                         [selectedMunicipality]="selectedMunicipality"
                         [selectedTrailMaintenances]="selectedTrailMaintenances"
                         [municipalityTrails]="municipalityTrails"
                         [municipalityTrailsMax]="municipalityTrailsMax"
                         [selectedLocationDetails]="selectedLocationDetails"
+                        [paginationPageSize]="paginationPageSize"
+                        [paginationCollectionSize]="paginationCollectionSize"
+                        [paginationPage]="paginationPage"
+                        [paginationSize]="paginationSize"
+                        [paginationEllipses]="paginationEllipses"
+                        [paginationMaxSize]="paginationMaxSize"
+                        (onTrailListPageChange)="onTrailListPageChange.emit($event)"
                         (onSelectedTrailId)="onSelectTrail($event)"
                         (onLoadLastMaintenanceForTrail)="onLoadLastMaintenance($event)"
                         (onLoadPoiForTrail)="onSelectPoiForTrail($event)"
