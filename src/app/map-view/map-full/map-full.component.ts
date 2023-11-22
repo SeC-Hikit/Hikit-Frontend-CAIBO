@@ -29,7 +29,6 @@ export class MapFullComponent implements OnInit {
     private static HALF_CIRCLE_SIZE: number = 15;
 
 
-
     hint: string = ""
     timeIntervalMsBeforeTrigger: number = 600;
     intervalObject: any;
@@ -63,8 +62,8 @@ export class MapFullComponent implements OnInit {
     @Input() poiHovering: PoiDto;
     @Input() trailHovering: TrailDto;
     @Input() isMobileView: boolean;
-
     @Input() zoomToTrail: boolean;
+    @Input() isRefresh: boolean;
 
 
     @Output() onTrailClick = new EventEmitter<string>();
@@ -155,6 +154,9 @@ export class MapFullComponent implements OnInit {
                 if (propName == "selectedTrailIndex") {
                     this.focusOnLocationIndex(this.selectedTrailIndex);
                 }
+                if (propName == "isRefresh") {
+                    this.refreshMapTiles();
+                }
                 if (propName == "showTrailCodeMarkers") {
                     this.toggleTrailMarkers(this.showTrailCodeMarkers);
                 }
@@ -220,7 +222,6 @@ export class MapFullComponent implements OnInit {
         }
         this.clearPreviouslySelectedLayer(previousTrailId);
         this.clearPathFromList(selectedTrail);
-
 
 
         const inverted = MapUtils.getCoordinatesInverted(selectedTrail.coordinates);
@@ -535,5 +536,15 @@ export class MapFullComponent implements OnInit {
                 it.getClassification(), "yellow"));
             it.getPolyline().addTo(this.map);
         });
+    }
+
+    private refreshMapTiles() {
+        const zoom = this.map.getZoom();
+        this.map.setZoom(zoom - 1, {animate: true});
+        setTimeout(()=> {
+            console.log("da " + zoom)
+            this.map.setZoom(zoom, {animate: true});
+        }, 500)
+
     }
 }

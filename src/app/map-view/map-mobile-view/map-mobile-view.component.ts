@@ -76,6 +76,7 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onDownloadPdf: EventEmitter<void> = new EventEmitter<void>();
     @Output() onSelectMunicipality: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNavigateToLocation: EventEmitter<Coordinates2D> = new EventEmitter<Coordinates2D>();
+    @Output() onForceMapRefresh: EventEmitter<void> = new EventEmitter<void>();
 
     isMapInitialized: boolean = true;
     opacityLow: boolean = false;

@@ -12,6 +12,7 @@
   transition: 0.2s all;
   width: 100%;
   z-index: 1000;
+  opacity: 0.99;
   min-height: 150px;
 
   .opacityLevelLow {
@@ -95,10 +96,8 @@
   #mobile-side-column {
     width: 100%;
     padding: 3%;
-  }
-
-  #mobile-side-column {
     transition: 0.3s all;
+    opacity: 0.99;
     background-color: $secondary-bg-color;
   }
 
