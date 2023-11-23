@@ -69,6 +69,7 @@ export class MapFullDetailViewComponent implements OnInit {
     @Output() onDownloadGpx: EventEmitter<void> = new EventEmitter<void>();
     @Output() onDownloadKml: EventEmitter<void> = new EventEmitter<void>();
     @Output() onDownloadPdf: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onShowMapTemporarilyPress: EventEmitter<void> = new EventEmitter<void>();
 
     private searchTerms = new Subject<string>();
 
@@ -313,5 +314,10 @@ export class MapFullDetailViewComponent implements OnInit {
         }
         return this.trailPreviewService.findTrailByNameOrLocationsNames(code, environment.realm,
             areDraftVisible, skip, limit);
+    }
+
+    toggleTransparency() {
+        console.log("a");
+        this.onShowMapTemporarilyPress.emit();
     }
 }

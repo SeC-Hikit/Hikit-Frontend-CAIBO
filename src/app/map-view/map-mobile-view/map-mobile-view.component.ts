@@ -168,4 +168,8 @@ export class MapMobileViewComponent implements OnInit {
         this.toggleFullView();
         this.onAccessibilityNotificationSelection.emit($event)
     }
+
+    toggleTransparency() {
+        this.opacityLow = !this.opacityLow;
+    }
 }
