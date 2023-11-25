@@ -33,6 +33,7 @@
                         [selectedTrailMaintenances]="selectedTrailMaintenances"
                         [selectedLocality]="selectedLocationDetails"
                         [selectedTrail]="selectedTrail"
+                        [connectedTrails]="connectedTrails"
                         [isCycloSwitchOn]="isCycloToggled"
                         [isMobileDetailOn]="isMobileDetailMode"
                         [isPoiLoaded]="isPoiLoaded"
@@ -55,7 +56,7 @@
                         [paginationMaxSize]="2"
 
                         (onTrailListPageChange)="loadTrailPreview($event)"
-                        (onSelectedTrailId)="onSelectTrail($event)"
+                        (onSelectedTrail)="onSelectTrail($event.id, $event.zoomIn, $event.switchView)"
                         (onLoadLastMaintenanceForTrail)="loadLastMaintenanceForTrail($event)"
                         (onLoadPoiForTrail)="loadPoiForTrail($event)"
                         (onGetUnresolvedForTrailId)="accessibilityService.getUnresolvedForTrailId($event)"

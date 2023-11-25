@@ -10,6 +10,7 @@ import {AccessibilityNotification} from "../../service/notification-service.serv
 import {MaintenanceDto} from "../../service/maintenance.service";
 import {MunicipalityDto} from "../../service/municipality.service";
 import {LocalityDto} from "../../service/ert.service";
+import {SelectTrailArgument} from "../map.component";
 
 export interface PositionChangeRequest {
     coordinates: Coordinates2D,
@@ -28,6 +29,7 @@ export class MapMobileViewComponent implements OnInit {
 
     @Input() sideView: ViewState;
     @Input() selectedTrail: TrailDto;
+    @Input() connectedTrails: TrailDto[];
     @Input() isCycloSwitchOn: boolean;
     @Input() isMobileDetailOn: boolean;
     @Input() isPoiLoaded: boolean;
@@ -53,7 +55,7 @@ export class MapMobileViewComponent implements OnInit {
 
 
     @Output() onTrailListPageChange: EventEmitter<number> = new EventEmitter<number>();
-    @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onSelectedTrail: EventEmitter<SelectTrailArgument> = new EventEmitter<SelectTrailArgument>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadPoiForTrail: EventEmitter<string> = new EventEmitter<string>();
     @Output() onGetUnresolvedForTrailId: EventEmitter<string> = new EventEmitter<string>();
@@ -77,6 +79,7 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onSelectMunicipality: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNavigateToLocation: EventEmitter<Coordinates2D> = new EventEmitter<Coordinates2D>();
     @Output() onForceMapRefresh: EventEmitter<void> = new EventEmitter<void>();
+
 
     isMapInitialized: boolean = true;
     opacityLow: boolean = false;
@@ -147,11 +150,11 @@ export class MapMobileViewComponent implements OnInit {
     }
 
 
-    onSelectTrail($event: string) {
+    onSelectTrail($event: SelectTrailArgument) {
         this.toggleFullView();
         setTimeout(() => {
-            this.onSelectedTrailId.emit($event);
-        }, 5500)
+            this.onSelectedTrail.emit($event);
+        }, 200)
     }
 
     onLoadLastMaintenance($event: string) {

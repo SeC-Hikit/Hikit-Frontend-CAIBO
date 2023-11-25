@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MapUtils, ViewState} from "../MapUtils";
-import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from "../../service/trail-service.service";
+import {TrailDto, TrailMappingDto, TrailService} from "../../service/trail-service.service";
 import {Observable, ObservedValueOf, Subject} from "rxjs";
 import {MunicipalityDto} from "../../service/municipality.service";
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from "../../service/trail-preview-service.service";
@@ -23,6 +23,7 @@ import {SelectTrailArgument} from "../map.component";
 export class MapFullDetailViewComponent implements OnInit {
 
     @Input() viewState = ViewState.TRAIL;
+    @Input() connectedTrails : TrailDto[] = [];
     @Input() selectedTrailData: TrailDto;
     @Input() selectedPoi: PoiDto;
     @Input() selectedTrailPois: PoiDto[] = [];
@@ -47,7 +48,7 @@ export class MapFullDetailViewComponent implements OnInit {
     @Input() paginationMaxSize: number;
 
     @Output() onTrailListPageChange: EventEmitter<number> = new EventEmitter<number>();
-    @Output() onSelectedTrailId: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onSelectedTrail: EventEmitter<SelectTrailArgument> = new EventEmitter<SelectTrailArgument>();
     @Output() onLoadLastMaintenanceForTrail: EventEmitter<string> = new EventEmitter<string>();
     @Output() onLoadPoiForTrail: EventEmitter<string> = new EventEmitter<string>();
     @Output() onGetUnresolvedForTrailId: EventEmitter<string> = new EventEmitter<string>();
@@ -73,18 +74,8 @@ export class MapFullDetailViewComponent implements OnInit {
 
     private searchTerms = new Subject<string>();
 
-
-    sectionName = environment.publicName;
-
-    selectedTrail: TrailDto;
-
-
     isPortraitMode: boolean = false;
     searchTermString: string = "";
-
-
-    trailList: TrailDto[] = [];
-    connectedTrails: TrailDto[] = [];
 
 
     highlightedLocation: Coordinates2D;
@@ -95,7 +86,6 @@ export class MapFullDetailViewComponent implements OnInit {
     selectedTrailIndex: number = 0;
     poiHoveringDto: PoiDto;
 
-    private trailMap: Map<string, TrailDto> = new Map<string, TrailDto>()
     highlightedTrail: TrailDto;
 
     isSearch: boolean = false;
@@ -155,7 +145,7 @@ export class MapFullDetailViewComponent implements OnInit {
         }
 
         MapUtils.changeUrlToState(ViewState.TRAIL, id);
-        this.selectTrail({id, refresh: true, switchView, zoomIn});
+        this.onSelectedTrail.emit({id, refresh: true, switchView, zoomIn});
     }
 
     onSearchClick() {
@@ -165,42 +155,6 @@ export class MapFullDetailViewComponent implements OnInit {
     loadTrailPreviewForMunicipality() {
     }
 
-    selectTrail(sat: SelectTrailArgument): void {
-        this.isLoading = true;
-        if (!sat) {
-            return;
-        }
-        let electedTrail = this.trailList.filter(t => t.id == sat.id);
-
-        if (sat.switchView) {
-            this.viewState = ViewState.TRAIL;
-        }
-
-        if (electedTrail.length > 0) {
-            this.viewState = ViewState.TRAIL;
-            this.selectedTrail = electedTrail[0];
-            this.loadRelatedForTrailId(sat.id);
-        }
-
-        if (sat.refresh || electedTrail.length == 0) {
-            this.trailService.getTrailById(sat.id).subscribe((resp) => {
-                this.selectedTrail = resp.content[0];
-                this.loadRelatedForTrailId(sat.id);
-            }, () => {
-
-            }, () => {
-                if (sat.zoomIn) {
-                    this.zoomToTrail = !this.zoomToTrail;
-                }
-                this.isLoading = false;
-            })
-        }
-
-        this.loadNotificationsForTrail(sat.id);
-        this.onLoadLastMaintenanceForTrail.emit(sat.id);
-        this.onLoadPoiForTrail.emit(sat.id);
-    }
-
     loadNotificationsForTrail(id: string): void {
         if (!id) {
             return;
@@ -208,27 +162,6 @@ export class MapFullDetailViewComponent implements OnInit {
         this.onGetUnresolvedForTrailId.emit(id);
     }
 
-    private loadRelatedForTrailId(id: string) {
-        const relatedTrailIds = this.selectedTrail.locations
-            .flatMap((it) => {
-                return it.encounteredTrailIds
-            }).filter(it => it != id);
-        const relatedTrailsSet = new Set(relatedTrailIds);
-        this.loadRelatedTrailsByIdForSelectedTrail(Array.from(relatedTrailsSet.values()));
-    }
-
-    loadRelatedTrailsByIdForSelectedTrail(trailIds: string[]) {
-        const trailDtoFromCache: TrailDto[] = trailIds
-            .filter((trailId) => this.trailMap.has(trailId))
-            .map((it) => this.trailMap.get(it))
-        const trailIdsNotInCache = trailIds.filter((trailId) => !this.trailMap.has(trailId))
-        const map: Promise<TrailResponse>[] = trailIdsNotInCache.map(it => this.trailService.getTrailById(it).toPromise());
-        Promise.all(map).then((resps) => {
-            const loadedTrails: TrailDto[] = resps.flatMap(it => it.content);
-            loadedTrails.forEach(it => this.trailMap.set(it.id, it));
-            this.connectedTrails = Array.from(trailDtoFromCache.concat(loadedTrails));
-        });
-    }
 
     navigateToLocation(location: Coordinates2D) {
         this.highlightedLocation = location;
@@ -267,11 +200,6 @@ export class MapFullDetailViewComponent implements OnInit {
         this.onPoiClick.emit(poidto);
     }
 
-    poiHovering(poidto: PoiDto) {
-        this.poiHoveringDto = poidto;
-        this.onPoiHovering.emit(poidto);
-    }
-
     ngOnChanges(changes: SimpleChanges) {
         if (this.isMapInitialized) {
             for (const propName in changes) {
@@ -285,12 +213,7 @@ export class MapFullDetailViewComponent implements OnInit {
                 if (propName == "selectedTrailData")
                     if (this.selectedTrailData != null) {
                         setTimeout(() =>
-                                this.selectTrail({
-                                    id: this.selectedTrailData.id,
-                                    refresh: true,
-                                    switchView: false,
-                                    zoomIn: false
-                                }),
+
                             600);
                     }
 
@@ -317,7 +240,6 @@ export class MapFullDetailViewComponent implements OnInit {
     }
 
     toggleTransparency() {
-        console.log("a");
         this.onShowMapTemporarilyPress.emit();
     }
 }

@@ -49,6 +49,7 @@ export interface SelectTrailArgument {
 })
 export class MapComponent implements OnInit {
 
+    static TRAIL_DETAILS_ID = "side-column";
     static MAP_ID = "map-full";
 
 
@@ -200,6 +201,10 @@ export class MapComponent implements OnInit {
     adaptSize() {
         this.isPortraitMode = this.getIsPortraitMode();
         const fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
+        if(!this.isPortraitMode) {
+            document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
+            document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
+        }
         document.getElementById(MapComponent.MAP_ID).style.height = fullSize.toString() + "px";
     }
 

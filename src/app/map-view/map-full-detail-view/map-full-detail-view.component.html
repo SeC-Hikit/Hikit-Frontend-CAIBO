@@ -28,7 +28,7 @@
                 [trailsForMunicipalityMax]="municipalityTrailsMax"
                 [isPaginationToShow]="false"
                 (onLoadTrailPage)="loadTrailPreviewForMunicipality()"
-                (onSelectTrailCode)="selectTrail($event)"
+                (onSelectTrailCode)="onSelectTrail($event.id, $event.zoomIn, $event.switchView)"
                 (onNavigateToLocation)="navigateToLocation($event)"
         >
         </app-municipality-details>
@@ -79,9 +79,9 @@
             ></ngb-pagination>
         </div>
     </div>
-    <div *ngIf="viewState=='trail' && selectedTrail" class="top-margin">
+    <div *ngIf="viewState=='trail' && selectedTrailData" class="top-margin">
         <app-map-trail-details
-                [selectedTrail]="selectedTrail"
+                [selectedTrail]="selectedTrailData"
                 [selectedTrailPois]="selectedTrailPois"
                 [trailNotifications]="selectedTrailNotifications"
                 [selectedTrailMaintenances]="selectedTrailMaintenances"
@@ -102,7 +102,6 @@
                 (onMaintenanceClick)="onMaintenanceClick.emit($event)"
                 (onToggleModeClick)="onToggleMode()"
                 (onPoiClickEvent)="poiClick($event)"
-                (onPoiHoveringEvent)="poiHovering($event)"
                 (onShowTrailClassificationCycloInfo)="onShowCyclingClassification.emit()"
                 (onShowTrailClassificationHikingInfo)="onShowHikingClassification.emit()"
                 (onHighlightTrail)="onHighlightTrail($event)"
@@ -117,9 +116,9 @@
                         xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
             </svg>
             <span class="back" (click)="onBackToTrailPoiClick.emit()"
-                  *ngIf="selectedTrail">Torna al sentiero {{selectedTrail.code}}</span>
+                  *ngIf="selectedTrailData">Torna al sentiero {{selectedTrailData.code}}</span>
             <span class="back" (click)="onBackToTrailPoiClick.emit()"
-                  *ngIf="!selectedTrail">Vai alla lista sentieri</span>
+                  *ngIf="!selectedTrailData">Vai alla lista sentieri</span>
         </div>
         <div *ngIf="viewState=='trail'"
              class="navigation-back clickable" (click)="showTrailList()">

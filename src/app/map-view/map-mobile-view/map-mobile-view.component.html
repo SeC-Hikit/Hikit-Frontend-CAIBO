@@ -15,8 +15,8 @@
                         oppure usa la ricerca 🔍.
                     </div>
                     <div class="col-md-offset-1 mainViewSide" *ngIf="sideView=='list'" (click)="toggleFullView()">
-                        Attualmente i risultati della tua ricerca sono nascosti.
-                        Premi qui per visualizzarli.
+                        Modalità ricerca testuale aperta.
+                        Premi qui per visualizzarla.
                     </div>
                 </div>
 
@@ -25,6 +25,7 @@
                 <app-mobile-municipality-preview *ngIf="sideView == 'municipality' && selectedMunicipality"
                                           [municipality]="selectedMunicipality"
                                                  [selectedLocationDetails]="selectedLocality"
+                                                 (onNavigateToLocation)="onNavigateToLocationClick($event)"
                 ></app-mobile-municipality-preview>
                 <app-mobile-poi-preview *ngIf="sideView == 'poi' && selectedPoi"
                                         [poi]="selectedPoi" [trailMappings]="trailMappings"
@@ -45,6 +46,7 @@
                  *ngIf="isMobileDetailOn">
                 <app-map-mobile-full-detail-view
                         [viewState]="sideView"
+                        [connectedTrails]="connectedTrails"
                         [selectedTrailData]="selectedTrail"
                         [isMapInitialized]="isMapInitialized"
                         [isCycloToggled]="isCycloSwitchOn"
@@ -68,7 +70,7 @@
                         [paginationEllipses]="paginationEllipses"
                         [paginationMaxSize]="paginationMaxSize"
                         (onTrailListPageChange)="onTrailListPageChange.emit($event)"
-                        (onSelectedTrailId)="onSelectTrail($event)"
+                        (onSelectedTrail)="onSelectTrail($event)"
                         (onLoadLastMaintenanceForTrail)="onLoadLastMaintenance($event)"
                         (onLoadPoiForTrail)="onSelectPoiForTrail($event)"
                         (onHighlightedLocation)="onNavigateToLocationClick({ coordinates: $event, isTogglePreview: true})"
