@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PlaceDto} from "../../../service/place.service";
-import {TrailMappingDto} from "../../../service/trail-service.service";
+import {TrailDto, TrailMappingDto} from "../../../service/trail-service.service";
 import {PositionChangeRequest} from "../map-mobile-view.component";
+import {SelectTrailArgument} from "../../map.component";
 
 @Component({
   selector: 'app-mobile-place-preview',
@@ -12,7 +13,9 @@ export class MobilePlacePreviewComponent implements OnInit {
 
   @Input() place: PlaceDto;
   @Input() trailMappings: Map<string, TrailMappingDto>;
+  @Input() previouslySelectedTrail: TrailDto;
 
+  @Output() onNavigateToTrail: EventEmitter<SelectTrailArgument> = new EventEmitter<SelectTrailArgument>();
   @Output() onNavigateToLocation: EventEmitter<PositionChangeRequest> = new EventEmitter<PositionChangeRequest>();
   constructor() { }
 

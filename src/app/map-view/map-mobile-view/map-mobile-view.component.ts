@@ -5,7 +5,7 @@ import {TrailPreview} from "../../service/trail-preview-service.service";
 import {GraphicUtils} from "../../utils/GraphicUtils";
 import {PoiDto} from "../../service/poi-service.service";
 import {ViewState} from "../MapUtils";
-import {PlaceDto} from "../../service/place.service";
+import {PlaceDto, PlaceRefDto} from "../../service/place.service";
 import {AccessibilityNotification} from "../../service/notification-service.service";
 import {MaintenanceDto} from "../../service/maintenance.service";
 import {MunicipalityDto} from "../../service/municipality.service";
@@ -79,6 +79,7 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onSelectMunicipality: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNavigateToLocation: EventEmitter<Coordinates2D> = new EventEmitter<Coordinates2D>();
     @Output() onForceMapRefresh: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onSelectPlaceByRef: EventEmitter<PlaceRefDto> = new EventEmitter<PlaceRefDto>();
 
 
     isMapInitialized: boolean = true;
@@ -174,5 +175,10 @@ export class MapMobileViewComponent implements OnInit {
 
     toggleTransparency() {
         this.opacityLow = !this.opacityLow;
+    }
+
+    onPoiClickEvent($event: PoiDto) {
+        this.toggleFullView();
+        this.onPoiClick.emit($event)
     }
 }

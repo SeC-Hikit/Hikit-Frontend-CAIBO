@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TrailMappingDto} from "../../../service/trail-service.service";
+import {TrailDto, TrailMappingDto} from "../../../service/trail-service.service";
 import {AccessibilityNotification} from "../../../service/notification-service.service";
 import {PositionChangeRequest} from "../map-mobile-view.component";
+import {SelectTrailArgument} from "../../map.component";
 
 
 @Component({
@@ -13,8 +14,10 @@ export class MobileAccessibilityIssuePreviewComponent implements OnInit {
 
   @Input() accessibilityNotification: AccessibilityNotification;
   @Input() trailMappings: Map<string, TrailMappingDto>;
+  @Input() previouslySelectedTrail: TrailDto;
 
   @Output() onNavigateToLocation: EventEmitter<PositionChangeRequest> = new EventEmitter<PositionChangeRequest>();
+  @Output() onNavigateToTrail: EventEmitter<SelectTrailArgument> = new EventEmitter<SelectTrailArgument>();
 
   constructor() { }
 

@@ -54,7 +54,6 @@
                         [paginationSize]="'sm'"
                         [paginationEllipses]="true"
                         [paginationMaxSize]="2"
-
                         (onTrailListPageChange)="loadTrailPreview($event)"
                         (onSelectedTrail)="onSelectTrail($event.id, $event.zoomIn, $event.switchView)"
                         (onLoadLastMaintenanceForTrail)="loadLastMaintenanceForTrail($event)"
@@ -72,6 +71,7 @@
                         (onShowHikingClassification)="onShowHikingClassification()"
                         (onToggleFullPageTrail)="toggleFullPageTrail()"
                         (onSelectMunicipality)="onSelectMunicipality($event)"
+                        (onSelectPlaceByRef)="onSelectPlaceByRef($event)"
                         (onPoiClick)="onPoiClick($event)"
                         (onDownloadGpx)="onDownloadGpx()"
                         (onDownloadKml)="onDownloadKml()"

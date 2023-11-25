@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-11"
         >
-            <h1 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor">{{ poi.name.slice(0, 30) }}</h1>
+
+            <h1 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor"><span class="arrow-back">⬅</span> {{ poi.name | ellipsis }}</h1>
         </div>
         <div class="col-1">
             <svg class="bi pulse clickable" width="24" height="24" fill="#D04341"
@@ -24,7 +25,9 @@
         <div class="col-6 offset-1">
             <div>Sentieri collegati</div>
             <span *ngFor="let trailId of poi.trailIds.slice(0, 3)"
-                  class="clickable white-font trailCodeColumn">
+                  class="clickable white-font trailCodeColumn"
+                  (click)="onNavigateToTrail.emit({ id: trailId, refresh: true,
+                  switchView: true, zoomIn: true})">
             {{ getNameOrCode(trailId) }}
         </span>
         </div>
