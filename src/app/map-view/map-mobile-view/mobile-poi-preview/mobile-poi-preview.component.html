@@ -3,7 +3,10 @@
         <div class="col-11"
         >
 
-            <h1 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor"><span class="arrow-back">⬅</span> {{ poi.name | ellipsis }}</h1>
+            <h1 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor">
+                <span class="arrow-back"
+                      (click)="onNavigateToTrailClick(previouslySelectedTrail.id)">
+                ⬅</span> {{ poi.name | ellipsis }}</h1>
         </div>
         <div class="col-1">
             <svg class="bi pulse clickable" width="24" height="24" fill="#D04341"

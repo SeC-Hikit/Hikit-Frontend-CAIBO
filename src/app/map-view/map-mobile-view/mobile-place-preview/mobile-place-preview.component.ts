@@ -28,4 +28,8 @@ export class MobilePlacePreviewComponent implements OnInit {
         this.trailMappings.get(id).code
   }
 
+  onNavigateToTrailClick(id: string) {
+    this.onNavigateToTrail.emit({id, refresh: false, zoomIn: true, switchView: true});
+  }
+
 }

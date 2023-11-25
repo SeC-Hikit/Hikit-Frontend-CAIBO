@@ -33,4 +33,8 @@ export class MobilePoiPreviewComponent implements OnInit {
     getImage(macroType: "BELVEDERE" | "SUPPORT" | "CULTURAL" | "CURIOSITY", microType: string[]) {
         return PoiUtils.getImage(macroType, microType);
     }
+
+    onNavigateToTrailClick(id: string) {
+        this.onNavigateToTrail.emit({id, refresh: false, zoomIn: true, switchView: true});
+    }
 }

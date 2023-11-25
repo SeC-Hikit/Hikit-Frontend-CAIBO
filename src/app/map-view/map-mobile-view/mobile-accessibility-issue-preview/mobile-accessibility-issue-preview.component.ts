@@ -33,4 +33,8 @@ export class MobileAccessibilityIssuePreviewComponent implements OnInit {
   getColor() {
     return !this.accessibilityNotification.minor ? "#D04341" : "#ECC333";
   }
+
+  onNavigateToTrailClick(id: string) {
+    this.onNavigateToTrail.emit({id, refresh: false, zoomIn: true, switchView: true});
+  }
 }

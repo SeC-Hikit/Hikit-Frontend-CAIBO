@@ -3,7 +3,8 @@
         <div class="col-9"
         >
             <h1 class="trailCodeColumn trailCodeColumn-fit" [ngClass]="{'isMinorBg' : true,
-            'isNotMinorBgColor' : !accessibilityNotification.minor}"><span class="arrow-back">⬅</span>
+            'isNotMinorBgColor' : !accessibilityNotification.minor}">
+                <span class="arrow-back" (click)="onNavigateToTrailClick(previouslySelectedTrail.id)">⬅</span>
                 Criticità {{ accessibilityNotification.minor ? "minore" : "" }}</h1>
         </div>
         <div class="col-1 offset-1">
