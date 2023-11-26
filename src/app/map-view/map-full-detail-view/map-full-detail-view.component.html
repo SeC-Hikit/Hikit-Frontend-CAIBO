@@ -132,6 +132,8 @@
         <div *ngIf="viewState"
              class="show-map-tmp clickable"
              (mousedown)="toggleTransparency()"
+             (touchstart)="toggleTransparency()"
+             (touchend)="toggleTransparency()"
              (mouseup)="toggleTransparency()">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use
