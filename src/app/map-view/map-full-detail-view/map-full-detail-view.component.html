@@ -28,7 +28,7 @@
                 [trailsForMunicipalityMax]="municipalityTrailsMax"
                 [isPaginationToShow]="false"
                 (onLoadTrailPage)="loadTrailPreviewForMunicipality()"
-                (onSelectTrailCode)="onSelectTrail($event.id, $event.zoomIn, $event.switchView)"
+                (onSelectTrailCode)="onSelectTrail($event.id, $event.zoomIn, true)"
                 (onNavigateToLocation)="navigateToLocation($event)"
         >
         </app-municipality-details>
