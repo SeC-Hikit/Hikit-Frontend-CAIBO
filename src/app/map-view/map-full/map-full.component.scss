@@ -3,6 +3,10 @@
   z-index: 1;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .btn-map {
   background: white !important;
   box-shadow: 0 0 5px #333;
@@ -23,22 +27,28 @@
 
 #municipality-btn {
   position: absolute;
-  left: 1%;
-  bottom: 1%;
+  right: 1%;
+  top: 50px;
 }
 
 #localize-me-btn {
   color: black;
   position: absolute;
-  left: 1%;
-  bottom: 65px;
+  right: 1%;
+  top: 110px;
 }
 
 #terrain-btn {
   color: black;
   position: absolute;
-  left: 1%;
-  bottom: 120px;
+  right: 1%;
+  top: 170px;
+}
+
+#search-btn {
+  position: absolute;
+  right: 1%;
+  top: 230px;
 }
 
 #hint-space {

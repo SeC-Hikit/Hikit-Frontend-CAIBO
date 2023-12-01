@@ -5,7 +5,7 @@ import {tap, catchError} from "rxjs/operators";
 import {components} from "src/binding/Binding";
 
 export type MunicipalityResponse = components["schemas"]["MunicipalityResponse"]
-export type MunicipalityDetails = components["schemas"]["MunicipalityDetailsDto"]
+export type MunicipalityDto = components["schemas"]["MunicipalityDetailsDto"]
 
 @Injectable({
     providedIn: "root",

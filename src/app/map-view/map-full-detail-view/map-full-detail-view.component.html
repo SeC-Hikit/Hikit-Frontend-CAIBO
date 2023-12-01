@@ -1,0 +1,145 @@
+<div class="MapFullDetailView row">
+    <div class="row">
+        <div class="col-11 offset-1" id="trail-detail-column"
+             [class]="viewState=='trail' || viewState=='poi' || viewState=='place' || viewState=='accessibility' || viewState=='municipality' ? 'selection-margin' : ''">
+            <div *ngIf="viewState=='' || viewState=='list'" class="row search-section top-margin-x2">
+                <div class="col-11">
+                    <app-search-input placeholder="Cerca per codice sentiero, nome o località (e.g: 100)"
+                                      (onTypingChange)="onSearchKeyPress($event)"
+                                      (onEnterPress)="onSearchClick()"
+                    >
+                    </app-search-input>
+                </div>
+                <div class="col-1 clickable">
+                    <svg class="bi" width="24" height="24" fill="#D04341" (click)="onSearchClick()">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#search"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="viewState=='municipality' && selectedMunicipality" class="row top-margin">
+        <app-municipality-details
+                [selectedMunicipality]="selectedMunicipality"
+                [selectedLocationDetails]="selectedLocationDetails"
+                [trailMappings]="trailMappings"
+                [trailsForMunicipality]="municipalityTrails"
+                [trailsForMunicipalityMax]="municipalityTrailsMax"
+                [isPaginationToShow]="false"
+                (onLoadTrailPage)="loadTrailPreviewForMunicipality()"
+                (onSelectTrailCode)="onSelectTrail($event.id, $event.zoomIn, true)"
+                (onNavigateToLocation)="navigateToLocation($event)"
+        >
+        </app-municipality-details>
+    </div>
+
+    <div *ngIf="viewState=='accessibility' && selectedNotification" class="row top-margin">
+        <app-notification-details
+                [selectedNotification]="selectedNotification"
+                [trailMappings]="trailMappings"
+        ></app-notification-details>
+    </div>
+
+    <div *ngIf="viewState=='poi' && selectedPoi" class="row top-margin">
+        <app-poi-details
+                [selectedPoi]="selectedPoi"
+                [trailMappings]="trailMappings"
+                (onSelectTrail)="onSelectTrail($event, false, true)"
+                (onHighlightTrail)="onHighlightTrail($event)"
+        ></app-poi-details>
+    </div>
+
+    <div *ngIf="viewState=='place' && selectedPlace" class="row top-margin">
+        <app-place-details
+                [selectedPlace]="selectedPlace"
+                [trailMappings]="trailMappings"
+                (onSelectTrail)="onSelectTrail($event, false, true)"
+                (onHighlightTrail)="onHighlightTrail($event)"
+        ></app-place-details>
+    </div>
+
+    <div *ngIf="viewState=='list'" class="top-margin">
+        <app-map-trail-list
+                [trailsPreviewList]="trailPreviewList"
+                (onSelectTrail)="onSelectTrail($event, true, true)"
+        >
+        </app-map-trail-list>
+        <div class="pagination-position"
+             *ngIf="trailPreviewList.length > 0 && !this.isSearch">
+            <ngb-pagination
+                    [pageSize]="paginationPageSize"
+                    [collectionSize]="paginationCollectionSize"
+                    [(page)]="paginationPage"
+                    [size]="paginationSize"
+                    [ellipses]="paginationEllipses"
+                    [maxSize]="paginationMaxSize"
+                    aria-label="Default pagination"
+                    (pageChange)="onTrailListPageChange.emit($event)"
+            ></ngb-pagination>
+        </div>
+    </div>
+    <div *ngIf="viewState=='trail' && selectedTrailData" class="top-margin">
+        <app-map-trail-details
+                [selectedTrail]="selectedTrailData"
+                [selectedTrailPois]="selectedTrailPois"
+                [trailNotifications]="selectedTrailNotifications"
+                [selectedTrailMaintenances]="selectedTrailMaintenances"
+                [connectedTrails]="connectedTrails"
+                [isCycloSwitchOn]="isCycloToggled"
+                [isPoiLoaded]="isPoiLoaded"
+                (onDownloadGpx)="onDownloadGpx.emit()"
+                (onDownloadKml)="onDownloadKml.emit()"
+                (onDownloadPdf)="onDownloadPdf.emit()"
+                (toggleFullTrailPageEvent)="onToggleFullPageTrail.emit()"
+                (toggleNotificationListEvent)="toggleNotificationsModal()"
+                (onNavigateToLocation)="navigateToLocation($event)"
+                (onShowLocation)="onSelectPlaceByRef.emit($event)"
+                (onSelectTrail)="onSelectTrail($event, true, true)"
+                (onNavigateToSelectedTrailCoordIndex)="navigateToSelectedTrailIndex($event)"
+                (onNavigateToTrailReportIssue)="onNavigateToTrailReportIssue.emit($event)"
+                (onSelectedNotification)="accessibilityNotificationSelection($event)"
+                (onMaintenanceClick)="onMaintenanceClick.emit($event)"
+                (onToggleModeClick)="onToggleMode()"
+                (onPoiClickEvent)="poiClick($event)"
+                (onShowTrailClassificationCycloInfo)="onShowCyclingClassification.emit()"
+                (onShowTrailClassificationHikingInfo)="onShowHikingClassification.emit()"
+                (onHighlightTrail)="onHighlightTrail($event)"
+                (onSelectMunicipality)="selectMunicipality($event)"
+        >
+        </app-map-trail-details>
+
+        <div *ngIf="viewState=='poi' || viewState=='place' || viewState=='accessibility' || viewState=='municipality'"
+             class="navigation-back clickable">
+            <svg class="bi pulse" width="24" height="24" fill="#D04341">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+            </svg>
+            <span class="back" (click)="onBackToTrailPoiClick.emit()"
+                  *ngIf="selectedTrailData">Torna al sentiero {{selectedTrailData.code}}</span>
+            <span class="back" (click)="onBackToTrailPoiClick.emit()"
+                  *ngIf="!selectedTrailData">Vai alla lista sentieri</span>
+        </div>
+        <div *ngIf="viewState=='trail'"
+             class="navigation-back clickable" (click)="showTrailList()">
+            <svg class="bi pulse" width="24" height="24" fill="#D04341">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-left-short"/>
+            </svg>
+            <span class="back">Vai a lista sentieri</span>
+        </div>
+
+        <div *ngIf="viewState"
+             class="show-map-tmp clickable"
+             (mousedown)="toggleTransparency()"
+             (touchstart)="toggleTransparency()"
+             (touchend)="toggleTransparency()"
+             (mouseup)="toggleTransparency()">
+            <svg class="bi pulse" width="24" height="24" fill="#D04341">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#map"/>
+            </svg>
+        </div>
+
+    </div>
+</div>

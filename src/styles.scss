@@ -39,6 +39,12 @@
   }
 }
 
+.trailCodeColumn-fit {
+  width: fit-content;
+  padding: 0 0.3em;
+  color: white;
+}
+
 #header-wrapper .container {
   padding: 0 0 0 0;
 }
@@ -285,6 +291,13 @@ select {
   cursor: pointer;
 }
 
+.arrow-back {
+  color: #1D9566;
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .modal-dialog {
   min-width: 60% !important;
 }
@@ -339,4 +352,13 @@ select {
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
+
+.map-icon {
+  min-width: 180px;
+  min-height: 180px;
+  opacity: 0.6;
+  background-image: url(/assets/cai/navigate.png);
+  background-size: contain;
+  background-repeat: no-repeat;
 }

@@ -1,0 +1,105 @@
+<div class="MapMobileView row" id="mobile-side-column">
+    <div class="container-flex column-map-mobile functional-column mobile-content"
+         [ngClass]="{'full-view': isFullView, 'opacityLevelLow': opacityLow}">
+        <div class="row">
+            <div class="expand-bar-outer" (click)="toggleFullView()">
+                <div class="expand-bar"></div>
+            </div>
+        </div>
+        <div class="contents">
+            <span [ngClass]="{'hide': isFullView}">
+                <div *ngIf="sideView == '' || sideView == 'list'" class="row">
+                    <div class="map-icon col-md-2"></div>
+                    <div class="col-md-offset-1 mainViewSide" *ngIf="sideView==''">
+                        Naviga la rete escursionistica - clicca su un sentiero,
+                        oppure usa la ricerca 🔍.
+                    </div>
+                    <div class="col-md-offset-1 mainViewSide" *ngIf="sideView=='list'" (click)="toggleFullView()">
+                        Modalità ricerca testuale aperta.
+                        Premi qui per visualizzarla.
+                    </div>
+                </div>
+
+                <app-mobile-trail-preview *ngIf="sideView == 'trail' && selectedTrail"
+                                          [trail]="selectedTrail"></app-mobile-trail-preview>
+                <app-mobile-municipality-preview *ngIf="sideView == 'municipality' && selectedMunicipality"
+                                          [municipality]="selectedMunicipality"
+                                                 [selectedLocationDetails]="selectedLocality"
+                                                 (onNavigateToLocation)="onNavigateToLocationClick($event)"
+                ></app-mobile-municipality-preview>
+                <app-mobile-poi-preview *ngIf="sideView == 'poi' && selectedPoi"
+                                        [previouslySelectedTrail]="selectedTrail"
+                                        [poi]="selectedPoi" [trailMappings]="trailMappings"
+                                        (onNavigateToTrail)="onSelectedTrail.emit($event)"
+                                        (onNavigateToLocation)="onNavigateToLocationClick($event)"
+                ></app-mobile-poi-preview>
+                <app-mobile-place-preview *ngIf="sideView == 'place' && selectedPlace"
+                                          [place]="selectedPlace"
+                                          (onNavigateToTrail)="onSelectedTrail.emit($event)"
+                                          [previouslySelectedTrail]="selectedTrail"
+                                          [trailMappings]="trailMappings"
+                                          (onNavigateToLocation)="onNavigateToLocationClick($event)"
+                ></app-mobile-place-preview>
+                <app-mobile-accessibility-issue-preview *ngIf="sideView == 'accessibility' && selectedNotification"
+                                                        [accessibilityNotification]="selectedNotification"
+                                                        [previouslySelectedTrail]="selectedTrail"
+                                                        [trailMappings]="trailMappings"
+                                                        (onNavigateToTrail)="onSelectedTrail.emit($event)"
+                                                        (onNavigateToLocation)="onNavigateToLocationClick($event)"
+                ></app-mobile-accessibility-issue-preview>
+            </span>
+            <div class="row"
+                 *ngIf="isMobileDetailOn">
+                <app-map-mobile-full-detail-view
+                        [viewState]="sideView"
+                        [connectedTrails]="connectedTrails"
+                        [selectedTrailData]="selectedTrail"
+                        [isMapInitialized]="isMapInitialized"
+                        [isCycloToggled]="isCycloSwitchOn"
+                        [isPoiLoaded]="isPoiLoaded"
+                        [trailPreviewList]="trailPreviewList"
+                        [selectedPlace]="selectedPlace"
+                        [trailMappings]="trailMappings"
+                        [selectedTrailNotifications]="selectedTrailNotifications"
+                        [selectedPoi]="selectedPoi"
+                        [selectedTrailPois]="selectTrailPois"
+                        [selectedNotification]="selectedNotification"
+                        [selectedMunicipality]="selectedMunicipality"
+                        [selectedTrailMaintenances]="selectedTrailMaintenances"
+                        [municipalityTrails]="municipalityTrails"
+                        [municipalityTrailsMax]="municipalityTrailsMax"
+                        [selectedLocationDetails]="selectedLocationDetails"
+                        [paginationPageSize]="paginationPageSize"
+                        [paginationCollectionSize]="paginationCollectionSize"
+                        [paginationPage]="paginationPage"
+                        [paginationSize]="paginationSize"
+                        [paginationEllipses]="paginationEllipses"
+                        [paginationMaxSize]="paginationMaxSize"
+                        (onTrailListPageChange)="onTrailListPageChange.emit($event)"
+                        (onSelectedTrail)="onSelectTrail($event)"
+                        (onLoadLastMaintenanceForTrail)="onLoadLastMaintenance($event)"
+                        (onLoadPoiForTrail)="onSelectPoiForTrail($event)"
+                        (onHighlightedLocation)="onNavigateToLocationClick({ coordinates: $event, isTogglePreview: true})"
+                        (onAccessibilityNotificationSelection)="onSelectIssue($event)"
+                        (onGetUnresolvedForTrailId)="onGetUnresolvedForTrailId.emit($event)"
+                        (onSelectMunicipality)="onSelectMunicipality.emit($event)"
+                        (onBackToTrailPoiClick)="onBackToTrailPoiClick.emit()"
+                        (onBackToTrailList)="onBackToTrailList.emit()"
+                        (onLoadTrailPreview)="onLoadTrailPreview.emit($event)"
+                        (onNavigateToTrailReportIssue)="onNavigateToTrailReportIssue.emit($event)"
+                        (onShowCyclingClassification)="onShowCyclingClassification.emit()"
+                        (onShowHikingClassification)="onShowHikingClassification.emit()"
+                        (onToggleFullPageTrail)="onToggleFullPageTrail.emit()"
+                        (onPoiClick)="onPoiClickEvent($event)"
+                        (onDownloadGpx)="onDownloadGpx.emit()"
+                        (onDownloadKml)="onDownloadKml.emit()"
+                        (onDownloadPdf)="onDownloadPdf.emit()"
+                        (onShowMapTemporarilyPress)="toggleTransparency()"
+                        (onSelectPlaceByRef)="onSelectPlaceByRef.emit($event)"
+                >
+
+                </app-map-mobile-full-detail-view>
+            </div>
+        </div>
+    </div>
+</div>

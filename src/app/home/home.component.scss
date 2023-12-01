@@ -1,5 +1,22 @@
 @import "src/app/style/const";
 
+.band {
+  height: 30px;
+  width: 100%;
+  background: pink;
+  position: absolute;
+  top: 6.9%;
+  left: 0;
+  text-align: center;
+  color: #AA336A;
+  font-weight: bold;
+  border: 1px solid white;
+
+  .pulse {
+    animation: pulse-animation 2s infinite alternate-reverse;
+  }
+}
+
 #image {
   background: url(/assets/cai/bg_home.avif) no-repeat;
   background-size: cover;
@@ -17,6 +34,7 @@
     right: 5%;
     top: 12%;
     transition: 0.5s all;
+
     a {
       text-decoration: none;
     }
@@ -37,12 +55,11 @@
   }
 
   .text-adv {
-    color : black;
+    color: black;
     padding: 10px;
     background: white;
     text-align: right;
     font-size: 48px !important;
-
 
 
     .strike-through {

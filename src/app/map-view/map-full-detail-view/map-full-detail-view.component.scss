@@ -1,0 +1,45 @@
+@import "/src/app/style/const.scss";
+
+.MapFullDetailView {
+  padding: 0 3% 3% 3%;
+}
+
+.MapTrailDetails {
+
+  .trailCodeColumnColor {
+    background-color: black !important;
+  }
+
+  .clickable {
+    color: white !important;
+  }
+}
+
+.show-map-tmp {
+  position: fixed;
+  bottom: -5px;
+  right: -5px;
+  background: $secondary-bg-color;
+  color: white;
+  border-radius: 10px;
+
+
+  svg {
+    margin: 20px;
+  }
+}
+
+
+.navigation-back {
+  width: 100%;
+  margin: 0;
+  z-index: 1;
+  padding: 1%;
+  height: 50px;
+}
+
+.search-section {
+  .search-box {
+    border: 1px solid black;
+  }
+}

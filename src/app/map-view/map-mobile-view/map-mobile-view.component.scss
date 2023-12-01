@@ -1,0 +1,111 @@
+@import "../../style/const.scss";
+
+.hide {
+  display: none !important;
+}
+
+.MapMobileView {
+
+  left: 18px;
+  top: 550px;
+  position: absolute;
+  transition: 0.2s all;
+  width: 100%;
+  z-index: 1000;
+  opacity: 0.99;
+  min-height: 150px;
+
+  .opacityLevelLow {
+    opacity: 0.2;
+  }
+
+  .mainViewSide {
+    width: 75%;
+  }
+
+  .navigation-back {
+    background: $secondary-bg-color;
+  }
+
+
+  .clickable {
+    color: white;
+  }
+
+  .map-icon {
+    min-width: 90px;
+    min-height: 90px;
+    width: 20%;
+  }
+
+  .mobile-content {
+    background: white;
+    width: 100%;
+  }
+
+  .full-view {
+    color: black;
+  }
+
+  #bike-icon, #people-icon, #clock-icon {
+    color: black;
+  }
+
+  .expand-bar-outer {
+    height: 30px;
+    width: 100%;
+    padding-top: 10px;
+    cursor: pointer;
+    animation-name: pulse-animation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  .expand-bar {
+    cursor: pointer;
+    width: 80%;
+    height: 5px;
+    background: $secondary-bg-color;
+    border-radius: 5px 5px 5px;
+    margin: 0 auto 10px;
+  }
+
+  .contents {
+    padding: 0 5% 2% 5%;
+  }
+
+  .mobile-preview-text {
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .mobile-preview-text-small-top {
+    color: $primary-bg-color;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .mobile-preview-text-small-bottom {
+    color: $error-color;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  #mobile-side-column {
+    width: 100%;
+    padding: 3%;
+    transition: 0.3s all;
+    opacity: 0.99;
+    background-color: $secondary-bg-color;
+  }
+
+  .bottom-margin {
+    margin-bottom: 20px;
+  }
+
+  .mobile-preview-text-small {
+    font-size: 14px;
+  }
+}

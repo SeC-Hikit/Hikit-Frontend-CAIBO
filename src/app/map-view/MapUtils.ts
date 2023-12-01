@@ -6,13 +6,17 @@ import {RectangleDto} from "../service/geo-trail-service";
 import {
     AlertPinIcon,
     CrossWayIcon,
-    MapPinIconType, MonumentalTreeIcon,
+    MapPinIconType,
+    MonumentalTreeIcon,
     PinIcon,
-    RuinIcon, ShaletIcon, TentIcon, ViewPinIcon,
+    RuinIcon,
+    ShaletIcon,
+    TentIcon,
+    ViewPinIcon,
     WaterIcon
 } from "../../assets/icons/MapPinIconType";
 import {Marker} from "../map-preview/map-preview.component";
-
+import {SelectTrailArgument} from "./map.component";
 
 
 export enum ViewState {
@@ -174,4 +178,11 @@ export class MapUtils {
         let optionalSlash = id != "" ? "/" : "";
         window.history.pushState({}, '', this.mapLocationString + state + optionalSlash + id)
     }
+
+    static getSelectTrailArgument(id: string, refresh: boolean = false,
+                                  switchView= false , zoomIn = false) : SelectTrailArgument {
+        return {id: id, refresh: refresh, switchView: switchView, zoomIn: zoomIn};
+    }
+
+
 }

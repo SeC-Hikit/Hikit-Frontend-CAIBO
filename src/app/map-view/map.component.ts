@@ -6,7 +6,7 @@ import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../servic
 import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
-import *  as FileSaver from 'file-saver';
+import * as FileSaver from 'file-saver';
 import {Coordinates2D, GeoTrailService, LocateDto, RectangleDto} from "../service/geo-trail-service";
 import {environment} from "../../environments/environment.prod";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
@@ -21,10 +21,11 @@ import {PlaceDto, PlaceRefDto, PlaceService} from "../service/place.service";
 import {ReadingUtils} from '../utils/ReadingUtils';
 import {Location} from "@angular/common";
 import {MapUtils, ViewState} from "./MapUtils";
-import {MunicipalityDetails, MunicipalityService} from "../service/municipality.service";
+import {MunicipalityDto, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
 import {ErtService, LocalityDto} from "../service/ert.service";
 
+//import {MapMobileViewComponent} from "./map-mobile-view/map-mobile-view.component";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -32,6 +33,13 @@ export enum TrailSimplifierLevel {
     MEDIUM = "medium",
     HIGH = "high",
     FULL = "full"
+}
+
+export interface SelectTrailArgument {
+    id: string,
+    refresh?: boolean,
+    switchView: boolean
+    zoomIn: boolean
 }
 
 @Component({
@@ -55,19 +63,20 @@ export class MapComponent implements OnInit {
 
     isPoiLoaded = false;
 
+
     // Bound elements
     searchTermString: string = "";
     trailPreviewList: TrailPreview[] = [];
     trailPreviewCount: number = 0;
     trailPreviewPage: number = 0;
 
-    municipalityList: MunicipalityDetails[] = []
+    municipalityList: MunicipalityDto[] = []
 
     selectedTrail: TrailDto;
     selectedNotification: AccessibilityNotification;
 
     // municipalities
-    selectedMunicipality: MunicipalityDetails;
+    selectedMunicipality: MunicipalityDto;
     municipalityTrails: TrailPreview[] = [];
     municipalityTrailsMax: number = 0;
 
@@ -99,13 +108,16 @@ export class MapComponent implements OnInit {
     highlightedTrail: TrailDto;
     selectedLocationDetails: LocalityDto;
     isSearch: boolean = false;
+    isPortraitMode: boolean = true;
+    isMobileDetailMode: boolean = false;
+    refreshSwitch: boolean = false;
 
     constructor(
         private trailService: TrailService,
         private geoTrailService: GeoTrailService,
         private poiService: PoiService,
         private trailPreviewService: TrailPreviewService,
-        private accessibilityService: NotificationService,
+        public accessibilityService: NotificationService,
         private maintenanceService: MaintenanceService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -119,11 +131,13 @@ export class MapComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.isPortraitMode = this.getIsPortraitMode();
         this.sideView = this.getViewFromLocation();
         this.loadMunicipalities();
         this.loadDataPassedByUrl();
         this.changeTileLayer("topo");
         this.ensureMapping();
+        this.setupShortcuts();
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
             debounceTime(500),
@@ -147,6 +161,7 @@ export class MapComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges) {
         for (const propName in changes) {
             if (propName == "sideView") {
+                console.log("[SIDEVIEW]: " + this.sideView);
                 document.getElementById("trail-detail-column")
                     .scrollTo(0, 0);
             }
@@ -184,9 +199,12 @@ export class MapComponent implements OnInit {
     }
 
     adaptSize() {
-        let fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
-        document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
-        document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
+        this.isPortraitMode = this.getIsPortraitMode();
+        const fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
+        if(!this.isPortraitMode) {
+            document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
+            document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
+        }
         document.getElementById(MapComponent.MAP_ID).style.height = fullSize.toString() + "px";
     }
 
@@ -194,45 +212,44 @@ export class MapComponent implements OnInit {
         if (!id) {
             return;
         }
-
         MapUtils.changeUrlToState(ViewState.TRAIL, id);
-        this.selectTrail(id, true, switchView, zoomIn);
+        this.selectTrail({id: id, refresh: true, switchView: switchView, zoomIn: zoomIn});
     }
 
-    selectTrail(id: string, refresh?: boolean, switchView = true, zoomIn = false): void {
+    selectTrail(sat: SelectTrailArgument): void {
         this.isLoading = true;
-        if (!id) {
+        if (!sat) {
             return;
         }
-        let electedTrail = this.trailList.filter(t => t.id == id);
+        let electedTrail = this.trailList.filter(t => t.id == sat.id);
 
-        if (switchView) {
+        if (sat.switchView) {
             this.sideView = ViewState.TRAIL;
         }
 
         if (electedTrail.length > 0) {
             this.sideView = ViewState.TRAIL;
             this.selectedTrail = electedTrail[0];
-            this.loadRelatedForTrailId(id);
+            this.loadRelatedForTrailId(sat.id);
         }
 
-        if (refresh || electedTrail.length == 0) {
-            this.trailService.getTrailById(id).subscribe((resp) => {
+        if (sat.refresh || electedTrail.length == 0) {
+            this.trailService.getTrailById(sat.id).subscribe((resp) => {
                 this.selectedTrail = resp.content[0];
-                this.loadRelatedForTrailId(id);
+                this.loadRelatedForTrailId(sat.id);
             }, () => {
 
             }, () => {
-                if(zoomIn) {
+                if (sat.zoomIn) {
                     this.zoomToTrail = !this.zoomToTrail;
                 }
                 this.isLoading = false;
             })
         }
 
-        this.loadNotificationsForTrail(id);
-        this.loadLastMaintenanceForTrail(id);
-        setTimeout(() => this.loadPoiForTrail(id), 1200);
+        this.loadNotificationsForTrail(sat.id);
+        this.loadLastMaintenanceForTrail(sat.id);
+        setTimeout(() => this.loadPoiForTrail(sat.id), 1200);
     }
 
     private loadRelatedForTrailId(id: string) {
@@ -343,7 +360,7 @@ export class MapComponent implements OnInit {
 
         this.zoomChangingShallTriggerTrailsReload = false;
         this.onLoading();
-        const level = this.electTrailSimplifierLevel(this.zoomLevel);
+        const level = this.selectTrailSimplifierLevel(this.zoomLevel);
         if (level == TrailSimplifierLevel.NONE) return;
         this.geoTrailService
             .locate(locateDto, level.toUpperCase(), false)
@@ -376,8 +393,8 @@ export class MapComponent implements OnInit {
     }
 
     onZoomChange(zoomLevel: number) {
-        const previousZoomLevelSimplifier = this.electTrailSimplifierLevel(this.zoomLevel);
-        const newZoomLayerSimplifier = this.electTrailSimplifierLevel(zoomLevel);
+        const previousZoomLevelSimplifier = this.selectTrailSimplifierLevel(this.zoomLevel);
+        const newZoomLayerSimplifier = this.selectTrailSimplifierLevel(zoomLevel);
         if (previousZoomLevelSimplifier != newZoomLayerSimplifier)
             console.log("User zoomed in and trail simplified changed... reloading visible trail!")
         this.zoomChangingShallTriggerTrailsReload = true;
@@ -410,7 +427,7 @@ export class MapComponent implements OnInit {
         this.sideView = ViewState.TRAIL_LIST;
     }
 
-    electTrailSimplifierLevel(zoom: number): TrailSimplifierLevel {
+    selectTrailSimplifierLevel(zoom: number): TrailSimplifierLevel {
         if (zoom <= 10) return TrailSimplifierLevel.NONE;
         if (zoom < 15) return TrailSimplifierLevel.LOW;
         if (zoom <= 17) return TrailSimplifierLevel.MEDIUM;
@@ -427,7 +444,7 @@ export class MapComponent implements OnInit {
 
     onSearchKeyPress($event: string) {
         this.searchTermString = $event;
-        if($event == ""){
+        if ($event == "") {
             this.trailPreviewPage = 1;
             this.searchTerms.next($event);
         }
@@ -453,7 +470,8 @@ export class MapComponent implements OnInit {
             })
     }
 
-    loadTrailPreviewForMunicipality(page: number) {}
+    loadTrailPreviewForMunicipality(page: number) {
+    }
 
     private openInfoModal(title: string, body: string) {
         const modal = this.modalService.open(InfoModalComponent);
@@ -483,7 +501,7 @@ export class MapComponent implements OnInit {
         return zoomLevel > 14;
     }
 
-    private loadPoiForTrail(id: string) {
+    loadPoiForTrail(id: string) {
         this.isPoiLoaded = false;
         this.poiService.getByTrailCode(id)
             .subscribe((resp) => {
@@ -493,8 +511,8 @@ export class MapComponent implements OnInit {
     }
 
     onPoiClick($event: PoiDto) {
-        MapUtils.changeUrlToState(ViewState.POI, $event.id)
-        this.navigateToLocation($event.coordinates)
+        MapUtils.changeUrlToState(ViewState.POI, $event.id);
+        this.navigateToLocation($event.coordinates);
         this.selectedPoi = $event;
         this.sideView = ViewState.POI;
     }
@@ -504,7 +522,7 @@ export class MapComponent implements OnInit {
     }
 
     onBackToTrailPoiClick() {
-        MapUtils.changeUrlToState(ViewState.TRAIL, this.selectedTrail.id)
+        MapUtils.changeUrlToState(ViewState.TRAIL, this.selectedTrail.id);
         this.sideView = ViewState.TRAIL;
         this.selectedPoi = null;
         this.poiHovering = null;
@@ -540,7 +558,7 @@ export class MapComponent implements OnInit {
                 return;
             }
             this.sideView = ViewState.PLACE;
-            this.selectedPlace = it.content[0]
+            this.selectedPlace = it.content[0];
             this.isLoading = false;
         }, () => {
         }, () => {
@@ -601,12 +619,10 @@ export class MapComponent implements OnInit {
                 this.accessibilityService.getUnresolvedForTrailId(target.trailId).toPromise(),
                 this.trailService.getTrailById(target.trailId).toPromise()]).then(
                 (responses) => {
-                    this.selectTrail(target.trailId, false, false, true);
+                    this.selectTrail({id: target.trailId, refresh: false, switchView: false, zoomIn: true});
                     this.selectedTrailNotifications = responses[0].content;
                     this.onAccessibilityNotificationSelection(id);
                 })
-
-
         })
     }
 
@@ -666,5 +682,42 @@ export class MapComponent implements OnInit {
 
     onSelectMunicipality($event: string) {
         this.selectMunicipality($event);
+    }
+
+    getIsPortraitMode() {
+        return (document.documentElement.clientWidth < document.documentElement.clientHeight);
+    }
+
+    onDetailMode() {
+        this.isMobileDetailMode = !this.isMobileDetailMode;
+    }
+
+    onSearchClickShowListOfTrails() {
+        this.sideView = ViewState.NONE;
+
+        setTimeout(() => {
+            this.onBackToTrailList();
+            setTimeout(() => {
+                let element = document.getElementById("search-box");
+                if (element) {
+                    element.focus();
+                }
+            }, 300);
+        }, 100);
+    }
+
+
+    private setupShortcuts() {
+        const context = this;
+        window.addEventListener('keydown', function (event) {
+            // SHIFT+F
+            if (event.shiftKey && event.code === 'KeyF') {
+                context.onSearchClickShowListOfTrails();
+            }
+        })
+    }
+
+    onForceMapRefresh() {
+        this.refreshSwitch = !this.refreshSwitch;
     }
 }

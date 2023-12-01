@@ -62,8 +62,9 @@ export class MapFullComponent implements OnInit {
     @Input() selectedTrailIndex?: number;
     @Input() poiHovering: PoiDto;
     @Input() trailHovering: TrailDto;
-
+    @Input() isMobileView: boolean;
     @Input() zoomToTrail: boolean;
+    @Input() isRefresh: boolean;
 
 
     @Output() onTrailClick = new EventEmitter<string>();
@@ -79,6 +80,7 @@ export class MapFullComponent implements OnInit {
     @Output() onMunicipalitySelectionClick = new EventEmitter();
     @Output() onTerrainChangeSelectionClick = new EventEmitter();
     @Output() onGeolocaliseMeSelectionClick = new EventEmitter();
+    @Output() onSearchClick = new EventEmitter();
 
     constructor() {
         this.otherTrailsPolylines = [];
@@ -92,7 +94,6 @@ export class MapFullComponent implements OnInit {
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         this.selectedLayer = this.getLayerByName("topo");
         this.selectedLayer.on("load", function () {
-            console.log("loaded");
         })
         this.map = L.map(MapFullComponent.MAP_ID, {
             layers: [this.selectedLayer],
@@ -142,12 +143,10 @@ export class MapFullComponent implements OnInit {
     private emitBounds() {
         let bounds = this.map.getBounds();
         let rectangleDtoFromLatLng = MapUtils.getRectangleDtoFromLatLng(bounds);
-        console.log(rectangleDtoFromLatLng)
         this.onViewChange.emit(rectangleDtoFromLatLng)
     }
 
     ngAfterViewInit(): void {
-        // let mapHeight = GraphicUtils.getMenuHeight();
         let fullSizeWOBorder = GraphicUtils.getFullHeightSizeWOMenuImage();
         document.getElementById(MapFullComponent.MAP_ID).style.height = fullSizeWOBorder.toString() + "px";
         this.map.invalidateSize();
@@ -159,6 +158,9 @@ export class MapFullComponent implements OnInit {
             for (const propName in changes) {
                 if (propName == "selectedTrailIndex") {
                     this.focusOnLocationIndex(this.selectedTrailIndex);
+                }
+                if (propName == "isRefresh") {
+                    this.refreshMapTiles();
                 }
                 if (propName == "showTrailCodeMarkers") {
                     this.toggleTrailMarkers(this.showTrailCodeMarkers);
@@ -190,9 +192,6 @@ export class MapFullComponent implements OnInit {
                 if (propName == "highlightedLocation") {
                     this.flyToLocation(this.highlightedLocation)
                 }
-                if (propName == "highlightedLocation") {
-                    this.flyToLocation(this.highlightedLocation)
-                }
                 if (propName == "zoomToTrail") {
                     this.focusOnTrail();
                 }
@@ -202,7 +201,7 @@ export class MapFullComponent implements OnInit {
     }
 
     flyToLocation(highlightedLocation: Coordinates2D) {
-        this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude});
+        this.map.flyTo({lat: highlightedLocation.latitude, lng: highlightedLocation.longitude}, 15);
     }
 
     focusOnTrail() {
@@ -230,7 +229,6 @@ export class MapFullComponent implements OnInit {
         this.clearPathFromList(selectedTrail);
 
 
-
         const inverted = MapUtils.getCoordinatesInverted(selectedTrail.coordinates);
         const mainPolyline = MapUtils.getPolylineFromCoords(inverted)
         mainPolyline.setStyle(MapUtils.getLineStyle(true, selectedTrail.classification));
@@ -251,7 +249,6 @@ export class MapFullComponent implements OnInit {
     }
 
     private getLineWeight() {
-        console.log(this.map.getZoom())
         if (this.map.getZoom() > 14) {
             return 10;
         }
@@ -465,11 +462,9 @@ export class MapFullComponent implements OnInit {
 
     private toggleTrailMarkers(showTrailCodeMarkers: boolean) {
         if (showTrailCodeMarkers) {
-            console.log("Showing trail markers")
             this.showTrailMarkers();
             return;
         }
-        console.log("Not showing trail markers")
         this.removeTrailMarkers();
     }
 
@@ -546,5 +541,15 @@ export class MapFullComponent implements OnInit {
                 it.getClassification(), "yellow"));
             it.getPolyline().addTo(this.map);
         });
+    }
+
+    private refreshMapTiles() {
+        const zoom = this.map.getZoom();
+        this.map.setZoom(zoom - 1, {animate: true});
+        setTimeout(()=> {
+            console.log("da " + zoom)
+            this.map.setZoom(zoom, {animate: true});
+        }, 500)
+
     }
 }

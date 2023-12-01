@@ -1,4 +1,12 @@
-<div class="col-12" id="map-full">
+<div class="col-12" id="map-full" [ngClass]="{'fixed' : isMobileView }">
+    <div class="btn btn-primary btn-map" id="search-btn" (click)="onSearchClick.emit()">
+        <button class="inner-btn">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#search"/>
+            </svg>
+        </button>
+    </div>
+
     <div class="btn btn-primary btn-map" id="localize-me-btn" (click)="onGeolocaliseMeSelectionClick.emit()">
         <button class="inner-btn">
             <svg class="bi" width="24" height="24" fill="currentColor">

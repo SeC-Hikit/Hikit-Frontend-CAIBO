@@ -16,7 +16,7 @@
             <span class="back" (click)="onBackToTrailList()" *ngIf="!selectedTrail">Vai alla lista sentieri</span>
         </div>
 
-        <div *ngIf="sideView=='trail'"
+        <div *ngIf="sideView=='trail' && !isPortraitMode"
              class="navigation-back clickable" (click)="showTrailList()">
             <svg class="bi pulse" width="24" height="24" fill="#D04341">
                 <use
@@ -25,7 +25,65 @@
             <span class="back">Torna alla lista sentieri</span>
         </div>
 
-        <div class="column-map col-lg-4 col-md-4 white details functional-column" id="side-column">
+        <div class="row">
+            <div class="col"
+                 *ngIf="isPortraitMode">
+                <app-map-mobile-view
+                        [sideView]="sideView"
+                        [selectedTrailMaintenances]="selectedTrailMaintenances"
+                        [selectedLocality]="selectedLocationDetails"
+                        [selectedTrail]="selectedTrail"
+                        [connectedTrails]="connectedTrails"
+                        [isCycloSwitchOn]="isCycloToggled"
+                        [isMobileDetailOn]="isMobileDetailMode"
+                        [isPoiLoaded]="isPoiLoaded"
+                        [trailPreviewList]="trailPreviewList"
+                        [selectedPlace]="selectedPlace"
+                        [trailMappings]="trailMappings"
+                        [selectedPoi]="selectedPoi"
+                        [selectTrailPois]="selectedTrailPois"
+                        [selectedTrailNotifications]="selectedTrailNotifications"
+                        [selectedNotification]="selectedNotification"
+                        [selectedMunicipality]="selectedMunicipality"
+                        [municipalityTrails]="municipalityTrails"
+                        [municipalityTrailsMax]="municipalityTrailsMax"
+                        [selectedLocationDetails]="selectedLocationDetails"
+                        [paginationPageSize]="maxTrailEntriesPerPage"
+                        [paginationCollectionSize]="trailPreviewCount"
+                        [paginationPage]="trailPreviewPage"
+                        [paginationSize]="'sm'"
+                        [paginationEllipses]="true"
+                        [paginationMaxSize]="2"
+                        (onTrailListPageChange)="loadTrailPreview($event)"
+                        (onSelectedTrail)="onSelectTrail($event.id, $event.zoomIn, $event.switchView)"
+                        (onLoadLastMaintenanceForTrail)="loadLastMaintenanceForTrail($event)"
+                        (onLoadPoiForTrail)="loadPoiForTrail($event)"
+                        (onGetUnresolvedForTrailId)="accessibilityService.getUnresolvedForTrailId($event)"
+                        (onToggleModeClick)="onToggleMode()"
+                        (onHighlightedLocation)="navigateToLocation($event)"
+                        (onDetailModeClick)="onDetailMode()"
+                        (onBackToTrailPoiClick)="onBackToTrailPoiClick()"
+                        (onBackToTrailList)="onBackToTrailList()"
+                        (onLoadTrailPreview)="loadTrailPreview($event)"
+                        (onNavigateToTrailReportIssue)="navigateToTrailReportIssue($event)"
+                        (onAccessibilityNotificationSelection)="onAccessibilityNotificationSelection($event)"
+                        (onShowCyclingClassification)="onShowCyclingClassification()"
+                        (onShowHikingClassification)="onShowHikingClassification()"
+                        (onToggleFullPageTrail)="toggleFullPageTrail()"
+                        (onSelectMunicipality)="onSelectMunicipality($event)"
+                        (onSelectPlaceByRef)="onSelectPlaceByRef($event)"
+                        (onPoiClick)="onPoiClick($event)"
+                        (onDownloadGpx)="onDownloadGpx()"
+                        (onDownloadKml)="onDownloadKml()"
+                        (onDownloadPdf)="onDownloadPdf()"
+                        (onNavigateToLocation)="navigateToLocation($event)"
+                        (onForceMapRefresh)="onForceMapRefresh()"
+                >
+                </app-map-mobile-view>
+            </div>
+        </div>
+        <div class="column-map col-lg-4 col-md-4 white details" id="side-column"
+             *ngIf="!isPortraitMode">
             <div class="row">
                 <div class="col-11 offset-1" id="trail-detail-column"
                      [class]="sideView == 'trail' || sideView == 'poi' || sideView == 'place' || sideView == 'accessibility' || sideView == 'municipality' ? 'selection-margin' : ''">
@@ -47,15 +105,15 @@
 
                     <div *ngIf="sideView=='municipality' && selectedMunicipality" class="row top-margin">
                         <app-municipality-details
-                            [selectedMunicipality] = "selectedMunicipality"
-                            [selectedLocationDetails] = "selectedLocationDetails"
-                            [trailMappings]="trailMappings"
-                            [trailsForMunicipality]="municipalityTrails"
-                            [trailsForMunicipalityMax] = "municipalityTrailsMax"
-                            [isPaginationToShow] = "false"
-                            (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
-                            (onSelectTrailCode)="selectTrail($event)"
-                            (onNavigateToLocation)="navigateToLocation($event)"
+                                [selectedMunicipality]="selectedMunicipality"
+                                [selectedLocationDetails]="selectedLocationDetails"
+                                [trailMappings]="trailMappings"
+                                [trailsForMunicipality]="municipalityTrails"
+                                [trailsForMunicipalityMax]="municipalityTrailsMax"
+                                [isPaginationToShow]="false"
+                                (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
+                                (onSelectTrailCode)="selectTrail($event)"
+                                (onNavigateToLocation)="navigateToLocation($event)"
                         >
                         </app-municipality-details>
                     </div>
@@ -87,7 +145,7 @@
                     <!-- TODO DIVIDE THIS MODULE -->
                     <div *ngIf="sideView==''">
                         <div class="row align-middle">
-                            <div class="col-md-12">
+                            <div class="col-12">
                                 <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
                                         class="clickable"
                                         (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
@@ -161,8 +219,10 @@
         </div>
 
         <!--  Map Column  -->
-        <div class="column-map col-lg-8 col-md-8">
+        <div class="column-map"
+             [ngClass]="{'col-8': !isPortraitMode, 'col-12': isPortraitMode}">
             <app-map-full id="map-full-container"
+                          [isMobileView]="isMobileDetailMode"
                           [selectedTrail]="selectedTrail"
                           [selectedTrailNotification]="selectedTrailNotifications"
                           [selectedTrailIndex]="selectedTrailIndex"
@@ -176,6 +236,7 @@
                           [trailHovering]="highlightedTrail"
                           [highlightedLocation]="highlightedLocation"
                           [zoomToTrail]="zoomToTrail"
+                          [isRefresh]="refreshSwitch"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"
                           (onNotificationClick)="onAccessibilityNotificationSelection($event)"
@@ -187,6 +248,7 @@
                           (onGeolocaliseMeSelectionClick)="onGeolocaliseUserClick()"
                           (onMunicipalitySelectionClick)="onMunicipalitySelectionClick()"
                           (onTerrainChangeSelectionClick)="onTerrainChangeSelectionClick()"
+                          (onSearchClick)="onSearchClickShowListOfTrails()"
             >
             </app-map-full>
         </div>

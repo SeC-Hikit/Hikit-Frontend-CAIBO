@@ -1,0 +1,37 @@
+<div class="MobileTrailPreview">
+    <div class="row">
+        <div class="col-9"
+        >
+            <h1 class="trailCodeColumn trailCodeColumn-fit" [ngClass]="{'isMinorBg' : true,
+            'isNotMinorBgColor' : !accessibilityNotification.minor}">
+                <span class="arrow-back" (click)="onNavigateToTrailClick(previouslySelectedTrail.id)">⬅</span>
+                Criticità {{ accessibilityNotification.minor ? "minore" : "" }}</h1>
+        </div>
+        <div class="col-1 offset-1">
+            <svg class="bi pulse" width="24" height="24" fill="#D04341"
+                 [ngClass]="{'notificationColor': true, 'isMinorColor': accessibilityNotification.minor}">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle-fill"/>
+            </svg>
+        </div>
+        <div class="col-1">
+            <svg class="bi pulse clickable" width="24" height="24" fill="#D04341"
+                 (click)="onNavigateToLocation.emit({ coordinates: accessibilityNotification.coordinates, isTogglePreview: false})">
+                <use
+                        xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#binoculars-fill"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="row margin-up">
+        <div class="col-2 text-center">
+            {{
+            accessibilityNotification.coordinates.latitude.toPrecision(6) + ", " +
+            accessibilityNotification.coordinates.longitude.toPrecision(6)
+            }}
+        </div>
+        <div class="col-9 offset-1">
+            <p [innerHTML]="accessibilityNotification.description"></p>
+        </div>
+    </div>
+</div>

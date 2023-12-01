@@ -1,4 +1,4 @@
-import { KeycloakService } from "keycloak-angular";
+import {KeycloakService} from "keycloak-angular";
 
 export function initializeKeycloak(keycloak: KeycloakService) {
   return () =>

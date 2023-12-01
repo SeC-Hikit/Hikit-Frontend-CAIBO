@@ -1,9 +1,8 @@
 export class GraphicUtils {
     
   public static getMenuHeight() {
-    let headerWrapperHeight = document.getElementById("header-wrapper")
-      .offsetHeight;
-    return headerWrapperHeight;
+    return document.getElementById("header-wrapper")
+        .offsetHeight;
   }
 
   public static getFullHeightSizeMenu() {
@@ -33,7 +32,6 @@ export class GraphicUtils {
   public static getFullHeightSizeWOMenuHeights() {
     let headerWrapperHeight = document.getElementById("header-wrapper")
         .offsetHeight;
-    let number = headerWrapperHeight;
-    return document.documentElement.clientHeight - number;
+    return document.documentElement.clientHeight - headerWrapperHeight;
   }
 }
