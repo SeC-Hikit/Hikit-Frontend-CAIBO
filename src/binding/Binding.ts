@@ -231,14 +231,17 @@ export interface paths {
   "/ert/localities/{istat}": {
     get: operations["get_9"];
   };
+  "/ert/events/{istat}": {
+    get: operations["get_10"];
+  };
   "/dataset": {
     get: operations["getTrailDatasetV"];
   };
   "/announcement": {
-    get: operations["get_10"];
+    get: operations["get_11"];
   };
   "/announcement/{id}": {
-    get: operations["get_11"];
+    get: operations["get_12"];
   };
   "/admin/diagnose/weather": {
     get: operations["testWeather"];
@@ -741,7 +744,6 @@ export interface components {
     };
     ImageDto: {
       url?: string;
-      thumb?: string;
       title?: string;
       name?: string;
       width?: number;
@@ -767,6 +769,70 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["LocalityDto"][];
+    };
+    CategoryDto: {
+      id?: number;
+      name?: string;
+      parent?: number;
+    };
+    CityRef: {
+      istat?: string;
+      city?: string;
+      province?: string;
+      province_short?: string;
+      iat?: components["schemas"]["Iat"][];
+    };
+    Contact: {
+      label?: string;
+      type?: string;
+      value?: string;
+    };
+    Coordinates: {
+      latitude?: number;
+      longitude?: number;
+    };
+    EventDto: {
+      id?: string;
+      title?: string;
+      description?: string;
+      locations?: components["schemas"]["EventLocationDto"][];
+      date_from?: string;
+      date_to?: string;
+      ticketing?: components["schemas"]["TicketDto"];
+      category?: components["schemas"]["CategoryDto"][];
+      cityRef?: components["schemas"]["CityRef"][];
+      attachments?: components["schemas"]["ImageDto"][];
+    };
+    EventLocationDto: {
+      title?: string;
+      city?: string;
+      province?: string;
+      address?: string;
+      coordinates?: components["schemas"]["CoordinatesDto"];
+    };
+    EventResponse: {
+      currentPage?: number;
+      totalPages?: number;
+      size?: number;
+      totalCount?: number;
+      status?: "OK" | "ERROR";
+      messages?: string[];
+      content?: components["schemas"]["EventDto"][];
+    };
+    Iat: {
+      name?: string;
+      address?: string;
+      number?: string;
+      coordinates?: components["schemas"]["Coordinates"];
+      contacts?: components["schemas"]["Contact"][];
+    };
+    TicketDto: {
+      website?: string;
+      subscriptions?: string;
+      full_rate?: string;
+      gratuity?: string;
+      type?: number;
+      entrance?: string;
     };
     TrailDatasetVersion: {
       version?: number;
@@ -1427,6 +1493,11 @@ export interface operations {
     };
   };
   resolveNotification: {
+    parameters: {
+      query: {
+        realm?: string;
+      };
+    };
     responses: {
       /** OK */
       200: {
@@ -2125,6 +2196,21 @@ export interface operations {
       };
     };
   };
+  get_10: {
+    parameters: {
+      path: {
+        istat: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["EventResponse"];
+        };
+      };
+    };
+  };
   getTrailDatasetV: {
     responses: {
       /** OK */
@@ -2135,7 +2221,7 @@ export interface operations {
       };
     };
   };
-  get_10: {
+  get_11: {
     parameters: {
       query: {
         skip?: number;
@@ -2152,7 +2238,7 @@ export interface operations {
       };
     };
   };
-  get_11: {
+  get_12: {
     parameters: {
       path: {
         id: string;

@@ -409,7 +409,7 @@ export class MapFullComponent implements OnInit {
         switch (layerName) {
             case "topo":
                 return L.tileLayer.wms(
-                    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+                    "https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=84b5c19849154538affddb0a8f385979",
                     {attribution: this.openStreetmapCopy, opacity: 0.75}
                 );
             case "geopolitic":

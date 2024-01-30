@@ -1,12 +1,9 @@
-import {EventEmitter, Output, SimpleChanges} from "@angular/core";
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
 import * as L from "leaflet";
 import {Coordinates2D, GeoTrailService, LocateDto} from "../service/geo-trail-service";
 import {MapUtils} from "../map-view/MapUtils";
-import {TrailDto, TrailCoordinatesDto, CoordinatesDto} from "../service/trail-service.service";
-import {StartIcon} from "../../assets/icons/MapPinIconType";
-import {EndIcon} from "../../assets/icons/MapPinIconType";
-import {MapPinIconType} from "../../assets/icons/MapPinIconType";
+import {CoordinatesDto, TrailCoordinatesDto, TrailDto} from "../service/trail-service.service";
+import {EndIcon, MapPinIconType, StartIcon} from "../../assets/icons/MapPinIconType";
 import {environment} from "../../environments/environment";
 
 export interface Marker {
@@ -74,7 +71,7 @@ export class MapPreviewComponent implements OnInit {
     ngAfterViewInit() {
         const openStreetmapCopy = '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         const topoLayer = L.tileLayer(
-            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+            "https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=84b5c19849154538affddb0a8f385979",
             {attribution: openStreetmapCopy}
         );
         this.initMap(topoLayer, this.index);

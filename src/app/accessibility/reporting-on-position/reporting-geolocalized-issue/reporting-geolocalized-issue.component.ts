@@ -29,7 +29,7 @@ export class ReportingGeolocalizedIssueComponent implements OnInit {
     ngOnInit(): void {
         const openStreetmapCopy = '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         const topoLayer = L.tileLayer(
-            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+            "https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=84b5c19849154538affddb0a8f385979",
             {attribution: openStreetmapCopy}
         );
         this.initMap(topoLayer);
