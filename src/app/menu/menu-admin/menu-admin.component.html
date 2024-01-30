@@ -1,4 +1,4 @@
-<div *ngIf="isVisible == true" class="it-nav-wrapper-admin" id="header-wrapper-2">
+<div *ngIf="isAdmin || isMaintainer || isContentCreator || isCasualVolunteer" class="it-nav-wrapper-admin" id="header-wrapper-2">
     <div class="it-header-center-wrapper">
         <div class="container">
             <div class="row">
@@ -20,7 +20,7 @@
                                                     </div>
                                                     <div class="menu-wrapper">
                                                         <ul class="navbar-nav">
-                                                            <li><a
+                                                            <li *ngIf="isAdmin"><a
                                                                     routerLink="/admin"
                                                                     routerLinkActive="active"
                                                                     class="nav-item nav-link"
@@ -28,9 +28,9 @@
                                                                 Pannello
                                                             </a></li>
                                                         </ul>
-                                                        <span class="separator">|</span>
+                                                        <span *ngIf="isAdmin || isMaintainer" class="separator">|</span>
                                                         <ul class="navbar-nav">
-                                                            <li>
+                                                            <li *ngIf="isAdmin || isMaintainer">
                                                                 <a
                                                                         routerLink="/admin/raw-trail-management"
                                                                         routerLinkActive="active"
@@ -39,7 +39,7 @@
                                                                     Tracce
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li *ngIf="isAdmin || isMaintainer">
                                                                 <a
                                                                         routerLink="/admin/trail-management"
                                                                         routerLinkActive="active"
@@ -48,7 +48,7 @@
                                                                     Sentieri
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li *ngIf="isAdmin || isMaintainer || isContentCreator">
                                                                 <a
                                                                         routerLink="/admin/place-management"
                                                                         routerLinkActive="active"
@@ -57,7 +57,7 @@
                                                                     Località/Bivio
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li *ngIf="isAdmin || isMaintainer || isContentCreator">
                                                                 <a
                                                                         routerLink="/admin/poi-management"
                                                                         routerLinkActive="active"
@@ -66,7 +66,7 @@
                                                                     POI
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li *ngIf="isAdmin || isMaintainer">
                                                                 <a
                                                                         routerLink="/admin/accessibility-management"
                                                                         routerLinkActive="active"
@@ -75,7 +75,7 @@
                                                                     Percorribilità
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li *ngIf="isAdmin || isMaintainer || isCasualVolunteer">
                                                                 <a
                                                                         routerLink="/admin/maintenance-management"
                                                                         routerLinkActive="active"
@@ -84,8 +84,8 @@
                                                                     Manutenzioni
                                                                 </a>
                                                             </li>
-                                                            <span class="separator">|</span>
-                                                            <li>
+                                                            <span *ngIf="isAdmin || isMaintainer" class="separator">|</span>
+                                                            <li *ngIf="isAdmin || isMaintainer || isCasualVolunteer">
                                                                 <a
                                                                         routerLink="/admin/announcement-management"
                                                                         routerLinkActive="active"
