@@ -36,6 +36,14 @@ export class AuthService {
         return userLoggedInToken.realm;
     }
 
+    getUserRole(): string {
+        let userLoggedInToken: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
+        if (userLoggedInToken == null) {
+            return "";
+        }
+        return userLoggedInToken.role;
+    }
+
     getInstanceRealm() : string {
         return environment.realm;
     }

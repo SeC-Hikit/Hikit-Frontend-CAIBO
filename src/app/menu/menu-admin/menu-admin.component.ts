@@ -10,7 +10,10 @@ import { AuthService } from "../../service/auth.service";
   styleUrls: ["./menu-admin.component.scss"],
 })
 export class MenuAdminComponent implements OnInit {
-  isVisible: boolean = false;
+  isMaintainer: boolean = true;
+  isCasualVolunteer: boolean = false;
+  isContentCreator: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -25,13 +28,13 @@ export class MenuAdminComponent implements OnInit {
   private assignNewUsername() {
     this.authService.onIsAuth(
       () => {
-        this.isVisible = true;
+        this.isAdmin = true;
         this.authService.getUsername().then((name) => {
           // this.usernameToShow = name;
         });
       },
       () => {
-        this.isVisible = false;
+        this.isAdmin = false;
       }
     );
   }
