@@ -28,7 +28,7 @@
                                                                 Pannello
                                                             </a></li>
                                                         </ul>
-                                                        <span class="separator">|</span>
+                                                        <span *ngIf="isAdmin || isMaintainer" class="separator">|</span>
                                                         <ul class="navbar-nav">
                                                             <li *ngIf="isAdmin || isMaintainer">
                                                                 <a
@@ -84,7 +84,7 @@
                                                                     Manutenzioni
                                                                 </a>
                                                             </li>
-                                                            <span class="separator">|</span>
+                                                            <span *ngIf="isAdmin || isMaintainer" class="separator">|</span>
                                                             <li *ngIf="isAdmin || isMaintainer || isCasualVolunteer">
                                                                 <a
                                                                         routerLink="/admin/announcement-management"

@@ -10,7 +10,7 @@ import { AuthService } from "../../service/auth.service";
   styleUrls: ["./menu-admin.component.scss"],
 })
 export class MenuAdminComponent implements OnInit {
-  isMaintainer: boolean = true;
+  isMaintainer: boolean = false;
   isCasualVolunteer: boolean = false;
   isContentCreator: boolean = false;
   isAdmin: boolean = false;
