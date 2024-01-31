@@ -5,6 +5,7 @@ import {
   TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
 import { components } from "src/binding/Binding";
+import {AuthService} from "../../service/auth.service";
 
 @Component({
   selector: "app-poi-management",
@@ -13,8 +14,15 @@ import { components } from "src/binding/Binding";
 })
 export class PoiManagementComponent implements OnInit {
 
-  constructor() {}
+  isAllowed: boolean = false;
 
-  ngOnInit(): void {}
+  constructor(private authService: AuthService) {}
 
+  ngOnInit(): void {
+    this.authService.getUserProfile().then((resp) => {
+      if (resp == 'admin' || resp == 'maintainer' || resp == 'content_creator') {
+        this.isAllowed = true;
+      }
+    });
+  }
 }

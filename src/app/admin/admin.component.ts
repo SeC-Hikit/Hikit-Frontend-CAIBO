@@ -11,6 +11,8 @@ import {AdminDiagnoseService, DiagnoseResponse} from "../service/diagnose.servic
 })
 export class AdminComponent implements OnInit {
 
+  isAllowed: boolean = false;
+
   isLoading: boolean = false;
   userName: string = '';
   userRealm: string = '';
@@ -26,6 +28,12 @@ export class AdminComponent implements OnInit {
               private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    this.authService.getUserProfile().then((resp) => {
+      if (resp == 'admin') {
+        this.isAllowed = true;
+      }
+    });
+
     this.authService.getUsername().then((resp)=> {
       this.userName = resp;
     })

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from "../../service/auth.service";
 
 @Component({
   selector: 'app-announcement-management',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AnnouncementManagementComponent implements OnInit {
 
-  constructor() { }
+  isAllowed: boolean = false;
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authService.getUserProfile().then((resp) => {
+      if (resp == 'admin' || resp == 'maintainer' || resp == 'casual_volunteer') {
+        this.isAllowed = true;
+      }
+    })
   }
 
 }

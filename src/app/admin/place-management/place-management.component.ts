@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from "../../service/auth.service";
 
 @Component({
   selector: 'app-place-management',
@@ -7,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlaceManagementComponent implements OnInit {
 
+  isAllowed: boolean = false;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authService.getUserProfile().then((resp) => {
+      if (resp == 'admin' || resp == 'maintainer' || resp == 'content_creator') {
+        this.isAllowed = true;
+      }
+    });
   }
 
 }

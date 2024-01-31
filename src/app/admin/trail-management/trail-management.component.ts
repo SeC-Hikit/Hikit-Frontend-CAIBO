@@ -21,6 +21,8 @@ export class TrailManagementComponent implements OnInit {
     page = 1;
     isLoading = false;
 
+    isAllowed: boolean = false;
+
     private destroy$ = new Subject();
 
     selectedTrail: TrailDto;
@@ -42,6 +44,12 @@ export class TrailManagementComponent implements OnInit {
     ngOnInit(): void {
         this.realm = this.authService.getInstanceRealm();
         this.getAllPreviews();
+
+        this.authService.getUserProfile().then((resp) => {
+            if (resp == 'admin' || resp == 'maintainer') {
+                this.isAllowed = true;
+            }
+        })
     }
 
     getAllPreviews() {
