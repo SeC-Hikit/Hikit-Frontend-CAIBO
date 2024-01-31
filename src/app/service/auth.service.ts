@@ -36,13 +36,13 @@ export class AuthService {
         return userLoggedInToken.realm;
     }
 
-    async getUserRole(): Promise<string> {
+    async getUserProfile(): Promise<string> {
         let userLoggedInToken: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
         if (userLoggedInToken == null) {
             return "";
         }
         console.log(userLoggedInToken);
-        return userLoggedInToken.role;
+        return userLoggedInToken.profile;
     }
 
     getInstanceRealm() : string {

@@ -28,7 +28,7 @@ export class MenuAdminComponent implements OnInit {
   private assignNewUsername() {
     this.authService.onIsAuth(
       () => {
-        this.authService.getUserRole().then((name: string): void => {
+        this.authService.getUserProfile().then((name: string): void => {
           this.isAdmin = false;
           this.isMaintainer = false;
           this.isContentCreator = false;
