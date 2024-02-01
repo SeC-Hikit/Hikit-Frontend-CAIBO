@@ -29,7 +29,8 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.getUserProfile().then((resp) => {
-      if (resp == 'admin') {
+      if (resp == 'admin' || resp == 'maintainer'
+          || resp == 'content_creator' || resp == 'casual_volunteer') {
         this.isAllowed = true;
       }
     });

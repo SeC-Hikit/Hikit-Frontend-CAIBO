@@ -10,6 +10,7 @@ import {TrailDto, TrailService} from "src/app/service/trail-service.service";
 import {Subject} from "rxjs";
 import {AdminTrailService} from "../../service/admin-trail.service";
 import {AuthService} from "../../service/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: "app-trail-management",
@@ -37,7 +38,8 @@ export class TrailManagementComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private adminTrailService: AdminTrailService,
-        private authService: AuthService
+        private authService: AuthService,
+        private routerService: Router
     ) {
     }
 
@@ -48,6 +50,8 @@ export class TrailManagementComponent implements OnInit {
         this.authService.getUserProfile().then((resp) => {
             if (resp == 'admin' || resp == 'maintainer') {
                 this.isAllowed = true;
+            } else {
+                this.routerService.navigate(["/admin"]);
             }
         })
     }
