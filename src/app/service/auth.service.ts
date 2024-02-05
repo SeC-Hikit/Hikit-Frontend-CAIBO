@@ -18,7 +18,7 @@ export class AuthService {
         const notLoggedCallback = onNotLogged == null ? () => {
         } : onNotLogged;
         this.keycloakService.isLoggedIn().then((isIn) => {
-            console.log(isIn);
+//            console.log(isIn);
             isIn ? onLoggedIn() : notLoggedCallback();
         });
     }
