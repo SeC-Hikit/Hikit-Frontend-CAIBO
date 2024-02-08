@@ -1,4 +1,4 @@
-<div *ngIf="isAdmin || isMaintainer || isContentCreator || isCasualVolunteer" class="it-nav-wrapper-admin" id="header-wrapper-2">
+<div *ngIf="userProfile != noProfile" class="it-nav-wrapper-admin" id="header-wrapper-2">
     <div class="it-header-center-wrapper">
         <div class="container">
             <div class="row">
@@ -20,7 +20,7 @@
                                                     </div>
                                                     <div class="menu-wrapper">
                                                         <ul class="navbar-nav">
-                                                            <li *ngIf="isAdmin"><a
+                                                            <li><a
                                                                     routerLink="/admin"
                                                                     routerLinkActive="active"
                                                                     class="nav-item nav-link"
@@ -28,9 +28,11 @@
                                                                 Pannello
                                                             </a></li>
                                                         </ul>
-                                                        <span *ngIf="isAdmin || isMaintainer" class="separator">|</span>
+                                                        <span *ngIf="userProfile == profile.admin
+                                                            || userProfile == profile.maintainer" class="separator">|</span>
                                                         <ul class="navbar-nav">
-                                                            <li *ngIf="isAdmin || isMaintainer">
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer">
                                                                 <a
                                                                         routerLink="/admin/raw-trail-management"
                                                                         routerLinkActive="active"
@@ -39,7 +41,8 @@
                                                                     Tracce
                                                                 </a>
                                                             </li>
-                                                            <li *ngIf="isAdmin || isMaintainer">
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer">
                                                                 <a
                                                                         routerLink="/admin/trail-management"
                                                                         routerLinkActive="active"
@@ -48,7 +51,9 @@
                                                                     Sentieri
                                                                 </a>
                                                             </li>
-                                                            <li *ngIf="isAdmin || isMaintainer || isContentCreator">
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer
+                                                                || userProfile == profile.contentCreator">
                                                                 <a
                                                                         routerLink="/admin/place-management"
                                                                         routerLinkActive="active"
@@ -57,7 +62,9 @@
                                                                     Località/Bivio
                                                                 </a>
                                                             </li>
-                                                            <li *ngIf="isAdmin || isMaintainer || isContentCreator">
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer
+                                                                || userProfile == profile.contentCreator">
                                                                 <a
                                                                         routerLink="/admin/poi-management"
                                                                         routerLinkActive="active"
@@ -66,7 +73,8 @@
                                                                     POI
                                                                 </a>
                                                             </li>
-                                                            <li *ngIf="isAdmin || isMaintainer">
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer">
                                                                 <a
                                                                         routerLink="/admin/accessibility-management"
                                                                         routerLinkActive="active"
@@ -75,7 +83,9 @@
                                                                     Percorribilità
                                                                 </a>
                                                             </li>
-                                                            <li *ngIf="isAdmin || isMaintainer || isCasualVolunteer">
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer
+                                                                || userProfile == profile.casualVolunteer">
                                                                 <a
                                                                         routerLink="/admin/maintenance-management"
                                                                         routerLinkActive="active"
@@ -84,8 +94,10 @@
                                                                     Manutenzioni
                                                                 </a>
                                                             </li>
-                                                            <span *ngIf="isAdmin || isMaintainer" class="separator">|</span>
-                                                            <li *ngIf="isAdmin || isMaintainer || isCasualVolunteer">
+                                                            <span *ngIf="userProfile == profile.admin || userProfile == profile.maintainer" class="separator">|</span>
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer
+                                                                || userProfile == profile.casualVolunteer">
                                                                 <a
                                                                         routerLink="/admin/announcement-management"
                                                                         routerLinkActive="active"

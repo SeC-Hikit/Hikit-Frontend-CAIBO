@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
-import {ProfileChecker} from "../ProfileChecker";
+import {profile, ProfileChecker} from "../ProfileChecker";
 
 @Component({
   selector: 'app-accessibility-management',
@@ -12,12 +12,12 @@ export class AccessibilityManagementComponent implements OnInit {
 
     isAllowed: boolean = false;
 
-    constructor(private profileChecker: ProfileChecker,
+    constructor(private authService: AuthService,
                 private routerService: Router) {
     }
 
-    ngOnInit(): void {
-        this.isAllowed = this.profileChecker.checkProfile('admin');
+    async ngOnInit() {
+        this.isAllowed = await ProfileChecker.checkProfile(this.authService, profile.admin);
         console.log(this.isAllowed);
         if (this.isAllowed == false) {
             this.routerService.navigate(['/admin']);

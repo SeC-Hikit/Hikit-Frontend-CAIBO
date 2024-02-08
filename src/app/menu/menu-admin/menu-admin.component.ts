@@ -1,46 +1,45 @@
-import { Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
-import { KeycloakService } from "keycloak-angular";
-import * as Keycloak from "keycloak-js";
-import { AuthService } from "../../service/auth.service";
+import {Component, OnInit} from "@angular/core";
+import {NavigationEnd, Router} from "@angular/router";
+import {AuthService} from "../../service/auth.service";
+import {profile} from "../../admin/ProfileChecker";
 
 @Component({
   selector: "app-menu-admin",
   templateUrl: "./menu-admin.component.html",
   styleUrls: ["./menu-admin.component.scss"],
 })
+
+
 export class MenuAdminComponent implements OnInit {
-  isMaintainer: boolean = false;
-  isCasualVolunteer: boolean = false;
-  isContentCreator: boolean = false;
-  isAdmin: boolean = false;
+
+  userProfile: profile = profile.noProfile;
+
+  // ngif inside menu-admin.component.html cannot get profile.noProfile
+  // inside ProfileChecker
+  noProfile: profile = profile.noProfile;
 
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.router.events.subscribe((change) => {
       if (change instanceof NavigationEnd) {
-        this.assignNewUsername();
+        this.assignRolesToUser();
       }
     });
   }
 
-  private assignNewUsername() {
+  private assignRolesToUser() {
     this.authService.onIsAuth(
       () => {
         this.authService.getUserProfile().then((name: string): void => {
-          this.isAdmin = false;
-          this.isMaintainer = false;
-          this.isContentCreator = false;
-          this.isCasualVolunteer = false;
           if (name == "admin") {
-            this.isAdmin = true;
+            this.userProfile = profile.admin;
           } else if (name == "maintainer") {
-            this.isMaintainer = true;
+            this.userProfile = profile.maintainer;
           } else if (name == "content_creator") {
-            this.isContentCreator = true;
+            this.userProfile = profile.contentCreator;
           } else if (name == "casual_volunteer") {
-            this.isCasualVolunteer = true;
+            this.userProfile = profile.casualVolunteer;
           }
         });
 
@@ -49,7 +48,7 @@ export class MenuAdminComponent implements OnInit {
         });
       },
       () => {
-        this.isAdmin = false;
+        this.userProfile = profile.noProfile;
       }
     );
   }
@@ -57,4 +56,6 @@ export class MenuAdminComponent implements OnInit {
   onLogoutClick(): void {
     //this.keycloakService.logout();
   }
+
+  protected readonly profile = profile;
 }
