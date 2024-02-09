@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
-import {profile, ProfileChecker} from "../ProfileChecker";
+import {Profile, ProfileChecker} from "../ProfileChecker";
 
 @Component({
   selector: 'app-accessibility-management',
@@ -17,7 +17,8 @@ export class AccessibilityManagementComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.isAllowed = await ProfileChecker.checkProfile(this.authService, profile.admin);
+        let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer];
+        this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
         console.log(this.isAllowed);
         if (this.isAllowed == false) {
             this.routerService.navigate(['/admin']);

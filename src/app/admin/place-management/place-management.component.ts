@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
+import {Profile, ProfileChecker} from "../ProfileChecker";
 
 @Component({
   selector: 'app-place-management',
@@ -14,13 +15,12 @@ export class PlaceManagementComponent implements OnInit {
     constructor(private authService: AuthService,
                 private routerService: Router) { }
 
-    ngOnInit(): void {
-        this.authService.getUserProfile().then((resp) => {
-            if (resp == 'admin' || resp == 'maintainer' || resp == 'content_creator') {
-                this.isAllowed = true;
-            } else {
-                this.routerService.navigate(["/admin"]);
-            }
-        });
+    async ngOnInit() {
+      let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer, Profile.contentCreator];
+      this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
+      console.log(this.isAllowed);
+      if (this.isAllowed == false) {
+        this.routerService.navigate(['/admin']);
+      }
     }
 }

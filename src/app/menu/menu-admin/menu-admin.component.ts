@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {NavigationEnd, Router} from "@angular/router";
 import {AuthService} from "../../service/auth.service";
-import {profile} from "../../admin/ProfileChecker";
+import {Profile} from "../../admin/ProfileChecker";
 
 @Component({
   selector: "app-menu-admin",
@@ -12,11 +12,11 @@ import {profile} from "../../admin/ProfileChecker";
 
 export class MenuAdminComponent implements OnInit {
 
-  userProfile: profile = profile.noProfile;
+  userProfile: Profile = Profile.noProfile;
 
   // ngif inside menu-admin.component.html cannot get profile.noProfile
   // inside ProfileChecker
-  noProfile: profile = profile.noProfile;
+  noProfile: Profile = Profile.noProfile;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -33,13 +33,13 @@ export class MenuAdminComponent implements OnInit {
       () => {
         this.authService.getUserProfile().then((name: string): void => {
           if (name == "admin") {
-            this.userProfile = profile.admin;
+            this.userProfile = Profile.admin;
           } else if (name == "maintainer") {
-            this.userProfile = profile.maintainer;
+            this.userProfile = Profile.maintainer;
           } else if (name == "content_creator") {
-            this.userProfile = profile.contentCreator;
+            this.userProfile = Profile.contentCreator;
           } else if (name == "casual_volunteer") {
-            this.userProfile = profile.casualVolunteer;
+            this.userProfile = Profile.casualVolunteer;
           }
         });
 
@@ -48,7 +48,7 @@ export class MenuAdminComponent implements OnInit {
         });
       },
       () => {
-        this.userProfile = profile.noProfile;
+        this.userProfile = Profile.noProfile;
       }
     );
   }
@@ -57,5 +57,5 @@ export class MenuAdminComponent implements OnInit {
     //this.keycloakService.logout();
   }
 
-  protected readonly profile = profile;
+  protected readonly profile = Profile;
 }

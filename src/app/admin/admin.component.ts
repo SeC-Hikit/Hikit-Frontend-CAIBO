@@ -3,6 +3,7 @@ import {AuthService} from "../service/auth.service";
 import {InstanceInfoDto, InstanceService} from "../service/instance.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AdminDiagnoseService, DiagnoseResponse} from "../service/diagnose.service";
+import {Profile, ProfileChecker} from "./ProfileChecker";
 
 @Component({
   selector: 'app-admin',
@@ -27,13 +28,13 @@ export class AdminComponent implements OnInit {
               private diagnoseService: AdminDiagnoseService,
               private modalService: NgbModal) { }
 
-  ngOnInit(): void {
-    this.authService.getUserProfile().then((resp) => {
-      if (resp == 'admin' || resp == 'maintainer'
-          || resp == 'content_creator' || resp == 'casual_volunteer') {
-        this.isAllowed = true;
-      }
-    });
+  async ngOnInit() {
+    let allowedProfiles: Profile[] = [Profile.admin,
+                                      Profile.maintainer,
+                                      Profile.contentCreator,
+                                      Profile.casualVolunteer];
+    this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
+    console.log(this.isAllowed);
 
     this.authService.getUsername().then((resp)=> {
       this.userName = resp;

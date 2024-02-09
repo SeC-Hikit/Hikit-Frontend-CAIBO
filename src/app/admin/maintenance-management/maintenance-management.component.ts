@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
+import {Profile, ProfileChecker} from "../ProfileChecker";
 
 @Component({
     selector: "app-maintenance-management",
@@ -15,13 +16,12 @@ export class MaintenanceManagementComponent implements OnInit {
                 private routerService: Router) {
     }
 
-    ngOnInit(): void {
-        this.authService.getUserProfile().then((resp) => {
-            if (resp == 'admin' || resp == 'maintainer' || resp == 'casual_volunteer') {
-                this.isAllowed = true;
-            } else {
-                this.routerService.navigate(["/admin"]);
-            }
-        });
+    async ngOnInit() {
+        let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer, Profile.casualVolunteer];
+        this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
+        console.log(this.isAllowed);
+        if (this.isAllowed == false) {
+            this.routerService.navigate(['/admin']);
+        }
     }
 }

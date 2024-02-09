@@ -1,6 +1,6 @@
 import {AuthService} from "../service/auth.service";
 
-export enum profile {
+export enum Profile {
     admin,
     maintainer,
     casualVolunteer,
@@ -10,26 +10,35 @@ export enum profile {
 
 export class ProfileChecker {
 
-    static async checkProfile(authService: AuthService, validProfile: profile): Promise<boolean> {
+    static async checkProfile(authService: AuthService, validProfiles: Profile[]): Promise<boolean> {
         let response = await authService.getUserProfile();
         console.log(response);
-        if(response == 'admin' && validProfile == profile.admin) {
-            console.log("all ok! Profile is valid");
-            return Promise.resolve(true);
+        switch(response) {
+            case 'admin':
+                for (let validProfile of validProfiles) {
+                    if (validProfile == Profile.admin) {
+                        return Promise.resolve(true);
+                    }
+                }
+            case 'maintainer':
+                for (let validProfile of validProfiles) {
+                    if (validProfile == Profile.maintainer) {
+                        return Promise.resolve(true);
+                    }
+                }
+            case 'casual_volunteer':
+                for (let validProfile of validProfiles) {
+                    if (validProfile == Profile.casualVolunteer) {
+                        return Promise.resolve(true);
+                    }
+                }
+            case 'content_creator':
+                for (let validProfile of validProfiles) {
+                    if (validProfile == Profile.contentCreator) {
+                        return Promise.resolve(true);
+                    }
+                }
         }
-        if(response == 'maintainer' && validProfile == profile.maintainer) {
-            console.log("all ok! Profile is valid");
-            return Promise.resolve(true);
-        }
-        if(response == 'casualVolunteer' && validProfile == profile.casualVolunteer) {
-            console.log("all ok! Profile is valid");
-            return Promise.resolve(true);
-        }
-        if(response == 'contentCreator' && validProfile == profile.contentCreator) {
-            console.log("all ok! Profile is valid");
-            return Promise.resolve(true);
-        } else {
-            return Promise.resolve(false);
-        }
+        return Promise.resolve(false);
     }
 }

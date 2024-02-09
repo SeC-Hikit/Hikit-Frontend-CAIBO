@@ -11,6 +11,7 @@ import {Subject} from "rxjs";
 import {AdminTrailService} from "../../service/admin-trail.service";
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
+import {Profile, ProfileChecker} from "../ProfileChecker";
 
 @Component({
     selector: "app-trail-management",
@@ -43,17 +44,16 @@ export class TrailManagementComponent implements OnInit {
     ) {
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
         this.realm = this.authService.getInstanceRealm();
         this.getAllPreviews();
 
-        this.authService.getUserProfile().then((resp) => {
-            if (resp == 'admin' || resp == 'maintainer') {
-                this.isAllowed = true;
-            } else {
-                this.routerService.navigate(["/admin"]);
-            }
-        })
+        let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer];
+        this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
+        console.log(this.isAllowed);
+        if (this.isAllowed == false) {
+            this.routerService.navigate(['/admin']);
+        }
     }
 
     getAllPreviews() {
