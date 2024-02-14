@@ -145,6 +145,7 @@ import {EllipsisPipe} from "./EllipsisPipe";
 import {
     MobileMunicipalityPreviewComponent
 } from './map-view/map-mobile-view/mobile-municipality-preview/mobile-municipality-preview.component';
+import {EventModalComponent} from './modal/event-modal/event-modal.component';
 
 @NgModule({
     declarations: [
@@ -243,7 +244,8 @@ import {
         MobilePlacePreviewComponent,
         MobilePoiPreviewComponent,
         MobileAccessibilityIssuePreviewComponent,
-        MobileMunicipalityPreviewComponent
+        MobileMunicipalityPreviewComponent,
+        EventModalComponent
     ],
   imports: [
     BrowserModule,

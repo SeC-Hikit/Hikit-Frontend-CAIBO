@@ -16,7 +16,6 @@
   .info {
     height: 400px;
     border-left: 2px solid $secondary-bg-color;
-    padding-left: 15px;
   }
 
   .scrollable-height {
@@ -38,5 +37,16 @@
     .key {
       text-transform: capitalize;
     }
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  .event-list {
+    list-style: none;
+    cursor: pointer;
+    margin: 2px 0;
+    font-family: "Fira Sans", sans-serif;
   }
 }

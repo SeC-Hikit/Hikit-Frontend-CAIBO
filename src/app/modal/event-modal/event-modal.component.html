@@ -1,0 +1,32 @@
+<div class="modal-header" *ngIf="event">
+    <div>
+        <a href="https://emiliaromagnaturismo.it" target="_blank">
+            <img src="assets/ert/ert_logo.png" alt="ert-logo" class="ert-logo">
+        </a>
+    </div>
+</div>
+<div class="modal-body">
+    <div>
+        <h3 class="modal-title">{{event.title}}</h3>
+    </div>
+    <h5>Programmazione</h5>
+    <div>
+        <span>dal {{event.date_from}} </span>
+        <span>al {{event.date_to}}</span>
+    </div>
+
+    <h5>Dove si trova?</h5>
+    <p *ngFor="let location of event.locations">
+        {{ location.address }}, {{location.city}}
+    </p>
+
+    <h5>Descrizione</h5>
+    <p [innerHTML]="event.description"></p>
+
+    <div>
+        <img class="preview" *ngFor="let img of event.attachments" src="{{img.url}}" alt="{{img.title}}"/>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="close()">Ok</button>
+</div>
