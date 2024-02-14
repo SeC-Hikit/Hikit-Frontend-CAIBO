@@ -775,22 +775,6 @@ export interface components {
       name?: string;
       parent?: number;
     };
-    CityRef: {
-      istat?: string;
-      city?: string;
-      province?: string;
-      province_short?: string;
-      iat?: components["schemas"]["Iat"][];
-    };
-    Contact: {
-      label?: string;
-      type?: string;
-      value?: string;
-    };
-    Coordinates: {
-      latitude?: number;
-      longitude?: number;
-    };
     EventDto: {
       id?: string;
       title?: string;
@@ -800,7 +784,7 @@ export interface components {
       date_to?: string;
       ticketing?: components["schemas"]["TicketDto"];
       category?: components["schemas"]["CategoryDto"][];
-      cityRef?: components["schemas"]["CityRef"][];
+      cityRef?: components["schemas"]["CityRefDto"];
       attachments?: components["schemas"]["ImageDto"][];
     };
     EventLocationDto: {
@@ -818,13 +802,6 @@ export interface components {
       status?: "OK" | "ERROR";
       messages?: string[];
       content?: components["schemas"]["EventDto"][];
-    };
-    Iat: {
-      name?: string;
-      address?: string;
-      number?: string;
-      coordinates?: components["schemas"]["Coordinates"];
-      contacts?: components["schemas"]["Contact"][];
     };
     TicketDto: {
       website?: string;
@@ -2200,6 +2177,10 @@ export interface operations {
     parameters: {
       path: {
         istat: string;
+      };
+      query: {
+        skip?: number;
+        limit?: number;
       };
     };
     responses: {

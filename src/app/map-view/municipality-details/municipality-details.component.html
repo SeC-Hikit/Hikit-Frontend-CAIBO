@@ -42,7 +42,19 @@
                     <div class="col-md-12 info scrollable-height">
                         <img *ngFor="let image of selectedLocationDetails.image; let i = index"
                              [src]="image.thumb"
-                             (click)="openModal(i, 0)"/>
+                             [alt]="'location_image_'+ i"
+                            />
+                    </div>
+                    <div class="col-md-5 top-margin-x2" *ngIf="selectedMunicipalityEvents && selectedMunicipalityEvents.length > 0">
+                        <h4>Eventi</h4>
+                    </div>
+                    <div class="col-md-12 info scrollable-height" *ngIf="selectedMunicipalityEvents && selectedMunicipalityEvents.length > 0">
+                        <ul>
+                            <li *ngFor="let event of selectedMunicipalityEvents" (click)="onSelectEvent(event)"
+                                class="event-list trailCodeColumn">
+                                {{ event.title }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

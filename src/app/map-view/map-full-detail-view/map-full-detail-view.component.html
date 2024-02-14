@@ -22,6 +22,7 @@
     <div *ngIf="viewState=='municipality' && selectedMunicipality" class="row top-margin">
         <app-municipality-details
                 [selectedMunicipality]="selectedMunicipality"
+                [selectedMunicipalityEvents]="selectMunicipalityEvents"
                 [selectedLocationDetails]="selectedLocationDetails"
                 [trailMappings]="trailMappings"
                 [trailsForMunicipality]="municipalityTrails"

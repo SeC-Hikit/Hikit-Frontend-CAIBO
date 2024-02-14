@@ -9,7 +9,7 @@ import {AccessibilityNotification} from "../../service/notification-service.serv
 import {MaintenanceDto} from "../../service/maintenance.service";
 import {Coordinates2D} from "../../service/geo-trail-service";
 import {PlaceDto, PlaceRefDto} from "../../service/place.service";
-import {LocalityDto} from "../../service/ert.service";
+import {EventDto, LocalityDto} from "../../service/ert.service";
 import {environment} from "../../../environments/environment.prod";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {PaginationUtils} from "../../utils/PaginationUtils";
@@ -33,6 +33,7 @@ export class MapFullDetailViewComponent implements OnInit {
     @Input() trailPreviewList: TrailPreview[];
     @Input() selectedTrailNotifications: AccessibilityNotification[];
     @Input() selectedPlace: PlaceDto;
+    @Input() selectMunicipalityEvents: EventDto[];
     @Input() selectedNotification: AccessibilityNotification;
     @Input() selectedMunicipality: MunicipalityDto;
     @Input() trailMappings: Map<string, TrailMappingDto> = new Map<string, TrailMappingDto>();
@@ -92,6 +93,7 @@ export class MapFullDetailViewComponent implements OnInit {
 
     private trailPreviewCount: number = 0;
     private trailPreviewPage: number = 1;
+
 
     constructor(
         private trailService: TrailService,
@@ -213,7 +215,6 @@ export class MapFullDetailViewComponent implements OnInit {
                 if (propName == "selectedTrailData")
                     if (this.selectedTrailData != null) {
                         setTimeout(() =>
-
                             600);
                     }
 

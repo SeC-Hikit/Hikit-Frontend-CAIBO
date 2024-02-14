@@ -9,7 +9,7 @@ import {PlaceDto, PlaceRefDto} from "../../service/place.service";
 import {AccessibilityNotification} from "../../service/notification-service.service";
 import {MaintenanceDto} from "../../service/maintenance.service";
 import {MunicipalityDto} from "../../service/municipality.service";
-import {LocalityDto} from "../../service/ert.service";
+import {EventDto, LocalityDto} from "../../service/ert.service";
 import {SelectTrailArgument} from "../map.component";
 
 export interface PositionChangeRequest {
@@ -42,6 +42,7 @@ export class MapMobileViewComponent implements OnInit {
     @Input() selectedTrailMaintenances: MaintenanceDto[];
     @Input() selectedNotification: AccessibilityNotification;
     @Input() selectedMunicipality: MunicipalityDto;
+    @Input() selectedMunicipalityRelatedEvents: EventDto[];
     @Input() selectedLocality: LocalityDto;
     @Input() municipalityTrails: TrailPreview[];
     @Input() municipalityTrailsMax: number;

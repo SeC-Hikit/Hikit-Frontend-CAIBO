@@ -23,7 +23,7 @@ import {Location} from "@angular/common";
 import {MapUtils, ViewState} from "./MapUtils";
 import {MunicipalityDto, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
-import {ErtService, LocalityDto} from "../service/ert.service";
+import {ErtService, EventDto, LocalityDto} from "../service/ert.service";
 
 //import {MapMobileViewComponent} from "./map-mobile-view/map-mobile-view.component";
 
@@ -77,6 +77,7 @@ export class MapComponent implements OnInit {
 
     // municipalities
     selectedMunicipality: MunicipalityDto;
+    selectedMunicipalityRelatedEvents: EventDto[];
     municipalityTrails: TrailPreview[] = [];
     municipalityTrailsMax: number = 0;
 
@@ -111,6 +112,7 @@ export class MapComponent implements OnInit {
     isPortraitMode: boolean = true;
     isMobileDetailMode: boolean = false;
     refreshSwitch: boolean = false;
+
 
     constructor(
         private trailService: TrailService,
@@ -470,9 +472,6 @@ export class MapComponent implements OnInit {
             })
     }
 
-    loadTrailPreviewForMunicipality(page: number) {
-    }
-
     private openInfoModal(title: string, body: string) {
         const modal = this.modalService.open(InfoModalComponent);
         modal.componentInstance.title = title;
@@ -654,6 +653,11 @@ export class MapComponent implements OnInit {
         this.ertService.getLocalityDetailsByIstat(code).subscribe(resp => {
             this.selectedLocationDetails = resp.content[0];
         });
+
+        this.ertService.getEventsByIstat(code, 0, 1000).subscribe(resp => {
+            this.selectedMunicipalityRelatedEvents = resp.content;
+        });
+
         this.trailPreviewService.findByMunicipality(this.selectedMunicipality.city, environment.realm,
             false, 0, 1000).subscribe((resp) => {
             this.municipalityTrails = resp.content
