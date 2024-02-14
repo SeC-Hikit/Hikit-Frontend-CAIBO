@@ -20,6 +20,7 @@ export class AdminComponent implements OnInit {
   userSection : string = '';
   userSectionCode: string = '';
   diagnoseAltitudeResponse: DiagnoseResponse = null;
+  profileName: string = '';
 
   instanceInfo : InstanceInfoDto;
 
@@ -38,11 +39,13 @@ export class AdminComponent implements OnInit {
 
     this.authService.getUsername().then((resp)=> {
       this.userName = resp;
-    })
-
+    });
+    this.authService.getUserProfile().then((resp) => {
+      this.profileName = ProfileChecker.profileToString(resp);
+    });
     this.instanceService.get().subscribe((resp) => {
       this.instanceInfo = resp;
-    })
+    });
 
     this.userRealm = this.authService.getUserRealm();
 
