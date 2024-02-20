@@ -41,7 +41,7 @@ export class AdminComponent implements OnInit {
       this.userName = resp;
     });
     this.authService.getUserProfile().then((resp) => {
-      this.profileName = ProfileChecker.profileToString(resp);
+      this.profileName = ProfileChecker.profileStringToRole(resp);
     });
     this.instanceService.get().subscribe((resp) => {
       this.instanceInfo = resp;

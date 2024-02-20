@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {NavigationEnd, Router} from "@angular/router";
 import {AuthService} from "../../service/auth.service";
-import {Profile} from "../../admin/ProfileChecker";
+import {Profile, ProfileChecker} from "../../admin/ProfileChecker";
 
 @Component({
   selector: "app-menu-admin",
@@ -13,6 +13,8 @@ import {Profile} from "../../admin/ProfileChecker";
 export class MenuAdminComponent implements OnInit {
 
   userProfile: Profile = Profile.noProfile;
+  userName: string = '';
+  userProfileString: string = '';
 
   // ngif inside menu-admin.component.html cannot get profile.noProfile
   // inside ProfileChecker
@@ -25,6 +27,14 @@ export class MenuAdminComponent implements OnInit {
       if (change instanceof NavigationEnd) {
         this.assignRolesToUser();
       }
+    });
+
+    this.authService.getUsername().then((resp) => {
+      this.userName = resp;
+    });
+
+    this.authService.getUserProfile().then((resp) => {
+      this.userProfileString = resp;
     });
   }
 
@@ -41,10 +51,6 @@ export class MenuAdminComponent implements OnInit {
           } else if (name == "casual_volunteer") {
             this.userProfile = Profile.casualVolunteer;
           }
-        });
-
-        this.authService.getUsername().then((name) => {
-          // this.usernameToShow = name;
         });
       },
       () => {
