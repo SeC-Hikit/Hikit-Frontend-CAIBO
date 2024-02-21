@@ -41,4 +41,18 @@ export class ProfileChecker {
         }
         return Promise.resolve(false);
     }
+
+    static profileToString(profileIn: string): string {
+        switch(profileIn) {
+            case 'admin':
+                return 'Amministratore';
+            case 'maintainer':
+                return 'Manutentore';
+            case 'casual_volunteer':
+                return 'Volontario';
+            case 'content_creator':
+                return 'Creatore di Contenuti';
+        }
+        return '';
+    }
 }
