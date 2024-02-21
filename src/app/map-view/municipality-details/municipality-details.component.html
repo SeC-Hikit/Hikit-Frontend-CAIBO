@@ -41,8 +41,9 @@
                     </div>
                     <div class="col-md-12 info scrollable-height">
                         <img *ngFor="let image of selectedLocationDetails.image; let i = index"
-                             [src]="image.thumb"
+                             [src]="image.url"
                              [alt]="'location_image_'+ i"
+                             class="full-width"
                             />
                     </div>
                     <div class="col-md-5 top-margin-x2" *ngIf="selectedMunicipalityEvents && selectedMunicipalityEvents.length > 0">
