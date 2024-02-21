@@ -5,6 +5,9 @@ import {
   TrailPreviewService,
 } from "src/app/service/trail-preview-service.service";
 import { components } from "src/binding/Binding";
+import {AuthService} from "../../service/auth.service";
+import {Router} from "@angular/router";
+import {Profile, ProfileChecker} from "../ProfileChecker";
 
 @Component({
   selector: "app-poi-management",
@@ -13,8 +16,17 @@ import { components } from "src/binding/Binding";
 })
 export class PoiManagementComponent implements OnInit {
 
-  constructor() {}
+  isAllowed: boolean = false;
 
-  ngOnInit(): void {}
+  constructor(private authService: AuthService,
+                private routerService: Router) {}
 
+  async ngOnInit() {
+    let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer, Profile.contentCreator];
+    this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
+    console.log(this.isAllowed);
+    if (this.isAllowed == false) {
+      this.routerService.navigate(['/admin']);
+    }
+  }
 }

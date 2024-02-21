@@ -1,4 +1,4 @@
-<div class="container my-1">
+<div *ngIf="isAllowed" class="container my-1">
     <div class="row section-distance-up">
         <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
         <app-menu-management></app-menu-management>

@@ -10,6 +10,8 @@ import {TrailDto, TrailService} from "src/app/service/trail-service.service";
 import {Subject} from "rxjs";
 import {AdminTrailService} from "../../service/admin-trail.service";
 import {AuthService} from "../../service/auth.service";
+import {Router} from "@angular/router";
+import {Profile, ProfileChecker} from "../ProfileChecker";
 
 @Component({
     selector: "app-trail-management",
@@ -20,6 +22,8 @@ export class TrailManagementComponent implements OnInit {
     entryPerPage = 10;
     page = 1;
     isLoading = false;
+
+    isAllowed: boolean = false;
 
     private destroy$ = new Subject();
 
@@ -35,13 +39,21 @@ export class TrailManagementComponent implements OnInit {
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private adminTrailService: AdminTrailService,
-        private authService: AuthService
+        private authService: AuthService,
+        private routerService: Router
     ) {
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
         this.realm = this.authService.getInstanceRealm();
         this.getAllPreviews();
+
+        let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer];
+        this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
+        console.log(this.isAllowed);
+        if (this.isAllowed == false) {
+            this.routerService.navigate(['/admin']);
+        }
     }
 
     getAllPreviews() {

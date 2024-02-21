@@ -18,7 +18,7 @@ export class AuthService {
         const notLoggedCallback = onNotLogged == null ? () => {
         } : onNotLogged;
         this.keycloakService.isLoggedIn().then((isIn) => {
-            console.log(isIn);
+//            console.log(isIn);
             isIn ? onLoggedIn() : notLoggedCallback();
         });
     }
@@ -36,12 +36,13 @@ export class AuthService {
         return userLoggedInToken.realm;
     }
 
-    getUserRole(): string {
+    async getUserProfile(): Promise<string> {
         let userLoggedInToken: any = this.keycloakService.getKeycloakInstance().idTokenParsed;
         if (userLoggedInToken == null) {
             return "";
         }
-        return userLoggedInToken.role;
+        console.log(userLoggedInToken);
+        return userLoggedInToken.profile;
     }
 
     getInstanceRealm() : string {
