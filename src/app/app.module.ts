@@ -146,6 +146,7 @@ import {
     MobileMunicipalityPreviewComponent
 } from './map-view/map-mobile-view/mobile-municipality-preview/mobile-municipality-preview.component';
 import {EventModalComponent} from './modal/event-modal/event-modal.component';
+import { MediaManagementComponent } from './admin/media-management/media-management.component';
 
 @NgModule({
     declarations: [
@@ -245,7 +246,8 @@ import {EventModalComponent} from './modal/event-modal/event-modal.component';
         MobilePoiPreviewComponent,
         MobileAccessibilityIssuePreviewComponent,
         MobileMunicipalityPreviewComponent,
-        EventModalComponent
+        EventModalComponent,
+        MediaManagementComponent
     ],
   imports: [
     BrowserModule,
