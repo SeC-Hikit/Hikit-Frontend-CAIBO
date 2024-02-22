@@ -34,7 +34,7 @@ export class MenuAdminComponent implements OnInit {
     });
 
     this.authService.getUserProfile().then((resp) => {
-      this.userProfileString = resp;
+      this.userProfileString = ProfileChecker.profileStringToRole(resp);
     });
   }
 
