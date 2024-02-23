@@ -1,10 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Status} from "src/app/Status";
-import {
-    TrailPreview,
-    TrailPreviewResponse,
-    TrailPreviewService,
-} from "src/app/service/trail-preview-service.service";
+import {TrailPreview, TrailPreviewResponse, TrailPreviewService,} from "src/app/service/trail-preview-service.service";
 import {takeUntil, tap} from "rxjs/operators";
 import {TrailDto, TrailService} from "src/app/service/trail-service.service";
 import {Subject} from "rxjs";
@@ -52,7 +48,7 @@ export class TrailManagementComponent implements OnInit {
         this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
         console.log(this.isAllowed);
         if (this.isAllowed == false) {
-            this.routerService.navigate(['/admin']);
+               this.routerService.navigate(['/admin']);
         }
     }
 
