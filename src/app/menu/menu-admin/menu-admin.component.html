@@ -94,6 +94,17 @@
                                                                     Manutenzioni
                                                                 </a>
                                                             </li>
+                                                            <li *ngIf="userProfile == profile.admin
+                                                                || userProfile == profile.maintainer
+                                                                || userProfile == profile.contentCreator">
+                                                                <a
+                                                                    routerLink="/admin/media-management"
+                                                                    routerLinkActive="active"
+                                                                    class="nav-item nav-link"
+                                                                >
+                                                                    Galleria
+                                                                </a>
+                                                            </li>
                                                             <span *ngIf="userProfile == profile.admin || userProfile == profile.maintainer" class="separator">|</span>
                                                             <li *ngIf="userProfile == profile.admin
                                                                 || userProfile == profile.maintainer
