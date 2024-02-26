@@ -42,7 +42,21 @@ export class ProfileChecker {
         return Promise.resolve(false);
     }
 
-    static profileToString(profileIn: string): string {
+    static profileToString(profileIn: Profile): string {
+        switch(profileIn) {
+            case Profile.admin:
+                return 'admin';
+            case Profile.maintainer:
+                return 'maintainer';
+            case Profile.contentCreator:
+                return 'content creator';
+            case Profile.casualVolunteer:
+                return 'casual volunteer';
+        }
+        return '';
+    }
+
+    static profileStringToRole(profileIn: string): string {
         switch(profileIn) {
             case 'admin':
                 return 'Amministratore';
