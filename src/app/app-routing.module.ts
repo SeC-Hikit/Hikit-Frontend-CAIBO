@@ -57,6 +57,7 @@ import {BugReportingComponent} from "./bug-reporting/bug-reporting.component";
 import {ReportingOnPositionComponent} from "./accessibility/reporting-on-position/reporting-on-position.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {DataUpdateComponent} from "./data-update/data-update.component";
+import {MediaManagementComponent} from "./admin/media-management/media-management.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -227,6 +228,10 @@ const routes: Routes = [
                     {path: "add/topic/:relatedTopic/id/:relatedTopicId", component: AnnouncementEditComponent},
                 ],
                 component: AnnouncementManagementComponent,
+            },
+            {
+                path: "media-management",
+                component: MediaManagementComponent,
             },
         ]
     },
