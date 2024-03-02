@@ -143,6 +143,14 @@
                                 (onHighlightTrail)="onHighlightTrail($event)"
                         ></app-place-details>
                     </div>
+
+                    <div *ngIf="sideView=='draw-mode'" class="row top-margin">
+                        <app-draw-mode-details>
+
+                        ></app-draw-mode-details>
+                    </div>
+
+
                     <!-- TODO DIVIDE THIS MODULE -->
                     <div *ngIf="sideView==''">
                         <div class="row align-middle">

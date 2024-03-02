@@ -729,5 +729,7 @@ export class MapComponent implements OnInit {
 
     toggleDrawMode() {
         this.isDrawMode = !this.isDrawMode;
+        this.sideView = this.isDrawMode ? ViewState.DRAW_MODE : ViewState.NONE;
+
     }
 }

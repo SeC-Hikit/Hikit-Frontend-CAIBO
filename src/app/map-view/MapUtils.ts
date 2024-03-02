@@ -23,7 +23,7 @@ export enum ViewState {
     NONE = "", TRAIL = "trail",
     POI = "poi", TRAIL_LIST = "list",
     PLACE = "place", ACCESSIBILITY = "accessibility",
-    MUNICIPALITY = "municipality"
+    MUNICIPALITY = "municipality", DRAW_MODE = "draw-mode"
 }
 
 export class MapUtils {
