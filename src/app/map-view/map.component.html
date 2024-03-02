@@ -113,7 +113,6 @@
                                 [trailsForMunicipality]="municipalityTrails"
                                 [trailsForMunicipalityMax]="municipalityTrailsMax"
                                 [isPaginationToShow]="false"
-                                (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
                                 (onSelectTrailCode)="selectTrail($event)"
                                 (onNavigateToLocation)="navigateToLocation($event)"
                         >
@@ -239,6 +238,7 @@
                           [highlightedLocation]="highlightedLocation"
                           [zoomToTrail]="zoomToTrail"
                           [isRefresh]="refreshSwitch"
+                          [isDrawMode]="isDrawMode"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"
                           (onNotificationClick)="onAccessibilityNotificationSelection($event)"
@@ -251,6 +251,7 @@
                           (onMunicipalitySelectionClick)="onMunicipalitySelectionClick()"
                           (onTerrainChangeSelectionClick)="onTerrainChangeSelectionClick()"
                           (onSearchClick)="onSearchClickShowListOfTrails()"
+                          (onDrawItineraryClick)="toggleDrawMode()"
             >
             </app-map-full>
         </div>

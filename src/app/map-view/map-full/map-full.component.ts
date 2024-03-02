@@ -65,6 +65,7 @@ export class MapFullComponent implements OnInit {
     @Input() isMobileView: boolean;
     @Input() zoomToTrail: boolean;
     @Input() isRefresh: boolean;
+    @Input() isDrawMode: boolean;
 
 
     @Output() onTrailClick = new EventEmitter<string>();
@@ -81,6 +82,7 @@ export class MapFullComponent implements OnInit {
     @Output() onTerrainChangeSelectionClick = new EventEmitter();
     @Output() onGeolocaliseMeSelectionClick = new EventEmitter();
     @Output() onSearchClick = new EventEmitter();
+    @Output() onDrawItineraryClick = new EventEmitter();
 
     constructor() {
         this.otherTrailsPolylines = [];

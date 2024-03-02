@@ -113,6 +113,8 @@ export class MapComponent implements OnInit {
     isMobileDetailMode: boolean = false;
     refreshSwitch: boolean = false;
 
+    isDrawMode: boolean = false;
+
 
     constructor(
         private trailService: TrailService,
@@ -723,5 +725,9 @@ export class MapComponent implements OnInit {
 
     onForceMapRefresh() {
         this.refreshSwitch = !this.refreshSwitch;
+    }
+
+    toggleDrawMode() {
+        this.isDrawMode = !this.isDrawMode;
     }
 }
