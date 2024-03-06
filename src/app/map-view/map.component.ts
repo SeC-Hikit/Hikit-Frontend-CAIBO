@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MaintenanceDto, MaintenanceService} from '../service/maintenance.service';
 import {AccessibilityNotification, NotificationService} from '../service/notification-service.service';
 import {TrailPreview, TrailPreviewResponse, TrailPreviewService} from '../service/trail-preview-service.service';
-import {TrailDto, TrailMappingDto, TrailResponse, TrailService} from '../service/trail-service.service';
+import {CoordinatesDto, TrailDto, TrailMappingDto, TrailResponse, TrailService} from '../service/trail-service.service';
 import {UserCoordinates} from '../UserCoordinates';
 import {GraphicUtils} from '../utils/GraphicUtils';
 import * as FileSaver from 'file-saver';
@@ -38,8 +38,13 @@ export enum TrailSimplifierLevel {
 export interface SelectTrailArgument {
     id: string,
     refresh?: boolean,
-    switchView: boolean
+    switchView: boolean,
     zoomIn: boolean
+}
+
+export interface DrawPoint {
+    point: Coordinates2D,
+    trailId: string,
 }
 
 @Component({
@@ -62,6 +67,8 @@ export class MapComponent implements OnInit {
     isCycloToggled = false;
 
     isPoiLoaded = false;
+
+    drawPoints: DrawPoint[] = [];
 
 
     // Bound elements
@@ -730,6 +737,10 @@ export class MapComponent implements OnInit {
     toggleDrawMode() {
         this.isDrawMode = !this.isDrawMode;
         this.sideView = this.isDrawMode ? ViewState.DRAW_MODE : ViewState.NONE;
+    }
 
+    getDrawClick(coords: Coordinates2D) {
+        this.drawPoints = this.drawPoints.concat([{point: coords, trailId: ""}]);
+        console.log(this.drawPoints);
     }
 }

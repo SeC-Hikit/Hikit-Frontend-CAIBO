@@ -1,4 +1,4 @@
-<div class="col-12" id="map-full" [ngClass]="{'fixed' : isMobileView }">
+<div class="col-12" id="map-full" [ngClass]="{'fixed' : isMobileView, 'crossDraw' : isDrawMode }">
     <div class="btn btn-primary btn-map" id="search-btn" (click)="onSearchClick.emit()">
         <button class="inner-btn">
             <svg class="bi" width="24" height="24" fill="currentColor">
@@ -25,7 +25,7 @@
     </div>
 
     <div class="btn btn-primary btn-map" id="terrain-btn">
-        <button class="inner-btn" disabled='disabled' (click)="onTerrainChangeSelectionClick.emit()">
+        <button class="inner-btn" (click)="onTerrainChangeSelectionClick.emit()">
             <svg class="bi" width="24" height="24" fill="currentColor">
                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#layers"/>
             </svg>

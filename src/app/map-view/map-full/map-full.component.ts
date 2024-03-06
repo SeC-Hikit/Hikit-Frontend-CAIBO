@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import 'leaflet';
-import {LeafletMouseEventHandlerFn} from 'leaflet';
+import {LeafletEvent, LeafletMouseEvent, LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
 import {Coordinates2D, RectangleDto} from 'src/app/service/geo-trail-service';
 import {CoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
@@ -14,6 +14,7 @@ import {MapPinIconType} from "../../../assets/icons/MapPinIconType";
 import {PoiDto} from "../../service/poi-service.service";
 import {PlaceRefDto} from "../../service/place.service";
 import {environment} from "../../../environments/environment";
+import {DrawPoint} from "../map.component";
 
 declare let L; // to be able to use L namespace
 
@@ -66,6 +67,7 @@ export class MapFullComponent implements OnInit {
     @Input() zoomToTrail: boolean;
     @Input() isRefresh: boolean;
     @Input() isDrawMode: boolean;
+    @Input() drawNewWaypoints: DrawPoint[] = [];
 
 
     @Output() onTrailClick = new EventEmitter<string>();
@@ -83,6 +85,7 @@ export class MapFullComponent implements OnInit {
     @Output() onGeolocaliseMeSelectionClick = new EventEmitter();
     @Output() onSearchClick = new EventEmitter();
     @Output() onDrawItineraryClick = new EventEmitter();
+    @Output() onMapDrawClick = new EventEmitter<Coordinates2D>();
 
     constructor() {
         this.otherTrailsPolylines = [];
@@ -129,6 +132,9 @@ export class MapFullComponent implements OnInit {
             this.onZoomChange.emit(this.map.getZoom());
         });
 
+        this.map.on("dblclick", (event) => {
+            this.onDrawWaypoint(event);
+        });
     }
 
     private onStartMoving() {
@@ -196,6 +202,12 @@ export class MapFullComponent implements OnInit {
                 }
                 if (propName == "zoomToTrail") {
                     this.focusOnTrail();
+                }
+                if (propName == "isDrawMode") {
+                    this.toggleMapDrawMode();
+                }
+                if (propName == "drawNewWaypoints") {
+                    this.renderDrawnWaypoints();
                 }
             }
         }
@@ -553,5 +565,26 @@ export class MapFullComponent implements OnInit {
             this.map.setZoom(zoom, {animate: true});
         }, 500)
 
+    }
+
+    private toggleMapDrawMode() {
+        if(this.isDrawMode)
+            this.map.doubleClickZoom.disable();
+        else
+            this.map.doubleClickZoom.enable();
+    }
+
+    private onDrawWaypoint(event: LeafletMouseEvent) {
+        if(!this.isDrawMode)
+            return;
+        this.onMapDrawClick.emit({latitude: event.latlng.lat, longitude: event.latlng.lng});
+    }
+
+    private renderDrawnWaypoints() {
+        this.drawNewWaypoints.forEach(waypoint => {
+            L.circle([waypoint.point.latitude, waypoint.point.longitude],
+              {radius: 30, color: 'blue'}).addTo(this.map);
+        });
+        console.log("here");
     }
 }

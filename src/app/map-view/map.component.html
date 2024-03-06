@@ -247,6 +247,7 @@
                           [zoomToTrail]="zoomToTrail"
                           [isRefresh]="refreshSwitch"
                           [isDrawMode]="isDrawMode"
+                          [drawNewWaypoints]="drawPoints"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"
                           (onNotificationClick)="onAccessibilityNotificationSelection($event)"
@@ -260,6 +261,7 @@
                           (onTerrainChangeSelectionClick)="onTerrainChangeSelectionClick()"
                           (onSearchClick)="onSearchClickShowListOfTrails()"
                           (onDrawItineraryClick)="toggleDrawMode()"
+                          (onMapDrawClick)="getDrawClick($event)"
             >
             </app-map-full>
         </div>
