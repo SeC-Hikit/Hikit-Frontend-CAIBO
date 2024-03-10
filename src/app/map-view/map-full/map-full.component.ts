@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import 'leaflet';
-import {LeafletEvent, LeafletMouseEvent, LeafletMouseEventHandlerFn} from 'leaflet';
+import {LeafletMouseEvent, LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
 import {Coordinates2D, RectangleDto} from 'src/app/service/geo-trail-service';
 import {CoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
@@ -132,7 +132,7 @@ export class MapFullComponent implements OnInit {
             this.onZoomChange.emit(this.map.getZoom());
         });
 
-        this.map.on("dblclick", (event) => {
+        this.map.on("click", (event: LeafletMouseEvent) => {
             this.onDrawWaypoint(event);
         });
     }
