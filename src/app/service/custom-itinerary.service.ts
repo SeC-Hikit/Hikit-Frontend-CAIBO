@@ -2,35 +2,29 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
-import {RestResponse} from '../RestResponse';
-import {MaintenanceDto} from "./maintenance.service";
+import {components} from 'src/binding/Binding';
 
+export type CustomItineraryResult = components["schemas"]["CustomItineraryResultDto"]
+export type CustomItineraryRequest = components["schemas"]["CustomItineraryRequestDto"]
 @Injectable({
   providedIn: 'root'
 })
-export class AdminMaintenanceService {
+export class CustomItineraryService {
   
-  baseUrl = "api/admin/maintenance";
+  baseUrl = "api/custom-itinerary";
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private httpClient: HttpClient) { }
 
-  save(maintenance: MaintenanceDto): Observable<RestResponse> {
-    return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
-        .pipe(
-            tap(_ => console.log("")),
-            catchError(this.handleError<RestResponse>('Save maintenance', null))
-        );
-  }
-
-  deleteById(_id: any): Observable<RestResponse> {
-    return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
-        .pipe(
-            tap(_ => console.log("")),
-            catchError(this.handleError<RestResponse>('Delete maintenance', null))
-        );
+  constructItinerary(plan: CustomItineraryRequest) {
+    return this.httpClient.post<CustomItineraryResult>(this.baseUrl + "/construct", plan)
+      .pipe(
+        tap(),
+        catchError(this.handleError<CustomItineraryResult>('Construct a custom itinerary', null))
+      );
   }
 
   /**

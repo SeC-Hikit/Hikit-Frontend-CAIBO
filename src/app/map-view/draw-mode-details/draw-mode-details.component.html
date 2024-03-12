@@ -1,1 +1,53 @@
-<p>draw-mode-details works!</p>
+<div class="MapTrailDetails row">
+    <div *ngIf="customItinerary">
+        <div class="col-12">
+            <div *ngIf="customItinerary && customItinerary.notifications.length > 0; else notShow"
+                 class="clickable row">
+
+                <table id="trailTable" class="table table-striped interactive-table">
+                    <thead class="">
+                    <tr>
+                        <th scope="col">Problemi verificati</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="col-12 clickable" *ngFor="let notification of customItinerary.notifications"
+                        (click)="onNotificationClick(notification.id)">
+                        <td>
+                            <span [innerHTML]="notification.description"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ng-template #notShow>
+                <div>
+                    <svg class="bi" width="24" height="24">
+                        <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
+                    </svg>
+                    Non ci sono problemi di percorribilità
+                </div>
+            </ng-template>
+        </div>
+    </div>
+    <div class="row top-margin-x2" *ngIf="customItinerary">
+        <div class="col-6">
+            <div>{{ getDistance() }}m</div>
+        </div>
+    </div>
+    <div class="row top-margin-x2">
+        <button class="btn" (click)="onCalculateItineraryClick()">Calcola Percorso</button>
+    </div>
+
+<!--    <div class="col-12">-->
+<!--        <div class="row">-->
+<!--            <div class="col-12">-->
+<!--                <h4>Profilo altimetrico</h4>-->
+<!--            </div>-->
+<!--            <div class="col-11">-->
+<!--                <canvas (mouseout)="onHoverAltiGraphOut()" id="hikeChart"></canvas>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
