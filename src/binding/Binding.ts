@@ -66,6 +66,9 @@ export interface paths {
   "/geo-tool/distance": {
     post: operations["radialDistance"];
   };
+  "/custom-itinerary/construct": {
+    post: operations["calculate"];
+  };
   "/admin/trail/status": {
     post: operations["updateTrailStatus"];
   };
@@ -623,6 +626,33 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["TrailIntersectionDto"][];
     };
+    CustomItineraryRequestDto: {
+      geoLineDto?: components["schemas"]["GeoLineDto"];
+    };
+    CustomItineraryResultDto: {
+      coordinates?: components["schemas"]["TrailCoordinates"][];
+      trailPreviews?: components["schemas"]["TrailPreviewDto"][];
+      notifications?: components["schemas"]["AccessibilityNotificationDto"][];
+      stats?: components["schemas"]["StatsTrailMetadataDto"];
+    };
+    TrailCoordinates: {
+      distanceFromTrailStart?: number;
+      latitude?: number;
+      longitude?: number;
+      altitude?: number;
+    };
+    TrailPreviewDto: {
+      id?: string;
+      code?: string;
+      classification?: "T" | "E" | "EE" | "EEA" | "UNCLASSIFIED";
+      startPos?: components["schemas"]["PlaceRefDto"];
+      finalPos?: components["schemas"]["PlaceRefDto"];
+      locations?: components["schemas"]["PlaceRefDto"][];
+      bikeData?: boolean;
+      trailStatus?: "DRAFT" | "PUBLIC";
+      statsTrailMetadata?: components["schemas"]["StatsTrailMetadataDto"];
+      fileDetails?: components["schemas"]["FileDetailsDto"];
+    };
     ResourceGeneratorResponse: {
       status?: "OK" | "BUSY";
     };
@@ -683,18 +713,6 @@ export interface components {
       status?: "OK" | "ERROR";
       message?: string[];
       content?: components["schemas"]["CountDto"];
-    };
-    TrailPreviewDto: {
-      id?: string;
-      code?: string;
-      classification?: "T" | "E" | "EE" | "EEA" | "UNCLASSIFIED";
-      startPos?: components["schemas"]["PlaceRefDto"];
-      finalPos?: components["schemas"]["PlaceRefDto"];
-      locations?: components["schemas"]["PlaceRefDto"][];
-      bikeData?: boolean;
-      trailStatus?: "DRAFT" | "PUBLIC";
-      statsTrailMetadata?: components["schemas"]["StatsTrailMetadataDto"];
-      fileDetails?: components["schemas"]["FileDetailsDto"];
     };
     TrailPreviewResponse: {
       currentPage?: number;
@@ -1217,6 +1235,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CoordinatesDto"][];
+      };
+    };
+  };
+  calculate: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["CustomItineraryResultDto"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CustomItineraryRequestDto"];
       };
     };
   };
