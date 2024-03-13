@@ -45,6 +45,7 @@ export class MapFullComponent implements OnInit {
     notificationMarkers: L.Marker[] = [];
     poiMarkers: L.Marker[] = [];
 
+    waypoints: L.Circle[] = [];
     userCircle: L.Circle = null
 
     otherTrailsPolylines: TrailToPolyline[];
@@ -86,6 +87,7 @@ export class MapFullComponent implements OnInit {
     @Output() onSearchClick = new EventEmitter();
     @Output() onDrawItineraryClick = new EventEmitter();
     @Output() onMapDrawClick = new EventEmitter<Coordinates2D>();
+
 
     constructor() {
         this.otherTrailsPolylines = [];
@@ -132,7 +134,7 @@ export class MapFullComponent implements OnInit {
             this.onZoomChange.emit(this.map.getZoom());
         });
 
-        this.map.on("click", (event: LeafletMouseEvent) => {
+        this.map.on("dblclick", (event: LeafletMouseEvent) => {
             this.onDrawWaypoint(event);
         });
     }
@@ -568,24 +570,27 @@ export class MapFullComponent implements OnInit {
     }
 
     private toggleMapDrawMode() {
-        if(this.isDrawMode)
+        if (this.isDrawMode) {
             this.map.doubleClickZoom.disable();
-        else
+        }
+        else {
             this.map.doubleClickZoom.enable();
+            this.waypoints.forEach((it) => this.map.removeLayer(it))
+            this.waypoints = [];
+        }
     }
 
     private onDrawWaypoint(event: LeafletMouseEvent) {
-        if(!this.isDrawMode)
+        if (!this.isDrawMode)
             return;
         this.onMapDrawClick.emit({latitude: event.latlng.lat, longitude: event.latlng.lng});
     }
 
     private renderDrawnWaypoints() {
-        L.polyline(this.drawNewWaypoints.map((x) => [x.point.latitude, x.point.longitude]), {color: 'green'}).addTo(this.map);
-        this.drawNewWaypoints.forEach(waypoint => {
+        this.waypoints = this.drawNewWaypoints.map(waypoint =>
             L.circle([waypoint.point.latitude, waypoint.point.longitude],
-              {radius: 30, color: 'blue'}).addTo(this.map);
-        });
-        console.log("here");
+                {radius: 30, color: 'blue'})
+        );
+        this.waypoints.forEach(it => it.addTo(this.map));
     }
 }
