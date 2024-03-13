@@ -581,6 +581,7 @@ export class MapFullComponent implements OnInit {
     }
 
     private renderDrawnWaypoints() {
+        L.polyline(this.drawNewWaypoints.map((x) => [x.point.latitude, x.point.longitude]), {color: 'green'}).addTo(this.map);
         this.drawNewWaypoints.forEach(waypoint => {
             L.circle([waypoint.point.latitude, waypoint.point.longitude],
               {radius: 30, color: 'blue'}).addTo(this.map);

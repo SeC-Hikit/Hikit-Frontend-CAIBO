@@ -69,7 +69,7 @@ export class MapComponent implements OnInit {
     isPoiLoaded = false;
 
     drawPoints: DrawPoint[] = [];
-
+    drawPolyLine: L.Polyline = null;
 
     // Bound elements
     searchTermString: string = "";

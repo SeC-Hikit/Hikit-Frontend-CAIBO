@@ -39,6 +39,7 @@ export class MapUtils {
     ): [number, number][] {
         return coordinates.map((x) => [x.latitude, x.longitude]);
     }
+
     static getTrailPolyline(trailCode: string, coordinates: TrailCoordinatesDto[], color: string = "#000") {
         const invertedCoords = MapUtils.getCoordinatesInverted(coordinates);
         const polyline = L.polyline(invertedCoords, {color: color});
