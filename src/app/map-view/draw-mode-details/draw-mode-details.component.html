@@ -1,7 +1,19 @@
 <div class="MapTrailDetails row">
-    <div *ngIf="customItinerary">
+    <div class="col-12 full-width" *ngIf="!customItineraryResult">
+        <h2>Disegna percorso</h2>
+        <img src="assets/cai/trekking/custom_itinerary-min.jpg" alt="draw-itinerary" class="full-width" />
+        <p>Per disegnare il tuo percorso, inizia con fare doppio click/tap.
+            <br>Una volta completato il percorso, clicca sul pulsante "Calcola Percorso"</p>
+    </div>
+    <div class="col-3" *ngIf="isLoading">
+        <div class="spinner-border relative start-50" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf="customItineraryResult && !isLoading">
+        <h2>Il tuo percorso</h2>
         <div class="col-12">
-            <div *ngIf="customItinerary && customItinerary.notifications.length > 0; else notShow"
+            <div *ngIf="customItineraryResult && customItineraryResult.notifications.length > 0; else notShow"
                  class="clickable row">
 
                 <table id="trailTable" class="table table-striped interactive-table">
@@ -12,7 +24,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="col-12 clickable" *ngFor="let notification of customItinerary.notifications"
+                    <tr class="col-12 clickable" *ngFor="let notification of customItineraryResult.notifications"
                         (click)="onNotificationClick(notification.id)">
                         <td>
                             <span [innerHTML]="notification.description"></span>
@@ -31,23 +43,71 @@
             </ng-template>
         </div>
     </div>
-    <div class="row top-margin-x2" *ngIf="customItinerary">
+    <div class="row top-margin-x2" *ngIf="customItineraryResult">
         <div class="col-6">
-            <div>{{ getDistance() }}m</div>
+            <h4>Salita</h4>
+        </div>
+        <div class="col-6">
+            <h4>Discesa</h4>
+        </div>
+        <div class="col-6">
+            {{ customItineraryResult.stats.totalRise }}m
+        </div>
+        <div class="col-6">
+            {{ customItineraryResult.stats.totalFall }}m
+        </div>
+        <div class="col-6 top-margin">
+            <h4>Distanza (m)</h4>
+        </div>
+        <div class="col-6 top-margin">
+            <h4>Tempo di perc.</h4>
+        </div>
+        <div class="col-6">
+            {{ getDistance() }}m
+        </div>
+        <div class="col-6">
+            <div>{{ customItineraryResult.stats.eta | eta }}</div>
+        </div>
+        <div class="col-6 top-margin">
+            <h4>Massima altitudine</h4>
+        </div>
+        <div class="col-6 top-margin">
+            <h4>Min altitudine</h4>
+        </div>
+        <div class="col-6">
+            <div>{{ customItineraryResult.stats.highestPlace }}m</div>
+        </div>
+        <div class="col-6">
+            <div>{{ customItineraryResult.stats.lowestPlace }}m</div>
         </div>
     </div>
-    <div class="row top-margin-x2">
-        <button class="btn" (click)="onCalculateItineraryClick()">Calcola Percorso</button>
+    <div class="col-12 top-margin-x2" [ngClass]="{ 'hide' : !customItineraryResult }">
+        <div class="row">
+            <div class="col-12">
+                <h4>Profilo altimetrico</h4>
+            </div>
+            <div class="col-11">
+                <canvas id="hikeCustomChart"></canvas>
+            </div>
+        </div>
     </div>
 
-<!--    <div class="col-12">-->
-<!--        <div class="row">-->
-<!--            <div class="col-12">-->
-<!--                <h4>Profilo altimetrico</h4>-->
-<!--            </div>-->
-<!--            <div class="col-11">-->
-<!--                <canvas (mouseout)="onHoverAltiGraphOut()" id="hikeChart"></canvas>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="col-12 top-margin-x2" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 1">
+        <button class="btn full-width"
+                (click)="onCalculateItineraryClick()">
+            <svg class="bi" width="18" height="18" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#lightning" />
+            </svg>
+            Calcola Percorso
+        </button>
+    </div>
+    <div class="col-12" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 2">
+        <button class="btn btn-secondary full-width"
+                (click)="onCalculateItineraryClick()">
+            <svg class="bi" width="18" height="18" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#repeat" />
+            </svg>
+            Chiudi anello
+        </button>
+    </div>
 </div>

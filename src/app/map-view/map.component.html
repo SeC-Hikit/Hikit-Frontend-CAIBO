@@ -144,9 +144,10 @@
                         ></app-place-details>
                     </div>
 
-                    <div *ngIf="sideView=='draw-mode'" class="row top-margin">
-                        <app-draw-mode-details
-                                [customItinerary]="customItineraryResult"
+                    <div *ngIf="sideView=='draw-mode'" class="row top-margin full-width">
+                        <app-draw-mode-details class="full-width"
+                                [customItineraryResult]="customItineraryResult"
+                                [customRequest]="customItinerary"
                                 (onCustomItineraryNewRequest)="onCustomItineraryRequest()">
                             >
                         </app-draw-mode-details>

@@ -41,6 +41,23 @@
         </button>
     </div>
 
+    <div class="btn btn-primary btn-map secondary-btn-bg" id="back-to-draw-itinerary-btn" *ngIf="isDrawMode">
+        <button class="inner-btn secondary-btn-bg">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="btn btn-primary btn-map secondary-btn-bg" id="calculate-itinerary-btn" *ngIf="isDrawMode">
+        <button class="inner-btn secondary-btn-bg">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#lightning" />
+            </svg>
+        </button>
+    </div>
+
+
     <!--  If draw mode is selected, show hints -->
 
     <div id="hint-space">

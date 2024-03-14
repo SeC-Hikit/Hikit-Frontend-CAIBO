@@ -1,3 +1,5 @@
+@import "../../style/const.scss";
+
 #map-full {
   width: 100%;
   z-index: 1;
@@ -55,6 +57,23 @@
   position: absolute;
   right: 1%;
   top: 320px;
+
+}
+
+#back-to-draw-itinerary-btn {
+  position: absolute;
+  right: 1%;
+  top: 375px;
+}
+
+#calculate-itinerary-btn {
+  position: absolute;
+  right: 1%;
+  top: 430px;
+}
+
+.secondary-btn-bg {
+  background: $soft-action-color !important;
 }
 
 #hint-space {

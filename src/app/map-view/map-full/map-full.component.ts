@@ -50,6 +50,8 @@ export class MapFullComponent implements OnInit {
 
     otherTrailsPolylines: TrailToPolyline[];
 
+    userCustomItineraryPolyline : L.Polyline;
+
     openStreetmapCopy: string;
 
     @Input() userPosition: UserCoordinates;
@@ -587,6 +589,12 @@ export class MapFullComponent implements OnInit {
     }
 
     private renderDrawnWaypoints() {
+        if(this.userCustomItineraryPolyline) this.userCustomItineraryPolyline.remove();
+        this.userCustomItineraryPolyline = L.polyline(this.drawNewWaypoints.map((x) =>
+            [x.point.latitude, x.point.longitude]), {color: 'blue'})
+        this.userCustomItineraryPolyline.addTo(this.map);
+
+        this.waypoints.forEach((it) => this.map.removeLayer(it))
         this.waypoints = this.drawNewWaypoints.map(waypoint =>
             L.circle([waypoint.point.latitude, waypoint.point.longitude],
                 {radius: 30, color: 'blue'})

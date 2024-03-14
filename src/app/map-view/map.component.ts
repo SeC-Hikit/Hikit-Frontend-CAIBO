@@ -751,6 +751,7 @@ export class MapComponent implements OnInit {
     toggleDrawMode() {
         this.customItinerary = {geoLineDto: {coordinates: []}};
         this.isDrawMode = !this.isDrawMode;
+        if(!this.isDrawMode) this.customItineraryResult = null;
         this.sideView = this.isDrawMode ? ViewState.DRAW_MODE : ViewState.NONE;
         this.drawPoints = [];
     }
