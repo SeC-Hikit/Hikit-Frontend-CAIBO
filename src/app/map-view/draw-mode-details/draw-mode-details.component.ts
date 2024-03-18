@@ -17,9 +17,12 @@ export class DrawModeDetailsComponent implements OnInit {
 
     @Input() customItineraryResult: CustomItineraryResult;
     @Input() customRequest: CustomItineraryRequest;
-    @Output() onCustomItineraryNewRequest = new EventEmitter<void>();
+    @Input() isLoading: boolean = false;
 
-    isLoading: boolean = false;
+    @Output() onCustomItineraryNewRequest = new EventEmitter<void>();
+    @Output() onCloseItineraryCircle = new EventEmitter<void>();
+    @Output() onDeleteItinerary = new EventEmitter<void>();
+
 
     constructor() {
 
@@ -65,12 +68,16 @@ export class DrawModeDetailsComponent implements OnInit {
     }
 
     updateChart(): void {
-        if(!this.chart) {
-            setTimeout(() => this.updateChart(), 200);
-            return; }
+        if (!this.chart) {
+            setTimeout(() => this.updateChart(), 500);
+            return;
+        }
         ChartUtils.clearChart(this.chart);
-        let altitudeDataPoints = this.customItineraryResult.coordinates.map(c => c.altitude);
-        this.chart.data.labels = this.customItineraryResult.coordinates.map(c => c.distanceFromTrailStart + "m");
+
+        let coordinates = this.customItineraryResult ? this.customItineraryResult.coordinates : [];
+
+        let altitudeDataPoints = coordinates.map(c => c.altitude);
+        this.chart.data.labels = coordinates.map(c => c.distanceFromTrailStart + "m");
         this.chart.data.datasets = [{
             backgroundColor: "rgb(255, 99, 132)",
             borderColor: "rgb(255, 99, 132)",
@@ -79,5 +86,9 @@ export class DrawModeDetailsComponent implements OnInit {
             label: "Percorso personalizzato"
         }]
         this.chart.update();
+    }
+
+    onEncounteredTrailClick(id: string) {
+
     }
 }

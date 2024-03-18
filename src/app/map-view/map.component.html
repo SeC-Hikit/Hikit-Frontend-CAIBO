@@ -146,9 +146,14 @@
 
                     <div *ngIf="sideView=='draw-mode'" class="row top-margin full-width">
                         <app-draw-mode-details class="full-width"
-                                [customItineraryResult]="customItineraryResult"
-                                [customRequest]="customItinerary"
-                                (onCustomItineraryNewRequest)="onCustomItineraryRequest()">
+                                               [customItineraryResult]="customItineraryResult"
+                                               [customRequest]="customItinerary"
+                                               [isLoading]="isCustomItineraryLoading"
+                                               (onCustomItineraryNewRequest)="onCustomItineraryRequest()"
+                                               (onCloseItineraryCircle)="onCustomItineraryCloseRoundTrip()"
+                                               (onDeleteItinerary)="deleteDrawTrip()"
+
+                        >
                             >
                         </app-draw-mode-details>
                     </div>
@@ -158,13 +163,19 @@
                     <div *ngIf="sideView==''">
                         <div class="row align-middle">
                             <div class="col-12">
-                                <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
-                                        class="clickable"
-                                        (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
+                                <p>Per iniziare, naviga la mappa, <span
+                                        (click)="showDrawMode()" class="clickable">disegna un percorso libero</span>,
+                                    ricerca un sentiero, oppure consulta la <span
+                                            class="clickable"
+                                            (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
                                 </p>
                             </div>
                             <div class="col-12">
                                 <button class="btn btn-primary full-width" (click)="showTrailList()">Lista sentieri
+                                </button>
+                            </div>
+                            <div class="col-12 top-margin">
+                                <button class="btn btn-secondary full-width" (click)="showDrawMode()">Disegna percorso libero
                                 </button>
                             </div>
                             <div class="col-md-12 top-margin-x2">
@@ -235,6 +246,7 @@
              [ngClass]="{'col-8': !isPortraitMode, 'col-12': isPortraitMode}">
             <app-map-full id="map-full-container"
                           [isMobileView]="isMobileDetailMode"
+                          [viewState]="sideView"
                           [selectedTrail]="selectedTrail"
                           [selectedTrailNotification]="selectedTrailNotifications"
                           [selectedTrailIndex]="selectedTrailIndex"
@@ -265,6 +277,9 @@
                           (onSearchClick)="onSearchClickShowListOfTrails()"
                           (onDrawItineraryClick)="toggleDrawMode()"
                           (onMapDrawClick)="getDrawClick($event)"
+                          (onShowDrawMode)="showDrawMode()"
+                          (onDeleteCustomItinerary)="deleteDrawTrip()"
+                          (onCalculateItinerary)="onCustomItineraryRequest()"
             >
             </app-map-full>
         </div>

@@ -6,7 +6,7 @@ import {Coordinates2D, RectangleDto} from 'src/app/service/geo-trail-service';
 import {CoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
 import {UserCoordinates} from 'src/app/UserCoordinates';
 import {GraphicUtils} from 'src/app/utils/GraphicUtils';
-import {MapUtils} from '../MapUtils';
+import {MapUtils, ViewState} from '../MapUtils';
 import {TrailToPolyline} from '../TrailToPolyline';
 import {AccessibilityNotification} from "../../service/notification-service.service";
 import {Marker} from 'src/app/map-preview/map-preview.component';
@@ -50,10 +50,11 @@ export class MapFullComponent implements OnInit {
 
     otherTrailsPolylines: TrailToPolyline[];
 
-    userCustomItineraryPolyline : L.Polyline;
+    userCustomItineraryPolyline: L.Polyline;
 
     openStreetmapCopy: string;
 
+    @Input() viewState: ViewState;
     @Input() userPosition: UserCoordinates;
     @Input() pois: PoiDto[];
     @Input() selectedTrail: TrailDto;
@@ -89,6 +90,9 @@ export class MapFullComponent implements OnInit {
     @Output() onSearchClick = new EventEmitter();
     @Output() onDrawItineraryClick = new EventEmitter();
     @Output() onMapDrawClick = new EventEmitter<Coordinates2D>();
+    @Output() onShowDrawMode = new EventEmitter<void>();
+    @Output() onDeleteCustomItinerary = new EventEmitter<void>();
+    @Output() onCalculateItinerary = new EventEmitter<void>();
 
 
     constructor() {
@@ -207,11 +211,16 @@ export class MapFullComponent implements OnInit {
                 if (propName == "zoomToTrail") {
                     this.focusOnTrail();
                 }
-                if (propName == "isDrawMode") {
-                    this.toggleMapDrawMode();
+                if (propName == "viewState") {
+                    if (this.viewState == ViewState.DRAW_MODE) this.toggleMapDrawMode();
                 }
                 if (propName == "drawNewWaypoints") {
                     this.renderDrawnWaypoints();
+                }
+                if (propName == "isDrawMode") {
+                    if(this.isDrawMode) {
+                        this.toggleDrawModeEventsListener();
+                    }
                 }
             }
         }
@@ -564,7 +573,7 @@ export class MapFullComponent implements OnInit {
     private refreshMapTiles() {
         const zoom = this.map.getZoom();
         this.map.setZoom(zoom - 1, {animate: true});
-        setTimeout(()=> {
+        setTimeout(() => {
             console.log("da " + zoom)
             this.map.setZoom(zoom, {animate: true});
         }, 500)
@@ -572,10 +581,9 @@ export class MapFullComponent implements OnInit {
     }
 
     private toggleMapDrawMode() {
-        if (this.isDrawMode) {
+        if (this.viewState == ViewState.DRAW_MODE) {
             this.map.doubleClickZoom.disable();
-        }
-        else {
+        } else {
             this.map.doubleClickZoom.enable();
             this.waypoints.forEach((it) => this.map.removeLayer(it))
             this.waypoints = [];
@@ -583,22 +591,75 @@ export class MapFullComponent implements OnInit {
     }
 
     private onDrawWaypoint(event: LeafletMouseEvent) {
-        if (!this.isDrawMode)
+        if (this.viewState != ViewState.DRAW_MODE)
             return;
         this.onMapDrawClick.emit({latitude: event.latlng.lat, longitude: event.latlng.lng});
     }
 
     private renderDrawnWaypoints() {
-        if(this.userCustomItineraryPolyline) this.userCustomItineraryPolyline.remove();
+        if (this.userCustomItineraryPolyline) this.userCustomItineraryPolyline.remove();
         this.userCustomItineraryPolyline = L.polyline(this.drawNewWaypoints.map((x) =>
             [x.point.latitude, x.point.longitude]), {color: 'blue'})
         this.userCustomItineraryPolyline.addTo(this.map);
 
         this.waypoints.forEach((it) => this.map.removeLayer(it))
-        this.waypoints = this.drawNewWaypoints.map(waypoint =>
+        this.waypoints = this.drawNewWaypoints.slice(0, this.drawNewWaypoints.length - 1).map(waypoint =>
             L.circle([waypoint.point.latitude, waypoint.point.longitude],
                 {radius: 30, color: 'blue'})
         );
+
+        const lastPoint = (this.drawNewWaypoints.length > 1) ?
+            this.drawNewWaypoints[this.drawNewWaypoints.length - 1] : this.drawNewWaypoints[0];
+        if (lastPoint) this.waypoints.push(
+            L.circle([
+                    lastPoint.point.latitude, lastPoint.point.longitude],
+                {radius: 30, color: '#1D9566'})
+        )
+
         this.waypoints.forEach(it => it.addTo(this.map));
+    }
+
+    toggleDrawModeEventsListener() {
+        this.locationsOnTrail.forEach((circlesOnTrails) => {
+            circlesOnTrails.removeEventListener("click");
+            circlesOnTrails.removeEventListener("mouseout");
+        })
+        this.trailCodeMarkers.forEach((trailCodeMarkers) => {
+            trailCodeMarkers.removeEventListener("click");
+        })
+        this.notificationMarkers.forEach((trailCodeMarkers) => {
+            trailCodeMarkers.removeEventListener("click");
+        })
+        this.poiMarkers.forEach((poiMarker) => {
+            poiMarker.removeEventListener("click");
+        })
+        this.otherTrailsPolylines.forEach((trail) => {
+            trail.getPolyline().removeEventListener("click")
+            trail.getPolyline().removeEventListener("mouseover")
+            trail.getPolyline().removeEventListener("mouseout")
+            trail.getBackgroundPolyline().removeEventListener("click")
+            trail.getBackgroundPolyline().removeEventListener("mouseover")
+            trail.getBackgroundPolyline().removeEventListener("mouseout")
+
+            trail.getPolyline().on("contextmenu", () => {
+                this.onSelectTrail(trail.getId())();
+            });
+        })
+    }
+
+    attachTrailEventsBasedOnMode(){
+
+    }
+
+    onShowDrawModeClick() {
+        this.onShowDrawMode.emit();
+    }
+
+    onDeleteCustomItineraryClick() {
+        this.onDeleteCustomItinerary.emit();
+    }
+
+    onCalculateItineraryClick() {
+        this.onCalculateItinerary.emit();
     }
 }

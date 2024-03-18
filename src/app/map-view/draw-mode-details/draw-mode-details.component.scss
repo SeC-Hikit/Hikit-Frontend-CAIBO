@@ -4,6 +4,17 @@
   display: none;
 }
 
+h4 {
+  font-size: medium;
+}
+
 .btn-secondary {
   background-color: $secondary-bg-color !important;
+}
+
+.MapDrawMode {
+
+  .description {
+    font-size: medium;
+  }
 }

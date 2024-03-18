@@ -122,8 +122,8 @@ export class MapComponent implements OnInit {
     isPortraitMode: boolean = true;
     isMobileDetailMode: boolean = false;
     refreshSwitch: boolean = false;
-
     isDrawMode: boolean = false;
+    isCustomItineraryLoading: boolean = false;
 
     customItinerary: CustomItineraryRequest = {geoLineDto: {coordinates: []}};
     customItineraryResult: CustomItineraryResult;
@@ -727,9 +727,11 @@ export class MapComponent implements OnInit {
     }
 
     onCustomItineraryRequest() {
+        this.isCustomItineraryLoading = true;
         this.customItineraryService.constructItinerary(this.customItinerary)
             .subscribe((it) => {
                 this.customItineraryResult = it;
+                this.isCustomItineraryLoading = false;
             });
     }
 
@@ -751,7 +753,7 @@ export class MapComponent implements OnInit {
     toggleDrawMode() {
         this.customItinerary = {geoLineDto: {coordinates: []}};
         this.isDrawMode = !this.isDrawMode;
-        if(!this.isDrawMode) this.customItineraryResult = null;
+        if (!this.isDrawMode) this.customItineraryResult = null;
         this.sideView = this.isDrawMode ? ViewState.DRAW_MODE : ViewState.NONE;
         this.drawPoints = [];
     }
@@ -759,6 +761,20 @@ export class MapComponent implements OnInit {
     getDrawClick(coords: Coordinates2D) {
         this.drawPoints = this.drawPoints.concat([{point: coords, trailId: ""}]);
         this.customItinerary.geoLineDto.coordinates = this.drawPoints.map(it => it.point)
-        console.log(this.drawPoints);
+        console.log(this.customItinerary.geoLineDto.coordinates);
+    }
+
+    onCustomItineraryCloseRoundTrip() {
+        this.getDrawClick(this.customItinerary.geoLineDto.coordinates[0]);
+    }
+
+    showDrawMode() {
+        this.sideView = ViewState.DRAW_MODE;
+    }
+
+    deleteDrawTrip() {
+        this.customItineraryResult = null;
+        this.customItinerary = {geoLineDto: {coordinates: []}};
+        this.drawPoints = [];
     }
 }

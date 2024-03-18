@@ -72,6 +72,12 @@
   top: 430px;
 }
 
+#delete-itinerary-btn {
+  position: absolute;
+  right: 1%;
+  top: 485px;
+}
+
 .secondary-btn-bg {
   background: $soft-action-color !important;
 }
@@ -92,6 +98,22 @@
     text-align: center;
   }
 }
+
+#hint-space-up {
+  position: absolute;
+  height: 30px;
+  background: $secondary-bg-color;
+  top: 2px;
+  left: 0;
+  color: white;
+  z-index: 1000;
+
+  div {
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
 
 .crossDraw {
   cursor: crosshair;

@@ -33,6 +33,10 @@ footer .it-footer { display: none !important; }
     font-weight: bold;
   }
 
+  .btn-secondary {
+    background: $secondary-bg-color !important;
+  }
+
   .clickable:hover {
     color: $primary-text-color;
     font-weight: bold;
