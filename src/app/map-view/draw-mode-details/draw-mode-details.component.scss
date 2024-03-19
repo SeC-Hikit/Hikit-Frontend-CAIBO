@@ -8,12 +8,16 @@ h4 {
   font-size: medium;
 }
 
+
 .btn-secondary {
   background-color: $secondary-bg-color !important;
 }
 
 .MapDrawMode {
 
+  .padding-left-zero {
+    padding-left: 0;
+  }
   .description {
     font-size: medium;
   }

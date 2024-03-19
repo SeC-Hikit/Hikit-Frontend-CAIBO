@@ -152,7 +152,7 @@
                                                (onCustomItineraryNewRequest)="onCustomItineraryRequest()"
                                                (onCloseItineraryCircle)="onCustomItineraryCloseRoundTrip()"
                                                (onDeleteItinerary)="deleteDrawTrip()"
-
+                                               (onBackBtn)="onBackDraw()"
                         >
                             >
                         </app-draw-mode-details>
@@ -164,7 +164,7 @@
                         <div class="row align-middle">
                             <div class="col-12">
                                 <p>Per iniziare, naviga la mappa, <span
-                                        (click)="showDrawMode()" class="clickable">disegna un percorso libero</span>,
+                                        (click)="toggleDrawMode()" class="clickable">disegna un percorso libero</span>,
                                     ricerca un sentiero, oppure consulta la <span
                                             class="clickable"
                                             (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
@@ -175,7 +175,7 @@
                                 </button>
                             </div>
                             <div class="col-12 top-margin">
-                                <button class="btn btn-secondary full-width" (click)="showDrawMode()">Disegna percorso libero
+                                <button class="btn btn-secondary full-width" (click)="toggleDrawMode()">Disegna percorso libero
                                 </button>
                             </div>
                             <div class="col-md-12 top-margin-x2">

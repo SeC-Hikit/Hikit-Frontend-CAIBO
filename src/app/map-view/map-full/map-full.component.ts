@@ -218,7 +218,7 @@ export class MapFullComponent implements OnInit {
                     this.renderDrawnWaypoints();
                 }
                 if (propName == "isDrawMode") {
-                    if(this.isDrawMode) {
+                    if (this.isDrawMode) {
                         this.toggleDrawModeEventsListener();
                     }
                 }
@@ -340,11 +340,11 @@ export class MapFullComponent implements OnInit {
     private addInteractiveTrailToMap(trailToPoly: TrailToPolyline) {
         this.map.addLayer(trailToPoly.getBackgroundPolyline().bringToBack())
         this.map.addLayer(trailToPoly.getPolyline().bringToBack());
-        // trailToPoly.getPolyline().addTo(this.map)
-        trailToPoly.getBackgroundPolyline().on("click", () => {
+        const eventType = this.isDrawMode ? "contextmenu" : "click";
+        trailToPoly.getBackgroundPolyline().on(eventType, () => {
             this.onSelectTrail(trailToPoly.getId())();
         });
-        trailToPoly.getPolyline().on("click", () => {
+        trailToPoly.getPolyline().on(eventType, () => {
             this.onSelectTrail(trailToPoly.getId())();
         });
         trailToPoly.getPolyline().on("mouseover", this.highlightTrail(trailToPoly));
@@ -419,7 +419,9 @@ export class MapFullComponent implements OnInit {
             let marker =
                 L.marker([middleCoordinateInTrail.latitude,
                     middleCoordinateInTrail.longitude], {icon: icon});
-            marker.on("click", this.onSelectTrail(trail.id))
+            const eventType = this.isDrawMode ?
+                "contextmenu" : "click";
+            marker.on(eventType, this.onSelectTrail(trail.id))
             this.trailCodeMarkers.push(marker);
             marker.addTo(this.map)
         }))
@@ -507,7 +509,8 @@ export class MapFullComponent implements OnInit {
                 {lng: it.coordinates.longitude, lat: it.coordinates.latitude},
                 {icon: MapUtils.determineIcon(marker)}
             );
-            notificationMarker.on("click", () => this.onNotificationClick.emit(it.id));
+            const eventType = this.isDrawMode ? "contextmenu" : "click";
+            notificationMarker.on(eventType, () => this.onNotificationClick.emit(it.id));
             this.notificationMarkers.push(notificationMarker);
             this.map.addLayer(notificationMarker)
         });
@@ -529,7 +532,8 @@ export class MapFullComponent implements OnInit {
                 const circle = L.circle(
                     [it.coordinates.latitude, it.coordinates.longitude],
                     {radius: MapFullComponent.HALF_CIRCLE_SIZE, fill: true, fillColor: "red", color: "red"});
-                circle.on("click", () => this.onLocationSelection.emit(it))
+                const eventType = this.isDrawMode ? "contextmenu" : "click";
+                circle.on(eventType, () => this.onLocationSelection.emit(it))
                 circle.on("mouseover", () => this.highlightPlaceLocation(circle, it));
                 circle.addTo(this.map);
                 this.locationsOnTrail.push(circle);
@@ -545,7 +549,8 @@ export class MapFullComponent implements OnInit {
         const circle = L.circle(
             [latLng.lat, latLng.lng],
             {radius: MapFullComponent.CIRCLE_SIZE, fill: true, fillColor: "yellow", color: "yellow"});
-        circle.on("click", () => this.onLocationSelection.emit(it))
+        const eventType = this.isDrawMode ? "contextmenu" : "click";
+        circle.on(eventType, () => this.onLocationSelection.emit(it))
         circle.on("mouseout", () => this.dehighlightPlaceLocation());
         this.locationsOnTrail.push(circle)
         this.map.addLayer(circle)
@@ -620,36 +625,28 @@ export class MapFullComponent implements OnInit {
     }
 
     toggleDrawModeEventsListener() {
+        const eventType = this.isDrawMode ? "contextmenu" : "click";
         this.locationsOnTrail.forEach((circlesOnTrails) => {
-            circlesOnTrails.removeEventListener("click");
-            circlesOnTrails.removeEventListener("mouseout");
+            circlesOnTrails.removeEventListener(eventType);
         })
         this.trailCodeMarkers.forEach((trailCodeMarkers) => {
-            trailCodeMarkers.removeEventListener("click");
+            trailCodeMarkers.removeEventListener(eventType);
         })
         this.notificationMarkers.forEach((trailCodeMarkers) => {
-            trailCodeMarkers.removeEventListener("click");
+            trailCodeMarkers.removeEventListener(eventType);
         })
         this.poiMarkers.forEach((poiMarker) => {
-            poiMarker.removeEventListener("click");
+            poiMarker.removeEventListener(eventType);
         })
         this.otherTrailsPolylines.forEach((trail) => {
-            trail.getPolyline().removeEventListener("click")
-            trail.getPolyline().removeEventListener("mouseover")
-            trail.getPolyline().removeEventListener("mouseout")
-            trail.getBackgroundPolyline().removeEventListener("click")
-            trail.getBackgroundPolyline().removeEventListener("mouseover")
-            trail.getBackgroundPolyline().removeEventListener("mouseout")
-
-            trail.getPolyline().on("contextmenu", () => {
-                this.onSelectTrail(trail.getId())();
-            });
+            trail.getPolyline().removeEventListener(eventType)
+            trail.getBackgroundPolyline().removeEventListener(eventType)
         })
+        if(this.isDrawMode) {
+            this.onMoved();
+        }
     }
 
-    attachTrailEventsBasedOnMode(){
-
-    }
 
     onShowDrawModeClick() {
         this.onShowDrawMode.emit();

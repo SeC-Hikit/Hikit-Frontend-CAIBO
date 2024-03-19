@@ -777,4 +777,9 @@ export class MapComponent implements OnInit {
         this.customItinerary = {geoLineDto: {coordinates: []}};
         this.drawPoints = [];
     }
+
+    onBackDraw() {
+        this.drawPoints = this.drawPoints.splice(0, this.drawPoints.length - 1);
+        this.customItinerary.geoLineDto.coordinates = this.drawPoints.map(it => it.point)
+    }
 }

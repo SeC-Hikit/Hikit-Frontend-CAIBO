@@ -3,6 +3,7 @@ import {CustomItineraryRequest, CustomItineraryResult} from "../../service/custo
 import {ChartUtils} from "../ChartUtils";
 import * as Chart from "chart.js";
 import {ChartOptions} from "chart.js";
+import {TrailClassificationUtils} from "../../TrailClassificationUtils";
 
 @Component({
     selector: 'app-draw-mode-details',
@@ -15,12 +16,15 @@ export class DrawModeDetailsComponent implements OnInit {
     private chart: Chart;
     private chartOptions: ChartOptions;
 
+    private calculatedClassification = ""
+
     @Input() customItineraryResult: CustomItineraryResult;
     @Input() customRequest: CustomItineraryRequest;
     @Input() isLoading: boolean = false;
 
     @Output() onCustomItineraryNewRequest = new EventEmitter<void>();
     @Output() onCloseItineraryCircle = new EventEmitter<void>();
+    @Output() onBackBtn = new EventEmitter<void>();
     @Output() onDeleteItinerary = new EventEmitter<void>();
 
 
@@ -44,6 +48,7 @@ export class DrawModeDetailsComponent implements OnInit {
         for (const propName in changes) {
             if (propName == "customItineraryResult") {
                 this.isLoading = false;
+                this.calculatedClassification = this.calculateTrailClassification()
                 this.updateChart();
             }
         }
@@ -90,5 +95,11 @@ export class DrawModeDetailsComponent implements OnInit {
 
     onEncounteredTrailClick(id: string) {
 
+    }
+
+    private calculateTrailClassification() {
+        return TrailClassificationUtils.getHighestClassification(
+            this.customItineraryResult.trailPreviews.map(it=>
+                TrailClassificationUtils.getClassification(it.classification)))
     }
 }
