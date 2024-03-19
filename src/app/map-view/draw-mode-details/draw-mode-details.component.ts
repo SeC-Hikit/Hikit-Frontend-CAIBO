@@ -16,7 +16,7 @@ export class DrawModeDetailsComponent implements OnInit {
     private chart: Chart;
     private chartOptions: ChartOptions;
 
-    private calculatedClassification = ""
+    calculatedClassification = ""
 
     @Input() customItineraryResult: CustomItineraryResult;
     @Input() customRequest: CustomItineraryRequest;
