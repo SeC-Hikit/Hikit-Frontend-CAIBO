@@ -99,6 +99,12 @@
   }
 }
 
+.hint-space-draw {
+  bottom: 40px !important;
+  box-shadow: none !important;
+  border-top: 1px solid $secondary-bg-color;
+}
+
 #hint-space-up {
   position: absolute;
   height: 30px;
@@ -115,6 +121,20 @@
   }
 }
 
+
+#commands-help-box {
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  height: 50px;
+  width: 100%;
+  background: white;
+  z-index: 999;
+  color: black;
+  padding: 10px 10px 0 15px;
+  border-radius: 5px;
+  border-top: 1px $secondary-bg-color solid;
+}
 
 .crossDraw {
   cursor: crosshair;

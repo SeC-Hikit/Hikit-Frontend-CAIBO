@@ -72,11 +72,26 @@
 
     <!--  If draw mode is selected, show hints -->
 
-    <div id="hint-space">
+    <div id="hint-space" [class]="{'hint-space-draw': this.isDrawMode }">
         <div>{{hint}}</div>
     </div>
     <div id="hint-space-up" class="full-width" *ngIf="isDrawMode">
         <div>Modalità disegno percorso libero</div>
+    </div>
+
+    <div id="commands-help-box" class="row" *ngIf="isDrawMode">
+        <div class="col-l-3">
+            <object data="/assets/bootstrap-icons/icons/mouse2-right_click.svg" type="image/svg+xml">
+                <img src="yourfallback.jpg"/>
+            </object>
+            <span>x2 click/tap = aggiunta p.passaggio</span>
+        </div>
+        <div class="offset-1 col-l-3">
+            <object data="/assets/bootstrap-icons/icons/mouse2-right_click.svg" type="image/svg+xml">
+                <img src="yourfallback.jpg"/>
+            </object>
+            <span>tasto destro = selezione</span>
+        </div>
     </div>
 
 </div>
