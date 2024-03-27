@@ -18,6 +18,7 @@ export class DrawModeDetailsComponent implements OnInit {
 
     calculatedClassification = ""
 
+    @Input() isCustomItineraryPrecise: boolean;
     @Input() customItineraryResult: CustomItineraryResult;
     @Input() customRequest: CustomItineraryRequest;
     @Input() isLoading: boolean = false;
@@ -26,6 +27,9 @@ export class DrawModeDetailsComponent implements OnInit {
     @Output() onCloseItineraryCircle = new EventEmitter<void>();
     @Output() onBackBtn = new EventEmitter<void>();
     @Output() onDeleteItinerary = new EventEmitter<void>();
+    @Output() onSaveItinerary = new EventEmitter<void>();
+    @Output() onTrailSelect = new EventEmitter<string>();
+    @Output() onSelectAccessibilityNotification = new EventEmitter<string>();
 
 
     constructor() {
@@ -60,7 +64,7 @@ export class DrawModeDetailsComponent implements OnInit {
     }
 
     onNotificationClick(id: string) {
-
+        this.onSelectAccessibilityNotification.emit(id)
     }
 
     getDistance() {
@@ -94,12 +98,16 @@ export class DrawModeDetailsComponent implements OnInit {
     }
 
     onEncounteredTrailClick(id: string) {
-
+        this.onTrailSelect.emit(id)
     }
 
     private calculateTrailClassification() {
         return TrailClassificationUtils.getHighestClassification(
             this.customItineraryResult.trailPreviews.map(it=>
                 TrailClassificationUtils.getClassification(it.classification)))
+    }
+
+    onSaveItineraryGpx() {
+        this.onSaveItinerary.emit();
     }
 }

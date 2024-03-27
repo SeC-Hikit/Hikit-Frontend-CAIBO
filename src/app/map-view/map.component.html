@@ -79,6 +79,15 @@
                         (onDownloadPdf)="onDownloadPdf()"
                         (onNavigateToLocation)="navigateToLocation($event)"
                         (onForceMapRefresh)="onForceMapRefresh()"
+                        [isCustomItineraryPrecise]="isCustomItineraryResultPrecise"
+                        [customItineraryResult]="customItineraryResult"
+                        [customItineraryRequest]="customItinerary"
+                        [isCustomItineraryLoading]="isCustomItineraryLoading"
+                        (onCalculateCustomItinerary)="onCustomItineraryRequest()"
+                        (onCloseItineraryCircle)="onCustomItineraryCloseRoundTrip()"
+                        (onDeleteCustomItinerary)="deleteDrawTrip()"
+                        (onBackCustomItinerary)="onBackDraw()"
+                        (onDownloadCustomItinerary)="onSaveItinerary()"
                 >
                 </app-map-mobile-view>
             </div>
@@ -146,6 +155,7 @@
 
                     <div *ngIf="sideView=='draw-mode'" class="row top-margin full-width">
                         <app-draw-mode-details class="full-width"
+                                               [isCustomItineraryPrecise]="isCustomItineraryResultPrecise"
                                                [customItineraryResult]="customItineraryResult"
                                                [customRequest]="customItinerary"
                                                [isLoading]="isCustomItineraryLoading"
@@ -153,8 +163,10 @@
                                                (onCloseItineraryCircle)="onCustomItineraryCloseRoundTrip()"
                                                (onDeleteItinerary)="deleteDrawTrip()"
                                                (onBackBtn)="onBackDraw()"
+                                               (onSaveItinerary)="onSaveItinerary()"
+                                               (onTrailSelect)="onSelectTrail($event, false, false)"
+                                               (onSelectAccessibilityNotification)="onAccessibilityNotificationSelection($event)"
                         >
-                            >
                         </app-draw-mode-details>
                     </div>
 

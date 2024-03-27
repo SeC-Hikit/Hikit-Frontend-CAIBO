@@ -15,10 +15,17 @@ h4 {
 
 .MapDrawMode {
 
+  padding: 0 3% 3% 3%;
+
   .padding-left-zero {
     padding-left: 0;
   }
+
   .description {
     font-size: medium;
+  }
+
+  .warning-low-precision {
+    color: $primary-bg-color;
   }
 }

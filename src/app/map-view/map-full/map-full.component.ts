@@ -124,6 +124,10 @@ export class MapFullComponent implements OnInit {
 
         L.control.scale({position: 'topright'}).addTo(this.map);
         this.attachEventListeners();
+
+        this.map.getContainer().addEventListener("contextmenu", function(domEvent) {
+            domEvent.preventDefault();
+        });
         this.onDoneLoading.emit();
     }
 

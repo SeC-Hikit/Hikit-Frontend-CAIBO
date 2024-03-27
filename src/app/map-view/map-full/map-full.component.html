@@ -76,21 +76,23 @@
         <div>{{hint}}</div>
     </div>
     <div id="hint-space-up" class="full-width" *ngIf="isDrawMode">
-        <div>Modalità disegno percorso libero</div>
+        <div *ngIf="isDrawMode && viewState !='draw-mode'" class="pulse clickable" (click)="onShowDrawModeClick()">
+            Torna al disegno percorso libero</div>
+        <div *ngIf="isDrawMode && viewState == 'draw-mode'">Modalità disegno percorso libero</div>
     </div>
 
     <div id="commands-help-box" class="row" *ngIf="isDrawMode">
         <div class="col-l-3">
-            <object data="/assets/bootstrap-icons/icons/mouse2-right_click.svg" type="image/svg+xml">
+            <object data="/assets/bootstrap-icons/icons/mouse2-left_click.svg" type="image/svg+xml">
                 <img src="yourfallback.jpg"/>
             </object>
-            <span>x2 click/tap = aggiunta p.passaggio</span>
+            <span class="margin-left">x2 click/tap = aggiunta p.passaggio</span>
         </div>
         <div class="offset-1 col-l-3">
             <object data="/assets/bootstrap-icons/icons/mouse2-right_click.svg" type="image/svg+xml">
                 <img src="yourfallback.jpg"/>
             </object>
-            <span>tasto destro = selezione</span>
+            <span class="margin-left">tasto destro = seleziona sentieri e altri elementi</span>
         </div>
     </div>
 

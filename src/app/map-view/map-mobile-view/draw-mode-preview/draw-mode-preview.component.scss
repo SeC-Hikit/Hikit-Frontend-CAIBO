@@ -1,0 +1,22 @@
+@import "/src/app/style/const.scss";
+
+.DrawModePreview {
+
+  .btn-border {
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .bg-action {
+    background: $action-btn-color;
+  }
+
+  .bg-delete {
+    background: $error-color;
+  }
+
+  .bg-info {
+    background: $info-color;
+  }
+}

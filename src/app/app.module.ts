@@ -148,6 +148,7 @@ import {
 import {EventModalComponent} from './modal/event-modal/event-modal.component';
 import {MediaManagementComponent} from './admin/media-management/media-management.component';
 import {DrawModeDetailsComponent} from './map-view/draw-mode-details/draw-mode-details.component';
+import {DrawModePreviewComponent} from './map-view/map-mobile-view/draw-mode-preview/draw-mode-preview.component';
 
 @NgModule({
     declarations: [
@@ -249,7 +250,8 @@ import {DrawModeDetailsComponent} from './map-view/draw-mode-details/draw-mode-d
         MobileMunicipalityPreviewComponent,
         EventModalComponent,
         MediaManagementComponent,
-        DrawModeDetailsComponent
+        DrawModeDetailsComponent,
+        DrawModePreviewComponent
     ],
   imports: [
     BrowserModule,

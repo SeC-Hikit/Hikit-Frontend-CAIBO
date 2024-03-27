@@ -48,6 +48,19 @@
                                                         (onNavigateToTrail)="onSelectedTrail.emit($event)"
                                                         (onNavigateToLocation)="onNavigateToLocationClick($event)"
                 ></app-mobile-accessibility-issue-preview>
+
+                <app-draw-mode-preview *ngIf="sideView=='draw-mode'"
+                                       [isLoading]="isCustomItineraryLoading"
+                                       [customItineraryResult]="customItineraryResult"
+                                       [customRequest]="customItineraryRequest"
+                                       [isCustomItineraryPrecise]="isCustomItineraryPrecise"
+                                       (onCustomItineraryNewRequest)="onCalculateCustomItinerary.emit()"
+                                       (onCloseItineraryCircle)="onCloseItineraryCircle.emit()"
+                                       (onDeleteItinerary)="onDeleteCustomItinerary.emit()"
+                                       (onSaveItinerary)="onDownloadCustomItinerary.emit()"
+                                       (onBackBtn)="onBackCustomItinerary.emit()"
+                ></app-draw-mode-preview>
+
             </span>
             <div class="row"
                  *ngIf="isMobileDetailOn">
@@ -98,6 +111,15 @@
                         (onDownloadPdf)="onDownloadPdf.emit()"
                         (onShowMapTemporarilyPress)="toggleTransparency()"
                         (onSelectPlaceByRef)="onSelectPlaceByRef.emit($event)"
+                        [customItineraryResult]="customItineraryResult"
+                        [customItineraryRequest]="customItineraryRequest"
+                        [isCustomItineraryLoading]="isCustomItineraryLoading"
+                        [isCustomItineraryResultPrecise]="isCustomItineraryPrecise"
+                        (onSaveItinerary)="onDownloadCustomItinerary.emit()"
+                        (onBackItineraryDraw)="onBackCustomItinerary.emit()"
+                        (onCustomItineraryCloseRoundTrip)="onCloseItineraryCircle.emit()"
+                        (onCustomItineraryRequest)="onCalculateCustomItinerary.emit()"
+                        (onDeleteDrawTrip)="onDeleteCustomItinerary.emit()"
                 >
 
                 </app-map-mobile-full-detail-view>

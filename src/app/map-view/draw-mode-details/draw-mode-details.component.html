@@ -16,12 +16,16 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <div *ngIf="customItineraryResult && !isLoading">
+    <div class="top-margin" *ngIf="customItineraryResult && !isLoading">
         <h2>Il tuo percorso</h2>
+        <div class="col-12" *ngIf="!isCustomItineraryPrecise">
+            <span class="pulse warning-low-precision">
+                L'itinerario potrebbe non essere preciso perchè alcuni punti distano più di 200m.</span>
+        </div>
+        <h3 class="top-margin">Problemi sul percorso o nei pressi</h3>
         <div class="col-12">
             <div *ngIf="customItineraryResult && customItineraryResult.notifications.length > 0; else notShow"
                  class="clickable row">
-                <h3>Problemi verificati</h3>
                 <table id="issueTable" class="table table-striped interactive-table">
                     <tbody>
                     <tr class="col-12 clickable" *ngFor="let notification of customItineraryResult.notifications"
@@ -38,7 +42,7 @@
                     <svg class="bi" width="24" height="24">
                         <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#check-all"/>
                     </svg>
-                    Non ci sono problemi di percorribilità
+                    Non ci sono problemi di percorribilità rilevati sul percorso
                 </div>
             </ng-template>
         </div>
@@ -115,6 +119,16 @@
                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#lightning"/>
             </svg>
             Calcola Percorso
+        </button>
+    </div>
+    <hr>
+    <div class="col-12 top-margin-x2" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 1">
+        <button class="btn full-width" [disabled]="isLoading || !customItineraryResult"
+                (click)="onSaveItineraryGpx()">
+            <svg class="bi" width="18" height="18" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+            </svg>
+            Scarica percorso
         </button>
     </div>
     <div class="col-12 top-margin" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 2">

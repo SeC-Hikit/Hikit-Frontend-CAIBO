@@ -29,6 +29,7 @@ import {
     CustomItineraryResult,
     CustomItineraryService
 } from "../service/custom-itinerary.service";
+import {ConfirmModalComponent} from "../modal/confirm-modal/confirm-modal.component";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -122,11 +123,13 @@ export class MapComponent implements OnInit {
     isPortraitMode: boolean = true;
     isMobileDetailMode: boolean = false;
     refreshSwitch: boolean = false;
+
     isDrawMode: boolean = false;
     isCustomItineraryLoading: boolean = false;
 
     customItinerary: CustomItineraryRequest = {geoLineDto: {coordinates: []}};
     customItineraryResult: CustomItineraryResult;
+    isCustomItineraryResultPrecise: boolean;
 
 
     constructor(
@@ -731,10 +734,20 @@ export class MapComponent implements OnInit {
         this.customItineraryService.constructItinerary(this.customItinerary)
             .subscribe((it) => {
                 this.customItineraryResult = it;
+                this.isCustomItineraryResultPrecise = this.isItineraryPrecisionHigh(it);
                 this.isCustomItineraryLoading = false;
             });
     }
 
+
+    private isItineraryPrecisionHigh(it: CustomItineraryResult) {
+        for (let i = 1; i < it.coordinates.length; i++) {
+            if (it.coordinates[i].distanceFromTrailStart - it.coordinates[i - 1].distanceFromTrailStart >= 200) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private setupShortcuts() {
         const context = this;
@@ -773,13 +786,37 @@ export class MapComponent implements OnInit {
     }
 
     deleteDrawTrip() {
+        const modal = this.modalService.open(
+          ConfirmModalComponent
+        )
+
+        modal.componentInstance.title = "Cancella percorso libero";
+        modal.componentInstance.body = "Sei sicura/o di voler cancellare il percorso?";
+        modal.componentInstance.onOk.subscribe(() => {
+            this.clearItinerary();
+        });
+    }
+
+    private clearItinerary() {
         this.customItineraryResult = null;
         this.customItinerary = {geoLineDto: {coordinates: []}};
         this.drawPoints = [];
     }
 
     onBackDraw() {
+        if(this.drawPoints.length == 1) { this.clearItinerary(); return; }
         this.drawPoints = this.drawPoints.splice(0, this.drawPoints.length - 1);
         this.customItinerary.geoLineDto.coordinates = this.drawPoints.map(it => it.point)
+    }
+
+    onSaveItinerary() {
+        this.isCustomItineraryLoading = true;
+        this.customItineraryService.downloadItinerary(this.customItineraryResult)
+            .subscribe((it) => {
+                const blob: any = new Blob([it.body], {type: 'application/csv'});
+                const date = new Date().getMilliseconds();
+                FileSaver.saveAs(blob, `sec_bo_percorso_${date}.gpx`);
+                this.isCustomItineraryLoading = false;
+            });
     }
 }

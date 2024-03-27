@@ -11,6 +11,7 @@ import {MaintenanceDto} from "../../service/maintenance.service";
 import {MunicipalityDto} from "../../service/municipality.service";
 import {EventDto, LocalityDto} from "../../service/ert.service";
 import {SelectTrailArgument} from "../map.component";
+import {CustomItineraryRequest, CustomItineraryResult} from "../../service/custom-itinerary.service";
 
 export interface PositionChangeRequest {
     coordinates: Coordinates2D,
@@ -81,6 +82,18 @@ export class MapMobileViewComponent implements OnInit {
     @Output() onNavigateToLocation: EventEmitter<Coordinates2D> = new EventEmitter<Coordinates2D>();
     @Output() onForceMapRefresh: EventEmitter<void> = new EventEmitter<void>();
     @Output() onSelectPlaceByRef: EventEmitter<PlaceRefDto> = new EventEmitter<PlaceRefDto>();
+
+    // Itinerary
+    @Input() isCustomItineraryPrecise: boolean = false;
+    @Input() customItineraryResult: CustomItineraryResult;
+    @Input() customItineraryRequest: CustomItineraryRequest;
+    @Input() isCustomItineraryLoading: boolean = false;
+
+    @Output() onDeleteCustomItinerary: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onCalculateCustomItinerary: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onCloseItineraryCircle: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onBackCustomItinerary: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDownloadCustomItinerary: EventEmitter<void> = new EventEmitter<void>();
 
 
     isMapInitialized: boolean = true;

@@ -134,7 +134,17 @@
   padding: 10px 10px 0 15px;
   border-radius: 5px;
   border-top: 1px $secondary-bg-color solid;
+
+  svg {
+    margin-top: 3px;
+  }
+
+  .margin-left {
+    margin-left: 5px;
+  }
+
 }
+
 
 .crossDraw {
   cursor: crosshair;

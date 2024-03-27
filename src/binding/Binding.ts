@@ -66,6 +66,9 @@ export interface paths {
   "/geo-tool/distance": {
     post: operations["radialDistance"];
   };
+  "/custom-itinerary/itinerary-download": {
+    post: operations["downloadGpx"];
+  };
   "/custom-itinerary/construct": {
     post: operations["calculate"];
   };
@@ -626,9 +629,6 @@ export interface components {
       messages?: string[];
       content?: components["schemas"]["TrailIntersectionDto"][];
     };
-    CustomItineraryRequestDto: {
-      geoLineDto?: components["schemas"]["GeoLineDto"];
-    };
     CustomItineraryResultDto: {
       coordinates?: components["schemas"]["TrailCoordinates"][];
       trailPreviews?: components["schemas"]["TrailPreviewDto"][];
@@ -652,6 +652,9 @@ export interface components {
       trailStatus?: "DRAFT" | "PUBLIC";
       statsTrailMetadata?: components["schemas"]["StatsTrailMetadataDto"];
       fileDetails?: components["schemas"]["FileDetailsDto"];
+    };
+    CustomItineraryRequestDto: {
+      geoLineDto?: components["schemas"]["GeoLineDto"];
     };
     ResourceGeneratorResponse: {
       status?: "OK" | "BUSY";
@@ -1235,6 +1238,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CoordinatesDto"][];
+      };
+    };
+  };
+  downloadGpx: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": string[];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CustomItineraryResultDto"];
       };
     };
   };

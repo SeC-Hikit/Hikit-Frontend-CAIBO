@@ -1,0 +1,58 @@
+<div class="DrawModePreview">
+    <div class="row" *ngIf="isLoading">
+        <div class="col-3">
+            <div class="spinner-border relative start-50" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="!isLoading">
+        <div class="col-12"
+        >
+            <h2 class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor">Percorso personalizzato</h2>
+            <span class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor" *ngIf="!customItineraryResult">Percorso non ancora calcolato</span>
+            <span class="trailCodeColumn trailCodeColumn-fit trailCodeColumnColor" *ngIf="customItineraryResult">Percorso calcolato, espandi per info</span>
+        </div>
+        <div class="col-2">
+            <div class="btn-border bg-action top-margin" (click)="onCalculateCustomItinerary()"
+             *ngIf="!isLoading && customRequest.geoLineDto.coordinates.length > 1">
+                <svg class="bi pulse clickable" width="24" height="24" fill="currentColor">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#lightning"
+                    />
+                </svg>
+            </div>
+        </div>
+        <div class="col-2" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 1 && customItineraryResult">
+            <div class="btn-border bg-action top-margin" (click)="onSaveItinerary.emit()">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
+                </svg>
+            </div>
+        </div>
+        <div class="col-2" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 0">
+            <div class="btn-border bg-info top-margin" (click)="onBackBtn.emit()">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-90deg-left"/>
+                </svg>
+            </div>
+        </div>
+        <div class="col-2" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 1">
+            <div class="btn-border bg-info top-margin" (click)="onCloseItineraryCircle.emit()">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#arrow-repeat"/>
+                </svg>
+            </div>
+        </div>
+        <div class="col-2" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 0">
+            <div class="btn-border bg-delete top-margin" (click)="onCancelItinerary()">
+                <svg class="bi clickable" width="24" height="24" fill="currentColor">
+                    <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#x"
+                    />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="row margin-up">
+    </div>
+</div>
