@@ -128,7 +128,7 @@
             <svg class="bi" width="18" height="18" fill="currentColor">
                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#download"/>
             </svg>
-            Scarica percorso
+            Download GPX
         </button>
     </div>
     <div class="col-12 top-margin" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 2">
@@ -149,7 +149,7 @@
             Indietro
         </button>
     </div>
-    <div class="col-12 top-margin" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 1">
+    <div class="col-12 top-margin mb-5" *ngIf="customRequest && customRequest.geoLineDto.coordinates.length > 1">
         <button class="btn btn-error full-width" (click)="onDeleteItinerary.emit()">
             Cancella
         </button>
