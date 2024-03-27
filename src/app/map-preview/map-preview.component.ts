@@ -143,33 +143,22 @@ export class MapPreviewComponent implements OnInit {
         }
         this.map.invalidateSize();
         for (const propName in changes) {
-            console.log(changes);
-
-            if (propName == "otherTrails") {
-                console.log("Other Trails")
+            if (propName == "otherTrails")
                 this.showSecondaryTrails();
-            }
-
-            if (propName == "focusPoint") {
-                this.changeView(this.focusPoint)
-            }
-            if (propName == "markersCoordinates") {
-                console.log("cahnged coords")
+            if (propName == "focusPoint")
+                this.changeView(this.focusPoint);
+            if (propName == "markersCoordinates")
                 this.drawMarkers(this.markersCoordinates);
-            }
             if (propName == "trailPreview") {
-                if (this.trailPreview) {
+                if (this.trailPreview)
                     this.onPreview(this.trailPreview.coordinates);
-                }
             }
-            if (propName == "elementAt") {
+            if (propName == "elementAt")
                 this.onSelection(this.elementAt);
-            }
         }
     }
 
     onSelection(elementAt: number) {
-        console.log("Rendering point at index " + elementAt);
         if (this.selectionCircle) this.map.removeLayer(this.selectionCircle);
         const trailCoords = this.trailPreview.coordinates;
         let selectedCoord = trailCoords[elementAt];

@@ -22,7 +22,7 @@ export class AdminDiagnoseService {
   testAltitude(): Observable<DiagnoseResponse> {
     return this.httpClient.get<DiagnoseResponse>(this.baseUrl + "/altitude")
         .pipe(
-            tap(_ => console.log("")),
+            tap(),
             catchError(this.handleError<DiagnoseResponse>('Diagnose the altitude service', null))
         );
   }

@@ -26,7 +26,7 @@ export class AdminMaintenanceService {
   save(maintenance: MaintenanceDto): Observable<RestResponse> {
     return this.httpClient.put<RestResponse>(this.baseUrl, maintenance)
         .pipe(
-            tap(_ => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>('Save maintenance', null))
         );
   }
@@ -34,7 +34,7 @@ export class AdminMaintenanceService {
   deleteById(_id: any): Observable<RestResponse> {
     return this.httpClient.delete<RestResponse>(this.baseUrl + "/" + _id)
         .pipe(
-            tap(_ => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>('Delete maintenance', null))
         );
   }

@@ -33,7 +33,6 @@ export class TrailSaveProcessHelper {
                              onComplete: (trailResponse: TrailResponse) => void,
                              onError: (errors: string[]) => void) {
 
-        console.log("Saving trail...")
         const trailImport: TrailImportDto = {
             name: trailData.name,
             coordinates: trailData.coordinates,

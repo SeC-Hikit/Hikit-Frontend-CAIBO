@@ -57,7 +57,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
             },
             icon: MapPinIconType.CROSSWAY_ICON
         }
-        console.log(this.inputForm)
     }
 
     toggleShowing(): void {
@@ -137,7 +136,6 @@ export class TrailIntersectionEntryComponent implements OnInit {
     }
 
     onDeleteEvent() {
-        console.log("delete")
         this.onDelete.emit();
     }
 

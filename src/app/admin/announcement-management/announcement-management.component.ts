@@ -18,7 +18,6 @@ export class AnnouncementManagementComponent implements OnInit {
     async ngOnInit() {
         let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer, Profile.casualVolunteer];
         this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
-        console.log(this.isAllowed);
         if (this.isAllowed == false) {
             this.routerService.navigate(['/admin']);
         }

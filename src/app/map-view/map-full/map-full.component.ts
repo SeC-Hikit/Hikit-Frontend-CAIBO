@@ -547,7 +547,6 @@ export class MapFullComponent implements OnInit {
         const zoom = this.map.getZoom();
         this.map.setZoom(zoom - 1, {animate: true});
         setTimeout(()=> {
-            console.log("da " + zoom)
             this.map.setZoom(zoom, {animate: true});
         }, 500)
 

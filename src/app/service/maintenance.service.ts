@@ -24,7 +24,7 @@ export class MaintenanceService {
         if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/future", {params: params})
         .pipe(
-            tap(_ => console.log("")),
+            tap(),
             catchError(this.handleError<MaintenanceResponse>('Future maintenance', null))
         );
     }
@@ -34,7 +34,7 @@ export class MaintenanceService {
         if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past", {params: params})
         .pipe(
-            tap(_ => console.log("")),
+            tap(),
             catchError(this.handleError<MaintenanceResponse>('Past maintenance', null))
         );
     }
@@ -42,7 +42,7 @@ export class MaintenanceService {
     getPastForTrail(trailId: string) {
         return this.httpClient.get<MaintenanceResponse>(this.baseUrl + "/past/" + trailId)
         .pipe(
-            tap(_ => console.log("")),
+            tap(),
             catchError(this.handleError<MaintenanceResponse>('Past maintenance by trailId', null))
         );
     }

@@ -21,7 +21,7 @@ export class AdminPoiService {
   getByTrailCode(id: string): Observable<PoiResponse> {
     return this.httpClient.get<PoiResponse>(this.baseUrl + "/code" + id)
         .pipe(
-            tap(_ => console.log(_)),
+            tap(),
             catchError(this.handleError<PoiResponse>('get by trail ID: ' + id, null))
         );
   }
@@ -29,7 +29,7 @@ export class AdminPoiService {
   create(poi: PoiDto) {
     return this.httpClient.post<PoiResponse>(this.baseUrl, poi)
         .pipe(
-            tap(_ => console.log(_)),
+            tap(),
             catchError(this.handleError<PoiResponse>('Creating poi', null))
         );
   }
@@ -37,7 +37,7 @@ export class AdminPoiService {
   delete(id: string) {
     return this.httpClient.delete<PoiResponse>(this.baseUrl + "/" + id)
         .pipe(
-            tap(_ => console.log(_)),
+            tap(),
             catchError(this.handleError<PoiResponse>('Delete POI', null))
         );
   }
@@ -45,7 +45,7 @@ export class AdminPoiService {
   update(poi: PoiDto) {
     return this.httpClient.put<PoiResponse>(this.baseUrl, poi)
         .pipe(
-            tap(_ => console.log(_)),
+            tap(),
             catchError(this.handleError<PoiResponse>('Updating poi', null))
         );
   }

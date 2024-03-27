@@ -96,7 +96,6 @@ export class PlacePickerSelectorComponent implements OnInit {
             pickerId: this.places.indexOf(this.selectedPlace),
             place: this.selectedPlace
         };
-        console.log(pickedPlace)
         this.onSelection.emit(pickedPlace);
         this.activeModal.close('Selected place')
     }

@@ -24,7 +24,7 @@ export class GeoToolsService {
         let params = new HttpParams().set("latitude", coordinates.latitude.toString())
             .append("longitude", coordinates.longitude.toString())
         return this.httpClient.get<CoordinatesDto>(this.baseUrl + "/altitude", {params: params}).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<CoordinatesDto>("", null))
         );
     }
@@ -34,7 +34,7 @@ export class GeoToolsService {
             console.error("Need more than one coordinate");
         }
         return this.httpClient.post<any>(this.baseUrl + "/distance", coordinates).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<CoordinatesDto>("", null))
         );
     }

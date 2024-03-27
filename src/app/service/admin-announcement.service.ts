@@ -26,21 +26,21 @@ export class AdminAnnouncementService {
 
     create(announcement: AnnouncementDto): Observable<PlaceResponse> {
         return this.httpClient.put<AnnouncementResponse>(this.baseUrl, announcement).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<PlaceResponse>("Create announcement", null))
         );
     }
 
     update(announcement: AnnouncementDto): Observable<AnnouncementResponse> {
         return this.httpClient.post<RestResponse>(this.baseUrl, announcement).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>("Update announcement", null))
         );
     }
 
     deleteById(_id: string): Observable<PlaceResponse> {
         return this.httpClient.delete<AnnouncementResponse>(this.baseUrl + "/" + _id).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<PlaceResponse>("", null))
         );
     }

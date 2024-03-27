@@ -129,7 +129,6 @@ export class MapFullDetailViewComponent implements OnInit {
     }
 
     showList() {
-        console.log(this.trailPreviewList.length);
         this.viewState = ViewState.TRAIL_LIST;
     }
 
@@ -205,13 +204,9 @@ export class MapFullDetailViewComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges) {
         if (this.isMapInitialized) {
             for (const propName in changes) {
-                if (propName == "viewState") {
-                    console.log("[SIDEVIEW]: " + this.viewState);
-                }
-                if (propName == "selectedTrailNotifications") {
-                }
-                if (propName == "trailPreviewList")
-                    console.log("preview list changed");
+                if (propName == "viewState") {}
+                if (propName == "selectedTrailNotifications") {}
+                if (propName == "trailPreviewList") {}
                 if (propName == "selectedTrailData")
                     if (this.selectedTrailData != null) {
                         setTimeout(() =>

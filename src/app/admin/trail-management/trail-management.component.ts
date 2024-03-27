@@ -46,7 +46,6 @@ export class TrailManagementComponent implements OnInit {
 
         let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer];
         this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
-        console.log(this.isAllowed);
         if (this.isAllowed == false) {
                this.routerService.navigate(['/admin']);
         }

@@ -12,7 +12,6 @@ export class ProfileChecker {
 
     static async checkProfile(authService: AuthService, validProfiles: Profile[]): Promise<boolean> {
         let response = await authService.getUserProfile();
-        console.log(response);
         switch(response) {
             case 'admin':
                 for (let validProfile of validProfiles) {

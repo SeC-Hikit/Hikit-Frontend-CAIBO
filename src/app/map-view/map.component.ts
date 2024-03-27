@@ -163,7 +163,6 @@ export class MapComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges) {
         for (const propName in changes) {
             if (propName == "sideView") {
-                console.log("[SIDEVIEW]: " + this.sideView);
                 document.getElementById("trail-detail-column")
                     .scrollTo(0, 0);
             }
@@ -395,10 +394,6 @@ export class MapComponent implements OnInit {
     }
 
     onZoomChange(zoomLevel: number) {
-        const previousZoomLevelSimplifier = this.selectTrailSimplifierLevel(this.zoomLevel);
-        const newZoomLayerSimplifier = this.selectTrailSimplifierLevel(zoomLevel);
-        if (previousZoomLevelSimplifier != newZoomLayerSimplifier)
-            console.log("User zoomed in and trail simplified changed... reloading visible trail!")
         this.zoomChangingShallTriggerTrailsReload = true;
         this.zoomLevel = zoomLevel;
     }

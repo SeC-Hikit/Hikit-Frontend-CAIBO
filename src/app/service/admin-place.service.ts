@@ -22,14 +22,14 @@ export class AdminPlaceService {
 
     create(place: PlaceDto): Observable<PlaceResponse> {
         return this.httpClient.put<PlaceResponse>(this.baseUrl, place).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<PlaceResponse>("Create place", null))
         );
     }
 
     update(place: PlaceDto): Observable<PlaceResponse> {
         return this.httpClient.post<RestResponse>(this.baseUrl, place).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>("Update place", null))
         );
     }
@@ -41,7 +41,7 @@ export class AdminPlaceService {
         return this.httpClient
             .put<PlaceResponse>(this.baseUrl + "/" + placeId, linkedMedia)
             .pipe(
-                tap((_) => console.log("")),
+                tap(),
                 catchError(this.handleError<PlaceResponse>("Add media", null))
             );
     }
@@ -50,7 +50,7 @@ export class AdminPlaceService {
         return this.httpClient
             .put<PlaceResponse>(this.baseUrl + "/link/trail", linkedPlaceDto)
             .pipe(
-                tap((_) => console.log("")),
+                tap(),
                 catchError(this.handleError<PlaceResponse>("Link trail", null))
             );
     }
@@ -59,7 +59,7 @@ export class AdminPlaceService {
         return this.httpClient
             .put<PlaceResponse>(this.baseUrl + "/unlink/trail", linkedPlaceDto)
             .pipe(
-                tap((_) => console.log("")),
+                tap(),
                 catchError(this.handleError<PlaceResponse>("Unlink trail", null))
             );
     }
@@ -71,14 +71,14 @@ export class AdminPlaceService {
         return this.httpClient
             .post<PlaceResponse>(this.baseUrl + "/" + placeId, linkedMedia)
             .pipe(
-                tap((_) => console.log("")),
+                tap(),
                 catchError(this.handleError<PlaceResponse>("", null))
             );
     }
 
     deleteById(_id: string): Observable<PlaceResponse> {
         return this.httpClient.delete<PlaceResponse>(this.baseUrl + "/" + _id).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<PlaceResponse>("", null))
         );
     }

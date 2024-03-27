@@ -24,7 +24,6 @@ export class PoiManagementComponent implements OnInit {
   async ngOnInit() {
     let allowedProfiles: Profile[] = [Profile.admin, Profile.maintainer, Profile.contentCreator];
     this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
-    console.log(this.isAllowed);
     if (this.isAllowed == false) {
       this.routerService.navigate(['/admin']);
     }

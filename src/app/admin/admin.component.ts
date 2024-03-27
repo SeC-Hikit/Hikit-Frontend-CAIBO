@@ -35,7 +35,6 @@ export class AdminComponent implements OnInit {
                                       Profile.contentCreator,
                                       Profile.casualVolunteer];
     this.isAllowed = await ProfileChecker.checkProfile(this.authService, allowedProfiles);
-    console.log(this.isAllowed);
 
     this.authService.getUsername().then((resp)=> {
       this.userName = resp;

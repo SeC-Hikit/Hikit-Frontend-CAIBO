@@ -22,7 +22,7 @@ export class MunicipalityService {
 
     get(): Observable<MunicipalityResponse> {
         return this.httpClient.get<MunicipalityResponse>(this.baseUrl).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<MunicipalityResponse>("", null))
         );
     }

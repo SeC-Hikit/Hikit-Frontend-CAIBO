@@ -23,7 +23,7 @@ export class AdminTrailService {
     return this.httpClient
       .put<RestResponse>(this.baseUrl + "/save", trailImportRequest)
       .pipe(
-        tap((_) => console.log("")),
+        tap(),
         catchError(this.handleError<RestResponse>("get all trail", null))
       );
   }
@@ -32,7 +32,7 @@ export class AdminTrailService {
     return this.httpClient
         .put<RestResponse>(this.baseUrl + "/save", trailImportRequest)
         .pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>("get all trail", null))
         );
   }
@@ -49,7 +49,7 @@ export class AdminTrailService {
     return this.httpClient
         .put<RestResponse>(this.baseUrl + "/update", trailDto)
         .pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>("update trail", null))
         );
   }
@@ -58,7 +58,7 @@ export class AdminTrailService {
     return this.httpClient
         .post<RestResponse>(this.baseUrl + "/status", trailDto)
         .pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>("Status trail", null))
         );
   }

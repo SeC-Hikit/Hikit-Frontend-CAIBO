@@ -55,7 +55,7 @@ export class TrailPreviewService {
     getPreview(id: string): Observable<TrailPreviewResponse> {
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/" + id)
             .pipe(
-                tap(_ => console.log(_)),
+                tap(),
                 catchError(this.handleError<TrailPreviewResponse>('get preview', null))
             );
     }
@@ -71,7 +71,7 @@ export class TrailPreviewService {
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/find/municipality/" + municipalityName,
             {params: params})
             .pipe(
-                tap(_ => console.log(_)),
+                tap(),
                 catchError(this.handleError<TrailPreviewResponse>('get preview', null))
             );
     }
@@ -83,7 +83,7 @@ export class TrailPreviewService {
             .append("isDraftTrailVisible", String(areDraftsVisible));
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl, {params: params})
             .pipe(
-                tap(_ => console.log(_)),
+                tap(),
                 catchError(this.handleError<TrailPreviewResponse>('get all previews', null))
             );
     }
@@ -96,7 +96,7 @@ export class TrailPreviewService {
         }
         return this.httpClient.get<TrailPreviewResponse>(this.baseUrl + "/raw", {params: params})
             .pipe(
-                tap(_ => console.log(_)),
+                tap(),
                 catchError(this.handleError<TrailPreviewResponse>('get all previews', null))
             );
     }
@@ -107,7 +107,7 @@ export class TrailPreviewService {
             .append("limit", limit);
         return this.httpClient.get<TrailMappingResponse>(this.baseUrl + "/map", {params: params})
             .pipe(
-                tap(_ => console.log(_)),
+                tap(),
                 catchError(this.handleError<TrailMappingResponse>('get preview', null))
             );
     }

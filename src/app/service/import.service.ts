@@ -49,7 +49,7 @@ export class ImportService {
     return this.httpClient
       .put<RestResponse>(this.baseUrl + "/save", trailImportRequest)
       .pipe(
-        tap((_) => console.log("")),
+        tap(),
         catchError(this.handleError<RestResponse>("get all trail", null))
       );
   }
@@ -58,7 +58,7 @@ export class ImportService {
     return this.httpClient
         .post(this.baseUrl + "/check", trailDto)
         .pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<RestResponse>("get trail", null))
         );
   }

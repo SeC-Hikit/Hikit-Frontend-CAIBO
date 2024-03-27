@@ -29,10 +29,8 @@ export class ChartUtils {
 
                     ChartUtils.interval = setTimeout(
                         ()=> {
-                            if (item.length) {
-                                console.log(item);
+                            if (item.length)
                                 onHoverCallback(item[0]._index)
-                            }
                         },
                         ChartUtils.DEBOUNCE_TIME);
                 }

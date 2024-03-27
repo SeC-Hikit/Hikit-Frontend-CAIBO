@@ -71,7 +71,6 @@ export class TrailRawViewTableComponent implements OnInit {
 
   uploadFile(file: FileList): void {
     this.isLoading = true;
-    console.log(file);
     this.importService
         .readTrail(file[0])
         .pipe(takeUntil(this.destroy$))
@@ -83,7 +82,6 @@ export class TrailRawViewTableComponent implements OnInit {
             return;
 
           }
-          console.log(response.content[0].id);
           this.navigateToEdit(response.content[0].id);
         });
   }

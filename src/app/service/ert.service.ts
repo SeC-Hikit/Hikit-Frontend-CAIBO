@@ -25,7 +25,7 @@ export class ErtService {
 
     getLocalityDetailsByIstat(istat: String): Observable<LocalityResponse> {
         return this.httpClient.get<LocalityResponse>(this.localitiesBaseUrl + "/" + istat).pipe(
-            tap((_) => console.log("")),
+            tap(),
             catchError(this.handleError<LocalityResponse>("", null))
         );
     }

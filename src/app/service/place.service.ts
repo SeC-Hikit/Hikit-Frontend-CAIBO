@@ -31,14 +31,14 @@ export class PlaceService {
                     .append("isDynamicShowing", isDynamic.toString());
         if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<PlaceResponse>(this.baseUrl, {params: params}).pipe(
-            tap((_) => {}),
+            tap(),
             catchError(this.handleError<PlaceResponse>("", null))
         );
     }
 
     getById(id: string): Observable<PlaceResponse> {
         return this.httpClient.get<PlaceResponse>(this.baseUrl + "/" + id).pipe(
-            tap((_) => {}),
+            tap(),
             catchError(this.handleError<PlaceResponse>("", null))
         );
     }
@@ -49,7 +49,7 @@ export class PlaceService {
         return this.httpClient
             .get<PlaceResponse>(this.baseUrl + "/name/" + name, {params: params})
             .pipe(
-                tap((_) => {}),
+                tap(),
                 catchError(this.handleError<PlaceResponse>("", null))
             );
     }

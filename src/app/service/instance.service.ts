@@ -24,7 +24,7 @@ export class InstanceService {
   get(): Observable<InstanceInfoDto> {
     return this.httpClient.get<InstanceInfoDto>(this.baseUrl)
       .pipe(
-        tap(_ => console.log(_)),
+        tap(),
         catchError(this.handleError<InstanceInfoDto>('get instance info', null))
       );
   }
