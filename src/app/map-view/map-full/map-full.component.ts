@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import 'leaflet';
-import {LeafletMouseEventHandlerFn} from 'leaflet';
+import {LeafletMouseEvent, LeafletMouseEventHandlerFn} from 'leaflet';
 import 'leaflet-textpath';
 import {Coordinates2D, RectangleDto} from 'src/app/service/geo-trail-service';
 import {CoordinatesDto, TrailDto} from 'src/app/service/trail-service.service';
 import {UserCoordinates} from 'src/app/UserCoordinates';
 import {GraphicUtils} from 'src/app/utils/GraphicUtils';
-import {MapUtils} from '../MapUtils';
+import {MapUtils, ViewState} from '../MapUtils';
 import {TrailToPolyline} from '../TrailToPolyline';
 import {AccessibilityNotification} from "../../service/notification-service.service";
 import {Marker} from 'src/app/map-preview/map-preview.component';
@@ -14,6 +14,7 @@ import {MapPinIconType} from "../../../assets/icons/MapPinIconType";
 import {PoiDto} from "../../service/poi-service.service";
 import {PlaceRefDto} from "../../service/place.service";
 import {environment} from "../../../environments/environment";
+import {DrawPoint} from "../map.component";
 
 declare let L; // to be able to use L namespace
 
@@ -44,12 +45,16 @@ export class MapFullComponent implements OnInit {
     notificationMarkers: L.Marker[] = [];
     poiMarkers: L.Marker[] = [];
 
+    waypoints: L.Circle[] = [];
     userCircle: L.Circle = null
 
     otherTrailsPolylines: TrailToPolyline[];
 
+    userCustomItineraryPolyline: L.Polyline;
+
     openStreetmapCopy: string;
 
+    @Input() viewState: ViewState;
     @Input() userPosition: UserCoordinates;
     @Input() pois: PoiDto[];
     @Input() selectedTrail: TrailDto;
@@ -65,6 +70,8 @@ export class MapFullComponent implements OnInit {
     @Input() isMobileView: boolean;
     @Input() zoomToTrail: boolean;
     @Input() isRefresh: boolean;
+    @Input() isDrawMode: boolean;
+    @Input() drawNewWaypoints: DrawPoint[] = [];
 
 
     @Output() onTrailClick = new EventEmitter<string>();
@@ -81,6 +88,12 @@ export class MapFullComponent implements OnInit {
     @Output() onTerrainChangeSelectionClick = new EventEmitter();
     @Output() onGeolocaliseMeSelectionClick = new EventEmitter();
     @Output() onSearchClick = new EventEmitter();
+    @Output() onDrawItineraryClick = new EventEmitter();
+    @Output() onMapDrawClick = new EventEmitter<Coordinates2D>();
+    @Output() onShowDrawMode = new EventEmitter<void>();
+    @Output() onDeleteCustomItinerary = new EventEmitter<void>();
+    @Output() onCalculateItinerary = new EventEmitter<void>();
+
 
     constructor() {
         this.otherTrailsPolylines = [];
@@ -111,6 +124,10 @@ export class MapFullComponent implements OnInit {
 
         L.control.scale({position: 'topright'}).addTo(this.map);
         this.attachEventListeners();
+
+        this.map.getContainer().addEventListener("contextmenu", function(domEvent) {
+            domEvent.preventDefault();
+        });
         this.onDoneLoading.emit();
     }
 
@@ -127,6 +144,9 @@ export class MapFullComponent implements OnInit {
             this.onZoomChange.emit(this.map.getZoom());
         });
 
+        this.map.on("dblclick", (event: LeafletMouseEvent) => {
+            this.onDrawWaypoint(event);
+        });
     }
 
     private onStartMoving() {
@@ -194,6 +214,17 @@ export class MapFullComponent implements OnInit {
                 }
                 if (propName == "zoomToTrail") {
                     this.focusOnTrail();
+                }
+                if (propName == "viewState") {
+                    if (this.viewState == ViewState.DRAW_MODE) this.toggleMapDrawMode();
+                }
+                if (propName == "drawNewWaypoints") {
+                    this.renderDrawnWaypoints();
+                }
+                if (propName == "isDrawMode") {
+                    if (this.isDrawMode) {
+                        this.toggleDrawModeEventsListener();
+                    }
                 }
             }
         }
@@ -313,11 +344,11 @@ export class MapFullComponent implements OnInit {
     private addInteractiveTrailToMap(trailToPoly: TrailToPolyline) {
         this.map.addLayer(trailToPoly.getBackgroundPolyline().bringToBack())
         this.map.addLayer(trailToPoly.getPolyline().bringToBack());
-        // trailToPoly.getPolyline().addTo(this.map)
-        trailToPoly.getBackgroundPolyline().on("click", () => {
+        const eventType = this.isDrawMode ? "contextmenu" : "click";
+        trailToPoly.getBackgroundPolyline().on(eventType, () => {
             this.onSelectTrail(trailToPoly.getId())();
         });
-        trailToPoly.getPolyline().on("click", () => {
+        trailToPoly.getPolyline().on(eventType, () => {
             this.onSelectTrail(trailToPoly.getId())();
         });
         trailToPoly.getPolyline().on("mouseover", this.highlightTrail(trailToPoly));
@@ -392,7 +423,9 @@ export class MapFullComponent implements OnInit {
             let marker =
                 L.marker([middleCoordinateInTrail.latitude,
                     middleCoordinateInTrail.longitude], {icon: icon});
-            marker.on("click", this.onSelectTrail(trail.id))
+            const eventType = this.isDrawMode ?
+                "contextmenu" : "click";
+            marker.on(eventType, this.onSelectTrail(trail.id))
             this.trailCodeMarkers.push(marker);
             marker.addTo(this.map)
         }))
@@ -480,7 +513,8 @@ export class MapFullComponent implements OnInit {
                 {lng: it.coordinates.longitude, lat: it.coordinates.latitude},
                 {icon: MapUtils.determineIcon(marker)}
             );
-            notificationMarker.on("click", () => this.onNotificationClick.emit(it.id));
+            const eventType = this.isDrawMode ? "contextmenu" : "click";
+            notificationMarker.on(eventType, () => this.onNotificationClick.emit(it.id));
             this.notificationMarkers.push(notificationMarker);
             this.map.addLayer(notificationMarker)
         });
@@ -502,7 +536,8 @@ export class MapFullComponent implements OnInit {
                 const circle = L.circle(
                     [it.coordinates.latitude, it.coordinates.longitude],
                     {radius: MapFullComponent.HALF_CIRCLE_SIZE, fill: true, fillColor: "red", color: "red"});
-                circle.on("click", () => this.onLocationSelection.emit(it))
+                const eventType = this.isDrawMode ? "contextmenu" : "click";
+                circle.on(eventType, () => this.onLocationSelection.emit(it))
                 circle.on("mouseover", () => this.highlightPlaceLocation(circle, it));
                 circle.addTo(this.map);
                 this.locationsOnTrail.push(circle);
@@ -518,7 +553,8 @@ export class MapFullComponent implements OnInit {
         const circle = L.circle(
             [latLng.lat, latLng.lng],
             {radius: MapFullComponent.CIRCLE_SIZE, fill: true, fillColor: "yellow", color: "yellow"});
-        circle.on("click", () => this.onLocationSelection.emit(it))
+        const eventType = this.isDrawMode ? "contextmenu" : "click";
+        circle.on(eventType, () => this.onLocationSelection.emit(it))
         circle.on("mouseout", () => this.dehighlightPlaceLocation());
         this.locationsOnTrail.push(circle)
         this.map.addLayer(circle)
@@ -546,10 +582,85 @@ export class MapFullComponent implements OnInit {
     private refreshMapTiles() {
         const zoom = this.map.getZoom();
         this.map.setZoom(zoom - 1, {animate: true});
-        setTimeout(()=> {
+        setTimeout(() => {
             console.log("da " + zoom)
             this.map.setZoom(zoom, {animate: true});
         }, 500)
 
+    }
+
+    private toggleMapDrawMode() {
+        if (this.viewState == ViewState.DRAW_MODE) {
+            this.map.doubleClickZoom.disable();
+        } else {
+            this.map.doubleClickZoom.enable();
+            this.waypoints.forEach((it) => this.map.removeLayer(it))
+            this.waypoints = [];
+        }
+    }
+
+    private onDrawWaypoint(event: LeafletMouseEvent) {
+        if (this.viewState != ViewState.DRAW_MODE)
+            return;
+        this.onMapDrawClick.emit({latitude: event.latlng.lat, longitude: event.latlng.lng});
+    }
+
+    private renderDrawnWaypoints() {
+        if (this.userCustomItineraryPolyline) this.userCustomItineraryPolyline.remove();
+        this.userCustomItineraryPolyline = L.polyline(this.drawNewWaypoints.map((x) =>
+            [x.point.latitude, x.point.longitude]), {color: 'blue'})
+        this.userCustomItineraryPolyline.addTo(this.map);
+
+        this.waypoints.forEach((it) => this.map.removeLayer(it))
+        this.waypoints = this.drawNewWaypoints.slice(0, this.drawNewWaypoints.length - 1).map(waypoint =>
+            L.circle([waypoint.point.latitude, waypoint.point.longitude],
+                {radius: 30, color: 'blue'})
+        );
+
+        const lastPoint = (this.drawNewWaypoints.length > 1) ?
+            this.drawNewWaypoints[this.drawNewWaypoints.length - 1] : this.drawNewWaypoints[0];
+        if (lastPoint) this.waypoints.push(
+            L.circle([
+                    lastPoint.point.latitude, lastPoint.point.longitude],
+                {radius: 30, color: '#1D9566'})
+        )
+
+        this.waypoints.forEach(it => it.addTo(this.map));
+    }
+
+    toggleDrawModeEventsListener() {
+        const eventType = this.isDrawMode ? "contextmenu" : "click";
+        this.locationsOnTrail.forEach((circlesOnTrails) => {
+            circlesOnTrails.removeEventListener(eventType);
+        })
+        this.trailCodeMarkers.forEach((trailCodeMarkers) => {
+            trailCodeMarkers.removeEventListener(eventType);
+        })
+        this.notificationMarkers.forEach((trailCodeMarkers) => {
+            trailCodeMarkers.removeEventListener(eventType);
+        })
+        this.poiMarkers.forEach((poiMarker) => {
+            poiMarker.removeEventListener(eventType);
+        })
+        this.otherTrailsPolylines.forEach((trail) => {
+            trail.getPolyline().removeEventListener(eventType)
+            trail.getBackgroundPolyline().removeEventListener(eventType)
+        })
+        if(this.isDrawMode) {
+            this.onMoved();
+        }
+    }
+
+
+    onShowDrawModeClick() {
+        this.onShowDrawMode.emit();
+    }
+
+    onDeleteCustomItineraryClick() {
+        this.onDeleteCustomItinerary.emit();
+    }
+
+    onCalculateItineraryClick() {
+        this.onCalculateItinerary.emit();
     }
 }

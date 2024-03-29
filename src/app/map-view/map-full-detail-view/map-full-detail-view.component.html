@@ -19,6 +19,24 @@
             </div>
         </div>
     </div>
+
+    <div *ngIf="viewState=='draw-mode'" class="row top-margin">
+        <app-draw-mode-details class="full-width"
+                               [isCustomItineraryPrecise]="isCustomItineraryResultPrecise"
+                               [customItineraryResult]="customItineraryResult"
+                               [customRequest]="customItineraryRequest"
+                               [isLoading]="isCustomItineraryLoading"
+                               (onCustomItineraryNewRequest)="onCustomItineraryRequest.emit()"
+                               (onCloseItineraryCircle)="onCustomItineraryCloseRoundTrip.emit()"
+                               (onDeleteItinerary)="onDeleteDrawTrip.emit()"
+                               (onBackBtn)="onBackItineraryDraw.emit()"
+                               (onSaveItinerary)="onSaveItinerary.emit()"
+                               (onTrailSelect)="onSelectTrail($event, false, false)"
+                               (onSelectAccessibilityNotification)="accessibilityNotificationSelection($event)"
+        >
+        </app-draw-mode-details>
+    </div>
+
     <div *ngIf="viewState=='municipality' && selectedMunicipality" class="row top-margin">
         <app-municipality-details
                 [selectedMunicipality]="selectedMunicipality"

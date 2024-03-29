@@ -1,0 +1,31 @@
+@import "../../style/const.scss";
+
+.hide {
+  display: none;
+}
+
+h4 {
+  font-size: medium;
+}
+
+
+.btn-secondary {
+  background-color: $secondary-bg-color !important;
+}
+
+.MapDrawMode {
+
+  padding: 0 3% 3% 3%;
+
+  .padding-left-zero {
+    padding-left: 0;
+  }
+
+  .description {
+    font-size: medium;
+  }
+
+  .warning-low-precision {
+    color: $primary-bg-color;
+  }
+}

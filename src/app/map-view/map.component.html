@@ -79,6 +79,15 @@
                         (onDownloadPdf)="onDownloadPdf()"
                         (onNavigateToLocation)="navigateToLocation($event)"
                         (onForceMapRefresh)="onForceMapRefresh()"
+                        [isCustomItineraryPrecise]="isCustomItineraryResultPrecise"
+                        [customItineraryResult]="customItineraryResult"
+                        [customItineraryRequest]="customItinerary"
+                        [isCustomItineraryLoading]="isCustomItineraryLoading"
+                        (onCalculateCustomItinerary)="onCustomItineraryRequest()"
+                        (onCloseItineraryCircle)="onCustomItineraryCloseRoundTrip()"
+                        (onDeleteCustomItinerary)="deleteDrawTrip()"
+                        (onBackCustomItinerary)="onBackDraw()"
+                        (onDownloadCustomItinerary)="onSaveItinerary()"
                 >
                 </app-map-mobile-view>
             </div>
@@ -113,7 +122,6 @@
                                 [trailsForMunicipality]="municipalityTrails"
                                 [trailsForMunicipalityMax]="municipalityTrailsMax"
                                 [isPaginationToShow]="false"
-                                (onLoadTrailPage)="loadTrailPreviewForMunicipality($event)"
                                 (onSelectTrailCode)="selectTrail($event)"
                                 (onNavigateToLocation)="navigateToLocation($event)"
                         >
@@ -144,17 +152,42 @@
                                 (onHighlightTrail)="onHighlightTrail($event)"
                         ></app-place-details>
                     </div>
+
+                    <div *ngIf="sideView=='draw-mode'" class="row top-margin full-width">
+                        <app-draw-mode-details class="full-width"
+                                               [isCustomItineraryPrecise]="isCustomItineraryResultPrecise"
+                                               [customItineraryResult]="customItineraryResult"
+                                               [customRequest]="customItinerary"
+                                               [isLoading]="isCustomItineraryLoading"
+                                               (onCustomItineraryNewRequest)="onCustomItineraryRequest()"
+                                               (onCloseItineraryCircle)="onCustomItineraryCloseRoundTrip()"
+                                               (onDeleteItinerary)="deleteDrawTrip()"
+                                               (onBackBtn)="onBackDraw()"
+                                               (onSaveItinerary)="onSaveItinerary()"
+                                               (onTrailSelect)="onSelectTrail($event, false, false)"
+                                               (onSelectAccessibilityNotification)="onAccessibilityNotificationSelection($event)"
+                        >
+                        </app-draw-mode-details>
+                    </div>
+
+
                     <!-- TODO DIVIDE THIS MODULE -->
                     <div *ngIf="sideView==''">
                         <div class="row align-middle">
                             <div class="col-12">
-                                <p>Per iniziare, naviga la mappa, ricerca un sentiero, oppure consulta la <span
-                                        class="clickable"
-                                        (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
+                                <p>Per iniziare, naviga la mappa, <span
+                                        (click)="toggleDrawMode()" class="clickable">disegna un percorso libero</span>,
+                                    ricerca un sentiero, oppure consulta la <span
+                                            class="clickable"
+                                            (click)="showTrailList()">lista di sentieri del {{sectionName}}</span>
                                 </p>
                             </div>
                             <div class="col-12">
                                 <button class="btn btn-primary full-width" (click)="showTrailList()">Lista sentieri
+                                </button>
+                            </div>
+                            <div class="col-12 top-margin">
+                                <button class="btn btn-secondary full-width" (click)="toggleDrawMode()">Disegna percorso libero
                                 </button>
                             </div>
                             <div class="col-md-12 top-margin-x2">
@@ -225,6 +258,7 @@
              [ngClass]="{'col-8': !isPortraitMode, 'col-12': isPortraitMode}">
             <app-map-full id="map-full-container"
                           [isMobileView]="isMobileDetailMode"
+                          [viewState]="sideView"
                           [selectedTrail]="selectedTrail"
                           [selectedTrailNotification]="selectedTrailNotifications"
                           [selectedTrailIndex]="selectedTrailIndex"
@@ -239,6 +273,8 @@
                           [highlightedLocation]="highlightedLocation"
                           [zoomToTrail]="zoomToTrail"
                           [isRefresh]="refreshSwitch"
+                          [isDrawMode]="isDrawMode"
+                          [drawNewWaypoints]="drawPoints"
                           (onViewChange)="geoLocateTrails($event)"
                           (onTrailClick)="onSelectTrail($event)"
                           (onNotificationClick)="onAccessibilityNotificationSelection($event)"
@@ -251,6 +287,11 @@
                           (onMunicipalitySelectionClick)="onMunicipalitySelectionClick()"
                           (onTerrainChangeSelectionClick)="onTerrainChangeSelectionClick()"
                           (onSearchClick)="onSearchClickShowListOfTrails()"
+                          (onDrawItineraryClick)="toggleDrawMode()"
+                          (onMapDrawClick)="getDrawClick($event)"
+                          (onShowDrawMode)="showDrawMode()"
+                          (onDeleteCustomItinerary)="deleteDrawTrip()"
+                          (onCalculateItinerary)="onCustomItineraryRequest()"
             >
             </app-map-full>
         </div>

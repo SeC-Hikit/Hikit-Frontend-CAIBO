@@ -1,3 +1,5 @@
+@import "../../style/const.scss";
+
 #map-full {
   width: 100%;
   z-index: 1;
@@ -51,6 +53,35 @@
   top: 230px;
 }
 
+#draw-itinerary-btn {
+  position: absolute;
+  right: 1%;
+  top: 320px;
+
+}
+
+#back-to-draw-itinerary-btn {
+  position: absolute;
+  right: 1%;
+  top: 375px;
+}
+
+#calculate-itinerary-btn {
+  position: absolute;
+  right: 1%;
+  top: 430px;
+}
+
+#delete-itinerary-btn {
+  position: absolute;
+  right: 1%;
+  top: 485px;
+}
+
+.secondary-btn-bg {
+  background: $soft-action-color !important;
+}
+
 #hint-space {
   position: absolute;
   width: 40%;
@@ -66,4 +97,55 @@
     font-size: 16px;
     text-align: center;
   }
+}
+
+.hint-space-draw {
+  bottom: 40px !important;
+  box-shadow: none !important;
+  border-top: 1px solid $secondary-bg-color;
+}
+
+#hint-space-up {
+  position: absolute;
+  height: 30px;
+  background: $secondary-bg-color;
+  top: 2px;
+  left: 0;
+  color: white;
+  z-index: 1000;
+
+  div {
+    font-size: 16px;
+    margin-top: 3px;
+    text-align: center;
+  }
+}
+
+
+#commands-help-box {
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  height: 50px;
+  width: 100%;
+  background: white;
+  z-index: 999;
+  color: black;
+  padding: 10px 10px 0 15px;
+  border-radius: 5px;
+  border-top: 1px $secondary-bg-color solid;
+
+  svg {
+    margin-top: 3px;
+  }
+
+  .margin-left {
+    margin-left: 5px;
+  }
+
+}
+
+
+.crossDraw {
+  cursor: crosshair;
 }

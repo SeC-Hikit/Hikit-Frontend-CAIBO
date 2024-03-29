@@ -33,6 +33,10 @@ footer .it-footer { display: none !important; }
     font-weight: bold;
   }
 
+  .btn-secondary {
+    background: $secondary-bg-color !important;
+  }
+
   .clickable:hover {
     color: $primary-text-color;
     font-weight: bold;
@@ -81,18 +85,5 @@ footer .it-footer { display: none !important; }
       bottom: 0;
       right: 0;
     }
-  }
-}
-
-.pulse {
-  animation: pulse-animation 1s infinite alternate-reverse;
-}
-
-@keyframes pulse-animation {
-  0% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
   }
 }

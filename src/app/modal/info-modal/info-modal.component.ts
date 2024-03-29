@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -11,6 +11,8 @@ export class InfoModalComponent implements OnInit {
   @Input() title: string = "";
   @Input() body: string = "";
 
+  @Output() onOk: EventEmitter<void> = new EventEmitter<void>();
+
   constructor(private modalService: NgbActiveModal) {}
 
   ngOnInit(): void {
@@ -21,6 +23,7 @@ export class InfoModalComponent implements OnInit {
   }
 
   close() {
+    this.onOk.emit();
     this.modalService.close();
   }
 }

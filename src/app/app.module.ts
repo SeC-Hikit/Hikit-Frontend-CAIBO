@@ -146,7 +146,9 @@ import {
     MobileMunicipalityPreviewComponent
 } from './map-view/map-mobile-view/mobile-municipality-preview/mobile-municipality-preview.component';
 import {EventModalComponent} from './modal/event-modal/event-modal.component';
-import { MediaManagementComponent } from './admin/media-management/media-management.component';
+import {MediaManagementComponent} from './admin/media-management/media-management.component';
+import {DrawModeDetailsComponent} from './map-view/draw-mode-details/draw-mode-details.component';
+import {DrawModePreviewComponent} from './map-view/map-mobile-view/draw-mode-preview/draw-mode-preview.component';
 
 @NgModule({
     declarations: [
@@ -247,7 +249,9 @@ import { MediaManagementComponent } from './admin/media-management/media-managem
         MobileAccessibilityIssuePreviewComponent,
         MobileMunicipalityPreviewComponent,
         EventModalComponent,
-        MediaManagementComponent
+        MediaManagementComponent,
+        DrawModeDetailsComponent,
+        DrawModePreviewComponent
     ],
   imports: [
     BrowserModule,

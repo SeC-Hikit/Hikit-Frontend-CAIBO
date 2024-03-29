@@ -24,8 +24,13 @@ import {MapUtils, ViewState} from "./MapUtils";
 import {MunicipalityDto, MunicipalityService} from "../service/municipality.service";
 import {Choice, OptionModalComponent} from "../modal/option-modal/option-modal.component";
 import {ErtService, EventDto, LocalityDto} from "../service/ert.service";
-
-//import {MapMobileViewComponent} from "./map-mobile-view/map-mobile-view.component";
+import {
+    CustomItineraryRequest,
+    CustomItineraryResult,
+    CustomItineraryService
+} from "../service/custom-itinerary.service";
+import {ConfirmModalComponent} from "../modal/confirm-modal/confirm-modal.component";
+import {UserFriendlyInputs} from "./UserFriendlyInputs";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -38,8 +43,13 @@ export enum TrailSimplifierLevel {
 export interface SelectTrailArgument {
     id: string,
     refresh?: boolean,
-    switchView: boolean
+    switchView: boolean,
     zoomIn: boolean
+}
+
+export interface DrawPoint {
+    point: Coordinates2D,
+    trailId: string,
 }
 
 @Component({
@@ -63,6 +73,8 @@ export class MapComponent implements OnInit {
 
     isPoiLoaded = false;
 
+    drawPoints: DrawPoint[] = [];
+    drawPolyLine: L.Polyline = null;
 
     // Bound elements
     searchTermString: string = "";
@@ -113,6 +125,13 @@ export class MapComponent implements OnInit {
     isMobileDetailMode: boolean = false;
     refreshSwitch: boolean = false;
 
+    isDrawMode: boolean = false;
+    isCustomItineraryLoading: boolean = false;
+
+    customItinerary: CustomItineraryRequest = {geoLineDto: {coordinates: []}};
+    customItineraryResult: CustomItineraryResult;
+    isCustomItineraryResultPrecise: boolean;
+
 
     constructor(
         private trailService: TrailService,
@@ -129,6 +148,7 @@ export class MapComponent implements OnInit {
         private placeService: PlaceService,
         private municipalityService: MunicipalityService,
         private ertService: ErtService,
+        private customItineraryService: CustomItineraryService
     ) {
     }
 
@@ -203,7 +223,7 @@ export class MapComponent implements OnInit {
     adaptSize() {
         this.isPortraitMode = this.getIsPortraitMode();
         const fullSize = GraphicUtils.getFullHeightSizeWOMenuHeights();
-        if(!this.isPortraitMode) {
+        if (!this.isPortraitMode) {
             document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.minHeight = fullSize.toString() + "px";
             document.getElementById(MapComponent.TRAIL_DETAILS_ID).style.height = fullSize.toString() + "px";
         }
@@ -710,7 +730,27 @@ export class MapComponent implements OnInit {
         }, 100);
     }
 
+    onCustomItineraryRequest() {
+        this.isCustomItineraryLoading = true;
+        this.customItineraryService.constructItinerary(this.customItinerary)
+            .subscribe((it) => {
+                this.customItineraryResult = it;
+                this.isCustomItineraryResultPrecise = this.isItineraryPrecisionHigh(it);
+                this.isCustomItineraryLoading = false;
+            });
+    }
 
+
+    private isItineraryPrecisionHigh(it: CustomItineraryResult) {
+        for (let i = 1; i < it.coordinates.length; i++) {
+            if (it.coordinates[i].distanceFromTrailStart - it.coordinates[i - 1].distanceFromTrailStart >= 200) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // TODO: move this to other file/class
     private setupShortcuts() {
         const context = this;
         window.addEventListener('keydown', function (event) {
@@ -721,7 +761,66 @@ export class MapComponent implements OnInit {
         })
     }
 
+
     onForceMapRefresh() {
         this.refreshSwitch = !this.refreshSwitch;
+    }
+
+    toggleDrawMode() {
+        UserFriendlyInputs.showCustomInstructionModalConditionally(this.modalService);
+        this.customItinerary = {geoLineDto: {coordinates: []}};
+        this.isDrawMode = !this.isDrawMode;
+        if (!this.isDrawMode) this.customItineraryResult = null;
+        this.sideView = this.isDrawMode ? ViewState.DRAW_MODE : ViewState.NONE;
+        this.drawPoints = [];
+    }
+
+    getDrawClick(coords: Coordinates2D) {
+        this.drawPoints = this.drawPoints.concat([{point: coords, trailId: ""}]);
+        this.customItinerary.geoLineDto.coordinates = this.drawPoints.map(it => it.point)
+        console.log(this.customItinerary.geoLineDto.coordinates);
+    }
+
+    onCustomItineraryCloseRoundTrip() {
+        this.getDrawClick(this.customItinerary.geoLineDto.coordinates[0]);
+    }
+
+    showDrawMode() {
+        this.sideView = ViewState.DRAW_MODE;
+    }
+
+    deleteDrawTrip() {
+        const modal = this.modalService.open(
+          ConfirmModalComponent
+        )
+
+        modal.componentInstance.title = "Cancella percorso libero";
+        modal.componentInstance.body = "Sei sicura/o di voler cancellare il percorso?";
+        modal.componentInstance.onOk.subscribe(() => {
+            this.clearItinerary();
+        });
+    }
+
+    private clearItinerary() {
+        this.customItineraryResult = null;
+        this.customItinerary = {geoLineDto: {coordinates: []}};
+        this.drawPoints = [];
+    }
+
+    onBackDraw() {
+        if(this.drawPoints.length == 1) { this.clearItinerary(); return; }
+        this.drawPoints = this.drawPoints.splice(0, this.drawPoints.length - 1);
+        this.customItinerary.geoLineDto.coordinates = this.drawPoints.map(it => it.point)
+    }
+
+    onSaveItinerary() {
+        this.isCustomItineraryLoading = true;
+        this.customItineraryService.downloadItinerary(this.customItineraryResult)
+            .subscribe((it) => {
+                const blob: any = new Blob([it.body], {type: 'application/csv'});
+                const date = new Date().getMilliseconds();
+                FileSaver.saveAs(blob, `sec_bo_percorso_${date}.gpx`);
+                this.isCustomItineraryLoading = false;
+            });
     }
 }

@@ -14,6 +14,7 @@ import {environment} from "../../../environments/environment.prod";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {PaginationUtils} from "../../utils/PaginationUtils";
 import {SelectTrailArgument} from "../map.component";
+import {CustomItineraryRequest, CustomItineraryResult} from "../../service/custom-itinerary.service";
 
 @Component({
     selector: 'app-map-mobile-full-detail-view',
@@ -23,7 +24,7 @@ import {SelectTrailArgument} from "../map.component";
 export class MapFullDetailViewComponent implements OnInit {
 
     @Input() viewState = ViewState.TRAIL;
-    @Input() connectedTrails : TrailDto[] = [];
+    @Input() connectedTrails: TrailDto[] = [];
     @Input() selectedTrailData: TrailDto;
     @Input() selectedPoi: PoiDto;
     @Input() selectedTrailPois: PoiDto[] = [];
@@ -41,9 +42,9 @@ export class MapFullDetailViewComponent implements OnInit {
     @Input() municipalityTrails: TrailPreview[];
     @Input() municipalityTrailsMax: number;
     @Input() selectedLocationDetails: LocalityDto;
-    @Input() paginationPageSize : number;
+    @Input() paginationPageSize: number;
     @Input() paginationCollectionSize: number;
-    @Input() paginationPage : number;
+    @Input() paginationPage: number;
     @Input() paginationSize: 'sm' | 'lg';
     @Input() paginationEllipses: boolean;
     @Input() paginationMaxSize: number;
@@ -72,6 +73,17 @@ export class MapFullDetailViewComponent implements OnInit {
     @Output() onDownloadKml: EventEmitter<void> = new EventEmitter<void>();
     @Output() onDownloadPdf: EventEmitter<void> = new EventEmitter<void>();
     @Output() onShowMapTemporarilyPress: EventEmitter<void> = new EventEmitter<void>();
+
+    @Input() isCustomItineraryResultPrecise: boolean = false;
+    @Input() customItineraryResult: CustomItineraryResult;
+    @Input() customItineraryRequest: CustomItineraryRequest;
+    @Input() isCustomItineraryLoading: boolean = false;
+    @Output() onCustomItineraryRequest: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onCustomItineraryCloseRoundTrip: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onDeleteDrawTrip: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onBackItineraryDraw: EventEmitter<void> = new EventEmitter<void>();
+    @Output() onSaveItinerary: EventEmitter<void> = new EventEmitter<void>();
+
 
     private searchTerms = new Subject<string>();
 

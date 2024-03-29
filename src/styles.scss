@@ -362,3 +362,21 @@ select {
   background-size: contain;
   background-repeat: no-repeat;
 }
+
+.pulse {
+  animation: pulse-animation 1s infinite alternate-reverse;
+}
+
+@keyframes pulse-animation {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.half-width {
+  width: 50%;
+  margin: 0 auto;
+}

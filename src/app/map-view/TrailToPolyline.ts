@@ -1,4 +1,5 @@
 import {TrailClassification} from "../TrailClassification";
+import {TrailClassificationUtils} from "../TrailClassificationUtils";
 
 export class TrailToPolyline {
 
@@ -18,16 +19,7 @@ export class TrailToPolyline {
     }
 
     getClassification(): TrailClassification {
-        if (this.classification == "E") {
-            return TrailClassification.E
-        }
-        if (this.classification == "T") {
-            return TrailClassification.T
-        }
-        if (this.classification == "EE") {
-            return TrailClassification.EE
-        }
-        return TrailClassification.EEA;
+        return TrailClassificationUtils.getClassification(this.classification);
     }
 
     getPolyline(): L.Polyline {
