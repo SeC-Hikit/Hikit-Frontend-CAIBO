@@ -30,6 +30,7 @@ import {
     CustomItineraryService
 } from "../service/custom-itinerary.service";
 import {ConfirmModalComponent} from "../modal/confirm-modal/confirm-modal.component";
+import {UserFriendlyInputs} from "./UserFriendlyInputs";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -749,6 +750,7 @@ export class MapComponent implements OnInit {
         return true;
     }
 
+    // TODO: move this to other file/class
     private setupShortcuts() {
         const context = this;
         window.addEventListener('keydown', function (event) {
@@ -759,11 +761,13 @@ export class MapComponent implements OnInit {
         })
     }
 
+
     onForceMapRefresh() {
         this.refreshSwitch = !this.refreshSwitch;
     }
 
     toggleDrawMode() {
+        UserFriendlyInputs.showCustomInstructionModalConditionally(this.modalService);
         this.customItinerary = {geoLineDto: {coordinates: []}};
         this.isDrawMode = !this.isDrawMode;
         if (!this.isDrawMode) this.customItineraryResult = null;
