@@ -125,7 +125,7 @@ export class MapFullComponent implements OnInit {
         L.control.scale({position: 'topright'}).addTo(this.map);
         this.attachEventListeners();
 
-        this.map.getContainer().addEventListener("contextmenu", function(domEvent) {
+        this.map.getContainer().addEventListener("contextmenu", function (domEvent) {
             domEvent.preventDefault();
         });
         this.onDoneLoading.emit();
@@ -222,9 +222,7 @@ export class MapFullComponent implements OnInit {
                     this.renderDrawnWaypoints();
                 }
                 if (propName == "isDrawMode") {
-                    if (this.isDrawMode) {
-                        this.toggleDrawModeEventsListener();
-                    }
+                    this.toggleDrawModeEventsListener();
                 }
             }
         }
@@ -629,26 +627,25 @@ export class MapFullComponent implements OnInit {
     }
 
     toggleDrawModeEventsListener() {
-        const eventType = this.isDrawMode ? "contextmenu" : "click";
+        const eventTypeToBeRemoved = this.isDrawMode ? "click" : "contextmenu";
         this.locationsOnTrail.forEach((circlesOnTrails) => {
-            circlesOnTrails.removeEventListener(eventType);
+            circlesOnTrails.removeEventListener(eventTypeToBeRemoved);
         })
         this.trailCodeMarkers.forEach((trailCodeMarkers) => {
-            trailCodeMarkers.removeEventListener(eventType);
+            trailCodeMarkers.removeEventListener(eventTypeToBeRemoved);
         })
         this.notificationMarkers.forEach((trailCodeMarkers) => {
-            trailCodeMarkers.removeEventListener(eventType);
+            trailCodeMarkers.removeEventListener(eventTypeToBeRemoved);
         })
         this.poiMarkers.forEach((poiMarker) => {
-            poiMarker.removeEventListener(eventType);
+            poiMarker.removeEventListener(eventTypeToBeRemoved);
         })
         this.otherTrailsPolylines.forEach((trail) => {
-            trail.getPolyline().removeEventListener(eventType)
-            trail.getBackgroundPolyline().removeEventListener(eventType)
+            trail.getPolyline().removeEventListener(eventTypeToBeRemoved)
+            trail.getBackgroundPolyline().removeEventListener(eventTypeToBeRemoved)
         })
-        if(this.isDrawMode) {
-            this.onMoved();
-        }
+
+        this.onMoved();
     }
 
 
