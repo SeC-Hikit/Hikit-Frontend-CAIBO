@@ -23,6 +23,7 @@ export const environment = {
         "Frana di terra da monte",
         "Fune di sicurezza danneggiata",
         "Gradini danneggiati",
+        "Altro"
     ]
 };
 

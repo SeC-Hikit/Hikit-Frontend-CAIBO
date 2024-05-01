@@ -29,9 +29,11 @@
                     <div *ngIf="hasLoaded" class="col-12 top-margin">
                         <label>Problema riscontrato <span class="mandatory-field-asterisk">*</span></label>
                         <div class="col-12">
-                            <select title="Scegli un'opzione"
+                            <select *ngIf="selectIssueCause != 'Altro'" title="Scegli un'opzione"
                                     formControlName="cause"
-                                    class="form-control">
+                                    class="form-control"
+                                    (change)="selectIssue($event)"
+                            >
                                 <option
                                         *ngFor="let foundIssue of foundIssues"
                                         value="{{ foundIssue }}"
@@ -39,6 +41,12 @@
                                     {{ foundIssue }}
                                 </option>
                             </select>
+                        </div>
+                        <div class="col-12" *ngIf="selectIssueCause == 'Altro'">
+                            <input type="text" maxlength="100"
+                                   class="form-control"
+                                   (change)="setNoteIssue($event)"
+                                   placeholder="Specifica una causa. Massimo 100 caratteri">
                         </div>
                     </div>
                     <div class="col-md-12 top-margin-x2">

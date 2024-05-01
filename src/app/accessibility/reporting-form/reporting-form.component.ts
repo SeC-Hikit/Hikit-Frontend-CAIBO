@@ -29,6 +29,7 @@ export class ReportingFormComponent implements OnInit {
     mapMarkers: Marker[] = [];
     trailPreviews: TrailPreview[];
     foundIssues: string[] = environment.issueReportingList;
+    selectIssueCause: string = "";
 
     // TODO: remove form param from the map component.
     formGroupz: FormGroup = new FormGroup({
@@ -185,5 +186,13 @@ export class ReportingFormComponent implements OnInit {
         this.formGroup.get("coordLatitude").setValue(latitude);
         this.formGroup.get("coordLongitude").setValue(longitude);
         this.formGroup.get("coordAltitude").setValue(altitude);
+    }
+
+    selectIssue($event: any) {
+        this.selectIssueCause = $event.target.value;
+    }
+
+    setNoteIssue($event: any) {
+        this.formGroup.get("cause").setValue($event.target.value);
     }
 }

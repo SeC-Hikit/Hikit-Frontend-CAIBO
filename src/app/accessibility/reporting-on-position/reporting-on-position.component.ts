@@ -40,8 +40,8 @@ export class ReportingOnPositionComponent implements OnInit {
     selectedTrail: TrailDto;
     foundIssues = environment.issueReportingList;
     specifiedPosition: CoordinatesDto;
-    hasBeenSelected: Boolean = false;
     formErrors: string[] = [];
+    selectIssueCause: string = "";
 
 
     constructor(private modalService: NgbModal,
@@ -180,5 +180,9 @@ export class ReportingOnPositionComponent implements OnInit {
         this.selectedTrail = trail;
         this.formGroup.get("trailId").setValue(trail.id);
         this.formGroup.get("cause").setValue(this.foundIssues[0]);
+    }
+
+    setNoteIssue($event: any) {
+        this.formGroup.get("cause").setValue($event.target.value);
     }
 }
