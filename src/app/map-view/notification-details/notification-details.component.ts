@@ -13,7 +13,7 @@ import {Help} from "../../utils/Help";
 export class NotificationDetailsComponent implements OnInit {
 
   @Input() selectedNotification: AccessibilityNotification;
-  @Input() trailMappings: Map<string, TrailMappingDto>;
+  @Input() trailMappings: Map<string, TrailMappingDto> = new Map();
 
   constructor(private modalService: NgbModal) { }
 

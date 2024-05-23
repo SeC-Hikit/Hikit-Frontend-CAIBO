@@ -150,6 +150,7 @@ export class MapFullComponent implements OnInit {
     }
 
     private onStartMoving() {
+        this.notificationMarkers.forEach((it) => this.map.removeLayer(it));
         clearTimeout(this.intervalObject);
     }
 
@@ -323,6 +324,8 @@ export class MapFullComponent implements OnInit {
         this.otherTrailsPolylines.forEach(trailToPoly => {
             this.addInteractiveTrailToMap(trailToPoly);
         });
+
+        this.renderNotification(this.selectedTrailNotification);
     }
 
     private mapToPolyTrail(trail: TrailDto) {

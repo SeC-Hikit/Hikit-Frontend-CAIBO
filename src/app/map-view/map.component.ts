@@ -97,7 +97,8 @@ export class MapComponent implements OnInit {
     trailList: TrailDto[] = [];
     connectedTrails: TrailDto[] = [];
     selectedTileLayer: string;
-    selectedTrailNotifications: AccessibilityNotification[];
+    allTrailNotifications: AccessibilityNotification[] = [];
+    selectedTrailNotifications: AccessibilityNotification[] = [];
     selectedTrailMaintenances: MaintenanceDto[];
 
     userPosition: UserCoordinates;
@@ -160,6 +161,7 @@ export class MapComponent implements OnInit {
         this.changeTileLayer("topo");
         this.ensureMapping();
         this.setupShortcuts();
+        this.loadNotifications();
 
         let observable: Observable<ObservedValueOf<Observable<TrailPreviewResponse>>> = this.searchTerms.pipe(
             debounceTime(500),
@@ -287,10 +289,7 @@ export class MapComponent implements OnInit {
         if (!id) {
             return;
         }
-        this.accessibilityService.getUnresolvedForTrailId(id)
-            .subscribe(notificationResponse => {
-                this.selectedTrailNotifications = notificationResponse.content
-            });
+       this.selectedTrailNotifications = this.allTrailNotifications.filter(it=> it.trailId == id)
     }
 
     loadRelatedTrailsByIdForSelectedTrail(trailIds: string[]) {
@@ -499,7 +498,7 @@ export class MapComponent implements OnInit {
     }
 
     onAccessibilityNotificationSelection(id: string) {
-        this.selectedNotification = this.selectedTrailNotifications.filter(it => it.id == id)[0];
+        this.selectedNotification = this.allTrailNotifications.filter(it => it.id == id)[0];
         MapUtils.changeUrlToState(ViewState.ACCESSIBILITY, id);
         this.sideView = ViewState.ACCESSIBILITY;
     }
@@ -822,5 +821,11 @@ export class MapComponent implements OnInit {
                 FileSaver.saveAs(blob, `sec_bo_percorso_${date}.gpx`);
                 this.isCustomItineraryLoading = false;
             });
+    }
+
+    private loadNotifications() {
+        this.accessibilityService.getUnresolved(0, 100).subscribe(it => {
+            this.allTrailNotifications = it.content;
+        })
     }
 }
