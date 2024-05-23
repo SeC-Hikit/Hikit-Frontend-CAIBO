@@ -824,7 +824,7 @@ export class MapComponent implements OnInit {
     }
 
     private loadNotifications() {
-        this.accessibilityService.getUnresolved(0, 100).subscribe(it => {
+        this.accessibilityService.getUnresolved(0, 1000).subscribe(it => {
             this.allTrailNotifications = it.content;
         })
     }
