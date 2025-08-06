@@ -249,6 +249,9 @@ export interface paths {
   "/announcement/{id}": {
     get: operations["get_12"];
   };
+  "/admin/trail/intersect": {
+    get: operations["findTrailIntersection_1"];
+  };
   "/admin/diagnose/weather": {
     get: operations["testWeather"];
   };
@@ -835,6 +838,15 @@ export interface components {
     TrailDatasetVersion: {
       version?: number;
       lastUpdate?: string;
+    };
+    MunicipalityIntersectionResponse: {
+      content?: components["schemas"]["MunicipalityToTrailDto"][];
+    };
+    MunicipalityToTrailDto: {
+      intersectionPoints?: components["schemas"]["CoordinatesDto"][];
+      distance?: number;
+      details?: components["schemas"]["MunicipalityDetailsDto"];
+      shapePoints?: components["schemas"]["Coordinates2D"][];
     };
     DiagnoseResponse: {
       service?: string;
@@ -2281,6 +2293,21 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["AnnouncementResponse"];
+        };
+      };
+    };
+  };
+  findTrailIntersection_1: {
+    parameters: {
+      query: {
+        trailId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["MunicipalityIntersectionResponse"];
         };
       };
     };

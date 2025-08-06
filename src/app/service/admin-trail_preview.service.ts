@@ -1,6 +1,11 @@
-import {HttpHeaders, HttpClient, HttpParams} from '@angular/common/http';
+import {components} from "../../binding/Binding";
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
+import {catchError, tap} from "rxjs/operators";
+
+export type MunicipalityIntersectionResponse = components["schemas"]["MunicipalityIntersectionResponse"];
+export type MunicipalityToTrailDto = components["schemas"]["MunicipalityToTrailDto"];
 
 
 @Injectable({
@@ -8,6 +13,7 @@ import {Observable, of} from 'rxjs';
 })
 export class AdminTrailPreviewService {
     baseUrl = "api/admin/trail-preview";
+    baseUrlIntersection  = "api/admin/trail/intersect";
     httpOptions = {
         headers: new HttpHeaders({'Content-Type': 'application/json'})
     };
@@ -20,6 +26,15 @@ export class AdminTrailPreviewService {
         const params = new HttpParams().set("realm", realm);
         return this.httpClient.post(this.baseUrl +
             "/list/export", {params: params}, {responseType: 'blob'});
+    }
+
+    getMunicipalityIntersection(trailId: string) : Observable<MunicipalityIntersectionResponse> {
+        return this.httpClient.get(this.baseUrlIntersection + "/" + trailId)
+            .pipe(
+                tap(),
+                catchError(this.handleError('', null))
+            );
+
     }
 
 

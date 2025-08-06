@@ -13,6 +13,15 @@
                 (onClose)="togglePreview()"
         ></app-trail-floating-preview>
     </div>
+
+    <div *ngIf="!isLoading && munInfDto != null">
+        <app-trail-floating-preview
+                [isVisible]="isPreviewVisible"
+                [municipalities]="munInfDto"
+                (onClose)="togglePreview()"
+        ></app-trail-floating-preview>
+    </div>
+
     <div class="row section-distance-up">
         <div class="col-lg-9 col-md-8 col-sm-12">
             <app-search-input placeholder="Cerca sentieri per nome o località"
@@ -33,6 +42,7 @@
                     <th scope="col" *ngIf="authService.isRealmMatch()">+ Ciclo</th>
                     <th scope="col" *ngIf="authService.isRealmMatch()">Modifica</th>
                     <th scope="col" *ngIf="authService.isRealmMatch()">Pubblicato</th>
+                    <th scope="col" *ngIf="authService.isRealmMatch()">Mun. inf</th>
                     <th scope="col" *ngIf="authService.isRealmMatch()">Cancella</th>
                 </tr>
                 </thead>
@@ -111,6 +121,14 @@
                                 <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye-slash"/>
                             </svg>
                         </div>
+                    </td>
+                    <td class="clickable" *ngIf="authService.isRealmMatch()">
+                        <svg class="bi" width="24" height="24" fill="currentColor"
+                             (click)="onMunicipalityInfo($event, trailPreview)">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#house"
+                            />
+                        </svg>
                     </td>
                     <td class="clickable" *ngIf="authService.isRealmMatch()">
                         <svg class="bi" width="24" height="24" fill="currentColor"

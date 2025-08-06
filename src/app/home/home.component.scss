@@ -18,9 +18,8 @@
 }
 
 #image {
-  background: url(/assets/cai/bg_home.avif) no-repeat;
   background-size: cover;
-  background-position: center;
+  background: url(/assets/cai/bg_home.avif) no-repeat center;
   width: 100%;
   position: fixed;
   top: 0;

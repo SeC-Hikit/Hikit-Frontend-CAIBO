@@ -41,6 +41,24 @@
         </button>
     </div>
 
+    <div class="btn btn-primary btn-map" id="explore-poi-on-map-btn" (click)="onDrawItineraryClick.emit()">
+        <button class="inner-btn">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#chat-left" *ngIf="!isDrawMode"/>
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#chat-left-fill" *ngIf="isDrawMode"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="btn btn-primary btn-map" id="explore-issues-on-map-btn" (click)="onDrawItineraryClick.emit()">
+        <button class="inner-btn">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle" *ngIf="!isDrawMode"/>
+                <use xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#exclamation-circle-fill" *ngIf="isDrawMode"/>
+            </svg>
+        </button>
+    </div>
+
     <div class="btn btn-primary btn-map secondary-btn-bg" id="back-to-draw-itinerary-btn"
          *ngIf="viewState != 'draw-mode' && isDrawMode"
          (click)="onShowDrawModeClick()">

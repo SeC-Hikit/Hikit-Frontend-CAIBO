@@ -218,5 +218,8 @@ export class AccessibilityNotificationViewComponent implements OnInit {
             this.filterTrailId = filteredTrails[0].id
             this.loadUnresolved(0, 1000, this.realm, this.filterTrailId)
         }
+        if (newTrailCode == "") {
+            this.loadNotification(1);
+        }
     }
 }

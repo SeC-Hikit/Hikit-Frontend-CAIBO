@@ -10,7 +10,7 @@ import {PaginationUtils} from "../../../utils/PaginationUtils";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component";
 import {AnnouncementTopic} from "../../../service/announcement.service";
-import {AdminTrailPreviewService} from "../../../service/admin-trail_preview.service";
+import {AdminTrailPreviewService, MunicipalityToTrailDto} from "../../../service/admin-trail_preview.service";
 import * as FileSaver from "file-saver";
 
 @Component({
@@ -29,6 +29,8 @@ export class TrailViewTableComponent implements OnInit {
     selectedTrail: TrailDto;
     isPreviewVisible: boolean = false;
     trailPreviewList: TrailPreview[];
+
+    munInfDto: MunicipalityToTrailDto[];
 
     savedTrailCode: string;
     totalTrail: number;
@@ -171,5 +173,16 @@ export class TrailViewTableComponent implements OnInit {
                 let blob: any = new Blob([response], {type: 'application/csv'});
                 FileSaver.saveAs(blob,  `export_${userRealm}.csv`);
             }, ()=>{}, ()=>{ this.isLoading = false; });
+    }
+
+    onMunicipalityInfo($event: MouseEvent, trailPreview: TrailPreview) {
+        this.isLoading = true;
+        this.adminTrailPreviewService.getMunicipalityIntersection(trailPreview.id).subscribe(
+            response => {
+                this.munInfDto = response.content
+                this.isLoading = false;
+                this.isPreviewVisible = true;
+            }
+        )
     }
 }
