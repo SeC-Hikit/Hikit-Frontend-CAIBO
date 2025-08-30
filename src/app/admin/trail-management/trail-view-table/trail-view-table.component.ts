@@ -12,6 +12,7 @@ import {InfoModalComponent} from "../../../modal/info-modal/info-modal.component
 import {AnnouncementTopic} from "../../../service/announcement.service";
 import {AdminTrailPreviewService, MunicipalityToTrailDto} from "../../../service/admin-trail_preview.service";
 import * as FileSaver from "file-saver";
+import {MunicipalityDto, MunicipalityService} from "../../../service/municipality.service";
 
 @Component({
     selector: 'app-trail-view-table',
@@ -36,13 +37,17 @@ export class TrailViewTableComponent implements OnInit {
     totalTrail: number;
     realm: string = "";
 
+    municipalities: MunicipalityDto[];
+    selectedMunicipality: MunicipalityDto;
+
     constructor(
         private trailPreviewService: TrailPreviewService,
         private trailService: TrailService,
         private adminTrailService: AdminTrailService,
         private adminTrailPreviewService: AdminTrailPreviewService,
         public authService: AuthService,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        private municipalityService: MunicipalityService,
     ) {
     }
 
@@ -51,6 +56,10 @@ export class TrailViewTableComponent implements OnInit {
             this.authService
                 .getInstanceRealm();
         this.getPreviews();
+        this.municipalityService.get().subscribe(it => {
+            this.municipalities = it.content
+            this.selectedMunicipality = it.content[0]
+        })
     }
 
     getPreviews() {
@@ -175,14 +184,38 @@ export class TrailViewTableComponent implements OnInit {
             }, ()=>{}, ()=>{ this.isLoading = false; });
     }
 
+    onDownloadMunicipalityList() {
+        this.isLoading = true;
+        let municipality = this.selectedMunicipality.city;
+        this.adminTrailPreviewService.exportListByMunicipality(municipality)
+            .subscribe(response => {
+                let blob: any = new Blob([response], {type: 'application/csv'});
+                FileSaver.saveAs(blob,  `export_${municipality.toLowerCase()}_${new Date().getUTCMilliseconds()}_.csv`);
+            }, (e)=>{
+                const modal = this.modalService.open(InfoModalComponent)
+                modal.componentInstance.title = "Operazione fallita";
+                modal.componentInstance.body = "Non riesco ad esportare la lista per '" + municipality + `'. Errore: ${e.message}`;
+            }, ()=>{ this.isLoading = false; });
+    }
+
+
     onMunicipalityInfo($event: MouseEvent, trailPreview: TrailPreview) {
         this.isLoading = true;
-        this.adminTrailPreviewService.getMunicipalityIntersection(trailPreview.id).subscribe(
-            response => {
-                this.munInfDto = response.content
-                this.isLoading = false;
-                this.isPreviewVisible = true;
-            }
-        )
+        this.trailService.getTrailById(trailPreview.id).subscribe(trailResp => {
+            this.adminTrailPreviewService.getMunicipalityIntersection(trailPreview.id).subscribe(
+                response => {
+                    this.selectedTrail = trailResp.content[0]
+                    this.munInfDto = response.content
+                    this.isLoading = false;
+                    this.isPreviewVisible = true;
+                }
+            )
+        })
+
+
+    }
+
+    selectMunicipality($event: any) {
+        this.selectedMunicipality = this.municipalities.filter(it => it.city == $event.target.value)[0]
     }
 }

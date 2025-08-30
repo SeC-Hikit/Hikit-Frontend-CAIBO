@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-
+    mapproxyHost: "/tiles",
     // S&C Env vars
     realm: "cai-bologna",
     instance: "sec_bologna_1",

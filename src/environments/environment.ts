@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-
+    mapproxyHost: "http://80.211.104.222:8081",
     // S&C Env vars
     realm: "cai-bologna",
     instance: "sec_bologna_1",

@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="map-preview" id="{{ classPrefix }}"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 top-margin">
+        <table class="det-table">
+            <thead>
+            <tr>
+                <td>Lunghezza sentiero</td>
+                <td *ngFor="let mun of municipalitiesToTrails">Lungh. dentro area c. di {{mun.details.city}}</td>
+            </tr>
+            <tr>
+                <td>{{ trail.statsTrailMetadata.length }}</td>
+                <td *ngFor="let mun of municipalitiesToTrails">{{mun.distance | number : '1.2-2'}}m</td>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>

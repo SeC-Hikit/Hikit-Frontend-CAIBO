@@ -442,9 +442,11 @@ export class MapFullComponent implements OnInit {
     getLayerByName(layerName: string): L.TileLayer {
         switch (layerName) {
             case "topo":
-                return L.tileLayer.wms(
-                    "https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=84b5c19849154538affddb0a8f385979",
-                    {attribution: this.openStreetmapCopy, opacity: 0.75}
+                let host = environment.mapproxyHost;
+                return L.tileLayer(
+                    // "https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=84b5c19849154538affddb0a8f385979",
+                    environment.mapproxyHost + "/1.0.0/thunderforest_landscape/webmercator/{z}/{x}/{y}.png",
+                    {attribution: this.openStreetmapCopy, opacity: 0.75 }
                 );
             case "geopolitic":
                 return L.tileLayer(

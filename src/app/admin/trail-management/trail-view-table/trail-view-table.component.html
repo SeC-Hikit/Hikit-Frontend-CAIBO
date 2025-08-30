@@ -17,6 +17,7 @@
     <div *ngIf="!isLoading && munInfDto != null">
         <app-trail-floating-preview
                 [isVisible]="isPreviewVisible"
+                [trails]="[selectedTrail]"
                 [municipalities]="munInfDto"
                 (onClose)="togglePreview()"
         ></app-trail-floating-preview>
@@ -30,6 +31,8 @@
         <div class="col-lg-3 col-md-8 col-sm-12">
             <button class="btn btn-primary" (click)="onDownloadList()">Download lista</button>
         </div>
+    </div>
+    <div class="row section-distance-up">
         <div class="col-12 top-margin" *ngIf="trailPreviewList && trailPreviewList.length > 0 else notShow">
             <table id="trailTable" class="table table-striped interactive-table">
                 <thead class="">
@@ -157,5 +160,23 @@
                     text="Nessun sentiero trovato.</br>
                          Creane uno caricando una traccia"></app-items-not-found>
         </ng-template>
+    </div>
+
+    <h1>Download info distanza per municipalità</h1>
+    <div class="row section-distance-up">
+        <div class="col-lg-3 col-md-8 col-sm-12">
+            <select title="Scegli un'opzione"
+                    class="form-control"
+                    (change)="selectMunicipality($event)"
+            >
+                <option
+                        *ngFor="let mun of municipalities"
+                        [value]="mun.city"> {{mun.city}}
+                </option>
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-8 col-sm-12">
+            <button class="btn btn-primary" (click)="onDownloadMunicipalityList()">Download Mun. lista</button>
+        </div>
     </div>
 </div>

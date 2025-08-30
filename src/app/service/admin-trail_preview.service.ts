@@ -28,6 +28,12 @@ export class AdminTrailPreviewService {
             "/list/export", {params: params}, {responseType: 'blob'});
     }
 
+    exportListByMunicipality(municipality: string): Observable<any> {
+        return this.httpClient.post(this.baseUrlIntersection +
+            "/" + municipality + "/export", {},{responseType: 'blob'});
+    }
+
+
     getMunicipalityIntersection(trailId: string) : Observable<MunicipalityIntersectionResponse> {
         return this.httpClient.get(this.baseUrlIntersection + "/" + trailId)
             .pipe(
