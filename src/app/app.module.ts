@@ -150,6 +150,8 @@ import {MediaManagementComponent} from './admin/media-management/media-managemen
 import {DrawModeDetailsComponent} from './map-view/draw-mode-details/draw-mode-details.component';
 import {DrawModePreviewComponent} from './map-view/map-mobile-view/draw-mode-preview/draw-mode-preview.component';
 import {MapPreviewMunicipalitiesComponent} from './map-preview-municipalities/map-preview-municipalities.component';
+import {MediaTableComponent} from './admin/media-management/media-table/media-table.component';
+import {MediaAssignerComponent} from './admin/media-management/media-assigner/media-assigner.component';
 
 @NgModule({
     declarations: [
@@ -253,7 +255,9 @@ import {MapPreviewMunicipalitiesComponent} from './map-preview-municipalities/ma
         MediaManagementComponent,
         DrawModeDetailsComponent,
         DrawModePreviewComponent,
-        MapPreviewMunicipalitiesComponent
+        MapPreviewMunicipalitiesComponent,
+        MediaTableComponent,
+        MediaAssignerComponent
     ],
   imports: [
     BrowserModule,

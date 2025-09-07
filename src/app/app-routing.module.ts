@@ -48,7 +48,9 @@ import {MaintenanceViewComponent} from "./admin/maintenance-management/maintenan
 import {PlaceGeneralViewComponent} from "./admin/place-management/place-general-view/place-general-view.component";
 import {AnnouncementEditComponent} from "./admin/announcement-management/announcement-edit/announcement-edit.component";
 import {AnnouncementManagementComponent} from "./admin/announcement-management/announcement-management.component";
-import {AdminAnnouncementViewComponent} from "./admin/announcement-management/announcement-view/admin-announcement-view.component";
+import {
+    AdminAnnouncementViewComponent
+} from "./admin/announcement-management/announcement-view/admin-announcement-view.component";
 import {AnnouncementViewComponent} from "./announcement-view/announcement-view.component";
 import {AnnouncementSingleViewComponent} from "./announcement-single-view/announcement-single-view.component";
 import {CreditsComponent} from "./credits/credits.component";
@@ -58,6 +60,7 @@ import {ReportingOnPositionComponent} from "./accessibility/reporting-on-positio
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {DataUpdateComponent} from "./data-update/data-update.component";
 import {MediaManagementComponent} from "./admin/media-management/media-management.component";
+import {MediaAssignerComponent} from "./admin/media-management/media-assigner/media-assigner.component";
 
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
@@ -231,7 +234,10 @@ const routes: Routes = [
             },
             {
                 path: "media-management",
-                component: MediaManagementComponent,
+                children: [
+                    {path: "", component: MediaManagementComponent},
+                    {path: "update/topic/:relatedTopic/id/:relatedTopicId", component: MediaAssignerComponent},
+                ]
             },
         ]
     },

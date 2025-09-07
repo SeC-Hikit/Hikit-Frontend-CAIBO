@@ -6,6 +6,8 @@
                     class="trail-upload-management__container-button button"
                     [isMultipleUpload]="false"
                     [isDisabled]="this.isLoading"
+                    [acceptedTypeFile]="['.gpx']"
+                    [textContent]="'carica un .gpx'"
                     (uploadedFiles)="uploadFile($event)"
             ></app-upload-button-management>
         </div>
@@ -13,6 +15,8 @@
             <app-upload-button-management
                     [isMultipleUpload]="true"
                     [isDisabled]="this.isLoading"
+                    [textContent]="'carica più .gpx'"
+                    [acceptedTypeFile]="['.gpx']"
                     class="trail-upload-management__container-button button"
                     (uploadedFiles)="uploadFiles($event)"
             ></app-upload-button-management>

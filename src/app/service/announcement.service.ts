@@ -1,9 +1,8 @@
-import {HttpHeaders, HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {tap, catchError} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import {components} from 'src/binding/Binding';
-import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
 
 export type AnnouncementDto = components["schemas"]["AnnouncementDto"]
 export type AnnouncementResponse = components["schemas"]["AnnouncementResponse"]
@@ -15,6 +14,7 @@ export enum AnnouncementTopic  {
     ACCESSIBILITY_NOTIFICATION = "ACCESSIBILITY_NOTIFICATION",
     MAINTENANCE = "MAINTENANCE"
 }
+
 
 @Injectable({
     providedIn: 'root'

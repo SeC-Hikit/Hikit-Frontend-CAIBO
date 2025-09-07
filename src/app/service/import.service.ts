@@ -1,10 +1,11 @@
-import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
-import { components } from "src/binding/Binding";
-import { RestResponse } from "../RestResponse";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {Observable, of} from "rxjs";
+import {catchError, tap} from "rxjs/operators";
+import {components} from "src/binding/Binding";
+import {RestResponse} from "../RestResponse";
 import {TrailMappingResponse, TrailResponse} from "./trail-service.service";
+import {MediaResponse} from "./media-service.service";
 
 
 export type TrailRawResponse = components['schemas']['TrailRawResponse'];
@@ -15,7 +16,8 @@ export type TrailRawDto = components['schemas']['TrailRawDto'];
   providedIn: "root",
 })
 export class ImportService {
-  baseUrl = "api/admin/import";
+  trailImport = "api/admin/import";
+  mediaImport = "api/admin/media";
   httpOptions = {
     headers: new HttpHeaders({ "Content-Type": "application/json" }),
   };
@@ -26,10 +28,20 @@ export class ImportService {
     const formData: FormData = new FormData();
     formData.append("file", file);
     return this.httpClient
-      .post<TrailRawResponse>(this.baseUrl, formData)
+      .post<TrailRawResponse>(this.trailImport, formData)
       .pipe(
         catchError(this.handleError<TrailRawResponse>("Read file", null))
       );
+  }
+
+  uploadImage(file: File) : Observable<MediaResponse> {
+    const formData: FormData = new FormData();
+    formData.append("file", file);
+    return this.httpClient
+        .post<MediaResponse>(this.mediaImport, formData)
+        .pipe(
+            catchError(this.handleError<TrailRawResponse>("Upload image file", null))
+        );
   }
 
   readTrails(files: FileList): Observable<TrailRawResponse> {
@@ -39,7 +51,7 @@ export class ImportService {
 
     }
     return this.httpClient
-      .post<TrailRawResponse>(this.baseUrl + "/bulk", formData)
+      .post<TrailRawResponse>(this.trailImport + "/bulk", formData)
       .pipe(
         catchError(this.handleError<TrailRawResponse>("bulk files", null))
       );
@@ -47,7 +59,7 @@ export class ImportService {
 
   saveTrail(trailImportRequest: TrailImportRequest): Observable<TrailResponse> {
     return this.httpClient
-      .put<RestResponse>(this.baseUrl + "/save", trailImportRequest)
+      .put<RestResponse>(this.trailImport + "/save", trailImportRequest)
       .pipe(
         tap((_) => console.log("")),
         catchError(this.handleError<RestResponse>("get all trail", null))
@@ -56,7 +68,7 @@ export class ImportService {
 
   checkTrail(trailDto: TrailRawDto) : Observable<TrailMappingResponse> {
     return this.httpClient
-        .post(this.baseUrl + "/check", trailDto)
+        .post(this.trailImport + "/check", trailDto)
         .pipe(
             tap((_) => console.log("")),
             catchError(this.handleError<RestResponse>("get trail", null))

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 
 @Component({
   selector: "app-upload-button-management",
@@ -8,7 +8,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 export class UploadButtonManagementComponent implements OnInit {
   @Input() isMultipleUpload: boolean;
   @Input() isDisabled: boolean;
+  @Input() acceptedTypeFile: string[];
 
+  @Input() textContent: string;
   @Output() uploadedFiles: EventEmitter<FileList> = new EventEmitter();
 
   constructor() {}

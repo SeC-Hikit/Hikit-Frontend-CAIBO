@@ -1,0 +1,56 @@
+<div *ngIf="medias && medias.length > 0" class="tablez">
+    <table
+            id="trailTable"
+            class="table table-striped interactive-table thin-rows"
+    >
+        <thead class="">
+        <tr>
+            <th scope="col">Seleziona</th>
+            <th scope="col">Nome file</th>
+            <th scope="col">Caricato il</th>
+            <th scope="col">Caricato da</th>
+            <th scope="col">Anteprima</th>
+            <th scope="col" *ngIf="authService.isRealmMatch() && isDeletedEnabled">Cancella</th>
+        </tr>
+        </thead>
+        <tbody class="short-list">
+        <tr *ngFor="let media of medias" class="trailPreview">
+            <td (click)="this.onSelectClick.emit(media)">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#chevron-double-left"
+                    />
+                </svg>
+            </td>
+            <td>
+                {{ media.name }}
+            </td>
+            <td>{{ media.creationDate }}</td>
+            <td>{{ media.fileDetails.uploadedBy }}</td>
+            <td class="clickable"
+                *ngIf="authService.isRealmMatch()"
+                (click)="onPreviewClick.emit(media)">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#eye"
+                    />
+                </svg>
+            </td>
+            <td (click)="onDeleteClick.emit(media)"
+                class="clickable"
+                *ngIf="authService.isRealmMatch() && isDeletedEnabled">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                    <use
+                            xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#trash"
+                    />
+                </svg>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="medias.length == 0">
+    <app-items-not-found class="top-margin-x2"
+                         text="Non ci sono ancora media caricate.">
+    </app-items-not-found>
+</div>

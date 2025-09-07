@@ -1,1 +1,41 @@
-<p>media-management works!</p>
+<div class="container" *ngIf="this.authService.isRealmMatch()">
+    <div class="row section-distance-up">
+        <div class="col-12">
+            <h1>Gestione Galleria</h1>
+        </div>
+    </div>
+    <div class="my-4">
+        <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+        <div class="row">
+            <div class="col-12">
+                <app-upload-button-management
+                        class="trail-upload-management__container-button button"
+                        [isMultipleUpload]="false"
+                        [isDisabled]="this.isLoading"
+                        [acceptedTypeFile]="['.jpeg', '.jpg']"
+                        [textContent]="'carica un\'immagine'"
+                        (uploadedFiles)="uploadFile($event)"
+                ></app-upload-button-management>
+            </div>
+        </div>
+    </div>
+    <div class="my-4">
+        <div class="row full-width">
+            <app-media-table class="full-width"
+                             [medias]="medias"
+                             (onPreviewClick)="this.openPreview($event)"
+                             (onSelectClick)="this.onSelect()"
+                             [isDeletedEnabled]="true"
+            ></app-media-table>
+        </div>
+    </div>
+    <div class="pagination-position">
+        <ngb-pagination
+                [pageSize]="entryPerPage"
+                [collectionSize]="totalMedia"
+                [(page)]="page"
+                aria-label="Default pagination"
+                (pageChange)="loadPage(page)"
+        ></ngb-pagination>
+    </div>
+</div>

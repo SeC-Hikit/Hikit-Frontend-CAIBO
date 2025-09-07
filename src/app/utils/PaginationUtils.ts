@@ -1,4 +1,4 @@
-import {AnnouncementDto, AnnouncementTopic, AnnouncementType} from "../service/announcement.service";
+import {AnnouncementTopic} from "../service/announcement.service";
 
 export class PaginationUtils {
 
@@ -14,10 +14,18 @@ export class PaginationUtils {
         return navigator.clipboard.writeText(id);
     }
 
+    public static up() {
+        scroll(0,0);
+    }
+
+
     public static getOptionsText(id: string, topic: AnnouncementTopic) {
-        return `Opzioni: <a href='/admin/announcement-management/add/topic/${topic}/id/${id}' 
+        return `Opzioni: <a href='/admin/announcement-management/add/topic/${topic}/id/${id}'
                 class="nav-item nav-link">
-                Crea un annuncio</a>`;
+                Crea un annuncio</a>
+                <a href='/admin/media-management/update/topic/${topic}/id/${id}'
+                class="nav-item nav-link">
+                Collega foto al contenuto</a>`;
     }
 
 

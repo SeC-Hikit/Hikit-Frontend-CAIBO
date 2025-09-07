@@ -7,5 +7,14 @@
         "pathRewrite": {
             "^/api": ""
           }
+    },
+    "/media": {
+        "target": "http://localhost:8990/api/v1/media",
+        "secure": false,
+        "changeOrigin": false,
+        "logLevel": "debug",
+        "pathRewrite": {
+            "^/media": ""
+        }
     }
 }
