@@ -20,12 +20,14 @@ export class PaginationUtils {
 
 
     public static getOptionsText(id: string, topic: AnnouncementTopic) {
-        return `Opzioni: <a href='/admin/announcement-management/add/topic/${topic}/id/${id}'
+        const mediaSupportedTopics = ["POI", "PLACE", "TRAIL"];
+        const text =  `Opzioni: <a href='/admin/announcement-management/add/topic/${topic}/id/${id}'
                 class="nav-item nav-link">
-                Crea un annuncio</a>
-                <a href='/admin/media-management/update/topic/${topic}/id/${id}'
+                Crea un annuncio</a>` +
+                `<a href='/admin/media-management/update/topic/${topic}/id/${id}'
                 class="nav-item nav-link">
-                Collega foto al contenuto</a>`;
+                Collega foto al contenuto</a>` ;
+        return text;
     }
 
 

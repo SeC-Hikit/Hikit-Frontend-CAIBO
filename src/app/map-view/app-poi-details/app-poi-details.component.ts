@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PoiDto} from "../../service/poi-service.service";
 import {TrailMappingDto} from "../../service/trail-service.service";
 import {PoiUtils} from "../PoiUtils";
+import {Media} from "../../service/media-service.service";
 
 @Component({
     selector: 'app-poi-details',
@@ -10,6 +11,7 @@ import {PoiUtils} from "../PoiUtils";
 })
 export class AppPoiDetailsComponent implements OnInit {
 
+    @Input() mediaDtos: Media[];
     @Input() selectedPoi: PoiDto;
     @Input() trailMappings: Map<string, TrailMappingDto>;
     @Output() onSelectTrail = new EventEmitter<string>();
@@ -26,9 +28,14 @@ export class AppPoiDetailsComponent implements OnInit {
     }
 
     getNameOrCode(id: string) {
-        return this.trailMappings.get(id).name ?
-            this.trailMappings.get(id).name :
-            this.trailMappings.get(id).code
+        try {
+            return this.trailMappings.get(id) && this.trailMappings.get(id).name ?
+                this.trailMappings.get(id).name :
+                this.trailMappings.get(id).code
+        } catch (e) {
+            return "";
+        }
+
     }
 
     getImage(macroType: "BELVEDERE" | "SUPPORT" | "CULTURAL" | "CURIOSITY", microType: string[]) {

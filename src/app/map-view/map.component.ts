@@ -31,6 +31,7 @@ import {
 } from "../service/custom-itinerary.service";
 import {ConfirmModalComponent} from "../modal/confirm-modal/confirm-modal.component";
 import {UserFriendlyInputs} from "./UserFriendlyInputs";
+import {Media, MediaService} from "../service/media-service.service";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -125,6 +126,7 @@ export class MapComponent implements OnInit {
     isPortraitMode: boolean = true;
     isMobileDetailMode: boolean = false;
     refreshSwitch: boolean = false;
+    media: Media[] = [];
 
     isDrawMode: boolean = false;
     isCustomItineraryLoading: boolean = false;
@@ -132,6 +134,7 @@ export class MapComponent implements OnInit {
     customItinerary: CustomItineraryRequest = {geoLineDto: {coordinates: []}};
     customItineraryResult: CustomItineraryResult;
     isCustomItineraryResultPrecise: boolean;
+
 
 
     constructor(
@@ -149,7 +152,8 @@ export class MapComponent implements OnInit {
         private placeService: PlaceService,
         private municipalityService: MunicipalityService,
         private ertService: ErtService,
-        private customItineraryService: CustomItineraryService
+        private customItineraryService: CustomItineraryService,
+        private mediaService: MediaService,
     ) {
     }
 
@@ -245,6 +249,7 @@ export class MapComponent implements OnInit {
         if (!sat) {
             return;
         }
+
         let electedTrail = this.trailList.filter(t => t.id == sat.id);
 
         if (sat.switchView) {
@@ -255,12 +260,14 @@ export class MapComponent implements OnInit {
             this.sideView = ViewState.TRAIL;
             this.selectedTrail = electedTrail[0];
             this.loadRelatedForTrailId(sat.id);
+            this.loadMediaForTrail();
         }
 
         if (sat.refresh || electedTrail.length == 0) {
             this.trailService.getTrailById(sat.id).subscribe((resp) => {
                 this.selectedTrail = resp.content[0];
                 this.loadRelatedForTrailId(sat.id);
+                this.loadMediaForTrail();
             }, () => {
 
             }, () => {
@@ -274,6 +281,17 @@ export class MapComponent implements OnInit {
         this.loadNotificationsForTrail(sat.id);
         this.loadLastMaintenanceForTrail(sat.id);
         setTimeout(() => this.loadPoiForTrail(sat.id), 1200);
+    }
+
+    private loadMediaForTrail() {
+        this.media = [];
+        this.selectedTrail.mediaList.forEach((it) => {
+            this.mediaService.getById(it.id).subscribe((loadedMedia) => {
+                if (loadedMedia != null && loadedMedia.content.length > 0) {
+                    this.media = [...this.media, loadedMedia.content[0]];
+                }
+            })
+        })
     }
 
     private loadRelatedForTrailId(id: string) {
@@ -570,6 +588,7 @@ export class MapComponent implements OnInit {
 
     onSelectPlace(id: string) {
         MapUtils.changeUrlToState(ViewState.PLACE, id)
+        this.media = []
         this.placeService.getById(id).subscribe((it) => {
             if (it.content.length == 0) {
                 this.openInfoModal("Errore", "La località selezionata non è stata trovata");
@@ -577,6 +596,14 @@ export class MapComponent implements OnInit {
             }
             this.sideView = ViewState.PLACE;
             this.selectedPlace = it.content[0];
+
+            this.selectedPlace.mediaIds.forEach((it)=> {
+                this.mediaService.getById(it).subscribe(resp=>{
+                    if (resp.content.length>0) {
+                        this.media.push(resp.content[0])
+                    }
+                })
+            })
             this.isLoading = false;
         }, () => {
         }, () => {
@@ -598,6 +625,13 @@ export class MapComponent implements OnInit {
                 return;
             }
             this.selectedPoi = it.content[0]
+            this.media = [];
+            this.selectedPoi.mediaList.forEach(ml => {
+                this.mediaService.getById(ml.id).subscribe(sp => {
+                    this.media.push(sp.content[0]);
+                })
+            });
+
             this.isLoading = false;
         }, () => {
         }, () => {
@@ -750,6 +784,7 @@ export class MapComponent implements OnInit {
     }
 
     // TODO: move this to other file/class
+
     private setupShortcuts() {
         const context = this;
         window.addEventListener('keydown', function (event) {

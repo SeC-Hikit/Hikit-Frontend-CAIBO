@@ -25,9 +25,24 @@
     <div class="col-12">
         <div class="row">
             <div class="col-md-12">
-                <img src="{{ getImage()}}" class="place-image"/>
+                <img src="{{ getImage() }}" class="place-image"/>
             </div>
         </div>
+    </div>
+    <div class="col-12 preview-trail top-margin" *ngIf="mediaDto && mediaDto.length > 0">
+        <h4>Fotografie</h4>
+        <!--                -->
+        <ngb-carousel>
+            <ng-template ngbSlide *ngFor="let image of mediaDto">
+                <div class="picsum-img-wrapper">
+                    <img [src]="image.fileUrl + '_m.' + image.extension" alt="Random first slide" class="cover-image" />
+                </div>
+            </ng-template>
+        </ngb-carousel>
+
+        <!--                -->
+        <!--                <img class="cover-image" [src]="medias[0].fileUrl + '_m.' + medias[0].extension" [alt]="medias[0].name">-->
+        <!--                &lt;!&ndash;                    <img *ngFor="let media of mediaDto" [src]="media.fileUrl + '_m.' + media.extension" [alt]="media.name">&ndash;&gt;-->
     </div>
     <div *ngIf="selectedPlace" id="scrollable-content" class="col-12">
         <div class="row" *ngIf="selectedPlace.description">

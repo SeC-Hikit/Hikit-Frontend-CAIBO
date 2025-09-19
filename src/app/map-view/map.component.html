@@ -30,6 +30,7 @@
                  *ngIf="isPortraitMode">
                 <app-map-mobile-view
                         [sideView]="sideView"
+                        [mediaDtos]="media"
                         [selectedTrailMaintenances]="selectedTrailMaintenances"
                         [selectedLocality]="selectedLocationDetails"
                         [selectedTrail]="selectedTrail"
@@ -137,6 +138,7 @@
 
                     <div *ngIf="sideView=='poi' && selectedPoi" class="row top-margin">
                         <app-poi-details
+                                [mediaDtos]="media"
                                 [selectedPoi]="selectedPoi"
                                 [trailMappings]="trailMappings"
                                 (onSelectTrail)="onSelectTrail($event, false, true)"
@@ -146,6 +148,7 @@
 
                     <div *ngIf="sideView=='place' && selectedPlace" class="row top-margin">
                         <app-place-details
+                                [mediaDto]="media"
                                 [selectedPlace]="selectedPlace"
                                 [trailMappings]="trailMappings"
                                 (onSelectTrail)="onSelectTrail($event, false, true)"
@@ -220,6 +223,7 @@
                     <div *ngIf="sideView=='trail'" class="top-margin">
                         <app-map-trail-details
                                 [selectedTrail]="selectedTrail"
+                                [medias]="media"
                                 [selectedTrailPois]="selectedTrailPois"
                                 [trailNotifications]="selectedTrailNotifications"
                                 [selectedTrailMaintenances]="selectedTrailMaintenances"

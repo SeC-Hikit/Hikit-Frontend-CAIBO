@@ -71,7 +71,8 @@ export class PoiViewTableComponent implements OnInit {
     getTrailCode(id: string): string {
         if (!id) return "";
         if (this.cachedTrail.length == 0) return "";
-        return this.cachedTrail.filter((ct) => ct.id == id)[0].code;
+        let trail = this.cachedTrail.filter((ct) => ct.id == id)
+        return trail.length > 0 ? trail[0].code : "";
     }
 
     getTrailPreviews(skip: number, limit: number) {
@@ -112,6 +113,7 @@ export class PoiViewTableComponent implements OnInit {
     }
 
     showPreview(coords: Coordinates2D, trailId: string) {
+        if (!trailId) return;
         this.trailService.getTrailById(trailId).subscribe(
             trailResp => {
                 this.marker = {color: "#1D9566", icon: MapPinIconType.PIN, coords: coords};

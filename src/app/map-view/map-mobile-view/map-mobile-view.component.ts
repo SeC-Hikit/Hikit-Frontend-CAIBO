@@ -12,6 +12,7 @@ import {MunicipalityDto} from "../../service/municipality.service";
 import {EventDto, LocalityDto} from "../../service/ert.service";
 import {SelectTrailArgument} from "../map.component";
 import {CustomItineraryRequest, CustomItineraryResult} from "../../service/custom-itinerary.service";
+import {Media} from "../../service/media-service.service";
 
 export interface PositionChangeRequest {
     coordinates: Coordinates2D,
@@ -54,6 +55,7 @@ export class MapMobileViewComponent implements OnInit {
     @Input() paginationSize: 'sm' | 'lg';
     @Input() paginationEllipses: boolean;
     @Input() paginationMaxSize: number;
+    @Input() mediaDtos: Media[] = [];
 
 
     @Output() onTrailListPageChange: EventEmitter<number> = new EventEmitter<number>();
@@ -98,6 +100,7 @@ export class MapMobileViewComponent implements OnInit {
 
     isMapInitialized: boolean = true;
     opacityLow: boolean = false;
+
 
     constructor() { }
 

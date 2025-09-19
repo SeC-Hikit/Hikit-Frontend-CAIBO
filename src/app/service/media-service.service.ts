@@ -6,6 +6,7 @@ import {components} from 'src/binding/Binding';
 
 export type MediaResponse = components["schemas"]["MediaResponse"]
 export type Media = components["schemas"]["MediaDto"]
+export type LinkedMedia = components["schemas"]["LinkedMediaDto"]
 
 
 export enum MediaTopic  {

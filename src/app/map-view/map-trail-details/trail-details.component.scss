@@ -2,6 +2,15 @@
 
 .MapTrailDetails {
 
+  .cover-image {
+    width: 100%;
+  }
+
+  .preview-trail {
+    width: 100%;
+    min-height: 150px;
+  }
+
   .classification {
     svg{
       margin: 0 10px;

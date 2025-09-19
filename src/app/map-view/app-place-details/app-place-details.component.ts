@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TrailMappingDto} from "../../service/trail-service.service";
 import {PlaceDto} from "../../service/place.service";
+import {Media} from "../../service/media-service.service";
 
 @Component({
   selector: 'app-place-details',
@@ -9,6 +10,7 @@ import {PlaceDto} from "../../service/place.service";
 })
 export class AppPlaceDetailsComponent implements OnInit {
 
+  @Input() mediaDto: Media[];
   @Input() selectedPlace: PlaceDto;
   @Input() trailMappings: Map<string, TrailMappingDto>;
   @Output() onSelectTrail = new EventEmitter<string>();
@@ -23,9 +25,13 @@ export class AppPlaceDetailsComponent implements OnInit {
   }
 
   getNameOrCode(id: string) {
-    return this.trailMappings.get(id).name ?
-        this.trailMappings.get(id).name :
-        this.trailMappings.get(id).code
+    try {
+      return this.trailMappings.get(id).name ?
+          this.trailMappings.get(id).name :
+          this.trailMappings.get(id).code
+    } catch (e) {
+      return "";
+    }
   }
 
   getImage() {

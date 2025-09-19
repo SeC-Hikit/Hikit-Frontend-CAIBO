@@ -21,7 +21,7 @@
             >
                 <thead class="">
                 <tr>
-                    <th scope="col">ID</th>
+                    <th scope="col">Menu</th>
                     <th scope="col">Nome località</th>
                     <th scope="col">Numero sentieri attr.</th>
                     <th scope="col">Numero media attr.</th>
@@ -33,7 +33,13 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let place of placeList" class="place-preview">
-                    <th class="small-column ellipsis clickable" [title]="place.id" (click)="copyId(place.id)">{{place.id}}</th>
+                    <th class="small-column ellipsis clickable" [title]="place.id"
+                        (click)="copyId(place.id)">
+                        <svg class="bi" width="24" height="24" fill="currentColor">
+                        <use
+                                xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#list-ul"
+                        />
+                    </svg></th>
                     <td (click)="onPreview(place)">
                         {{ place.name }}
                     </td>

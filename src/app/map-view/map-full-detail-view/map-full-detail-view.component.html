@@ -63,6 +63,7 @@
     <div *ngIf="viewState=='poi' && selectedPoi" class="row top-margin">
         <app-poi-details
                 [selectedPoi]="selectedPoi"
+                [mediaDtos]="mediaDtos"
                 [trailMappings]="trailMappings"
                 (onSelectTrail)="onSelectTrail($event, false, true)"
                 (onHighlightTrail)="onHighlightTrail($event)"
@@ -72,6 +73,7 @@
     <div *ngIf="viewState=='place' && selectedPlace" class="row top-margin">
         <app-place-details
                 [selectedPlace]="selectedPlace"
+                [mediaDto]="mediaDtos"
                 [trailMappings]="trailMappings"
                 (onSelectTrail)="onSelectTrail($event, false, true)"
                 (onHighlightTrail)="onHighlightTrail($event)"
@@ -100,6 +102,7 @@
     </div>
     <div *ngIf="viewState=='trail' && selectedTrailData" class="top-margin">
         <app-map-trail-details
+                [medias]="mediaDtos"
                 [selectedTrail]="selectedTrailData"
                 [selectedTrailPois]="selectedTrailPois"
                 [trailNotifications]="selectedTrailNotifications"

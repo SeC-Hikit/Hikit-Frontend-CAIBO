@@ -15,6 +15,7 @@ import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {PaginationUtils} from "../../utils/PaginationUtils";
 import {SelectTrailArgument} from "../map.component";
 import {CustomItineraryRequest, CustomItineraryResult} from "../../service/custom-itinerary.service";
+import {Media} from "../../service/media-service.service";
 
 @Component({
     selector: 'app-map-mobile-full-detail-view',
@@ -22,7 +23,6 @@ import {CustomItineraryRequest, CustomItineraryResult} from "../../service/custo
     styleUrls: ['./map-full-detail-view.component.scss']
 })
 export class MapFullDetailViewComponent implements OnInit {
-
     @Input() viewState = ViewState.TRAIL;
     @Input() connectedTrails: TrailDto[] = [];
     @Input() selectedTrailData: TrailDto;
@@ -48,6 +48,7 @@ export class MapFullDetailViewComponent implements OnInit {
     @Input() paginationSize: 'sm' | 'lg';
     @Input() paginationEllipses: boolean;
     @Input() paginationMaxSize: number;
+    @Input() mediaDtos: Media[] = [];
 
     @Output() onTrailListPageChange: EventEmitter<number> = new EventEmitter<number>();
     @Output() onSelectedTrail: EventEmitter<SelectTrailArgument> = new EventEmitter<SelectTrailArgument>();
@@ -105,6 +106,7 @@ export class MapFullDetailViewComponent implements OnInit {
 
     private trailPreviewCount: number = 0;
     private trailPreviewPage: number = 1;
+
 
 
     constructor(

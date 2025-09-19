@@ -4,7 +4,6 @@
             <div class="col-md-8">
                 <h1 class="trailCodeColumn trailCodeColumnColor">{{ selectedTrail.code }}</h1>
             </div>
-
             <div class="col-md-2" (click)="onToggleMode()">
                 <svg class="bi clickable" width="29" height="29" fill="currentColor"
                      [ngClass]="!isCycloSwitchOn ? '' : 'low-opacity'">
@@ -265,7 +264,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
+            <div class="col-12 preview-trail top-margin" *ngIf="medias && medias.length > 0">
+                <h4>Fotografie</h4>
+                <!--                -->
+                <ngb-carousel>
+                    <ng-template ngbSlide *ngFor="let image of medias">
+                        <div class="picsum-img-wrapper">
+                            <img [src]="image.fileUrl + '_m.' + image.extension" alt="Random first slide" class="cover-image" />
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
+
+                <!--                -->
+<!--                <img class="cover-image" [src]="medias[0].fileUrl + '_m.' + medias[0].extension" [alt]="medias[0].name">-->
+<!--                &lt;!&ndash;                    <img *ngFor="let media of mediaDto" [src]="media.fileUrl + '_m.' + media.extension" [alt]="media.name">&ndash;&gt;-->
+            </div>
+            <div class="col-12 top-margin">
                 <div class="row">
                     <div class="col-12">
                         <h4>Le località/bivio sul percorso</h4>

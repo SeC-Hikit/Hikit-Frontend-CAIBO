@@ -25,4 +25,12 @@
       text-transform: capitalize;
     }
   }
+
+  .preview-trail {
+    width: 100%;
+    min-height: 150px;
+    img  {
+      max-width: 100%;
+    }
+  }
 }

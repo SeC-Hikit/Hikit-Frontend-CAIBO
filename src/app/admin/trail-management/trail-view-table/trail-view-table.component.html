@@ -37,7 +37,7 @@
             <table id="trailTable" class="table table-striped interactive-table">
                 <thead class="">
                 <tr>
-                    <th scope="col">Id</th>
+                    <th scope="col">Menu</th>
                     <th scope="col">Codice</th>
                     <th scope="col">Localita</th>
                     <th scope="col">Cl.</th>
@@ -60,7 +60,11 @@
                             title="{{ trailPreview.id }}"
                             (click)="copyId(trailPreview.id)"
                     >
-                        {{ trailPreview.id }}
+                        <svg class="bi" width="24" height="24" fill="currentColor">
+                            <use
+                                    xlink:href="/assets/bootstrap-icons/bootstrap-icons.svg#list-ul"
+                            />
+                        </svg>
                     </th>
 
                     <td>
