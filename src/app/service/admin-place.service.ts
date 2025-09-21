@@ -1,10 +1,10 @@
-import {HttpHeaders, HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable, of} from "rxjs";
-import {tap, catchError} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
 import {components} from "src/binding/Binding";
 import {RestResponse} from "../RestResponse";
-import {LinkedMedia, PlaceDto, PlaceRefDto, PlaceResponse, UnlinkMedia} from "./place.service";
+import {LinkedMedia, PlaceDto, PlaceResponse, UnlinkMedia} from "./place.service";
 
 export type LinkedPlaceDto = components['schemas']['LinkedPlaceDto'];
 
@@ -69,7 +69,7 @@ export class AdminPlaceService {
         linkedMedia: UnlinkMedia
     ): Observable<PlaceResponse> {
         return this.httpClient
-            .post<PlaceResponse>(this.baseUrl + "/" + placeId, linkedMedia)
+            .post<PlaceResponse>(this.baseUrl + "/media/" + placeId, linkedMedia)
             .pipe(
                 tap((_) => console.log("")),
                 catchError(this.handleError<PlaceResponse>("", null))

@@ -15,6 +15,7 @@ import {PoiDto} from "../../service/poi-service.service";
 import {PlaceRefDto} from "../../service/place.service";
 import {environment} from "../../../environments/environment";
 import {DrawPoint} from "../map.component";
+import {Media} from 'src/app/service/media-service.service';
 
 declare let L; // to be able to use L namespace
 
@@ -55,6 +56,7 @@ export class MapFullComponent implements OnInit {
     openStreetmapCopy: string;
 
     @Input() viewState: ViewState;
+    @Input() media: Media[];
     @Input() userPosition: UserCoordinates;
     @Input() pois: PoiDto[];
     @Input() selectedTrail: TrailDto;
@@ -93,6 +95,7 @@ export class MapFullComponent implements OnInit {
     @Output() onShowDrawMode = new EventEmitter<void>();
     @Output() onDeleteCustomItinerary = new EventEmitter<void>();
     @Output() onCalculateItinerary = new EventEmitter<void>();
+    @Output() onImageClick = new EventEmitter<void>();
 
 
     constructor() {
@@ -664,5 +667,9 @@ export class MapFullComponent implements OnInit {
 
     onCalculateItineraryClick() {
         this.onCalculateItinerary.emit();
+    }
+
+    onImageClicks($event: MouseEvent) {
+        this.onImageClick.emit();
     }
 }

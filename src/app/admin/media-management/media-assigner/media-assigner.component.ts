@@ -207,6 +207,10 @@ export class MediaAssignerComponent implements OnInit {
                 this.placeServiceAdmin.update(this.place).subscribe((pl) => {
                     this.modalOpen("Salvato", "Immagini salvate su località-bivio");
                 })
+
+                // this.placeServiceAdmin.update(this.place).subscribe((pl) => {
+                //     this.modalOpen("Salvato", "Immagini salvate su località-bivio");
+                // })
                 break;
             case MediaTopic.ANNOUNCEMENT:
                 this.name = "annuncio";

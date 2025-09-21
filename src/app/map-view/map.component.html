@@ -261,6 +261,7 @@
         <div class="column-map"
              [ngClass]="{'col-8': !isPortraitMode, 'col-12': isPortraitMode}">
             <app-map-full id="map-full-container"
+                          [media]="media"
                           [isMobileView]="isMobileDetailMode"
                           [viewState]="sideView"
                           [selectedTrail]="selectedTrail"
@@ -296,6 +297,7 @@
                           (onShowDrawMode)="showDrawMode()"
                           (onDeleteCustomItinerary)="deleteDrawTrip()"
                           (onCalculateItinerary)="onCustomItineraryRequest()"
+                          (onImageClick)="onImageClick()"
             >
             </app-map-full>
         </div>

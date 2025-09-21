@@ -32,6 +32,7 @@ import {
 import {ConfirmModalComponent} from "../modal/confirm-modal/confirm-modal.component";
 import {UserFriendlyInputs} from "./UserFriendlyInputs";
 import {Media, MediaService} from "../service/media-service.service";
+import {ImageModalComponent} from "../modal/image-modal/image-modal.component";
 
 export enum TrailSimplifierLevel {
     NONE = "none",
@@ -862,5 +863,11 @@ export class MapComponent implements OnInit {
         this.accessibilityService.getUnresolved(0, 1000).subscribe(it => {
             this.allTrailNotifications = it.content;
         })
+    }
+
+    onImageClick() {
+        const modal = this.modalService.open(ImageModalComponent);
+        modal.componentInstance.title = "";
+        modal.componentInstance.mediaDtos = this.media;
     }
 }
